@@ -5,7 +5,7 @@ import java.util.List;
 public class Character extends StatBlock {
     private int hp;
 
-    // constructs a character with the given parameters and rolls their hp
+    // EFFECTS: constructs a character with the given parameters and rolls hp
     public Character(String name, String size, String type,
                      RollFormula hpFormula, int ac, int speed,
                      int strength, int dexterity, int constitution, int intelligence, int wisdom, int charisma,
@@ -17,4 +17,7 @@ public class Character extends StatBlock {
         this.hp = hpFormula.roll();
     }
 
+    public int getHP() {
+        return hp;
+    }
 }

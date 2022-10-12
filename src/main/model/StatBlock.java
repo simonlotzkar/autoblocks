@@ -18,8 +18,9 @@ public class StatBlock {
     private int wisdom;
     private int charisma;
 
-    List<Action> actions;
+    private List<Action> actions;
 
+    // REQUIRES: name is unique
     // EFFECTS: constructs a statblock with the given parameters
     public StatBlock(String name, String size, String type,
                      RollFormula hpFormula, int ac, int speed,
@@ -42,6 +43,10 @@ public class StatBlock {
         this.charisma = charisma;
 
         this.actions = actions;
+    }
+
+    public String getName() {
+        return this.name;
     }
 
 }

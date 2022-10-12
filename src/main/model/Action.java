@@ -19,7 +19,7 @@ public class Action {
     }
 
     // EFFECTS: prints the given action with rolled hit and damage
-    public void execute() {
+    public void takeAction() {
         //stub TODO
     }
 
