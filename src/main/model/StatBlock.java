@@ -53,12 +53,12 @@ public class StatBlock {
     // getters:
     // EFFECTS: gets hp formula as a string
     public String getHPString() {
-        return Integer.toString(hpFormula.getAmountOfDice()) + "d"
-                + Integer.toString(hpFormula.getDieSides()) + " + "
-                + Integer.toString(hpFormula.getModifier());
+        return hpFormula.getAmountOfDice() + "d"
+                + hpFormula.getDieSides() + " + "
+                + hpFormula.getModifier();
     }
 
-    // EFFECTS: gets character name
+    // EFFECTS: gets character name with first letter capitalized
     public String getName() {
         return name;
     }
@@ -151,5 +151,10 @@ public class StatBlock {
     // EFFECTS: gets character actions
     public List<Action> getActions() {
         return actions;
+    }
+
+    // EFFECTS: gets an error string, only meant for overriding with character
+    public String getGroup() {
+        return "ERROR: GET STATBLOCK GROUP";
     }
 }

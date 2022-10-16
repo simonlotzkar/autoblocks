@@ -31,19 +31,19 @@ As a user, I want to be able to:
 - select character in play and do the following: ☑
     - display all character stats and actions ☑
     - roll for character ☐
-    - edit character hitpoints ☐
-    - change character group ☐
-    - delete character from play ☐
-- select group in play and do the following: ☑
-  - display characters in group by all stats ☑
+    - edit character hitpoints ☑
+    - change character group ☑
+    - delete character from play ☑
+- select group in play and do the following: ☐
+  - display characters in group by all stats ☐
   - roll for group ☐
   - edit group hp ☐
   - remove group from characters ☐
   - delete group and its characters from play ☐
-- view a list of statblocks by their names, sorted alphabetically (aka the 'library') and do the following: ☐
-  - select statblock in library and do the following: ☐
-    - display all statblock stats and actions ☐
-    - add any number of statblock to play as new characters ☐
+- view a list of statblocks by their names, sorted alphabetically (aka the 'library') and do the following: ☑
+  - select statblock in library and do the following: ☑
+    - display all statblock stats and actions ☑
+    - add any number of statblock to play as new characters ☑
   - add new, custom statblock to the library. ☐
 
 ### Future additions:

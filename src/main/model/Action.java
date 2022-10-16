@@ -26,16 +26,16 @@ public class Action {
     // getters
     // EFFECTS: get hit formula as a string
     public String getHitString() {
-        return Integer.toString(hit.getAmountOfDice()) + "d"
-                + Integer.toString(hit.getDieSides()) + " + "
-                + Integer.toString(hit.getModifier());
+        return hit.getAmountOfDice() + "d"
+                + hit.getDieSides() + " + "
+                + hit.getModifier();
     }
 
     // EFFECTS: get damage formula as a string
     public String getDamageString() {
-        return Integer.toString(damage.getAmountOfDice()) + "d"
-                + Integer.toString(damage.getDieSides()) + " + "
-                + Integer.toString(damage.getModifier());
+        return damage.getAmountOfDice() + "d"
+                + damage.getDieSides() + " + "
+                + damage.getModifier();
     }
 
     // EFFECTS: get action name

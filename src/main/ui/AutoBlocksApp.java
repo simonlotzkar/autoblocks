@@ -6,8 +6,8 @@ import model.Character;
 import java.util.*;
 
 public class AutoBlocksApp {
-    private final List<StatBlock> library = new ArrayList<StatBlock>();
-    private final List<Character> play = new ArrayList<Character>();
+    private final List<StatBlock> library = new ArrayList<>();
+    private final List<Character> play = new ArrayList<>();
     private final Scanner userInput = new Scanner(System.in);
 
     private StatBlock selectedStatBlock;
@@ -134,17 +134,9 @@ public class AutoBlocksApp {
         String select = userInput.next().toLowerCase();
 
         if (selectType.equals("statblock")) {
-            for (StatBlock sb : library) {
-                if (select.equals(sb.getName().toLowerCase())) {
-                    selectStatBlock(sb);
-                }
-            }
+            selectStatBlockByName(select);
         } else if (selectType.equals("character")) {
-            for (Character c : play) {
-                if (select.equals(c.getName().toLowerCase())) {
-                    selectCharacter(c);
-                }
-            }
+            selectCharacterByName(select);
         } else {
             for (Character c : play) {
                 if (select.equals(c.getGroup().toLowerCase())) {
@@ -158,18 +150,26 @@ public class AutoBlocksApp {
         }
     }
 
-    // EFFECTS: prints given statblock, selects them, and changes to StatBlockMenu
-    private void selectStatBlock(StatBlock statBlock) {
-        System.out.println("Found " + statBlock.getName() + "!");
-        selectedStatBlock = statBlock;
-        menuLevel = "statblock";
+    // EFFECTS: searches library for given statblock name, prints name, selects them, and changes to StatBlockMenu
+    private void selectStatBlockByName(String statBlockName) {
+        for (StatBlock sb : library) {
+            if (statBlockName.equals(sb.getName().toLowerCase())) {
+                System.out.println("Found " + statBlockName + "!");
+                selectedStatBlock = sb;
+                menuLevel = "statblock";
+            }
+        }
     }
 
-    // EFFECTS: prints given character, selects them, and changes to CharacterMenu
-    private void selectCharacter(Character character) {
-        System.out.println("Found " + character.getName() + "!");
-        selectedCharacter = character;
-        menuLevel = "character";
+    // EFFECTS: searches play for given character name, prints name, selects them, and changes to CharacterMenu
+    private void selectCharacterByName(String characterName) {
+        for (Character c : play) {
+            if (characterName.equals(c.getName().toLowerCase())) {
+                System.out.println("Found " + characterName + "!");
+                selectedCharacter = c;
+                menuLevel = "character";
+            }
+        }
     }
 
     // EFFECTS: prints given group name, selects it, creates an array, and changes to GroupMenu
@@ -177,7 +177,7 @@ public class AutoBlocksApp {
         System.out.println("Found " + groupName + "!");
         System.out.println("Selecting group members...");
         for (Character c : play) {
-            if (selectedGroupName.equals(c.getGroup())) {
+            if (c.getGroup() != null && selectedGroupName.equals(c.getGroup())) {
                 selectedGroup.add(c);
             }
         }
@@ -235,7 +235,7 @@ public class AutoBlocksApp {
                 changeCharacterGroup();
                 break;
             case "del":
-                deleteCharacter();
+                deleteSelectedCharacter();
                 break;
             case "exit":
                 goToMainMenu();
@@ -260,10 +260,9 @@ public class AutoBlocksApp {
         }
     }
 
-    // EFFECTS: prints given statblock or character stats
+    // EFFECTS: prints given statblock OR character stats
     private void displayIndividualStats(StatBlock selected) {
-        System.out.println("\n" + selected.getName() + ": ");
-        System.out.println("\t" + selected.getSize() + " " + selected.getType());
+        displayIndividualTitle(selected);
         System.out.println("\t" + "HP = " + "(" + selected.getHPString() + ")"
                 + ", AC = " + selected.getAC()
                 + ", Speed = " + selected.getSpeed());
@@ -274,6 +273,21 @@ public class AutoBlocksApp {
                 + ", Wis: " + selected.getWisdom() + "(" + selected.getWisdomModifier() + ")"
                 + ", Cha: " + selected.getCharisma() + "(" + selected.getCharismaModifier() + ")");
         displayActions(selected);
+    }
+
+    // EFFECTS: prints the title of the given statblock OR character
+    private void displayIndividualTitle(StatBlock selected) {
+        if (selected instanceof Character) {
+            if (selected.getGroup() != null) {
+                System.out.println("\n" + selected.getName() + " (Group: " + selected.getGroup() + ")" + ": "
+                        + selected.getSize() + " " + selected.getType() + ".");
+            } else {
+                System.out.println("\n" + selected.getName() + " (Group: None): "
+                        + selected.getSize() + " " + selected.getType() + ".");
+            }
+        } else {
+            System.out.println("\n" + selected.getName() + ": " + selected.getSize() + " " + selected.getType() + ".");
+        }
     }
 
     // EFFECTS: prints all actions for the given statblock or character
@@ -290,21 +304,59 @@ public class AutoBlocksApp {
         menuLevel = "roll";
     }
 
-    // REQUIRES: hp cannot exceed max hp
+    // REQUIRES: hp cannot exceed max hp, either a character or group is selected
     // MODIFIES: this
-    // EFFECTS: increase, reduce, or set hp for a character OR group
+    // EFFECTS: increase or reduce hp for a character OR group
     private void editHP() {
-        //stub TODO
+        if (selectedCharacter != null) {
+            System.out.println("Enter amount of hp to change this character's current hp by:");
+            int hpDifference = userInput.nextInt();
+            selectedCharacter.changeHP(hpDifference);
+        } else {
+            System.out.println("Enter amount of hp to change this group's current hp by:");
+            int hpDifference = userInput.nextInt();
+            for (Character c : selectedGroup) {
+                c.changeHP(hpDifference);
+            }
+        }
     }
 
     // EFFECTS: prompts user to either change or remove group then executes choice
     private void changeCharacterGroup() {
-        //stub TODO
+        if (selectedCharacter.getGroup() != null) {
+            System.out.println("Enter the new group for this character (one word), or type rem to remove its group:");
+            String newGroup = userInput.next().toLowerCase();
+            if (newGroup.equals("rem")) {
+                selectedCharacter.setGroup(null);
+                System.out.println("Removed this character's group.");
+            } else {
+                selectedCharacter.setGroup(newGroup.substring(0, 1).toUpperCase() + newGroup.substring(1));
+                System.out.println("Changed this character's group.");
+            }
+        } else {
+            System.out.println("Enter the new group (one word) for this character:");
+            String newGroup = userInput.next().toLowerCase();
+            selectedCharacter.setGroup(newGroup.substring(0, 1).toUpperCase() + newGroup.substring(1));
+            System.out.println("Changed this character's group.");
+        }
     }
 
-    // EFFECTS: prompts user for confirmation, removes character from play, then exits menu *MainMenu*
-    private void deleteCharacter() {
-        //stub TODO
+    // EFFECTS: prompts user for confirmation, removes selected character from play, then exits menu *MainMenu*
+    private void deleteSelectedCharacter() {
+        System.out.println("\nAre you sure you want to delete the selected character? Confirm:");
+        System.out.println("\ty = yes,");
+        System.out.println("\tn = no");
+        String confirmation = userInput.next().toLowerCase();
+        if (confirmation.equals("y")) {
+            play.remove(selectedCharacter);
+            System.out.println("Deleted character.");
+            goToMainMenu();
+        } else if (confirmation.equals("n")) {
+            System.out.println("Cancelling deletion...");
+        } else {
+            System.out.println("Command invalid!");
+            deleteSelectedCharacter();
+        }
     }
 
     // EFFECTS: exits to main menu and unselects everything
@@ -548,23 +600,73 @@ public class AutoBlocksApp {
         }
     }
 
-    // EFFECTS: add any number of the selected statblock to play as characters
+    // EFFECTS: add any number of the selected statblock to play as characters with no unique names
     private void createCharacters() {
         System.out.println("How many copies of this statblock do you want to add?");
         int numberOfCopies = userInput.nextInt();
-        System.out.println("Adding " + Integer.toString(numberOfCopies) + " " + selectedStatBlock.getName() 
+        System.out.println("Adding " + numberOfCopies + " " + selectedStatBlock.getName()
                 + "s to play...");
         for (int i = 1; i < (numberOfCopies + 1); i++) {
-            Character character = new Character((selectedStatBlock.getName() + Integer.toString(i)),
+            Character character = new Character(nameNewCharacter(),
                     selectedStatBlock.getSize(), selectedStatBlock.getType(), selectedStatBlock.getHpFormula(),
                     selectedStatBlock.getAC(), selectedStatBlock.getSpeed(), selectedStatBlock.getStrength(),
                     selectedStatBlock.getDexterity(), selectedStatBlock.getConstitution(),
                     selectedStatBlock.getIntelligence(), selectedStatBlock.getWisdom(),
                     selectedStatBlock.getCharisma(), selectedStatBlock.getActions());
-            System.out.println("Added copy " + Integer.toString(i) + "!");
+            System.out.println("Added copy " + i + "!");
             play.add(character);
         }
-        System.out.println("Done adding " + Integer.toString(numberOfCopies) + " statblocks.");
+        System.out.println("Done adding " + numberOfCopies + " statblocks.");
+    }
+
+    // EFFECTS: searches play for characters named after selectedStatBlock: if there's none, returns selected statblock
+    //          name with 1 as suffix, otherwise arrays the character suffixes and returns selected statblock name with
+    //          the lowest number not in the array as a suffix
+    private String nameNewCharacter() {
+        int lowestNumber = 1;
+        List<Integer> suffixes;
+        if (playContainsSelectedStatBlockName()) {
+            suffixes = generateSuffixes();
+            lowestNumber = findFirstIntegerGap(suffixes);
+        }
+        return selectedStatBlock.getName().toLowerCase() + lowestNumber;
+    }
+
+    // EFFECTS: returns true if play contains a character with the selected statblock name, excluding its suffix,
+    //          false otherwise
+    private boolean playContainsSelectedStatBlockName() {
+        for (Character c : play) {
+            if (c.getName().toLowerCase().contains(selectedStatBlock.getName().toLowerCase())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // EFFECTS: returns list of suffixes for characters in play with selected statblock name
+    private List<Integer> generateSuffixes() {
+        List<Integer> suffixes = new ArrayList<>();
+        for (Character c : play) {
+            if (c.getName().toLowerCase().contains(selectedStatBlock.getName().toLowerCase())) {
+                suffixes.add(Integer.parseInt(c.getName().toLowerCase().replaceAll("[^\\d]", "")));
+            }
+        }
+        return suffixes;
+    }
+
+    // REQUIRES: given interger list contains at least one integer
+    // EFFECTS: returns lowest integer that is not already in the given list, starting with 1
+    private int findFirstIntegerGap(List<Integer> integerList) {
+        int firstLowest = 1;
+        integerList.sort(Comparator.naturalOrder());
+        for (int i : integerList) {
+            if (i == firstLowest) {
+                firstLowest++;
+            } else if (i > firstLowest) {
+                return firstLowest;
+            }
+        }
+        return firstLowest;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -577,7 +679,7 @@ public class AutoBlocksApp {
         Action orcGreatAxe = new Action("GreatAxe", "Melee Weapon Attack.", "Slashing",
                 5, orcGreatAxeHit, orcGreatAxeDamage);
 
-        List<Action> orcActions = new ArrayList<Action>();
+        List<Action> orcActions = new ArrayList<>();
         orcActions.add(orcGreatAxe);
 
         StatBlock orc = new StatBlock("Orc", "Medium", "Humanoid", orcHPFormula, 13, 30,
