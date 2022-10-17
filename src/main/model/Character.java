@@ -14,14 +14,14 @@ public class Character extends StatBlock {
     public Character(String name, String size, String type,
                      RollFormula hpFormula, int ac, int speed, int initiativeBonus,
                      int strength, int dexterity, int constitution, int intelligence, int wisdom, int charisma,
-                     List<Action> actions) {
+                     List<Action> actions, String parentStatBlockName) {
         super(name, size, type,
                 hpFormula, ac, speed, initiativeBonus,
                 strength, dexterity, constitution, intelligence, wisdom, charisma,
                 actions);
         maxHP = hpFormula.roll();
         hp = maxHP;
-        parentStatBlockName = super.getName();
+        this.parentStatBlockName = parentStatBlockName;
     }
 
     // setters
@@ -34,6 +34,9 @@ public class Character extends StatBlock {
     // EFFECTS: sets current hp to sum of given int and hp
     public void changeHP(int change) {
         hp += change;
+        if (hp > maxHP) {
+            hp = maxHP;
+        }
     }
 
     // getters

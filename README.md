@@ -54,9 +54,10 @@ As a user, I want to be able to:
 
 ### Currently added default statblocks:
 - Orc
+- Goblin
 
 ### Future additions:
-- come with all default monsters in the 5th edition monsters manual [1/300]
+- come with all default monsters in the 5th edition monsters manual [2/300]
 - make actions generic (currently they are statblock specific)
 - turn order and automation of turns
 - equipment

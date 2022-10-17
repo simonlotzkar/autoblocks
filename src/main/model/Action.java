@@ -20,9 +20,10 @@ public class Action {
         this.damage = damage;
     }
 
-    // EFFECTS: prints the given action with rolled hit and damage
-    public void displayRoll() {
-        //stub TODO
+    // EFFECTS: prints the action with rolled hit and damage for given character
+    public void displayRollForCharacter(String characterName) {
+        System.out.println(characterName + "'s " + name + " " + description + "(" + reach + "ft) did "
+                + hit.roll() + " to hit, and " + damage.roll() + " " + damageType + " damage.");
     }
 
     // getters

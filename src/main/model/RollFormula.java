@@ -15,7 +15,11 @@ public class RollFormula {
     // EFFECTS: randomly picks a number between 1 and the given die value as many times as declared, then adds the
     //          modifier to the total and returns it
     public int roll() {
-        return 0; //stub TODO
+        int total = 0;
+        for (int i = 0; i < amountOfDice; i++) {
+            total += Math.random() * dieSides;
+        }
+        return total + modifier;
     }
 
     // getters

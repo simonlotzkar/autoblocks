@@ -554,8 +554,8 @@ public class AutoBlocksApp {
     // EFFECTS: searches given character's actions for one with given name, then prints its roll
     private void rollCharacterActionByName(Character character, String action) {
         for (Action a : character.getActions()) {
-            if (a.getName().equals(action)) {
-                a.displayRoll();
+            if (a.getName().equalsIgnoreCase(action)) {
+                a.displayRollForCharacter(character.getName());
                 break;
             }
         }
@@ -854,7 +854,8 @@ public class AutoBlocksApp {
                     selectedStatBlock.getAC(), selectedStatBlock.getSpeed(), selectedStatBlock.getInitiativeBonus(),
                     selectedStatBlock.getStrength(), selectedStatBlock.getDexterity(),
                     selectedStatBlock.getConstitution(), selectedStatBlock.getIntelligence(),
-                    selectedStatBlock.getWisdom(), selectedStatBlock.getCharisma(), selectedStatBlock.getActions());
+                    selectedStatBlock.getWisdom(), selectedStatBlock.getCharisma(), selectedStatBlock.getActions(),
+                    selectedStatBlock.getName());
             System.out.println("Added copy " + i + "!");
             play.add(character);
         }
@@ -919,7 +920,7 @@ public class AutoBlocksApp {
         RollFormula orcGreatAxeHit = new RollFormula(1, 20, 5);
         RollFormula orcGreatAxeDamage = new RollFormula(1, 12, 3);
 
-        Action orcGreatAxe = new Action("OrcGreatAxe", "Melee Weapon Attack.", "Slashing",
+        Action orcGreatAxe = new Action("GreatAxe", "Melee Weapon Attack", "Slashing",
                 5, orcGreatAxeHit, orcGreatAxeDamage);
 
         List<Action> orcActions = new ArrayList<>();
@@ -929,6 +930,21 @@ public class AutoBlocksApp {
                 16, 12, 16, 7, 11, 10, orcActions);
 
         library.add(orc);
+
+        RollFormula goblinHPFormula = new RollFormula(2,6,0);
+        RollFormula goblinShortBowHit = new RollFormula(1, 20, 4);
+        RollFormula goblinShortBowDamage = new RollFormula(1, 6, 2);
+
+        Action goblinShortBow = new Action("ShortBow", "Ranged Weapon Attack", "Piercing",
+                320, goblinShortBowHit, goblinShortBowDamage);
+
+        List<Action> goblinActions = new ArrayList<>();
+        goblinActions.add(goblinShortBow);
+
+        StatBlock goblin = new StatBlock("Goblin", "Small", "Humanoid", goblinHPFormula, 15, 30, 0,
+                8, 14, 10, 10, 8, 8, goblinActions);
+
+        library.add(goblin);
 
     }
 
