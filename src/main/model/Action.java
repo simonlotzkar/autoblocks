@@ -4,7 +4,9 @@ public class Action {
     private final String name;
     private final String description;
     private final String damageType;
+
     private final int reach;
+
     private final RollFormula hit;
     private final RollFormula damage;
 
@@ -19,7 +21,7 @@ public class Action {
     }
 
     // EFFECTS: prints the given action with rolled hit and damage
-    public void takeAction() {
+    public void roll() {
         //stub TODO
     }
 

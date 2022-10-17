@@ -78,7 +78,7 @@ public class AutoBlocksApp {
     private void processMainCommand(String command) {
         switch (command) {
             case "roll":
-                customRoll();
+                System.out.println(getCustomRollFormula("custom").roll());
                 break;
             case "char":
                 searchForAndSelect("character");
@@ -113,17 +113,16 @@ public class AutoBlocksApp {
         }
     }
 
-    // EFFECTS: prompts user for input and makes a custom roll with given input
-    private void customRoll() {
-        System.out.println("Enter amount of dice to roll.");
+    // EFFECTS: prompts user for roll fields based on given name and returns a roll with given input
+    private RollFormula getCustomRollFormula(String rollName) {
+        System.out.println("Enter amount of dice for " + rollName + " roll.");
         int amountOfDice = userInput.nextInt();
-        System.out.println("Enter sides on dice.");
+        System.out.println("Enter sides on dice for " + rollName + " roll.");
         int die = userInput.nextInt();
-        System.out.println("Enter modifier.");
+        System.out.println("Enter modifier for " + rollName + " roll.");
         int modifier = userInput.nextInt();
 
-        RollFormula roll = new RollFormula(amountOfDice, die, modifier);
-        System.out.println(roll.roll());
+        return new RollFormula(amountOfDice, die, modifier);
     }
 
     // REQUIRES: selectType is either "character", "group", or "statblock"
@@ -234,7 +233,7 @@ public class AutoBlocksApp {
                 changeCharacterGroup();
                 break;
             case "del":
-                deleteSelectedCharacter();
+                displayDeleteCharacterMenu();
                 break;
             case "exit":
                 goToMainMenu();
@@ -264,14 +263,15 @@ public class AutoBlocksApp {
         displayIndividualTitle(selected);
         System.out.println("\t" + "HP = " + "(" + selected.getHPString() + ")"
                 + ", AC = " + selected.getAC()
-                + ", Speed = " + selected.getSpeed());
+                + ", Speed = " + selected.getSpeed()
+                + ", Initiative = " + selected.getInitiativeBonus());
         System.out.println("\t" + "Str: " + selected.getStrength() + "(" + selected.getStrengthModifier() + ")"
                 + ", Dex: " + selected.getDexterity() + "(" + selected.getDexterityModifier() + ")"
                 + ", Con: " + selected.getConstitution() + "(" + selected.getConstitutionModifier() + ")"
                 + ", Int: " + selected.getIntelligence() + "(" + selected.getIntelligenceModifier() + ")"
                 + ", Wis: " + selected.getWisdom() + "(" + selected.getWisdomModifier() + ")"
                 + ", Cha: " + selected.getCharisma() + "(" + selected.getCharismaModifier() + ")");
-        displayActions(selected);
+        displayCharacterOrStatBlockActions(selected);
     }
 
     // EFFECTS: prints the title of the given statblock OR character
@@ -290,7 +290,7 @@ public class AutoBlocksApp {
     }
 
     // EFFECTS: prints all actions for the given statblock or character
-    private void displayActions(StatBlock statBlock) {
+    private void displayCharacterOrStatBlockActions(StatBlock statBlock) {
         System.out.println("\tActions:");
         for (Action a : statBlock.getActions()) {
             System.out.println("\t" + a.getName() + ": " + a.getHitString() + " to hit, " + a.getDamageString()
@@ -341,20 +341,25 @@ public class AutoBlocksApp {
     }
 
     // EFFECTS: prompts user for confirmation, removes selected character from play, then exits menu *MainMenu*
-    private void deleteSelectedCharacter() {
+    private void displayDeleteCharacterMenu() {
         System.out.println("\nAre you sure you want to delete the selected character? Confirm:");
         System.out.println("\ty = yes,");
         System.out.println("\tn = no");
-        String confirmation = userInput.next().toLowerCase();
-        if (confirmation.equals("y")) {
+        String command = userInput.next().toLowerCase();
+        processDeleteCharacterCommand(command);
+    }
+
+    // EFFECTS: processes deletecharactermenu commands
+    private void processDeleteCharacterCommand(String command) {
+        if (command.equals("y")) {
             play.remove(selectedCharacter);
             System.out.println("Deleted character.");
             goToMainMenu();
-        } else if (confirmation.equals("n")) {
+        } else if (command.equals("n")) {
             System.out.println("Cancelling deletion...");
         } else {
             System.out.println("Command invalid!");
-            deleteSelectedCharacter();
+            displayDeleteCharacterMenu();
         }
     }
 
@@ -399,10 +404,10 @@ public class AutoBlocksApp {
                 editHP();
                 break;
             case "rem":
-                removeGroup();
+                displayReduceGroupMenu("remove");
                 break;
             case "del":
-                deleteGroup();
+                displayReduceGroupMenu("delete");
                 break;
             case "exit":
                 goToMainMenu();
@@ -413,34 +418,73 @@ public class AutoBlocksApp {
         }
     }
 
-    // EFFECTS: prompts user for confirmation, removes group from characters in it, then exits menu *MainMenu*
-    private void removeGroup() {
-        //stub TODO
+    // REQUIRES: instruction is either "remove" or "delete"
+    // EFFECTS: prompts user for confirmation, removes group from characters in it, then exits menu *MainMenu*;
+    //          OR does the same but also deletes characters in groups, depending on given instruction
+    private void displayReduceGroupMenu(String instruction) {
+        if (instruction.equals("remove")) {
+            System.out.println("\nAre you sure you want to remove the selected group from all characters? Confirm:");
+        } else {
+            System.out.println("\nAre you sure you want to delete the selected group AND all its characters? Confirm:");
+        }
+        System.out.println("\ty = yes,");
+        System.out.println("\tn = no");
+        String command = userInput.next().toLowerCase();
+        processReduceGroupCommand(instruction, command);
     }
 
-    // EFFECTS: prompts user for confirmation, deletes group and its characters from play, then exits menu *MainMenu*
-    private void deleteGroup() {
-        //stub TODO
+    // EFFECTS: processes ReduceGroupMenu commands based on given instruction and command
+    private void processReduceGroupCommand(String instruction, String command) {
+        if (command.equals("y")) {
+            if (instruction.equals("remove")) {
+                System.out.println("Removing group from characters...");
+                removeGroupFromCharacters();
+                System.out.println("Removed group from characters.");
+                goToMainMenu();
+            } else {
+                System.out.println("Deleting group and characters...");
+                deleteGroupAndCharacters();
+                System.out.println("Deleted group and characters.");
+                goToMainMenu();
+            }
+        } else if (command.equals("n")) {
+            System.out.println("Cancelling removal...");
+        } else {
+            System.out.println("Command invalid!");
+            displayDeleteCharacterMenu();
+        }
+    }
+
+    // EFFECTS: sets every group member in selected group to no group
+    private void removeGroupFromCharacters() {
+        for (Character c : selectedGroup) {
+            c.setGroup(null);
+        }
+    }
+
+    // EFFECTS: removes all group members from selected group from play
+    private void deleteGroupAndCharacters() {
+        for (Character c : selectedGroup) {
+            play.remove(c);
+        }
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     // EFFECTS: displays selected character OR group actions and RollMenu commands:
     //          - roll action
+    //          - roll ability check
     //          - roll initiative
-    //          - make skill check
-    //          - make saving throw
     //          - go back *MainMenu*
     private void displayRollMenu() {
         System.out.println("\nRoll Menu. Actions available for currently selected character or group:");
         System.out.println("-------------------------------------------------------------------------");
 
-        displayGroupOrCharacterActions();
+        displayRollMenuActions();
 
         System.out.println("\nRoll Commands:");
         System.out.println("\tact: Roll an action.");
+        System.out.println("\tcheck: Make an ability check.");
         System.out.println("\tinit: Roll initiative.");
-        System.out.println("\tskill: Make a skill check.");
-        System.out.println("\tsave: Make a saving throw.");
         System.out.println("\tback: Go back to the previous menu.");
         System.out.println("\texit: Exit to the main menu.");
     }
@@ -450,16 +494,13 @@ public class AutoBlocksApp {
     private void processRollCommand(String command) {
         switch (command) {
             case "act":
-                rollAction();
+                displayActionMenu();
+                break;
+            case "check":
+                displayAbilityCheckMenu();
                 break;
             case "init":
-                rollInitiative();
-                break;
-            case "skill":
-                rollSkillCheck();
-                break;
-            case "save":
-                rollSavingThrow();
+                displayInitiativeMenu();
                 break;
             case "back":
                 goToPreviousMenu();
@@ -473,36 +514,178 @@ public class AutoBlocksApp {
         }
     }
 
-    // REQUIRES: either a character or group is selected
-    // EFFECTS: checks if a character or group is selected and prints all actions amongst them
-    private void displayGroupOrCharacterActions() {
+    // EFFECTS: checks if a character or group is selected and prints all actions amongst them, but doesn't repeat any
+    //          parent statblock actions
+    private void displayRollMenuActions() {
         if (selectedCharacter != null) {
-            displayActions(selectedCharacter);
+            displayCharacterOrStatBlockActions(selectedCharacter);
         } else {
+            List<String> displayedStatBlocks = new ArrayList<>();
             for (Character c : selectedGroup) {
-                displayActions(c);
+                if (!displayedStatBlocks.contains(c.getParentStatBlockName())) {
+                    displayCharacterOrStatBlockActions(c);
+                    displayedStatBlocks.add(c.getParentStatBlockName());
+                }
             }
         }
     }
 
-    // EFFECTS:
-    private void rollAction() {
-        //stub TODO
+    // EFFECTS: displays all available actions for either selected character or group, prompts user for an action,
+    //          then rolls it once per character with that action
+    private void displayActionMenu() {
+        System.out.println("\nWhich action do you want to roll?");
+        displayRollMenuActions();
+        String command = userInput.next().toLowerCase();
+        System.out.println("Rolling " + command + " action...");
+        processActionCommand(command);
     }
 
-    // EFFECTS:
-    private void rollInitiative() {
-        //stub TODO
+    // EFFECTS: rolls given action for selected character, OR for all characters in selected group
+    private void processActionCommand(String command) {
+        if (selectedCharacter != null) {
+            rollCharacterActionByName(selectedCharacter, command);
+        } else {
+            for (Character c : selectedGroup) {
+                rollCharacterActionByName(c, command);
+            }
+        }
     }
 
-    // EFFECTS:
-    private void rollSkillCheck() {
-        //stub TODO
+    // EFFECTS: searches given character's actions for one with given name, then prints its roll
+    private void rollCharacterActionByName(Character character, String action) {
+        for (Action a : character.getActions()) {
+            if (a.getName().equals(action)) {
+                a.roll();
+                break;
+            }
+        }
     }
 
-    // EFFECTS:
-    private void rollSavingThrow() {
-        //stub TODO
+    // EFFECTS: prompts user for which abilitycheck to make, then rolls abilitycheck for selected character,
+    //          OR all characters in selected group
+    private void displayAbilityCheckMenu() {
+        System.out.println("\nWhich ability check do you want to roll?");
+        System.out.println("\tstr = Strength check.");
+        System.out.println("\tdex = Dexterity check.");
+        System.out.println("\tcon = Constitution check.");
+        System.out.println("\tint = Intelligence check.");
+        System.out.println("\twis = Wisdom check.");
+        System.out.println("\tcha = Charisma check.");
+        String command = userInput.next().toLowerCase();
+        System.out.println("Rolling " + command + " check...");
+        processAbilityCheckCommand(command);
+    }
+
+    // EFFECTS: rolls a check depending on the given command
+    private void processAbilityCheckCommand(String command) {
+        switch (command) {
+            case "str":
+                displayAbilityCheck("strength");
+                break;
+            case "dex":
+                displayAbilityCheck("dexterity");
+                break;
+            case "con":
+                displayAbilityCheck("constitution");
+                break;
+            case "int":
+                displayAbilityCheck("intelligence");
+                break;
+            case "wis":
+                displayAbilityCheck("wisdom");
+                break;
+            case "cha":
+                displayAbilityCheck("charisma");
+                break;
+            default:
+                System.out.println("Command invalid!");
+                break;
+        }
+    }
+
+    // EFFECTS: prints given check for selected character OR all characters in selected group
+    private void displayAbilityCheck(String ability) {
+        if (selectedCharacter != null) {
+            System.out.println(selectedCharacter.getName()
+                    + "'s " + ability + "check: " + rollAbilityCheck(selectedCharacter, ability) + ".");
+        } else {
+            for (Character c : selectedGroup) {
+                System.out.println(c.getName() + "'s " + ability + "check: " + rollAbilityCheck(c, ability));
+            }
+        }
+    }
+
+    // REQUIRES: given ability is one of: strength, dexterity, constitution, intelligence, wisdom, or charisma
+    // EFFECTS: rolls given ability's check for given character
+    private int rollAbilityCheck(Character character, String ability) {
+        switch (ability) {
+            case "strength":
+                return rollStrengthCheck(character);
+            case "dexterity":
+                return rollDexterityCheck(character);
+            case "constitution":
+                return rollConstitutionCheck(character);
+            case "intelligence":
+                return rollIntelligenceCheck(character);
+            case "wisdom":
+                return rollWisdomCheck(character);
+            default:
+                return rollCharismaCheck(character);
+        }
+    }
+
+    // EFFECTS: rolls a strength check for the given character
+    private int rollStrengthCheck(Character character) {
+        RollFormula rollFormula = new RollFormula(1, 20, character.getStrengthModifier());
+        return rollFormula.roll();
+    }
+
+    // EFFECTS: rolls a dexterity check for the given character
+    private int rollDexterityCheck(Character character) {
+        RollFormula rollFormula = new RollFormula(1, 20, character.getDexterityModifier());
+        return rollFormula.roll();
+    }
+
+    // EFFECTS: rolls a constitution check for the given character
+    private int rollConstitutionCheck(Character character) {
+        RollFormula rollFormula = new RollFormula(1, 20, character.getConstitutionModifier());
+        return rollFormula.roll();
+    }
+
+    // EFFECTS: rolls a intelligence check for the given character
+    private int rollIntelligenceCheck(Character character) {
+        RollFormula rollFormula = new RollFormula(1, 20, character.getIntelligenceModifier());
+        return rollFormula.roll();
+    }
+
+    // EFFECTS: rolls a wisdom skill for the given character
+    private int rollWisdomCheck(Character character) {
+        RollFormula rollFormula = new RollFormula(1, 20, character.getWisdomModifier());
+        return rollFormula.roll();
+    }
+
+    // EFFECTS: rolls a charisma check for the given character
+    private int rollCharismaCheck(Character character) {
+        RollFormula rollFormula = new RollFormula(1, 20, character.getCharismaModifier());
+        return rollFormula.roll();
+    }
+
+    // EFFECTS: rolls initiative for selected character, OR all characters in selected group
+    private void displayInitiativeMenu() {
+        System.out.println("Rolling initiative...");
+        if (selectedCharacter != null) {
+            System.out.println(selectedCharacter.getName()
+                    + "'s initiative: " + rollInitiative(selectedCharacter) + ".");
+        } else {
+            for (Character c : selectedGroup) {
+                System.out.println(c.getName() + "'s initiative: " + rollInitiative(c));
+            }
+        }
+    }
+
+    // EFFECTS: calculates the totalInitiativeBonus for given character and rolls their initiative
+    private int rollInitiative(Character character) {
+        return rollDexterityCheck(character) + character.getInitiativeBonus();
     }
 
     // REQUIRES: either a character or group is selected
@@ -559,9 +742,69 @@ public class AutoBlocksApp {
         }
     }
 
-    // EFFECTS: add new custom Statblock to the library
+    // EFFECTS: prompts user for new statblock parameters, then constructs a new statblock based on userinput and
+    //          adds it to the library
     private void createCustomStatBlock() {
-        //stub TODO
+        String name = getCustomStatBlockString("name");
+        String size = getCustomStatBlockString("size");
+        String type = getCustomStatBlockString("type");
+
+        RollFormula hpFormula = getCustomRollFormula("hpformula");
+        int ac = getCustomStatBlockInteger("ac");
+        int speed = getCustomStatBlockInteger("speed");
+        int initiativeBonus = getCustomStatBlockInteger("initiativeBonus");
+
+        int strength = getCustomStatBlockInteger("strength");
+        int dexterity = getCustomStatBlockInteger("dexterity");
+        int constitution = getCustomStatBlockInteger("constitution");
+        int intelligence = getCustomStatBlockInteger("intelligence");
+        int wisdom = getCustomStatBlockInteger("wisdom");
+        int charisma = getCustomStatBlockInteger("charisma");
+
+        List<Action> actions = getCustomStatBlockActions();
+
+        StatBlock customStatBlock = new StatBlock(name, size, type, hpFormula, ac, speed, initiativeBonus,
+                strength, dexterity, constitution, intelligence, wisdom, charisma, actions);
+        library.add(customStatBlock);
+    }
+
+    // EFFECTS: prompts user for given field based on given string and returns it
+    private String getCustomStatBlockString(String field) {
+        System.out.println("Enter custom statblock " + field + ": ");
+        return userInput.next();
+    }
+
+    // EFFECTS: prompts user for given field based on given int and returns it
+    private int getCustomStatBlockInteger(String field) {
+        System.out.println("Enter custom statblock " + field + ": ");
+        return userInput.nextInt();
+    }
+
+    // EFFECTS: prompts user for number of actions to add, then prompts for each field for each action
+    //          and returns them as a list
+    private List<Action> getCustomStatBlockActions() {
+        List<Action> actions =  new ArrayList<>();
+        System.out.println("How many actions do you want to give your custom statblock?");
+        int numberOfActions = userInput.nextInt() + 1;
+        for (int i = 1; i < numberOfActions; i++) {
+            System.out.println("Adding action " + i + "...");
+            actions.add(getCustomStatBlockAction());
+        }
+        return actions;
+    }
+
+    // EFFECTS: prompts user for action fields and constructs an action with them, then returns it
+    private Action getCustomStatBlockAction() {
+        String name = getCustomStatBlockString("name");
+        String description = getCustomStatBlockString("description");
+        String damageType = getCustomStatBlockString("damagetype");
+
+        int reach = getCustomStatBlockInteger("reach");
+
+        RollFormula hit = getCustomRollFormula("hit");
+        RollFormula damage = getCustomRollFormula("damage");
+
+        return new Action(name, description, damageType, reach, hit, damage);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -608,10 +851,10 @@ public class AutoBlocksApp {
         for (int i = 1; i < (numberOfCopies + 1); i++) {
             Character character = new Character(nameNewCharacter(),
                     selectedStatBlock.getSize(), selectedStatBlock.getType(), selectedStatBlock.getHpFormula(),
-                    selectedStatBlock.getAC(), selectedStatBlock.getSpeed(), selectedStatBlock.getStrength(),
-                    selectedStatBlock.getDexterity(), selectedStatBlock.getConstitution(),
-                    selectedStatBlock.getIntelligence(), selectedStatBlock.getWisdom(),
-                    selectedStatBlock.getCharisma(), selectedStatBlock.getActions());
+                    selectedStatBlock.getAC(), selectedStatBlock.getSpeed(), selectedStatBlock.getInitiativeBonus(),
+                    selectedStatBlock.getStrength(), selectedStatBlock.getDexterity(),
+                    selectedStatBlock.getConstitution(), selectedStatBlock.getIntelligence(),
+                    selectedStatBlock.getWisdom(), selectedStatBlock.getCharisma(), selectedStatBlock.getActions());
             System.out.println("Added copy " + i + "!");
             play.add(character);
         }
@@ -676,18 +919,17 @@ public class AutoBlocksApp {
         RollFormula orcGreatAxeHit = new RollFormula(1, 20, 5);
         RollFormula orcGreatAxeDamage = new RollFormula(1, 12, 3);
 
-        Action orcGreatAxe = new Action("GreatAxe", "Melee Weapon Attack.", "Slashing",
+        Action orcGreatAxe = new Action("Orc GreatAxe", "Melee Weapon Attack.", "Slashing",
                 5, orcGreatAxeHit, orcGreatAxeDamage);
 
         List<Action> orcActions = new ArrayList<>();
         orcActions.add(orcGreatAxe);
 
-        StatBlock orc = new StatBlock("Orc", "Medium", "Humanoid", orcHPFormula, 13, 30,
+        StatBlock orc = new StatBlock("Orc", "Medium", "Humanoid", orcHPFormula, 13, 30, 0,
                 16, 12, 16, 7, 11, 10, orcActions);
 
         library.add(orc);
 
-        //TODO library
     }
 
 }

@@ -10,6 +10,7 @@ public class StatBlock {
     protected final RollFormula hpFormula;
     protected final int ac;
     protected final int speed;
+    protected final int initiativeBonus;
 
     protected final int strength;
     protected final int dexterity;
@@ -23,7 +24,7 @@ public class StatBlock {
     // REQUIRES: name is unique
     // EFFECTS: constructs a statblock with the given parameters
     public StatBlock(String name, String size, String type,
-                     RollFormula hpFormula, int ac, int speed,
+                     RollFormula hpFormula, int ac, int speed, int initiativeBonus,
                      int strength, int dexterity, int constitution, int intelligence, int wisdom, int charisma,
                      List<Action> actions) {
 
@@ -34,6 +35,7 @@ public class StatBlock {
         this.hpFormula = hpFormula;
         this.ac = ac;
         this.speed = speed;
+        this.initiativeBonus = initiativeBonus;
 
         this.strength = strength;
         this.dexterity = dexterity;
@@ -51,104 +53,109 @@ public class StatBlock {
     }
 
     // getters:
-    // EFFECTS: gets hp formula as a string
+    // EFFECTS: gets statblock hp formula as a string
     public String getHPString() {
         return hpFormula.getAmountOfDice() + "d"
                 + hpFormula.getDieSides() + " + "
                 + hpFormula.getModifier();
     }
 
-    // EFFECTS: gets character name with first letter capitalized
+    // EFFECTS: gets statblock name with first letter capitalized
     public String getName() {
         return name;
     }
 
-    // EFFECTS: gets character size
+    // EFFECTS: gets statblock size
     public String getSize() {
         return size;
     }
 
-    // EFFECTS: gets character type
+    // EFFECTS: gets statblock type
     public String getType() {
         return type;
     }
 
-    // EFFECTS: gets hp formula
+    // EFFECTS: gets statblock hp formula
     public RollFormula getHpFormula() {
         return hpFormula;
     }
 
-    // EFFECTS: gets character ac
+    // EFFECTS: gets statblock ac
     public int getAC() {
         return ac;
     }
 
-    // EFFECTS: gets character speed
+    // EFFECTS: gets statblock speed
     public int getSpeed() {
         return speed;
     }
 
-    // EFFECTS: gets character strength
+    //EFFECTS: gets statblock initiative bonus
+    public int getInitiativeBonus() {
+        return initiativeBonus;
+    }
+
+    // EFFECTS: gets statblock strength
     public int getStrength() {
         return strength;
     }
 
-    // EFFECTS: gets character strength modifier
+    // EFFECTS: gets statblock strength modifier
     public int getStrengthModifier() {
         return convertToModifier(strength);
     }
 
-    // EFFECTS: gets character dexterity
+    // EFFECTS: gets statblock dexterity
     public int getDexterity() {
         return dexterity;
     }
 
-    // EFFECTS: gets character dexterity modifier
+    // EFFECTS: gets statblock dexterity modifier
     public int getDexterityModifier() {
         return convertToModifier(dexterity);
     }
 
-    // EFFECTS: gets character constitution
+    // EFFECTS: gets statblock constitution
     public int getConstitution() {
         return constitution;
     }
 
-    // EFFECTS: gets character constitution modifier
+    // EFFECTS: gets statblock constitution modifier
     public int getConstitutionModifier() {
         return convertToModifier(constitution);
     }
 
-    // EFFECTS: gets character intelligence
+    // EFFECTS: gets statblock intelligence
     public int getIntelligence() {
         return intelligence;
     }
 
-    // EFFECTS: gets character intelligence modifier
+    // EFFECTS: gets statblock intelligence modifier
     public int getIntelligenceModifier() {
         return convertToModifier(intelligence);
     }
 
-    // EFFECTS: gets character wisdom
+    // EFFECTS: gets statblock wisdom
     public int getWisdom() {
         return wisdom;
     }
 
-    // EFFECTS: gets character wisdom modifier
+    // EFFECTS: gets statblock wisdom modifier
     public int getWisdomModifier() {
         return convertToModifier(wisdom);
     }
 
-    // EFFECTS: gets character charisma
+    // EFFECTS: gets statblock charisma
     public int getCharisma() {
         return charisma;
     }
 
-    // EFFECTS: gets character charisma modifier
+    // EFFECTS: gets statblock charisma modifier
     public int getCharismaModifier() {
         return convertToModifier(charisma);
     }
 
-    // EFFECTS: gets character actions
+    // EFFECTS: gets statblock actions
     public List<Action> getActions() {
         return actions;
     }
