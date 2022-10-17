@@ -133,19 +133,18 @@ public class AutoBlocksApp {
         System.out.println("Enter " + selectType + " name.");
         String select = userInput.next().toLowerCase();
 
-        if (selectType.equals("statblock")) {
+        if ("statblock".equals(selectType)) {
             selectStatBlockByName(select);
-        } else if (selectType.equals("character")) {
+        } else if ("character".equals(selectType)) {
             selectCharacterByName(select);
-        } else {
+        } else if ("group".equals(selectType)) {
             for (Character c : play) {
-                if (select.equals(c.getGroup().toLowerCase())) {
+                if (c.getGroup() != null && select.equals(c.getGroup().toLowerCase())) {
                     selectGroupByName(select);
+                    break;
                 }
             }
-        }
-
-        if (selectedGroupName == null && selectedStatBlock == null && selectedCharacter == null) {
+        } else {
             System.out.println("Could not find specified " + selectType + ".");
         }
     }
@@ -174,6 +173,7 @@ public class AutoBlocksApp {
 
     // EFFECTS: prints given group name, selects it, creates an array, and changes to GroupMenu
     private void selectGroupByName(String groupName) {
+        selectedGroupName = groupName;
         System.out.println("Found " + groupName + "!");
         System.out.println("Selecting group members...");
         for (Character c : play) {
@@ -182,7 +182,6 @@ public class AutoBlocksApp {
             }
         }
         System.out.println("Group members accounted for!");
-        selectedGroupName = groupName;
         menuLevel = "group";
     }
 
@@ -376,7 +375,7 @@ public class AutoBlocksApp {
     //          - delete group and characters in it
     //          - go back *MainMenu*
     private void displayGroupMenu() {
-        System.out.println("\nGroup Menu. Characters in currently selected group:");
+        System.out.println("\nGroup Menu. Currently selected group: " + selectedGroupName + ". Members:");
         System.out.println("-----------------------------------------------------");
 
         displayStats();
@@ -399,10 +398,10 @@ public class AutoBlocksApp {
             case "hp":
                 editHP();
                 break;
-            case "remove":
+            case "rem":
                 removeGroup();
                 break;
-            case "delete":
+            case "del":
                 deleteGroup();
                 break;
             case "exit":
@@ -617,6 +616,7 @@ public class AutoBlocksApp {
             play.add(character);
         }
         System.out.println("Done adding " + numberOfCopies + " statblocks.");
+        goToLibraryMenu();
     }
 
     // EFFECTS: searches play for characters named after selectedStatBlock: if there's none, returns selected statblock

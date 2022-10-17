@@ -30,14 +30,22 @@ As a user, I want to be able to:
 - simulate rolling any number of dice, with any number of sides, and with any modifier ☑
 - select character in play and do the following: ☑
     - display all character stats and actions ☑
-    - roll for character ☐
+    - enter roll menu for character and do the following: ☐
+        - roll character action ☐
+        - roll character initiative ☐
+        - roll character skill check ☐
+        - roll character saving throw ☐
     - edit character hitpoints ☑
     - change character group ☑
     - delete character from play ☑
-- select group in play and do the following: ☐
-  - display characters in group by all stats ☐
-  - roll for group ☐
-  - edit group hp ☐
+- select group in play and do the following: ☑
+  - display characters in group by all stats ☑
+  - enter roll menu for group and do the following: ☑
+    - roll group action ☐
+    - roll group initiative ☐
+    - roll group skill check ☐
+    - roll group saving throw ☐
+  - edit group hp ☑
   - remove group from characters ☐
   - delete group and its characters from play ☐
 - view a list of statblocks by their names, sorted alphabetically (aka the 'library') and do the following: ☑
