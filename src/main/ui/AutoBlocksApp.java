@@ -293,8 +293,8 @@ public class AutoBlocksApp {
     private void displayCharacterOrStatBlockActions(StatBlock statBlock) {
         System.out.println("\tActions:");
         for (Action a : statBlock.getActions()) {
-            System.out.println("\t" + a.getName() + ": " + a.getHitString() + " to hit, " + a.getDamageString()
-                    + " " + a.getDamageType().toLowerCase() + " damage. " + a.getDescription());
+            System.out.println("\t" + a.getName() + ": " + a.getReach() + "ft reach, " + a.getHitString() + " to hit, "
+                    + a.getDamageString() + " " + a.getDamageType().toLowerCase() + " damage. " + a.getDescription());
         }
     }
 
@@ -555,7 +555,7 @@ public class AutoBlocksApp {
     private void rollCharacterActionByName(Character character, String action) {
         for (Action a : character.getActions()) {
             if (a.getName().equals(action)) {
-                a.roll();
+                a.displayRoll();
                 break;
             }
         }
@@ -919,7 +919,7 @@ public class AutoBlocksApp {
         RollFormula orcGreatAxeHit = new RollFormula(1, 20, 5);
         RollFormula orcGreatAxeDamage = new RollFormula(1, 12, 3);
 
-        Action orcGreatAxe = new Action("Orc GreatAxe", "Melee Weapon Attack.", "Slashing",
+        Action orcGreatAxe = new Action("OrcGreatAxe", "Melee Weapon Attack.", "Slashing",
                 5, orcGreatAxeHit, orcGreatAxeDamage);
 
         List<Action> orcActions = new ArrayList<>();

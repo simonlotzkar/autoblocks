@@ -21,7 +21,7 @@ public class Action {
     }
 
     // EFFECTS: prints the given action with rolled hit and damage
-    public void roll() {
+    public void displayRoll() {
         //stub TODO
     }
 
@@ -60,14 +60,13 @@ public class Action {
         return reach;
     }
 
-    // EFFECTS: get hit
+    // EFFECTS: get hit formula
     public RollFormula getHit() {
         return hit;
     }
 
-    // EFFECTS: get damage
+    // EFFECTS: get hit formula
     public RollFormula getDamage() {
         return damage;
     }
-
 }

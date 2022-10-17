@@ -42,16 +42,6 @@ public class Character extends StatBlock {
         return hp + "/" + maxHP;
     }
 
-    // EFFECTS: get current hp
-    public int getCurrentHP() {
-        return hp;
-    }
-
-    // EFFECTS: get max hp
-    public int getMaxHP() {
-        return maxHP;
-    }
-
     // EFFECTS: get group
     public String getGroup() {
         return group;
