@@ -4,14 +4,14 @@ public class Action {
     private final String name;
     private final String description;
     private final String damageType;
-
-    private final int reach;
+    private final String reach;
 
     private final RollFormula hit;
     private final RollFormula damage;
 
     // EFFECTS: constructs an action with the given parameters
-    public Action(String name, String description, String damageType, int reach, RollFormula hit, RollFormula damage) {
+    public Action(String name, String description, String damageType, String reach,
+                  RollFormula hit, RollFormula damage) {
         this.name = name;
         this.description = description;
         this.damageType = damageType;
@@ -57,7 +57,7 @@ public class Action {
     }
 
     // EFFECTS: get reach
-    public int getReach() {
+    public String getReach() {
         return reach;
     }
 

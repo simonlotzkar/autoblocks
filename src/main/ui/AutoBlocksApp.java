@@ -293,8 +293,9 @@ public class AutoBlocksApp {
     private void displayCharacterOrStatBlockActions(StatBlock statBlock) {
         System.out.println("\tActions:");
         for (Action a : statBlock.getActions()) {
-            System.out.println("\t" + a.getName() + ": " + a.getReach() + "ft reach, " + a.getHitString() + " to hit, "
-                    + a.getDamageString() + " " + a.getDamageType().toLowerCase() + " damage. " + a.getDescription());
+            System.out.println("\t" + a.getName() + ": " + a.getDescription() + ". " + a.getReach() + " reach, "
+                    + "(" + a.getHitString() + ") to hit, (" + a.getDamageString() + ") "
+                    + a.getDamageType().toLowerCase() + " damage. ");
         }
     }
 
@@ -743,9 +744,9 @@ public class AutoBlocksApp {
     }
 
     // EFFECTS: prompts user for new statblock parameters, then constructs a new statblock based on userinput and
-    //          adds it to the library
+    //          adds it to the library. if user gives a name already in use, reprompts for different name.
     private void createCustomStatBlock() {
-        String name = getCustomStatBlockString("name");
+        String name = getCustomStatBlockName();
         String size = getCustomStatBlockString("size");
         String type = getCustomStatBlockString("type");
 
@@ -766,6 +767,19 @@ public class AutoBlocksApp {
         StatBlock customStatBlock = new StatBlock(name, size, type, hpFormula, ac, speed, initiativeBonus,
                 strength, dexterity, constitution, intelligence, wisdom, charisma, actions);
         library.add(customStatBlock);
+    }
+
+    // EFFECTS: prompts user for new custom statblock name, reasks if the given name belongs to an existing statblock
+    //          until a unique name is provided, then returns that name.
+    private String getCustomStatBlockName() {
+        String name = getCustomStatBlockString("name");
+        for (StatBlock sb : library) {
+            if ((sb.getName().toLowerCase()).equals(name)) {
+                System.out.println("This name is already in use. Trying again...");
+                getCustomStatBlockName();
+            }
+        }
+        return name;
     }
 
     // EFFECTS: prompts user for given field based on given string and returns it
@@ -798,8 +812,7 @@ public class AutoBlocksApp {
         String name = getCustomStatBlockString("name");
         String description = getCustomStatBlockString("description");
         String damageType = getCustomStatBlockString("damagetype");
-
-        int reach = getCustomStatBlockInteger("reach");
+        String reach = getCustomStatBlockString("reach");
 
         RollFormula hit = getCustomRollFormula("hit");
         RollFormula damage = getCustomRollFormula("damage");
@@ -916,36 +929,58 @@ public class AutoBlocksApp {
     // -----------------------------------------------------------------------------------------------------------------
     // EFFECTS: initializes default statblocks in the library
     private void initializeLibrary() {
-        RollFormula orcHPFormula = new RollFormula(2,8,6);
-        RollFormula orcGreatAxeHit = new RollFormula(1, 20, 5);
-        RollFormula orcGreatAxeDamage = new RollFormula(1, 12, 3);
+        System.out.println("Initializing library...");
+        initializeOrcStatBlock();
+        initializeGoblinStatBlock();
+        System.out.println("All default statblocks added to library!");
+    }
 
-        Action orcGreatAxe = new Action("GreatAxe", "Melee Weapon Attack", "Slashing",
-                5, orcGreatAxeHit, orcGreatAxeDamage);
+    // EFFECTS: for orc: creates formulae for actions, creates actions, creates statblock, then adds to the library
+    private void initializeOrcStatBlock() {
+        Action orcGreatAxe = new Action("GreatAxe", "Melee Weapon Attack", "Slashing", "5ft",
+                new RollFormula(1, 20, 5),  //hit formula
+                new RollFormula(1, 12, 3)); //damage formula
+        Action orcJavelinMelee = new Action("Javelin", "Melee Weapon Attack", "Piercing", "5ft",
+                new RollFormula(1, 20, 5),  //hit formula
+                new RollFormula(1, 6, 3)); //damage formula
+        Action orcJavelinRanged = new Action("Javelin", "Ranged Weapon Attack", "Piercing", "30/120ft",
+                new RollFormula(1, 20, 5),  //hit formula
+                new RollFormula(1, 6, 3)); //damage formula
 
         List<Action> orcActions = new ArrayList<>();
         orcActions.add(orcGreatAxe);
+        orcActions.add(orcJavelinMelee);
+        orcActions.add(orcJavelinRanged);
 
-        StatBlock orc = new StatBlock("Orc", "Medium", "Humanoid", orcHPFormula, 13, 30, 0,
-                16, 12, 16, 7, 11, 10, orcActions);
+        StatBlock orc = new StatBlock("Orc", "Medium", "Humanoid",
+                new RollFormula(2,8,6), //hp formula
+                13, 30, 0,
+                16, 12, 16, 7, 11, 10,
+                orcActions);
 
         library.add(orc);
+    }
 
-        RollFormula goblinHPFormula = new RollFormula(2,6,0);
-        RollFormula goblinShortBowHit = new RollFormula(1, 20, 4);
-        RollFormula goblinShortBowDamage = new RollFormula(1, 6, 2);
-
-        Action goblinShortBow = new Action("ShortBow", "Ranged Weapon Attack", "Piercing",
-                320, goblinShortBowHit, goblinShortBowDamage);
+    // EFFECTS: for goblin: creates formulae for actions, creates actions, creates statblock, then adds to the library
+    private void initializeGoblinStatBlock() {
+        Action goblinScimitar = new Action("Scimitar", "Melee Weapon Attack", "Piercing", "5ft",
+                new RollFormula(1, 20, 4),  //hit formula
+                new RollFormula(1, 6, 2));  //damage formula
+        Action goblinShortBow = new Action("ShortBow", "Ranged Weapon Attack", "Piercing", "80/320ft",
+                new RollFormula(1, 20, 4),  //hit formula
+                new RollFormula(1, 6, 2));  //damage formula
 
         List<Action> goblinActions = new ArrayList<>();
+        goblinActions.add(goblinScimitar);
         goblinActions.add(goblinShortBow);
 
-        StatBlock goblin = new StatBlock("Goblin", "Small", "Humanoid", goblinHPFormula, 15, 30, 0,
-                8, 14, 10, 10, 8, 8, goblinActions);
+        StatBlock goblin = new StatBlock("Goblin", "Small", "Humanoid",
+                new RollFormula(2,6,0), //hp formula
+                15, 30, 0,
+                8, 14, 10, 10, 8, 8,
+                goblinActions);
 
         library.add(goblin);
-
     }
 
 }
