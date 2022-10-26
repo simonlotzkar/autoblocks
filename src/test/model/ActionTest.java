@@ -1,7 +1,7 @@
 package model;
 
-import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,8 +14,8 @@ public class ActionTest {
     public void runBeforeEach() {
         testHitFormula = new RollFormula(1, 20, 5);
         testDamageFormula = new RollFormula(1, 12, 3);
-        testAction = new Action("OrcGreatAxe", "Melee Weapon Attack.", "Slashing",
-                5, testHitFormula, testDamageFormula);
+        testAction = new Action("OrcGreatAxe", "Melee Weapon Attack", "Slashing",
+                "5ft", testHitFormula, testDamageFormula);
     }
 
     @Test
@@ -23,7 +23,7 @@ public class ActionTest {
         assertEquals("OrcGreatAxe", testAction.getName());
         assertEquals("Melee Weapon Attack", testAction.getDescription());
         assertEquals("Slashing", testAction.getDamageType());
-        assertEquals(5, testAction.getReach());
+        assertEquals("5ft", testAction.getReach());
         assertEquals(testHitFormula, testAction.getHit());
         assertEquals(testDamageFormula, testAction.getDamage());
     }

@@ -1,167 +1,311 @@
 package model;
 
+import model.statblockfields.*;
+
 import java.util.*;
 
 public class StatBlock {
-    protected final String name;
-    protected final String size;
-    protected final String type;
+    // required fields
+    protected final Title title;
 
     protected final RollFormula hpFormula;
-    protected final int ac;
-    protected final int speed;
-    protected final int initiativeBonus;
+    protected final Armour armour;
+    protected final Speeds speeds;
+    protected final Senses senses;
+    protected final int proficiency;
+    protected final int xp;
 
-    protected final int strength;
-    protected final int dexterity;
-    protected final int constitution;
-    protected final int intelligence;
-    protected final int wisdom;
-    protected final int charisma;
-
+    protected final AbilityScores abilityScores;
+    protected final List<Ability> abilities;
     protected final List<Action> actions;
 
-    // REQUIRES: name is unique
-    // EFFECTS: constructs a statblock with the given parameters
-    public StatBlock(String name, String size, String type,
-                     RollFormula hpFormula, int ac, int speed, int initiativeBonus,
-                     int strength, int dexterity, int constitution, int intelligence, int wisdom, int charisma,
-                     List<Action> actions) {
+    // optional fields
+    protected final SavingThrowProficiencies savingThrowProficiencies;
+    protected final SkillProficiencies skillProficiencies;
+    protected final ConditionImmunities conditionImmunities;
+    protected final Resistances resistances;
+    protected final Languages languages;
+    protected final LegendaryMechanics legendaryMechanics;
 
-        this.name = name;
-        this.size = size;
-        this.type = type;
-
-        this.hpFormula = hpFormula;
-        this.ac = ac;
-        this.speed = speed;
-        this.initiativeBonus = initiativeBonus;
-
-        this.strength = strength;
-        this.dexterity = dexterity;
-        this.constitution = constitution;
-        this.intelligence = intelligence;
-        this.wisdom = wisdom;
-        this.charisma = charisma;
-
-        this.actions = actions;
+    // EFFECTS: constructs a StatBlock using a builder
+    public StatBlock(StatBlockBuilder builder) {
+        this.title = builder.title;
+        this.xp = builder.xp;
+        this.hpFormula = builder.hpFormula;
+        this.proficiency = builder.proficiency;
+        this.armour = builder.armour;
+        this.speeds = builder.speeds;
+        this.abilityScores = builder.abilityScores;
+        this.abilities = builder.abilities;
+        this.actions = builder.actions;
+        this.savingThrowProficiencies = builder.savingThrowProficiencies;
+        this.skillProficiencies = builder.skillProficiencies;
+        this.conditionImmunities = builder.conditionImmunities;
+        this.resistances = builder.resistances;
+        this.languages = builder.languages;
+        this.senses = builder.senses;
+        this.legendaryMechanics = builder.legendaryMechanics;
     }
 
-    // EFFECTS: calculates modifier from given ability score
-    protected int convertToModifier(int modifier) {
-        return (modifier - 10) / 2;
-    }
-
+    // -----------------------------------------------------------------------------------------------------------------
     // getters:
-    // EFFECTS: gets statblock hp formula as a string
+    // EFFECTS: returns hp formula as a string
     public String getHPString() {
-        return hpFormula.getAmountOfDice() + "d"
+        return "(" + hpFormula.getAmountOfDice() + "d"
                 + hpFormula.getDieSides() + " + "
-                + hpFormula.getModifier();
+                + hpFormula.getModifier() + ")";
     }
 
-    // EFFECTS: gets statblock name with first letter capitalized
-    public String getName() {
-        return name;
+    // EFFECTS: calculates and returns the challenge ratings from xp (0-2,899)
+    public String getChallengeRating() {
+        if (xp < 24) {
+            return "0";
+        } else if (xp < 49) {
+            return "1/8";
+        } else if (xp < 99) {
+            return "1/4";
+        } else if (xp < 199) {
+            return "1/2";
+        } else if (xp < 449) {
+            return "1";
+        } else if (xp < 699) {
+            return "2";
+        } else if (xp < 1099) {
+            return "3";
+        } else if (xp < 1799) {
+            return "4";
+        } else if (xp < 2499) {
+            return "5";
+        } else if (xp < 2899) {
+            return "6";
+        } else {
+            return getChallengeRatingPartTwo();
+        }
     }
 
-    // EFFECTS: gets statblock size
-    public String getSize() {
-        return size;
+    // EFFECTS: calculates and returns the challenge rating ratings from xp (3,400-19,000)
+    public String getChallengeRatingPartTwo() {
+        if (xp < 3899) {
+            return "7";
+        } else if (xp < 4999) {
+            return "8";
+        } else if (xp < 5899) {
+            return "9";
+        } else if (xp < 7199) {
+            return "10";
+        } else if (xp < 8399) {
+            return "11";
+        } else if (xp < 9999) {
+            return "12";
+        } else if (xp < 11499) {
+            return "13";
+        } else if (xp < 12999) {
+            return "14";
+        } else if (xp < 14999) {
+            return "15";
+        } else if (xp < 18999) {
+            return "16";
+        } else {
+            return getChallengeRatingPartThree();
+        }
     }
 
-    // EFFECTS: gets statblock type
-    public String getType() {
-        return type;
+    // EFFECTS: calculates and returns the challenge rating ratings from xp (20,000-inf)
+    public String getChallengeRatingPartThree() {
+        if (xp < 19999) {
+            return "17";
+        } else if (xp < 21999) {
+            return "18";
+        } else if (xp < 24999) {
+            return "19";
+        } else if (xp < 32999) {
+            return "20";
+        } else if (xp < 40999) {
+            return "21";
+        } else if (xp < 49999) {
+            return "22";
+        } else if (xp < 61999) {
+            return "23";
+        } else if (xp < 74999) {
+            return "24";
+        } else if (xp < 89999) {
+            return "25";
+        } else if (xp < 104999) {
+            return "26";
+        } else {
+            return getChallengeRatingPartFour();
+        }
     }
 
-    // EFFECTS: gets statblock hp formula
+    // EFFECTS: calculates and returns the challenge rating from xp, third helper
+    public String getChallengeRatingPartFour() {
+        if (xp < 119999) {
+            return "27";
+        } else if (xp < 134999) {
+            return "28";
+        } else if (xp < 154999) {
+            return "29";
+        } else {
+            return "30+";
+        }
+    }
+
+    // EFFECTS: gets name
+    public Title getTitle() {
+        return title;
+    }
+
+    // EFFECTS: gets xp
+    public int getXp() {
+        return xp;
+    }
+
+    // EFFECTS: gets hp formula
     public RollFormula getHpFormula() {
         return hpFormula;
     }
 
-    // EFFECTS: gets statblock ac
-    public int getAC() {
-        return ac;
+    // EFFECTS: gets proficiency
+    public int getProficiency() {
+        return proficiency;
     }
 
-    // EFFECTS: gets statblock speed
-    public int getSpeed() {
-        return speed;
+    // EFFECTS: gets armour
+    public Armour getArmour() {
+        return armour;
     }
 
-    //EFFECTS: gets statblock initiative bonus
-    public int getInitiativeBonus() {
-        return initiativeBonus;
+    // EFFECTS: gets speeds
+    public Speeds getSpeeds() {
+        return speeds;
     }
 
-    // EFFECTS: gets statblock strength
-    public int getStrength() {
-        return strength;
+    // EFFECTS: gets senses
+    public Senses getSenses() {
+        return senses;
     }
 
-    // EFFECTS: gets statblock strength modifier
-    public int getStrengthModifier() {
-        return convertToModifier(strength);
+    // EFFECTS: gets ability scores
+    public AbilityScores getAbilityScores() {
+        return abilityScores;
     }
 
-    // EFFECTS: gets statblock dexterity
-    public int getDexterity() {
-        return dexterity;
+    // EFFECTS: gets abilities
+    public List<Ability> getAbilities() {
+        return abilities;
     }
 
-    // EFFECTS: gets statblock dexterity modifier
-    public int getDexterityModifier() {
-        return convertToModifier(dexterity);
-    }
-
-    // EFFECTS: gets statblock constitution
-    public int getConstitution() {
-        return constitution;
-    }
-
-    // EFFECTS: gets statblock constitution modifier
-    public int getConstitutionModifier() {
-        return convertToModifier(constitution);
-    }
-
-    // EFFECTS: gets statblock intelligence
-    public int getIntelligence() {
-        return intelligence;
-    }
-
-    // EFFECTS: gets statblock intelligence modifier
-    public int getIntelligenceModifier() {
-        return convertToModifier(intelligence);
-    }
-
-    // EFFECTS: gets statblock wisdom
-    public int getWisdom() {
-        return wisdom;
-    }
-
-    // EFFECTS: gets statblock wisdom modifier
-    public int getWisdomModifier() {
-        return convertToModifier(wisdom);
-    }
-
-    // EFFECTS: gets statblock charisma
-    public int getCharisma() {
-        return charisma;
-    }
-
-    // EFFECTS: gets statblock charisma modifier
-    public int getCharismaModifier() {
-        return convertToModifier(charisma);
-    }
-
-    // EFFECTS: gets statblock actions
+    // EFFECTS: gets actions
     public List<Action> getActions() {
         return actions;
     }
 
-    // EFFECTS: gets an error string, only meant for overriding with character
-    public String getGroup() {
-        return "ERROR: GET STATBLOCK GROUP";
+    // EFFECTS: gets saving throw proficiencies
+    public SavingThrowProficiencies getSavingThrowProficiencies() {
+        return savingThrowProficiencies;
+    }
+
+    // EFFECTS: gets skill proficiencies
+    public SkillProficiencies getSkillProficiencies() {
+        return skillProficiencies;
+    }
+
+    // EFFECTS: gets condition immunities
+    public ConditionImmunities getConditionImmunities() {
+        return conditionImmunities;
+    }
+
+    // EFFECTS: gets resistances
+    public Resistances getResistances() {
+        return resistances;
+    }
+
+    // EFFECTS: gets languages
+    public Languages getLanguages() {
+        return languages;
+    }
+
+    // EFFECTS: gets legendary mechanics
+    public LegendaryMechanics getLegendaryMechanics() {
+        return legendaryMechanics;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // builder class
+    public static class StatBlockBuilder {
+        // required fields
+        protected final Title title;
+
+        protected final RollFormula hpFormula;
+        protected final Armour armour;
+        protected final Speeds speeds;
+        protected final Senses senses;
+        protected final int proficiency;
+        protected final int xp;
+
+        protected final AbilityScores abilityScores;
+        protected final List<Ability> abilities;
+        protected final List<Action> actions;
+
+        // optional fields
+        protected SavingThrowProficiencies savingThrowProficiencies;
+        protected SkillProficiencies skillProficiencies;
+        protected ConditionImmunities conditionImmunities;
+        protected Resistances resistances;
+        protected Languages languages;
+        protected LegendaryMechanics legendaryMechanics;
+
+        // EFFECTS: constructs a builder with required fields
+        public StatBlockBuilder(Title title, int xp, RollFormula hpFormula, int proficiency, Armour armour,
+                                Speeds speeds, Senses senses, AbilityScores abilityScores, List<Ability> abilities,
+                                List<Action> actions, Languages languages) {
+            this.title = title;
+            this.hpFormula = hpFormula;
+            this.armour = armour;
+            this.speeds = speeds;
+            this.senses = senses;
+            this.proficiency = proficiency;
+            this.xp = xp;
+            this.abilityScores = abilityScores;
+            this.abilities = abilities;
+            this.actions = actions;
+            this.languages = languages;
+        }
+
+        // EFFECTS: returns a new StatBlock with required fields,
+        //          and any optional fields that had their builder called.
+        public StatBlock build() {
+            return new StatBlock(this);
+        }
+
+        // EFFECTS: returns a builder that assigns saving throw proficiencies to the StatBlock
+        public StatBlockBuilder savingThrowProficiencies(SavingThrowProficiencies savingThrowProficiencies) {
+            this.savingThrowProficiencies = savingThrowProficiencies;
+            return this;
+        }
+
+        // EFFECTS: returns a builder that assigns skill proficiencies to the StatBlock
+        public StatBlockBuilder skillProficiencies(SkillProficiencies skillProficiencies) {
+            this.skillProficiencies = skillProficiencies;
+            return this;
+        }
+
+        // EFFECTS: returns a builder that assigns condition immunities to the StatBlock
+        public StatBlockBuilder conditionImmunities(ConditionImmunities conditionImmunities) {
+            this.conditionImmunities = conditionImmunities;
+            return this;
+        }
+
+        // EFFECTS: returns a builder that assigns resistances to the StatBlock
+        public StatBlockBuilder resistances(Resistances resistances) {
+            this.resistances = resistances;
+            return this;
+        }
+
+        // EFFECTS: returns a builder that assigns saving legendary mechanics to the StatBlock
+        public StatBlockBuilder legendaryMechanics(LegendaryMechanics legendaryMechanics) {
+            this.legendaryMechanics = legendaryMechanics;
+            return this;
+        }
     }
 }

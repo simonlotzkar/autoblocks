@@ -2,7 +2,9 @@ package ui;
 
 import model.*;
 import model.Character;
+import model.statblockfields.*;
 
+import java.text.NumberFormat;
 import java.util.*;
 
 public class AutoBlocksApp {
@@ -17,6 +19,8 @@ public class AutoBlocksApp {
 
     private String menuLevel = "main";
     private boolean runApp = true;
+
+    private static final String commandInvalid = "Command invalid!";
 
     // EFFECTS: constructs the autoblocks app
     public AutoBlocksApp() {
@@ -78,7 +82,7 @@ public class AutoBlocksApp {
     private void processMainCommand(String command) {
         switch (command) {
             case "roll":
-                System.out.println(getCustomRollFormula("custom").roll());
+                System.out.println("Custom roll result: " + getRollFormula("custom").roll());
                 break;
             case "char":
                 searchForAndSelect("character");
@@ -93,7 +97,7 @@ public class AutoBlocksApp {
                 goToDesktop();
                 break;
             default:
-                System.out.println("Command invalid!");
+                System.out.println(commandInvalid);
                 break;
         }
     }
@@ -102,10 +106,12 @@ public class AutoBlocksApp {
     private void displayPlay() {
         if (!play.isEmpty()) {
             for (Character c : play) {
-                if (c.getGroup() != null) {
-                    System.out.println("\t" + c.getName() + " (Group: " + c.getGroup() + "), HP: " + c.getHPString());
+                Title selectedTitle = c.getTitle();
+                if (selectedTitle.getGroup() != null) {
+                    System.out.println("\t" + selectedTitle.getName()
+                            + " (Group: " + selectedTitle.getGroup() + "), HP: " + c.getHPString());
                 } else {
-                    System.out.println("\t" + c.getName() + ", HP: " + c.getHPString());
+                    System.out.println("\t" + selectedTitle.getName() + ", HP: " + c.getHPString());
                 }
             }
         } else {
@@ -114,7 +120,7 @@ public class AutoBlocksApp {
     }
 
     // EFFECTS: prompts user for roll fields based on given name and returns a roll with given input
-    private RollFormula getCustomRollFormula(String rollName) {
+    private RollFormula getRollFormula(String rollName) {
         System.out.println("Enter amount of dice for " + rollName + " roll.");
         int amountOfDice = userInput.nextInt();
         System.out.println("Enter sides on dice for " + rollName + " roll.");
@@ -138,7 +144,8 @@ public class AutoBlocksApp {
             selectCharacterByName(select);
         } else if ("group".equals(selectType)) {
             for (Character c : play) {
-                if (c.getGroup() != null && select.equals(c.getGroup().toLowerCase())) {
+                Title selectedTitle = c.getTitle();
+                if (selectedTitle.getGroup() != null && select.equals(selectedTitle.getGroup().toLowerCase())) {
                     selectGroupByName(select);
                     break;
                 }
@@ -151,7 +158,7 @@ public class AutoBlocksApp {
     // EFFECTS: searches library for given statblock name, prints name, selects them, and changes to StatBlockMenu
     private void selectStatBlockByName(String statBlockName) {
         for (StatBlock sb : library) {
-            if (statBlockName.equals(sb.getName().toLowerCase())) {
+            if (statBlockName.equals(sb.getTitle().getName().toLowerCase())) {
                 System.out.println("Found " + statBlockName + "!");
                 selectedStatBlock = sb;
                 menuLevel = "statblock";
@@ -162,7 +169,7 @@ public class AutoBlocksApp {
     // EFFECTS: searches play for given character name, prints name, selects them, and changes to CharacterMenu
     private void selectCharacterByName(String characterName) {
         for (Character c : play) {
-            if (characterName.equals(c.getName().toLowerCase())) {
+            if (characterName.equals(c.getTitle().getName().toLowerCase())) {
                 System.out.println("Found " + characterName + "!");
                 selectedCharacter = c;
                 menuLevel = "character";
@@ -176,7 +183,8 @@ public class AutoBlocksApp {
         System.out.println("Found " + groupName + "!");
         System.out.println("Selecting group members...");
         for (Character c : play) {
-            if (c.getGroup() != null && selectedGroupName.equals(c.getGroup())) {
+            Title selectedTitle = c.getTitle();
+            if (selectedTitle.getGroup() != null && selectedGroupName.equals(selectedTitle.getGroup())) {
                 selectedGroup.add(c);
             }
         }
@@ -239,7 +247,7 @@ public class AutoBlocksApp {
                 goToMainMenu();
                 break;
             default:
-                System.out.println("Command invalid!");
+                System.out.println(commandInvalid);
                 break;
         }
     }
@@ -261,41 +269,119 @@ public class AutoBlocksApp {
     // EFFECTS: prints given statblock OR character stats
     private void displayIndividualStats(StatBlock selected) {
         displayIndividualTitle(selected);
-        System.out.println("\t" + "HP = " + "(" + selected.getHPString() + ")"
-                + ", AC = " + selected.getAC()
-                + ", Speed = " + selected.getSpeed()
-                + ", Initiative = " + selected.getInitiativeBonus());
-        System.out.println("\t" + "Str: " + selected.getStrength() + "(" + selected.getStrengthModifier() + ")"
-                + ", Dex: " + selected.getDexterity() + "(" + selected.getDexterityModifier() + ")"
-                + ", Con: " + selected.getConstitution() + "(" + selected.getConstitutionModifier() + ")"
-                + ", Int: " + selected.getIntelligence() + "(" + selected.getIntelligenceModifier() + ")"
-                + ", Wis: " + selected.getWisdom() + "(" + selected.getWisdomModifier() + ")"
-                + ", Cha: " + selected.getCharisma() + "(" + selected.getCharismaModifier() + ")");
-        displayCharacterOrStatBlockActions(selected);
+        displayIndividualCombat(selected);
+        displayIndividualAbilityScores(selected);
+        displayIndividualDescriptors(selected);
+
+        if (!selected.getAbilities().isEmpty()) {
+            displayIndividualAbilities(selected);
+        }
+
+        displayIndividualActions(selected);
+
+        if (selected.getLegendaryMechanics() != null) {
+            displayIndividualLegendaryMechanics(selected);
+        }
     }
 
     // EFFECTS: prints the title of the given statblock OR character
     private void displayIndividualTitle(StatBlock selected) {
+        Title title = selected.getTitle();
         if (selected instanceof Character) {
-            if (selected.getGroup() != null) {
-                System.out.println("\n" + selected.getName() + " (Group: " + selected.getGroup() + ")" + ": "
-                        + selected.getSize() + " " + selected.getType() + ".");
+            if (title.getGroup() != null) {
+                System.out.println("\n" + title.getName() + " (Group: " + title.getGroup() + "): "
+                        + title.getSize() + " " + title.getType() + ", " + title.getAlignment() + ":");
             } else {
-                System.out.println("\n" + selected.getName() + " (Group: None): "
-                        + selected.getSize() + " " + selected.getType() + ".");
+                System.out.println("\n" + title.getName() + " (Group: None): "
+                        + title.getSize() + " " + title.getType() + ", " + title.getAlignment() + ":");
             }
         } else {
-            System.out.println("\n" + selected.getName() + ": " + selected.getSize() + " " + selected.getType() + ".");
+            System.out.println("\n" + title.getName() + ": "
+                    + title.getSize() + " " + title.getType() + ", " + title.getAlignment() + ":");
         }
     }
 
-    // EFFECTS: prints all actions for the given statblock or character
-    private void displayCharacterOrStatBlockActions(StatBlock statBlock) {
+    // EFFECTS: prints the selected StatBlock or Character combat related stats
+    private void displayIndividualCombat(StatBlock selected) {
+        System.out.println("\t" + "Hit Points: " + selected.getHPString()
+                + "\tArmour Class: " + selected.getArmour().getArmourString()
+                + "\tSpeed: " + selected.getSpeeds().getSpeedsString()
+                + "\tSenses: " + selected.getSenses().getSensesString()
+                + "\tProficiency: " + selected.getProficiency()
+                + "\tChallenge " + selected.getChallengeRating()
+                + " (" + NumberFormat.getIntegerInstance().format(selected.getXp()) + "xp)");
+    }
+
+    // EFFECTS: prints the selected StatBlock or Character ability scores with modifiers
+    private void displayIndividualAbilityScores(StatBlock selected) {
+        AbilityScores abilityScores = selected.getAbilityScores();
+        System.out.println("\tStr: " + abilityScores.getStrength()
+                + "(" + abilityScores.getStrengthModifier() + ")"
+                + ", Dex: " + abilityScores.getDexterity()
+                + "(" + abilityScores.getDexterityModifier() + ")"
+                + ", Con: " + abilityScores.getConstitution()
+                + "(" + abilityScores.getConstitutionModifier() + ")"
+                + ", Int: " + abilityScores.getIntelligence()
+                + "(" + abilityScores.getIntelligenceModifier() + ")"
+                + ", Wis: " + abilityScores.getWisdom()
+                + "(" + abilityScores.getWisdomModifier() + ")"
+                + ", Cha: " + abilityScores.getCharisma()
+                + "(" + abilityScores.getCharismaModifier() + ")");
+    }
+
+    // EFFECTS: prints the selected StatBlock or Character descriptors that are not empty
+    private void displayIndividualDescriptors(StatBlock selected) {
+        String descriptors = "";
+
+        SavingThrowProficiencies savingThrows = selected.getSavingThrowProficiencies();
+        SkillProficiencies skills = selected.getSkillProficiencies();
+        Resistances resistances = selected.getResistances();
+        ConditionImmunities conditionImmunities = selected.getConditionImmunities();
+
+        if (savingThrows != null) {
+            descriptors += "\tProficient Saving Throws: " + savingThrows.getSavingThrowProficienciesString(selected);
+        }
+
+        if (skills != null) {
+            descriptors += "\tProficient Skills: " + skills.getSkillProficienciesString(selected);
+        }
+
+        if (resistances != null) {
+            descriptors += resistances.getResistancesString();
+        }
+
+        if (conditionImmunities != null) {
+            descriptors += "\tCondition Immunities: " + conditionImmunities.getConditionImmunitiesString();
+        }
+
+        descriptors += ("\t" + selected.getLanguages().getLanguagesString());
+        System.out.println(descriptors);
+    }
+
+    // EFFECTS: prints the selected StatBlock or Character abilities
+    private void displayIndividualAbilities(StatBlock selected) {
+        System.out.println("\tAbilities:");
+        for (Ability a : selected.getAbilities()) {
+            System.out.println("\t\t" + a.getName() + ": " + a.getDescription() + ". ");
+        }
+    }
+
+    // EFFECTS: prints the selected StatBlock or Character actions
+    private void displayIndividualActions(StatBlock selected) {
         System.out.println("\tActions:");
-        for (Action a : statBlock.getActions()) {
-            System.out.println("\t" + a.getName() + ": " + a.getDescription() + ". " + a.getReach() + " reach, "
-                    + "(" + a.getHitString() + ") to hit, (" + a.getDamageString() + ") "
+        for (Action a : selected.getActions()) {
+            System.out.println("\t\t" + a.getName() + ": " + a.getDescription() + ". " + a.getReach() + " reach, "
+                    + "(" + a.getHit().getRollString() + ") to hit, (" + a.getDamage().getRollString() + ") "
                     + a.getDamageType().toLowerCase() + " damage. ");
+        }
+    }
+
+    // EFFECTS: prints the selected StatBlock or Character legendary mechanics
+    private void displayIndividualLegendaryMechanics(StatBlock selected) {
+        System.out.println("\tLegendary Mechanics:");
+        System.out.println(selected.getLegendaryMechanics().getLegendaryDescription());
+        for (Ability a : selected.getLegendaryMechanics().getLegendaryActions()) {
+            System.out.println("\t" + a.getName() + ": " + a.getDescription() + ". ");
         }
     }
 
@@ -323,20 +409,20 @@ public class AutoBlocksApp {
 
     // EFFECTS: prompts user to either change or remove group then executes choice
     private void changeCharacterGroup() {
-        if (selectedCharacter.getGroup() != null) {
+        if (selectedCharacter.getTitle().getGroup() != null) {
             System.out.println("Enter the new group for this character (one word), or type rem to remove its group:");
             String newGroup = userInput.next().toLowerCase();
             if (newGroup.equals("rem")) {
-                selectedCharacter.setGroup(null);
+                selectedCharacter.getTitle().setGroup(null);
                 System.out.println("Removed this character's group.");
             } else {
-                selectedCharacter.setGroup(newGroup.substring(0, 1).toUpperCase() + newGroup.substring(1));
+                selectedCharacter.getTitle().setGroup(newGroup.substring(0, 1).toUpperCase() + newGroup.substring(1));
                 System.out.println("Changed this character's group.");
             }
         } else {
             System.out.println("Enter the new group (one word) for this character:");
             String newGroup = userInput.next().toLowerCase();
-            selectedCharacter.setGroup(newGroup.substring(0, 1).toUpperCase() + newGroup.substring(1));
+            selectedCharacter.getTitle().setGroup(newGroup.substring(0, 1).toUpperCase() + newGroup.substring(1));
             System.out.println("Changed this character's group.");
         }
     }
@@ -359,7 +445,7 @@ public class AutoBlocksApp {
         } else if (command.equals("n")) {
             System.out.println("Cancelling deletion...");
         } else {
-            System.out.println("Command invalid!");
+            System.out.println(commandInvalid);
             displayDeleteCharacterMenu();
         }
     }
@@ -405,16 +491,16 @@ public class AutoBlocksApp {
                 editHP();
                 break;
             case "rem":
-                displayReduceGroupMenu("remove");
+                displayReduceOrDeleteGroupMenu("remove");
                 break;
             case "del":
-                displayReduceGroupMenu("delete");
+                displayReduceOrDeleteGroupMenu("delete");
                 break;
             case "exit":
                 goToMainMenu();
                 break;
             default:
-                System.out.println("Command invalid!");
+                System.out.println(commandInvalid);
                 break;
         }
     }
@@ -422,7 +508,7 @@ public class AutoBlocksApp {
     // REQUIRES: instruction is either "remove" or "delete"
     // EFFECTS: prompts user for confirmation, removes group from characters in it, then exits menu *MainMenu*;
     //          OR does the same but also deletes characters in groups, depending on given instruction
-    private void displayReduceGroupMenu(String instruction) {
+    private void displayReduceOrDeleteGroupMenu(String instruction) {
         if (instruction.equals("remove")) {
             System.out.println("\nAre you sure you want to remove the selected group from all characters? Confirm:");
         } else {
@@ -431,12 +517,12 @@ public class AutoBlocksApp {
         System.out.println("\ty = yes,");
         System.out.println("\tn = no");
         String command = userInput.next().toLowerCase();
-        processReduceGroupCommand(instruction, command);
+        processReduceOrDeleteGroupCommand(instruction, command);
     }
 
     // EFFECTS: processes ReduceGroupMenu commands based on given instruction and command
-    private void processReduceGroupCommand(String instruction, String command) {
-        if (command.equals("y")) {
+    private void processReduceOrDeleteGroupCommand(String instruction, String command) {
+        if ("y".equals(command)) {
             if (instruction.equals("remove")) {
                 System.out.println("Removing group from characters...");
                 removeGroupFromCharacters();
@@ -448,10 +534,10 @@ public class AutoBlocksApp {
                 System.out.println("Deleted group and characters.");
                 goToMainMenu();
             }
-        } else if (command.equals("n")) {
+        } else if ("n".equals(command)) {
             System.out.println("Cancelling removal...");
         } else {
-            System.out.println("Command invalid!");
+            System.out.println(commandInvalid);
             displayDeleteCharacterMenu();
         }
     }
@@ -459,7 +545,7 @@ public class AutoBlocksApp {
     // EFFECTS: sets every group member in selected group to no group
     private void removeGroupFromCharacters() {
         for (Character c : selectedGroup) {
-            c.setGroup(null);
+            c.getTitle().setGroup(null);
         }
     }
 
@@ -510,7 +596,7 @@ public class AutoBlocksApp {
                 goToMainMenu();
                 break;
             default:
-                System.out.println("Command invalid!");
+                System.out.println(commandInvalid);
                 break;
         }
     }
@@ -519,13 +605,13 @@ public class AutoBlocksApp {
     //          parent statblock actions
     private void displayRollMenuActions() {
         if (selectedCharacter != null) {
-            displayCharacterOrStatBlockActions(selectedCharacter);
+            displayIndividualActions(selectedCharacter);
         } else {
-            List<String> displayedStatBlocks = new ArrayList<>();
+            List<StatBlock> displayedStatBlocks = new ArrayList<>();
             for (Character c : selectedGroup) {
-                if (!displayedStatBlocks.contains(c.getParentStatBlockName())) {
-                    displayCharacterOrStatBlockActions(c);
-                    displayedStatBlocks.add(c.getParentStatBlockName());
+                if (!displayedStatBlocks.contains(c.getParentStatBlock())) {
+                    displayIndividualActions(c);
+                    displayedStatBlocks.add(c.getParentStatBlock());
                 }
             }
         }
@@ -556,7 +642,7 @@ public class AutoBlocksApp {
     private void rollCharacterActionByName(Character character, String action) {
         for (Action a : character.getActions()) {
             if (a.getName().equalsIgnoreCase(action)) {
-                a.displayRollForCharacter(character.getName());
+                a.displayRollForCharacter(character.getTitle().getName());
                 break;
             }
         }
@@ -599,7 +685,7 @@ public class AutoBlocksApp {
                 displayAbilityCheck("charisma");
                 break;
             default:
-                System.out.println("Command invalid!");
+                System.out.println(commandInvalid);
                 break;
         }
     }
@@ -607,11 +693,11 @@ public class AutoBlocksApp {
     // EFFECTS: prints given check for selected character OR all characters in selected group
     private void displayAbilityCheck(String ability) {
         if (selectedCharacter != null) {
-            System.out.println(selectedCharacter.getName()
+            System.out.println(selectedCharacter.getTitle().getName()
                     + "'s " + ability + "check: " + rollAbilityCheck(selectedCharacter, ability) + ".");
         } else {
             for (Character c : selectedGroup) {
-                System.out.println(c.getName() + "'s " + ability + "check: " + rollAbilityCheck(c, ability));
+                System.out.println(c.getTitle().getName() + "'s " + ability + "check: " + rollAbilityCheck(c, ability));
             }
         }
     }
@@ -637,37 +723,37 @@ public class AutoBlocksApp {
 
     // EFFECTS: rolls a strength check for the given character
     private int rollStrengthCheck(Character character) {
-        RollFormula rollFormula = new RollFormula(1, 20, character.getStrengthModifier());
+        RollFormula rollFormula = new RollFormula(1, 20, character.getAbilityScores().getStrengthModifier());
         return rollFormula.roll();
     }
 
     // EFFECTS: rolls a dexterity check for the given character
     private int rollDexterityCheck(Character character) {
-        RollFormula rollFormula = new RollFormula(1, 20, character.getDexterityModifier());
+        RollFormula rollFormula = new RollFormula(1, 20, character.getAbilityScores().getDexterityModifier());
         return rollFormula.roll();
     }
 
     // EFFECTS: rolls a constitution check for the given character
     private int rollConstitutionCheck(Character character) {
-        RollFormula rollFormula = new RollFormula(1, 20, character.getConstitutionModifier());
+        RollFormula rollFormula = new RollFormula(1, 20, character.getAbilityScores().getConstitutionModifier());
         return rollFormula.roll();
     }
 
     // EFFECTS: rolls a intelligence check for the given character
     private int rollIntelligenceCheck(Character character) {
-        RollFormula rollFormula = new RollFormula(1, 20, character.getIntelligenceModifier());
+        RollFormula rollFormula = new RollFormula(1, 20, character.getAbilityScores().getIntelligenceModifier());
         return rollFormula.roll();
     }
 
     // EFFECTS: rolls a wisdom skill for the given character
     private int rollWisdomCheck(Character character) {
-        RollFormula rollFormula = new RollFormula(1, 20, character.getWisdomModifier());
+        RollFormula rollFormula = new RollFormula(1, 20, character.getAbilityScores().getWisdomModifier());
         return rollFormula.roll();
     }
 
     // EFFECTS: rolls a charisma check for the given character
     private int rollCharismaCheck(Character character) {
-        RollFormula rollFormula = new RollFormula(1, 20, character.getCharismaModifier());
+        RollFormula rollFormula = new RollFormula(1, 20, character.getAbilityScores().getCharismaModifier());
         return rollFormula.roll();
     }
 
@@ -675,18 +761,13 @@ public class AutoBlocksApp {
     private void displayInitiativeMenu() {
         System.out.println("Rolling initiative...");
         if (selectedCharacter != null) {
-            System.out.println(selectedCharacter.getName()
-                    + "'s initiative: " + rollInitiative(selectedCharacter) + ".");
+            System.out.println(selectedCharacter.getTitle().getName()
+                    + "'s initiative: " + rollDexterityCheck(selectedCharacter) + ".");
         } else {
             for (Character c : selectedGroup) {
-                System.out.println(c.getName() + "'s initiative: " + rollInitiative(c));
+                System.out.println(c.getTitle().getName() + "'s initiative: " + rollDexterityCheck(c));
             }
         }
-    }
-
-    // EFFECTS: calculates the totalInitiativeBonus for given character and rolls their initiative
-    private int rollInitiative(Character character) {
-        return rollDexterityCheck(character) + character.getInitiativeBonus();
     }
 
     // REQUIRES: either a character or group is selected
@@ -717,10 +798,10 @@ public class AutoBlocksApp {
         System.out.println("\texit: Go back to the main menu.");
     }
 
-    // EFFECTS: prints all statblocks in the library with their names, sorted alphabetically
+    // EFFECTS: prints all statblocks in the library with their names
     private void displayLibrary() {
         for (StatBlock sb : library) {
-            System.out.println(sb.getName());
+            System.out.println(sb.getTitle().getName());
         }
     }
 
@@ -738,7 +819,7 @@ public class AutoBlocksApp {
                 goToMainMenu();
                 break;
             default:
-                System.out.println("Command invalid!");
+                System.out.println(commandInvalid);
                 break;
         }
     }
@@ -746,27 +827,102 @@ public class AutoBlocksApp {
     // EFFECTS: prompts user for new statblock parameters, then constructs a new statblock based on userinput and
     //          adds it to the library. if user gives a name already in use, reprompts for different name.
     private void createCustomStatBlock() {
-        String name = getCustomStatBlockName();
-        String size = getCustomStatBlockString("size");
-        String type = getCustomStatBlockString("type");
-
-        RollFormula hpFormula = getCustomRollFormula("hpformula");
-        int ac = getCustomStatBlockInteger("ac");
-        int speed = getCustomStatBlockInteger("speed");
-        int initiativeBonus = getCustomStatBlockInteger("initiativeBonus");
-
-        int strength = getCustomStatBlockInteger("strength");
-        int dexterity = getCustomStatBlockInteger("dexterity");
-        int constitution = getCustomStatBlockInteger("constitution");
-        int intelligence = getCustomStatBlockInteger("intelligence");
-        int wisdom = getCustomStatBlockInteger("wisdom");
-        int charisma = getCustomStatBlockInteger("charisma");
-
+        Title title = getCustomStatBlockTitle();
+        int xp = getCustomInteger("statblock xp");
+        RollFormula hpFormula = getRollFormula("custom statblock hp formula");
+        int proficiency = getCustomInteger("statblock proficiency bonus");
+        Armour armour = getCustomStatBlockArmour();
+        Speeds speeds = getCustomStatBlockSpeeds();
+        Senses senses = getCustomStatBlockSenses();
+        AbilityScores abilityScores = getCustomStatBlockAbilityScores();
+        List<Ability> abilities = getCustomStatBlockAbilities("abilities");
         List<Action> actions = getCustomStatBlockActions();
+        Languages languages = getCustomStatBlockLanguages();
 
-        StatBlock customStatBlock = new StatBlock(name, size, type, hpFormula, ac, speed, initiativeBonus,
-                strength, dexterity, constitution, intelligence, wisdom, charisma, actions);
+        StatBlock customStatBlock = new StatBlock.StatBlockBuilder(title, xp, hpFormula, proficiency, armour, speeds,
+                senses, abilityScores, abilities, actions, languages)
+                .savingThrowProficiencies(promptGetCustomStatBlockSavingThrowProficiencies())
+                .skillProficiencies(promptGetCustomStatBlockSkillProficiencies())
+                .conditionImmunities(promptGetCustomStatBlockConditionImmunities())
+                .resistances(promptGetCustomStatBlockResistances())
+                .legendaryMechanics(promptGetCustomStatBlockLegendaryMechanics())
+                .build();
+
         library.add(customStatBlock);
+    }
+
+    // EFFECTS: prompts user for given string and returns it
+    private String getCustomString(String customString) {
+        System.out.println("Enter custom " + customString + ": ");
+        return userInput.next();
+    }
+
+    // EFFECTS: prompts user for given integer and returns it
+    private int getCustomInteger(String customInteger) {
+        System.out.println("Enter custom " + customInteger + ": ");
+        return userInput.nextInt();
+    }
+
+    // EFFECTS: prompts user for given statblock string field and returns it
+    private String getCustomStatBlockString(String field) {
+        return getCustomString("statblock " + field);
+    }
+
+    // EFFECTS: prompts user for given statblock integer field and returns it
+    private int getCustomStatBlockInteger(String field) {
+        return getCustomInteger("statblock " + field);
+    }
+
+    // EFFECTS: prompts user for given question and returns true or false based on user input
+    private boolean promptConfirmation(String prompt) {
+        System.out.println("Confirm: " + prompt + "? Input y for yes or n for no...");
+        switch (userInput.next().toLowerCase()) {
+            case "y":
+                return true;
+            case "n":
+                return false;
+            default:
+                System.out.println(commandInvalid);
+                return promptConfirmation(prompt);
+        }
+    }
+
+    // EFFECTS: prompts user for given statblock boolean field and returns it
+    private boolean getCustomStatBlockBoolean(String field) {
+        return promptConfirmation("Statblock " + field);
+    }
+
+    // EFFECTS: prompts user with confirmation to add armour name to the custom statblock;
+    //          if yes, prompts user for an armour name and returns it;
+    //          if no, returns null.
+    private String getCustomStatBlockArmourName() {
+        if (promptConfirmation("add custom statblock armour name")) {
+            return getCustomString("statblock armour name");
+        }
+        return null;
+    }
+
+    // EFFECTS: prompts user to add an optional integer and gets it if the user confirms it, or 0
+    private int getCustomOptionalInteger(String customInteger) {
+        if (promptConfirmation("add custom " + customInteger)) {
+            return getCustomInteger(customInteger);
+        }
+        return 0;
+    }
+
+    // EFFECTS: prompts user to add an optional statblock integer field and gets it if the user confirms it, or 0
+    private int getCustomStatBlockOptionalInteger(String field) {
+        return getCustomOptionalInteger("statblock " + field);
+    }
+
+    // EFFECTS: prompts user for custom statblock title parameters then constructs a title with them, excluding group;
+    //          if user gives a name already in use, reprompts for different name;
+    private Title getCustomStatBlockTitle() {
+        return new Title.TitleBuilder(
+                getCustomStatBlockName(),
+                getCustomStatBlockString("size"),
+                getCustomStatBlockString("type"),
+                getCustomStatBlockString("alignment")).build();
     }
 
     // EFFECTS: prompts user for new custom statblock name, reasks if the given name belongs to an existing statblock
@@ -774,24 +930,74 @@ public class AutoBlocksApp {
     private String getCustomStatBlockName() {
         String name = getCustomStatBlockString("name");
         for (StatBlock sb : library) {
-            if ((sb.getName().toLowerCase()).equals(name)) {
-                System.out.println("This name is already in use. Trying again...");
+            if ((sb.getTitle().getName().toLowerCase()).equals(name)) {
+                System.out.println("This name is already in use. Try again...");
                 getCustomStatBlockName();
             }
         }
         return name;
     }
 
-    // EFFECTS: prompts user for given field based on given string and returns it
-    private String getCustomStatBlockString(String field) {
-        System.out.println("Enter custom statblock " + field + ": ");
-        return userInput.next();
+    // EFFECTS: prompts user for custom StatBlock armour parameters then returns it
+    private Armour getCustomStatBlockArmour() {
+        return new Armour.ArmourBuilder(getCustomStatBlockInteger("armour ac"))
+                .armourName(getCustomStatBlockArmourName())
+                .magicArmour(getCustomStatBlockOptionalInteger("magic armour ac"))
+                .build();
     }
 
-    // EFFECTS: prompts user for given field based on given int and returns it
-    private int getCustomStatBlockInteger(String field) {
-        System.out.println("Enter custom statblock " + field + ": ");
-        return userInput.nextInt();
+    // EFFECTS: prompts user for custom StatBlock speeds parameters then returns it
+    private Speeds getCustomStatBlockSpeeds() {
+        return new Speeds.SpeedsBuilder(getCustomStatBlockInteger("speed"))
+                .burrow(getCustomStatBlockOptionalInteger("burrowing speed"))
+                .climb(getCustomStatBlockOptionalInteger("climbing speed"))
+                .fly(getCustomStatBlockOptionalInteger("flying speed"))
+                .swim(getCustomStatBlockOptionalInteger("swimming speed"))
+                .build();
+    }
+
+    // EFFECTS: prompts user for custom StatBlock senses parameters then returns it
+    private Senses getCustomStatBlockSenses() {
+        return new Senses.SensesBuilder(getCustomStatBlockInteger("passive perception"))
+                .blindSight(getCustomStatBlockOptionalInteger("blindsight"))
+                .darkVision(getCustomStatBlockOptionalInteger("darkvision"))
+                .tremorSense(getCustomStatBlockOptionalInteger("tremorsense"))
+                .trueSight(getCustomStatBlockOptionalInteger("truesight"))
+                .build();
+    }
+
+    // EFFECTS: prompts user for custom StatBlock ability scores then returns it
+    private AbilityScores getCustomStatBlockAbilityScores() {
+        String as = " ability score";
+
+        return new AbilityScores(getCustomStatBlockInteger("strength" + as),
+                getCustomStatBlockInteger("dexterity" + as),
+                getCustomStatBlockInteger("constitution" + as),
+                getCustomStatBlockInteger("intelligence" + as),
+                getCustomStatBlockInteger("wisdom" + as),
+                getCustomStatBlockInteger("charisma" + as));
+    }
+
+    // EFFECTS: prompts user for number of given ability types to add, then prompts for each field for each ability
+    //          and returns them as a list
+    private List<Ability> getCustomStatBlockAbilities(String abilityType) {
+        List<Ability> abilities =  new ArrayList<>();
+        System.out.println("How many " + abilityType + " do you want to give your custom statblock?");
+        int numberOfAbilities = userInput.nextInt() + 1;
+        for (int i = 1; i < numberOfAbilities; i++) {
+            System.out.println("Adding " + abilityType + " " + i + "...");
+            abilities.add(getCustomAbility(abilityType));
+        }
+        return abilities;
+    }
+
+    // EFFECTS: prompts user for ability fields of given ability type and constructs an ability with them,
+    //          then returns it
+    private Ability getCustomAbility(String abilityType) {
+        String name = getCustomString(abilityType + " name");
+        String description = getCustomString(abilityType + " description");
+
+        return new Ability(name, description);
     }
 
     // EFFECTS: prompts user for number of actions to add, then prompts for each field for each action
@@ -802,22 +1008,217 @@ public class AutoBlocksApp {
         int numberOfActions = userInput.nextInt() + 1;
         for (int i = 1; i < numberOfActions; i++) {
             System.out.println("Adding action " + i + "...");
-            actions.add(getCustomStatBlockAction());
+            actions.add(getCustomAction());
         }
         return actions;
     }
 
     // EFFECTS: prompts user for action fields and constructs an action with them, then returns it
-    private Action getCustomStatBlockAction() {
-        String name = getCustomStatBlockString("name");
-        String description = getCustomStatBlockString("description");
-        String damageType = getCustomStatBlockString("damagetype");
-        String reach = getCustomStatBlockString("reach");
+    private Action getCustomAction() {
+        String name = getCustomString("action name");
+        String description = getCustomString("action description");
+        String damageType = getCustomString("action damage type");
+        String reach = getCustomString("action reach");
 
-        RollFormula hit = getCustomRollFormula("hit");
-        RollFormula damage = getCustomRollFormula("damage");
+        RollFormula hit = getRollFormula("action hit");
+        RollFormula damage = getRollFormula("action damage");
 
         return new Action(name, description, damageType, reach, hit, damage);
+    }
+
+    // EFFECTS: prompts user for custom StatBlock languages and telepathy then returns them as a Languages
+    private Languages getCustomStatBlockLanguages() {
+        List<String> listOfLanguages = getCustomStatBlockListOfLanguages();
+        int telepathy = getCustomStatBlockOptionalInteger("telepathy range");
+
+        return new Languages.LanguagesBuilder(listOfLanguages).telepathy(telepathy).build();
+    }
+
+    // EFFECTS: prompts user for number of languages to add, then prompts for each language and returns them as a list
+    private List<String> getCustomStatBlockListOfLanguages() {
+        List<String> listOfLanguages =  new ArrayList<>();
+        System.out.println("How many languages do you want to give your custom statblock?");
+        int numberOfActions = userInput.nextInt() + 1;
+        for (int i = 1; i < numberOfActions; i++) {
+            System.out.println("Adding language " + i + "...");
+            listOfLanguages.add(getCustomStatBlockString("language"));
+        }
+        return listOfLanguages;
+    }
+
+    // EFFECTS: prompts user if they want to add saving throw proficiencies to the custom statblock:
+    //          if yes they are prompted for each saving throw and returns them as a SavingThrowProficiencies;
+    //          if no, returns a default SavingThrowProficiencies
+    private SavingThrowProficiencies promptGetCustomStatBlockSavingThrowProficiencies() {
+        if (promptConfirmation("add custom statblock saving throw proficiencies")) {
+            return getCustomStatBlockSavingThrowProficiencies();
+        } else {
+            return new SavingThrowProficiencies.SavingThrowProficienciesBuilder().build();
+        }
+    }
+
+    // EFFECTS: prompts user for custom StatBlock all saving throw proficiencies,
+    //          then returns them as a SavingThrowProficiencies
+    private SavingThrowProficiencies getCustomStatBlockSavingThrowProficiencies() {
+        String suffix = " saving throw proficiency";
+
+        return new SavingThrowProficiencies.SavingThrowProficienciesBuilder()
+                .strengthProficiency(getCustomStatBlockBoolean("strength" + suffix))
+                .dexterityProficiency(getCustomStatBlockBoolean("dexterity" + suffix))
+                .constitutionProficiency(getCustomStatBlockBoolean("constitution" + suffix))
+                .intelligenceProficiency(getCustomStatBlockBoolean("intelligence" + suffix))
+                .wisdomProficiency(getCustomStatBlockBoolean("wisdom" + suffix))
+                .charismaProficiency(getCustomStatBlockBoolean("charisma" + suffix))
+                .build();
+    }
+
+    // EFFECTS: prompts user if they want to add skill proficiencies to the custom statblock:
+    //          if yes they are prompted for each skill and returns them as a SkillProficiencies;
+    //          if no, returns a default SkillProficiencies
+    private SkillProficiencies promptGetCustomStatBlockSkillProficiencies() {
+        if (promptConfirmation("add custom statblock skill proficiencies")) {
+            return getCustomStatBlockSkillProficiencies();
+        } else {
+            return new SkillProficiencies.SkillProficienciesBuilder().build();
+        }
+    }
+
+    // EFFECTS: prompts user for custom StatBlock skill proficiencies then returns them as a SkillProficiencies
+    private SkillProficiencies getCustomStatBlockSkillProficiencies() {
+        String suffix = " skill proficiency";
+
+        return new SkillProficiencies.SkillProficienciesBuilder()
+                .acrobatics(getCustomStatBlockBoolean("acrobatics" + suffix))
+                .animalHandling(getCustomStatBlockBoolean("animal handling" + suffix))
+                .arcana(getCustomStatBlockBoolean("arcana" + suffix))
+                .athletics(getCustomStatBlockBoolean("athletics" + suffix))
+                .deception(getCustomStatBlockBoolean("deception" + suffix))
+                .history(getCustomStatBlockBoolean("history" + suffix))
+                .insight(getCustomStatBlockBoolean("insight" + suffix))
+                .intimidation(getCustomStatBlockBoolean("intimidation" + suffix))
+                .investigation(getCustomStatBlockBoolean("investigation" + suffix))
+                .medicine(getCustomStatBlockBoolean("medicine" + suffix))
+                .nature(getCustomStatBlockBoolean("nature" + suffix))
+                .perception(getCustomStatBlockBoolean("perception" + suffix))
+                .performance(getCustomStatBlockBoolean("performance" + suffix))
+                .persuasion(getCustomStatBlockBoolean("persuasion" + suffix))
+                .religion(getCustomStatBlockBoolean("religion" + suffix))
+                .sleightOfHand(getCustomStatBlockBoolean("sleight of hand" + suffix))
+                .stealth(getCustomStatBlockBoolean("stealth" + suffix))
+                .survival(getCustomStatBlockBoolean("survival" + suffix))
+                .build();
+    }
+
+    // EFFECTS: prompts user if they want to add condition immunities to the custom statblock:
+    //          if yes they are prompted for each condition and returns them as a ConditionImmunities;
+    //          if no, returns a default ConditionImmunities
+    private ConditionImmunities promptGetCustomStatBlockConditionImmunities() {
+        if (promptConfirmation("add custom statblock condition immunities")) {
+            return getCustomStatBlockConditionImmunities();
+        } else {
+            return new ConditionImmunities.ConditionImmunitiesBuilder().build();
+        }
+    }
+
+    // EFFECTS: prompts user for custom StatBlock condition immunities then returns them as a ConditionImmunities
+    private ConditionImmunities getCustomStatBlockConditionImmunities() {
+        String suffix = " condition immunity";
+
+        return new ConditionImmunities.ConditionImmunitiesBuilder()
+                .blinded(getCustomStatBlockBoolean("blinded" + suffix))
+                .charmed(getCustomStatBlockBoolean("charmed" + suffix))
+                .deafened(getCustomStatBlockBoolean("deafened" + suffix))
+                .frightened(getCustomStatBlockBoolean("frightened" + suffix))
+                .grappled(getCustomStatBlockBoolean("grappled" + suffix))
+                .incapacitated(getCustomStatBlockBoolean("incapacitated" + suffix))
+                .invisible(getCustomStatBlockBoolean("invisible" + suffix))
+                .paralyzed(getCustomStatBlockBoolean("paralyzed" + suffix))
+                .petrified(getCustomStatBlockBoolean("petrified" + suffix))
+                .poisoned(getCustomStatBlockBoolean("poisoned" + suffix))
+                .prone(getCustomStatBlockBoolean("prone" + suffix))
+                .restrained(getCustomStatBlockBoolean("restrained" + suffix))
+                .stunned(getCustomStatBlockBoolean("stunned" + suffix))
+                .unconscious(getCustomStatBlockBoolean("unconscious" + suffix))
+                .build();
+    }
+
+    // EFFECTS: prompts user if they want to add damage type resistances to the custom statblock:
+    //          if yes they are prompted for each damage type and returns them as a Resistances;
+    //          if no, returns a default Resistances
+    private Resistances promptGetCustomStatBlockResistances() {
+        if (promptConfirmation("add custom statblock damage type vulnerabilities/resistances/immunities")) {
+            return getCustomStatBlockResistances();
+        } else {
+            return new Resistances.ResistancesBuilder().build();
+        }
+    }
+
+    // EFFECTS: prompts user for custom StatBlock resistances then returns them as a Resistances
+    private Resistances getCustomStatBlockResistances() {
+        String suffix = " damage resistance";
+
+        return new Resistances.ResistancesBuilder()
+                .acid(getCustomStatBlockOptionalResistance("acid" + suffix))
+                .bludgeoning(getCustomStatBlockOptionalResistance("bludgeoning" + suffix))
+                .cold(getCustomStatBlockOptionalResistance("cold" + suffix))
+                .fire(getCustomStatBlockOptionalResistance("fire" + suffix))
+                .force(getCustomStatBlockOptionalResistance("force" + suffix))
+                .lightning(getCustomStatBlockOptionalResistance("lightning" + suffix))
+                .necrotic(getCustomStatBlockOptionalResistance("necrotic" + suffix))
+                .piercing(getCustomStatBlockOptionalResistance("piercing" + suffix))
+                .poison(getCustomStatBlockOptionalResistance("poison" + suffix))
+                .psychic(getCustomStatBlockOptionalResistance("psychic" + suffix))
+                .radiant(getCustomStatBlockOptionalResistance("radiant" + suffix))
+                .slashing(getCustomStatBlockOptionalResistance("slashing" + suffix))
+                .thunder(getCustomStatBlockOptionalResistance("thunder" + suffix))
+                .nonMagical(getCustomStatBlockOptionalResistance("non-magical" + suffix))
+                .nonSilver(getCustomStatBlockOptionalResistance("non-silver" + suffix))
+                .nonAdamantine(getCustomStatBlockOptionalResistance("non-adamantine" + suffix))
+                .build();
+    }
+
+    // EFFECTS: prompts user for confirmation to add the given damage type resistance;
+    //          if yes, prompts for which type of resistance to assign given damage type and then returns it;
+    //          if no, returns null.
+    private String getCustomStatBlockOptionalResistance(String customString) {
+        if (promptConfirmation("add custom " + customString)) {
+            return getCustomResistance(customString);
+        }
+        return null;
+    }
+
+    // EFFECTS: prompts for which type of resistance to assign given damage type and then returns it
+    private String getCustomResistance(String customString) {
+        System.out.println("Enter resistant, immune, or vulnerable for " + customString + ": ");
+        String command = userInput.next();
+        switch (command) {
+            case "resistant":
+                return "resistance";
+            case "immune":
+                return "immunity";
+            case "vulnerable":
+                return "vulnerability";
+            default:
+                System.out.println(commandInvalid);
+                return getCustomResistance(customString);
+        }
+    }
+
+    // EFFECTS: prompts user if they want to add legendary mechanics to the custom statblock:
+    //          if yes they are prompted for the parameters and returns them as a LegendaryMechanics;
+    //          if no, returns a LegendaryMechanics with null fields
+    private LegendaryMechanics promptGetCustomStatBlockLegendaryMechanics() {
+        if (promptConfirmation("add custom statblock legendary mechanics")) {
+            return getCustomStatBlockLegendaryMechanics();
+        } else {
+            return new LegendaryMechanics(null, null);
+        }
+    }
+
+    // EFFECTS: prompts user for custom StatBlock legendary mechanics then returns them as a LegendaryMechanics
+    private LegendaryMechanics getCustomStatBlockLegendaryMechanics() {
+        return new LegendaryMechanics(getCustomStatBlockString("legendary description"),
+                getCustomStatBlockAbilities("legendary actions"));
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -850,7 +1251,7 @@ public class AutoBlocksApp {
                 goToMainMenu();
                 break;
             default:
-                System.out.println("Command invalid!");
+                System.out.println(commandInvalid);
                 break;
         }
     }
@@ -859,21 +1260,27 @@ public class AutoBlocksApp {
     private void createCharacters() {
         System.out.println("How many copies of this statblock do you want to add?");
         int numberOfCopies = userInput.nextInt();
-        System.out.println("Adding " + numberOfCopies + " " + selectedStatBlock.getName()
-                + "s to play...");
+        System.out.println("Adding " + numberOfCopies + " copies of " + selectedStatBlock.getTitle().getName()
+                + " to play...");
         for (int i = 1; i < (numberOfCopies + 1); i++) {
-            Character character = new Character(nameNewCharacter(),
-                    selectedStatBlock.getSize(), selectedStatBlock.getType(), selectedStatBlock.getHpFormula(),
-                    selectedStatBlock.getAC(), selectedStatBlock.getSpeed(), selectedStatBlock.getInitiativeBonus(),
-                    selectedStatBlock.getStrength(), selectedStatBlock.getDexterity(),
-                    selectedStatBlock.getConstitution(), selectedStatBlock.getIntelligence(),
-                    selectedStatBlock.getWisdom(), selectedStatBlock.getCharisma(), selectedStatBlock.getActions(),
-                    selectedStatBlock.getName());
-            System.out.println("Added copy " + i + "!");
+            Character character = new Character.CharacterBuilder(selectedStatBlock, getNewCharacterTitle(),
+                    selectedStatBlock.getXp(), selectedStatBlock.getHpFormula(),selectedStatBlock.getProficiency(),
+                    selectedStatBlock.getArmour(), selectedStatBlock.getSpeeds(), selectedStatBlock.getSenses(),
+                    selectedStatBlock.getAbilityScores(), selectedStatBlock.getAbilities(),
+                    selectedStatBlock.getActions(), selectedStatBlock.getLanguages()).build();
+            System.out.println("Added copy " + i + "of " + selectedStatBlock.getTitle().getName() + "!");
             play.add(character);
         }
         System.out.println("Done adding " + numberOfCopies + " statblocks.");
         goToLibraryMenu();
+    }
+
+    // EFFECTS: returns a title with the parameters of the selected statblock, except for name which is generated
+    //          based on the names of already existing character names (keeps all names unique)
+    private Title getNewCharacterTitle() {
+        Title parentTitle = selectedStatBlock.getTitle();
+        return new Title.TitleBuilder(nameNewCharacter(), parentTitle.getSize(), parentTitle.getType(),
+                parentTitle.getAlignment()).build();
     }
 
     // EFFECTS: searches play for characters named after selectedStatBlock: if there's none, returns selected statblock
@@ -886,14 +1293,14 @@ public class AutoBlocksApp {
             suffixes = generateSuffixes();
             lowestNumber = findFirstIntegerGap(suffixes);
         }
-        return selectedStatBlock.getName().toLowerCase() + lowestNumber;
+        return selectedStatBlock.getTitle().getName().toLowerCase() + lowestNumber;
     }
 
     // EFFECTS: returns true if play contains a character with the selected statblock name, excluding its suffix,
     //          false otherwise
     private boolean playContainsSelectedStatBlockName() {
         for (Character c : play) {
-            if (c.getName().toLowerCase().contains(selectedStatBlock.getName().toLowerCase())) {
+            if (c.getTitle().getName().toLowerCase().contains(selectedStatBlock.getTitle().getName().toLowerCase())) {
                 return true;
             }
         }
@@ -904,8 +1311,8 @@ public class AutoBlocksApp {
     private List<Integer> generateSuffixes() {
         List<Integer> suffixes = new ArrayList<>();
         for (Character c : play) {
-            if (c.getName().toLowerCase().contains(selectedStatBlock.getName().toLowerCase())) {
-                suffixes.add(Integer.parseInt(c.getName().toLowerCase().replaceAll("[^\\d]", "")));
+            if (c.getTitle().getName().toLowerCase().contains(selectedStatBlock.getTitle().getName().toLowerCase())) {
+                suffixes.add(Integer.parseInt(c.getTitle().getName().toLowerCase().replaceAll("[^\\d]", "")));
             }
         }
         return suffixes;
@@ -931,12 +1338,37 @@ public class AutoBlocksApp {
     private void initializeLibrary() {
         System.out.println("Initializing library...");
         initializeOrcStatBlock();
-        initializeGoblinStatBlock();
         System.out.println("All default statblocks added to library!");
     }
 
-    // EFFECTS: for orc: creates formulae for actions, creates actions, creates statblock, then adds to the library
+    // EFFECTS: adds orc and all its parameters to the library
     private void initializeOrcStatBlock() {
+        List<String> orcLanguages = new ArrayList<>();
+        orcLanguages.add("Common");
+        orcLanguages.add("Orc");
+        Ability aggression = new Ability("Aggressive", "As a bonus Action, the orc can move up to its "
+                + "speed toward a Hostile creature that it can see.");
+        List<Ability> orcAbilities = new ArrayList<>();
+        orcAbilities.add(aggression);
+
+        StatBlock orc = new StatBlock.StatBlockBuilder(
+                (new Title.TitleBuilder("Orc", "Humanoid (Orc)", "Medium", "Chaotic Evil").build()),
+                100, new RollFormula(2, 8, 6), 2,
+                (new Armour.ArmourBuilder(13).armourName("Hide Armour").build()),
+                (new Speeds.SpeedsBuilder(30).build()),
+                (new Senses.SensesBuilder(10).darkVision(60).build()),
+                (new AbilityScores(16, 12, 16, 7, 11, 10)),
+                (orcAbilities),
+                initializeOrcActions(),
+                (new Languages.LanguagesBuilder(orcLanguages).build()))
+                .skillProficiencies(new SkillProficiencies.SkillProficienciesBuilder().intimidation(true).build())
+                .build();
+
+        library.add(orc);
+    }
+
+    // EFFECTS: returns orc actions
+    private List<Action> initializeOrcActions() {
         Action orcGreatAxe = new Action("GreatAxe", "Melee Weapon Attack", "Slashing", "5ft",
                 new RollFormula(1, 20, 5),  //hit formula
                 new RollFormula(1, 12, 3)); //damage formula
@@ -952,35 +1384,6 @@ public class AutoBlocksApp {
         orcActions.add(orcJavelinMelee);
         orcActions.add(orcJavelinRanged);
 
-        StatBlock orc = new StatBlock("Orc", "Medium", "Humanoid",
-                new RollFormula(2,8,6), //hp formula
-                13, 30, 0,
-                16, 12, 16, 7, 11, 10,
-                orcActions);
-
-        library.add(orc);
+        return orcActions;
     }
-
-    // EFFECTS: for goblin: creates formulae for actions, creates actions, creates statblock, then adds to the library
-    private void initializeGoblinStatBlock() {
-        Action goblinScimitar = new Action("Scimitar", "Melee Weapon Attack", "Piercing", "5ft",
-                new RollFormula(1, 20, 4),  //hit formula
-                new RollFormula(1, 6, 2));  //damage formula
-        Action goblinShortBow = new Action("ShortBow", "Ranged Weapon Attack", "Piercing", "80/320ft",
-                new RollFormula(1, 20, 4),  //hit formula
-                new RollFormula(1, 6, 2));  //damage formula
-
-        List<Action> goblinActions = new ArrayList<>();
-        goblinActions.add(goblinScimitar);
-        goblinActions.add(goblinShortBow);
-
-        StatBlock goblin = new StatBlock("Goblin", "Small", "Humanoid",
-                new RollFormula(2,6,0), //hp formula
-                15, 30, 0,
-                8, 14, 10, 10, 8, 8,
-                goblinActions);
-
-        library.add(goblin);
-    }
-
 }

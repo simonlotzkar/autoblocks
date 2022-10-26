@@ -11,14 +11,13 @@ simulate any form of map, it's intended to be used with an external one.
   - **autoroll for characters (initiative, actions, etc)**
   - **edit character hitpoints**
   - **group characters for multi rolls and multi hp edits**
-- this application holds data such as *default monster statblocks*, but also allows the user to *enter custom entries 
-and clone/edit existing ones*.
+- this application holds data such as *default monster statblocks*, but also allows the user to *enter custom entries*.
 <p>
-I made this application because I'm a D&D DM and combat is by far the slowest and most tedious part of play. There are 
-some online tools for simulating combat, but most try to do automation and map simulation at the same time. I think 
+I made this application because I'm a D&D DM and I think there is no other application like this one. While there are 
+some other applications for automating rolls, most try to do automation and map simulation at the same time. I think 
 it's better to keep them separate because some people like theatre of the mind (no maps), and some people prefer in 
-person. This app allows those not playing online to automate mechanics at a large scale. So in short, I made this for 
-personal use and any others who don't want online maps but want large scale automation. 
+person. This app allows the DM to only exclude repetitive simple rolls and hp management so they can focus on the rest
+of the game. So in short, I made this for personal use, but also because I think it solves a problem in a unique way.
 </p>
 
 ### User Stories
@@ -51,21 +50,35 @@ As a user, I want to be able to:
     - edit group hp ☑
     - remove group from characters ☑
     - delete group and its characters from play ☑
-
+- statblock stats (in order):
+  - descriptors: 
+    - name,
+    - type,
+    - size,
+    - alignment
+  - combat:
+    - challenge rating
+    - hpFormula,
+    - proficiency, 
+    - armour
+  - speeds
+  - ability scores
+  - saving throw proficiencies
+  - skill proficiencies
+  - condition immunities
+  - damage resistances/vulnerablitities/immunities
+  - languages and telepathy
+  - senses
+  - abilities
+  - actions
+  - legendary mechanics
 
 ### Currently added default statblocks:
 - Orc
 - Goblin
 
 ### Future additions:
-- come with all default monsters in the 5th edition monsters manual [2/300]
-- make actions generic (currently they are statblock specific)
-- turn order and automation of turns
-- equipment
-- inventory generation
-- traits
-- skills
-- senses
-- languages
-- challenge rating
-- legenedary mechanics
+- finish(add) statblock/character stats ☐
+- turn order and automation of turns ☐
+- inventory/loot generation ☐
+- come with all default monsters in the 5th edition monsters manual (2/300) ☐

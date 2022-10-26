@@ -23,6 +23,15 @@ public class RollFormula {
     }
 
     // getters
+    // EFFECTS: get roll formula as a string, uses + or - appropriately
+    public String getRollString() {
+        if (modifier >= 0) {
+            return amountOfDice + "d" + dieSides + "+" + modifier;
+        } else {
+            return amountOfDice + "d" + dieSides + "-" + modifier;
+        }
+    }
+
     // EFFECTS: get amount of dice
     public int getAmountOfDice() {
         return amountOfDice;
