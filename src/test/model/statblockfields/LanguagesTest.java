@@ -1,9 +1,9 @@
-package model;
+package model.statblockfields;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class StatBlockTest {
+public class LanguagesTest {
     @BeforeEach
     public void beforeEach() {
         //stub
@@ -15,12 +15,17 @@ public class StatBlockTest {
     }
 
     @Test
-    public void testGetChallengeRating() {
+    public void testGetLanguagesString() {
         //stub
     }
 
     @Test
-    public void testGetHPString() {
+    public void testGetLanguagesListString() {
+        //stub
+    }
+
+    @Test
+    public void testGetTelepathyString() {
         //stub
     }
 }

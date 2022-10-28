@@ -17,15 +17,14 @@ public class Action extends Ability {
         this.damage = damage;
     }
 
-    // EFFECTS: prints the action with rolled hit and damage for given character
-    public void displayRollForCharacter(String characterName) {
-        System.out.println(characterName + "'s " + super.getDescription() + ", " + super.getName()
-                + ", (" + reach + "ft) did " + hit.roll() + " to hit, and " + damage.roll() + " " + damageType
-                + " damage.");
-    }
-
     // -----------------------------------------------------------------------------------------------------------------
     // getters
+    // EFFECTS: prints the action with rolled hit and damage for given name
+    public String rollAsStringForName(String name) {
+        return (name + "'s " + super.getDescription() + ", " + super.getName() + " (" + reach + "ft), did "
+                + hit.roll() + " to hit, and " + damage.roll() + " " + damageType + " damage.");
+    }
+
     // EFFECTS: get damage type
     public String getDamageType() {
         return damageType;

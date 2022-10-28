@@ -21,8 +21,7 @@ public class Character extends StatBlock {
 
     // -----------------------------------------------------------------------------------------------------------------
     // setters
-    // REQUIRES: hp cannot exceed max hp
-    // EFFECTS: sets current hp to sum of given int and hp
+    // EFFECTS: sets current hp to sum of given int and hp; if hp is greater than maxhp, sets hp to maxhp.
     public void changeHP(int change) {
         hp += change;
         if (hp > maxHP) {

@@ -25,60 +25,41 @@ of the game. So in short, I made this for personal use, but also because I think
 As a user, I want to be able to:
 </p>
 
-- simulate rolling any number of dice, with any number of sides, and with any modifier ☑
-- view a list of statblocks by their names, (aka the 'library') and do the following: ☑
-    - select statblock in library and do the following: ☑
-        - display all statblock stats and actions ☑
-        - add any number of statblock to play as new characters ☑
-    - add new, custom statblock to the library. ☑
-- view a list of characters (aka 'play') by their names, groups, and hp; and do the following: ☑
-  - select character in play and do the following: ☑
-      - display all character stats and actions ☑
-      - enter roll menu for character and do the following: ☑
-          - roll character action ☑
-          - roll character ability check ☑
-          - roll character initiative ☑
-      - edit character hitpoints ☑
-      - change character group ☑
-      - delete character from play ☑
-  - select group in play and do the following: ☑
-    - display characters in group by all stats ☑
-    - enter roll menu for group and do the following: ☑
-      - roll group action ☑
-      - roll group ability check ☑
-      - roll group initiative ☑
-    - edit group hp ☑
-    - remove group from characters ☑
-    - delete group and its characters from play ☑
-- statblock stats (in order):
-  - descriptors: 
-    - name,
-    - type,
-    - size,
-    - alignment
-  - combat:
-    - challenge rating
-    - hpFormula,
-    - proficiency, 
-    - armour
-  - speeds
-  - ability scores
-  - saving throw proficiencies
-  - skill proficiencies
-  - condition immunities
-  - damage resistances/vulnerablitities/immunities
-  - languages and telepathy
-  - senses
-  - abilities
-  - actions
-  - legendary mechanics
+- simulate rolling any number of dice, with any number of sides, and with any modifier
+- view a list of statblocks by their names, (aka the 'library') and do the following:
+    - select statblock in library and do the following:
+        - display all statblock information
+        - add any number of statblock to play as new characters
+    - add new, custom statblock to the library.
+- view a list of characters (aka 'play') by their names, groups, and hp; and do the following:
+  - select character in play and do the following:
+      - display all character stats and actions
+      - enter roll menu for character and do the following:
+          - roll character action
+          - roll character ability check
+          - roll character initiative
+      - edit character hitpoints
+      - change character group
+      - delete character from play
+  - select group in play and do the following:
+    - display characters in group by all stats
+    - enter roll menu for group and do the following: 
+      - roll group action
+      - roll group ability check
+      - roll group initiative
+    - edit group hp
+    - remove group from characters
+    - delete group and its characters from play
+- automatically save the library to file when adding custom statblocks, and automatically load the library from file when
+starting the application
+- chose to save the current play environment to file when exiting the application
+- chose to load a play environment when starting the application
 
 ### Currently added default statblocks:
 - Orc
-- Goblin
 
 ### Future additions:
-- finish(add) statblock/character stats ☐
+- delete statblocks from the library ☐
 - turn order and automation of turns ☐
 - inventory/loot generation ☐
-- come with all default monsters in the 5th edition monsters manual (2/300) ☐
+- come with all default monsters in the 5th edition monsters manual (1/300) ☐

@@ -1,9 +1,9 @@
-package model;
+package model.statblockfields;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class StatBlockTest {
+public class LegendaryMechanicsTest {
     @BeforeEach
     public void beforeEach() {
         //stub
@@ -11,16 +11,6 @@ public class StatBlockTest {
 
     @Test
     public void testConstructor() {
-        //stub
-    }
-
-    @Test
-    public void testGetChallengeRating() {
-        //stub
-    }
-
-    @Test
-    public void testGetHPString() {
         //stub
     }
 }

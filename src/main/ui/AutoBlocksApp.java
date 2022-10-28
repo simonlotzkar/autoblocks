@@ -642,7 +642,7 @@ public class AutoBlocksApp {
     private void rollCharacterActionByName(Character character, String action) {
         for (Action a : character.getActions()) {
             if (a.getName().equalsIgnoreCase(action)) {
-                a.displayRollForCharacter(character.getTitle().getName());
+                System.out.println(a.rollAsStringForName(character.getTitle().getName()));
                 break;
             }
         }
@@ -1359,7 +1359,7 @@ public class AutoBlocksApp {
                 (new Senses.SensesBuilder(10).darkVision(60).build()),
                 (new AbilityScores(16, 12, 16, 7, 11, 10)),
                 (orcAbilities),
-                initializeOrcActions(),
+                returnOrcActions(),
                 (new Languages.LanguagesBuilder(orcLanguages).build()))
                 .skillProficiencies(new SkillProficiencies.SkillProficienciesBuilder().intimidation(true).build())
                 .build();
@@ -1368,7 +1368,7 @@ public class AutoBlocksApp {
     }
 
     // EFFECTS: returns orc actions
-    private List<Action> initializeOrcActions() {
+    private List<Action> returnOrcActions() {
         Action orcGreatAxe = new Action("GreatAxe", "Melee Weapon Attack", "Slashing", "5ft",
                 new RollFormula(1, 20, 5),  //hit formula
                 new RollFormula(1, 12, 3)); //damage formula

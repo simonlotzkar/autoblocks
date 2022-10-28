@@ -93,8 +93,6 @@ public class SavingThrowProficiencies {
         return "";
     }
 
-
-
     // EFFECTS: gets whether a strength proficiency exists
     public boolean isStrengthProficiency() {
         return strengthProficiency;
