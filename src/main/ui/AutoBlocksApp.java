@@ -3,13 +3,17 @@ package ui;
 import model.*;
 import model.Character;
 import model.statblockfields.*;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.*;
 
 public class AutoBlocksApp {
-    private final List<StatBlock> library = new ArrayList<>();
-    private final List<Character> play = new ArrayList<>();
+    private Library library = new Library("main library", new ArrayList<>());
+    private List<Character> play = new ArrayList<>();
     private final Scanner userInput = new Scanner(System.in);
 
     private StatBlock selectedStatBlock;
@@ -22,8 +26,15 @@ public class AutoBlocksApp {
 
     private static final String commandInvalid = "Command invalid!";
 
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
+    private static final String JSON_STORE = "./data/library.json";
+
     // EFFECTS: constructs the autoblocks app
-    public AutoBlocksApp() {
+    // CITATION: based on JsonSerializationDemo
+    public AutoBlocksApp() throws FileNotFoundException {
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
         runAutoBlocks();
     }
 
@@ -74,31 +85,28 @@ public class AutoBlocksApp {
         System.out.println("\tchar: Select a character in play. Take individual actions and edit hp from here.");
         System.out.println("\tgroup: Select a group in play. Take group actions and edit group hp from here.");
         System.out.println("\tlib: View statblock library. Add characters to play from here.");
-        System.out.println("\tquit: exit to desktop.");
+        System.out.println("\tload: Load a statblock library from file.");
+        System.out.println("\tquit: Save library and exit to desktop.");
     }
 
     // MODIFIES: this
     // EFFECTS: processes commands for MainMenu
     private void processMainCommand(String command) {
-        switch (command) {
-            case "roll":
-                System.out.println("Custom roll result: " + getRollFormula("custom").roll());
-                break;
-            case "char":
-                searchForAndSelect("character");
-                break;
-            case "group":
-                searchForAndSelect("group");
-                break;
-            case "lib":
-                goToLibraryMenu();
-                break;
-            case "quit":
-                goToDesktop();
-                break;
-            default:
-                System.out.println(commandInvalid);
-                break;
+        if ("roll".equals(command)) {
+            System.out.println("Custom roll result: " + getRollFormula("custom").roll());
+        } else if ("char".equals(command)) {
+            searchForAndSelect("character");
+        } else if ("group".equals(command)) {
+            searchForAndSelect("group");
+        } else if ("lib".equals(command)) {
+            goToLibraryMenu();
+        } else if ("load".equals(command)) {
+            loadLibrary();
+        } else if ("quit".equals(command)) {
+            saveLibrary();
+            goToDesktop();
+        } else {
+            System.out.println(commandInvalid);
         }
     }
 
@@ -157,7 +165,7 @@ public class AutoBlocksApp {
 
     // EFFECTS: searches library for given statblock name, prints name, selects them, and changes to StatBlockMenu
     private void selectStatBlockByName(String statBlockName) {
-        for (StatBlock sb : library) {
+        for (StatBlock sb : library.getStatBlocks()) {
             if (statBlockName.equals(sb.getTitle().getName().toLowerCase())) {
                 System.out.println("Found " + statBlockName + "!");
                 selectedStatBlock = sb;
@@ -199,6 +207,31 @@ public class AutoBlocksApp {
         selectedGroupName = null;
         selectedStatBlock = null;
         selectedGroup = new ArrayList<>();
+    }
+
+    // MODIFIES: this
+    // EFFECTS: loads workroom from file
+    // CITATION: based on JsonSerializationDemo
+    private void loadLibrary() {
+        try {
+            library = jsonReader.read();
+            System.out.println("Loaded " + library.getName() + " from " + JSON_STORE);
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + JSON_STORE);
+        }
+    }
+
+    // EFFECTS: saves the workroom to file
+    // CITATION: based on JsonSerializationDemo
+    private void saveLibrary() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(library);
+            jsonWriter.close();
+            System.out.println("Saved " + library.getName() + " to " + JSON_STORE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file: " + JSON_STORE);
+        }
     }
 
     // EFFECTS: quits the app
@@ -309,7 +342,7 @@ public class AutoBlocksApp {
                 + "\tSenses: " + selected.getSenses().getSensesString()
                 + "\tProficiency: " + selected.getProficiency()
                 + "\tChallenge " + selected.getChallengeRating()
-                + " (" + NumberFormat.getIntegerInstance().format(selected.getXp()) + "xp)");
+                + " (" + NumberFormat.getIntegerInstance().format(selected.getXP()) + "xp)");
     }
 
     // EFFECTS: prints the selected StatBlock or Character ability scores with modifiers
@@ -371,8 +404,8 @@ public class AutoBlocksApp {
         System.out.println("\tActions:");
         for (Action a : selected.getActions()) {
             System.out.println("\t\t" + a.getName() + ": " + a.getDescription() + ". " + a.getReach() + " reach, "
-                    + "(" + a.getHit().getRollString() + ") to hit, (" + a.getDamage().getRollString() + ") "
-                    + a.getDamageType().toLowerCase() + " damage. ");
+                    + "(" + a.getHitFormula().getRollString() + ") to hit, (" + a.getDamageFormula().getRollString()
+                    + ") " + a.getDamageType().toLowerCase() + " damage. ");
         }
     }
 
@@ -800,7 +833,7 @@ public class AutoBlocksApp {
 
     // EFFECTS: prints all statblocks in the library with their names
     private void displayLibrary() {
-        for (StatBlock sb : library) {
+        for (StatBlock sb : library.getStatBlocks()) {
             System.out.println(sb.getTitle().getName());
         }
     }
@@ -848,7 +881,7 @@ public class AutoBlocksApp {
                 .legendaryMechanics(promptGetCustomStatBlockLegendaryMechanics())
                 .build();
 
-        library.add(customStatBlock);
+        library.addStatBlock(customStatBlock);
     }
 
     // EFFECTS: prompts user for given string and returns it
@@ -929,7 +962,7 @@ public class AutoBlocksApp {
     //          until a unique name is provided, then returns that name.
     private String getCustomStatBlockName() {
         String name = getCustomStatBlockString("name");
-        for (StatBlock sb : library) {
+        for (StatBlock sb : library.getStatBlocks()) {
             if ((sb.getTitle().getName().toLowerCase()).equals(name)) {
                 System.out.println("This name is already in use. Try again...");
                 getCustomStatBlockName();
@@ -1264,7 +1297,7 @@ public class AutoBlocksApp {
                 + " to play...");
         for (int i = 1; i < (numberOfCopies + 1); i++) {
             Character character = new Character.CharacterBuilder(selectedStatBlock, getNewCharacterTitle(),
-                    selectedStatBlock.getXp(), selectedStatBlock.getHpFormula(),selectedStatBlock.getProficiency(),
+                    selectedStatBlock.getXP(), selectedStatBlock.getHpFormula(),selectedStatBlock.getProficiency(),
                     selectedStatBlock.getArmour(), selectedStatBlock.getSpeeds(), selectedStatBlock.getSenses(),
                     selectedStatBlock.getAbilityScores(), selectedStatBlock.getAbilities(),
                     selectedStatBlock.getActions(), selectedStatBlock.getLanguages()).build();
@@ -1364,7 +1397,7 @@ public class AutoBlocksApp {
                 .skillProficiencies(new SkillProficiencies.SkillProficienciesBuilder().intimidation(true).build())
                 .build();
 
-        library.add(orc);
+        //library.addStatBlock(orc);
     }
 
     // EFFECTS: returns orc actions

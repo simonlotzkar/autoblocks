@@ -1,6 +1,9 @@
 package model.statblockfields;
 
-public class Armour {
+import org.json.JSONObject;
+import persistence.Writable;
+
+public class Armour implements Writable {
     // required fields
     private final int ac;
 
@@ -78,5 +81,15 @@ public class Armour {
             this.magicArmour = magicArmour;
             return this;
         }
+    }
+
+    // constructs a json object with the fields of the armour
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("ac", ac);
+        json.put("armourName", armourName);
+        json.put("magicArmour", magicArmour);
+        return json;
     }
 }

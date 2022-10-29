@@ -1,8 +1,13 @@
 package model.statblockfields;
 
+import model.Ability;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.List;
 
-public class Languages {
+public class Languages implements Writable {
     // required fields
     private final List<String> languagesList;
 
@@ -79,5 +84,15 @@ public class Languages {
             this.telepathy = telepathy;
             return this;
         }
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // constructs a json object with the fields of the languages
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("languagesList", languagesList);
+        json.put("telepathy", telepathy);
+        return json;
     }
 }

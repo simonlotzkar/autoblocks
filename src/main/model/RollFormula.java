@@ -1,6 +1,9 @@
 package model;
 
-public class RollFormula {
+import org.json.JSONObject;
+import persistence.Writable;
+
+public class RollFormula implements Writable {
     private final int amountOfDice;
     private final int dieSides;
     private final int modifier;
@@ -47,4 +50,13 @@ public class RollFormula {
         return modifier;
     }
 
+    // constructs a json object with the fields of the roll formula
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("amountOfDice", amountOfDice);
+        json.put("dieSides", dieSides);
+        json.put("modifier", modifier);
+        return json;
+    }
 }

@@ -1,6 +1,9 @@
 package model.statblockfields;
 
-public class Resistances {
+import org.json.JSONObject;
+import persistence.Writable;
+
+public class Resistances implements Writable {
     // optional fields
     private final String acid;
     private final String bludgeoning;
@@ -394,5 +397,28 @@ public class Resistances {
             this.nonAdamantine = nonAdamantine;
             return this;
         }
+    }
+
+    // constructs a json object with the fields of the resistances
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("acid", acid);
+        json.put("bludgeoning", bludgeoning);
+        json.put("cold", cold);
+        json.put("fire", fire);
+        json.put("force", force);
+        json.put("lightning", lightning);
+        json.put("necrotic", necrotic);
+        json.put("piercing", piercing);
+        json.put("poison", poison);
+        json.put("psychic", psychic);
+        json.put("radiant", radiant);
+        json.put("slashing", slashing);
+        json.put("thunder", thunder);
+        json.put("nonMagical", nonMagical);
+        json.put("nonSilver", nonSilver);
+        json.put("nonAdamantine", nonAdamantine);
+        return json;
     }
 }

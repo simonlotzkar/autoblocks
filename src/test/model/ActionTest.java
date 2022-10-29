@@ -49,18 +49,18 @@ public class ActionTest {
         assertEquals(testActionDescription0, testAction0.getDescription());
         assertEquals(testActionDamageType0, testAction0.getDamageType());
         assertEquals(testActionReach0, testAction0.getReach());
-        assertEquals(testRollFormula0, testAction0.getHit());
-        assertEquals(testRollFormula0, testAction0.getDamage());
+        assertEquals(testRollFormula0, testAction0.getHitFormula());
+        assertEquals(testRollFormula0, testAction0.getDamageFormula());
 
         assertEquals(testActionName1, testAction1.getName());
         assertEquals(testActionDescription1, testAction1.getDescription());
         assertEquals(testActionDamageType1, testAction1.getDamageType());
         assertEquals(testActionReach1, testAction1.getReach());
-        assertEquals(testRollFormula1, testAction1.getHit());
-        assertEquals(testRollFormula1, testAction1.getDamage());
+        assertEquals(testRollFormula1, testAction1.getHitFormula());
+        assertEquals(testRollFormula1, testAction1.getDamageFormula());
 
-        assertEquals(testRollFormula2, testAction2.getHit());
-        assertEquals(testRollFormula3, testAction2.getDamage());
+        assertEquals(testRollFormula2, testAction2.getHitFormula());
+        assertEquals(testRollFormula3, testAction2.getDamageFormula());
     }
 
     @Test

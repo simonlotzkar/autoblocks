@@ -1,8 +1,10 @@
 package model.statblockfields;
 
 import model.StatBlock;
+import org.json.JSONObject;
+import persistence.Writable;
 
-public class SavingThrowProficiencies {
+public class SavingThrowProficiencies implements Writable {
     // optional fields
     private final boolean strengthProficiency;
     private final boolean dexterityProficiency;
@@ -180,5 +182,18 @@ public class SavingThrowProficiencies {
             this.charismaProficiency = charismaProficiency;
             return this;
         }
+    }
+
+    // constructs a json object with the fields of the saving throw proficiencies
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("strengthProficiency", strengthProficiency);
+        json.put("dexterityProficiency", dexterityProficiency);
+        json.put("constitutionProficiency", constitutionProficiency);
+        json.put("intelligenceProficiency", intelligenceProficiency);
+        json.put("wisdomProficiency", wisdomProficiency);
+        json.put("charismaProficiency", charismaProficiency);
+        return json;
     }
 }

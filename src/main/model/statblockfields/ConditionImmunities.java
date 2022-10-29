@@ -1,8 +1,9 @@
 package model.statblockfields;
 
-import model.StatBlock;
+import org.json.JSONObject;
+import persistence.Writable;
 
-public class ConditionImmunities {
+public class ConditionImmunities implements Writable {
     // optional fields
     private final boolean blinded;
     private final boolean charmed;
@@ -351,5 +352,26 @@ public class ConditionImmunities {
             this.unconscious = unconscious;
             return this;
         }
+    }
+
+    // constructs a json object with the fields of the condition immunities
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("blinded", blinded);
+        json.put("charmed", charmed);
+        json.put("deafened", deafened);
+        json.put("frightened", frightened);
+        json.put("grappled", grappled);
+        json.put("incapacitated", incapacitated);
+        json.put("invisible", invisible);
+        json.put("paralyzed", paralyzed);
+        json.put("petrified", petrified);
+        json.put("poisoned", poisoned);
+        json.put("prone", prone);
+        json.put("restrained", restrained);
+        json.put("stunned", stunned);
+        json.put("unconscious", unconscious);
+        return json;
     }
 }

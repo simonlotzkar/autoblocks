@@ -1,6 +1,9 @@
 package model;
 
-public class Ability {
+import org.json.JSONObject;
+import persistence.Writable;
+
+public class Ability implements Writable {
     // required fields
     private final String name;
     private final String description;
@@ -21,5 +24,15 @@ public class Ability {
     // EFFECTS: returns ability description
     public String getDescription() {
         return description;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // constructs a json object with the fields of the ability
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("description", description);
+        return json;
     }
 }

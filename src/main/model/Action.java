@@ -1,20 +1,22 @@
 package model;
 
+import org.json.JSONObject;
+
 public class Action extends Ability {
     // required fields
     private final String damageType;
     private final String reach;
-    private final RollFormula hit;
-    private final RollFormula damage;
+    private final RollFormula hitFormula;
+    private final RollFormula damageFormula;
 
     // EFFECTS: constructs an action with the given parameters
     public Action(String name, String description, String damageType, String reach,
-                  RollFormula hit, RollFormula damage) {
+                  RollFormula hitFormula, RollFormula damageFormula) {
         super(name, description);
         this.damageType = damageType;
         this.reach = reach;
-        this.hit = hit;
-        this.damage = damage;
+        this.hitFormula = hitFormula;
+        this.damageFormula = damageFormula;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -22,7 +24,7 @@ public class Action extends Ability {
     // EFFECTS: prints the action with rolled hit and damage for given name
     public String rollAsStringForName(String name) {
         return (name + "'s " + super.getDescription() + ", " + super.getName() + " (" + reach + "ft), did "
-                + hit.roll() + " to hit, and " + damage.roll() + " " + damageType + " damage.");
+                + hitFormula.roll() + " to hit, and " + damageFormula.roll() + " " + damageType + " damage.");
     }
 
     // EFFECTS: get damage type
@@ -36,12 +38,26 @@ public class Action extends Ability {
     }
 
     // EFFECTS: get hit formula
-    public RollFormula getHit() {
-        return hit;
+    public RollFormula getHitFormula() {
+        return hitFormula;
     }
 
     // EFFECTS: get hit formula
-    public RollFormula getDamage() {
-        return damage;
+    public RollFormula getDamageFormula() {
+        return damageFormula;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // constructs a json object with the fields of the action
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", getName());
+        json.put("description", getDescription());
+        json.put("damageType", damageType);
+        json.put("reach", reach);
+        json.put("hitFormula", hitFormula.toJson());
+        json.put("damageFormula", hitFormula.toJson());
+        return json;
     }
 }

@@ -1,10 +1,13 @@
 package model;
 
 import model.statblockfields.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
 
 import java.util.*;
 
-public class StatBlock {
+public class StatBlock implements Writable {
     // required fields
     protected final Title title;
 
@@ -18,13 +21,13 @@ public class StatBlock {
     protected final AbilityScores abilityScores;
     protected final List<Ability> abilities;
     protected final List<Action> actions;
+    protected final Languages languages;
 
     // optional fields
     protected final SavingThrowProficiencies savingThrowProficiencies;
     protected final SkillProficiencies skillProficiencies;
     protected final ConditionImmunities conditionImmunities;
     protected final Resistances resistances;
-    protected final Languages languages;
     protected final LegendaryMechanics legendaryMechanics;
 
     // EFFECTS: constructs a StatBlock using a builder
@@ -156,7 +159,7 @@ public class StatBlock {
     }
 
     // EFFECTS: gets xp
-    public int getXp() {
+    public int getXP() {
         return xp;
     }
 
@@ -242,6 +245,7 @@ public class StatBlock {
         protected final Senses senses;
         protected final int proficiency;
         protected final int xp;
+        protected Languages languages;
 
         protected final AbilityScores abilityScores;
         protected final List<Ability> abilities;
@@ -252,7 +256,6 @@ public class StatBlock {
         protected SkillProficiencies skillProficiencies;
         protected ConditionImmunities conditionImmunities;
         protected Resistances resistances;
-        protected Languages languages;
         protected LegendaryMechanics legendaryMechanics;
 
         // EFFECTS: constructs a builder with required fields
@@ -307,5 +310,60 @@ public class StatBlock {
             this.legendaryMechanics = legendaryMechanics;
             return this;
         }
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("title", title.toJson());
+        json.put("xp", xp);
+        json.put("hpFormula", hpFormula.toJson());
+        json.put("proficiency", proficiency);
+        json.put("armour", armour.toJson());
+        json.put("speeds", speeds.toJson());
+        json.put("senses", senses.toJson());
+        json.put("abilityScores", abilityScores.toJson());
+        json.put("abilities", abilitiesToJson());
+        json.put("actions", actionsToJson());
+        json.put("languages", languages.toJson());
+        return json;
+//        return optionalFieldsToJson(json);
+    }
+
+    // constructs a json array with the abilities
+    public JSONArray abilitiesToJson() {
+        JSONArray jsonArray = new JSONArray();
+        for (Ability a : abilities) {
+            jsonArray.put(a.toJson());
+        }
+        return jsonArray;
+    }
+
+    // constructs a json array with the actions
+    public JSONArray actionsToJson() {
+        JSONArray jsonArray = new JSONArray();
+        for (Action a : actions) {
+            jsonArray.put(a.toJson());
+        }
+        return jsonArray;
+    }
+
+    public JSONObject optionalFieldsToJson(JSONObject json) {
+        if (savingThrowProficiencies != null) {
+            json.put("savingThrowProficiencies", savingThrowProficiencies.toJson());
+        }
+        if (skillProficiencies != null) {
+            json.put("skillProficiencies", skillProficiencies.toJson());
+        }
+        if (conditionImmunities != null) {
+            json.put("conditionImmunities", conditionImmunities.toJson());
+        }
+        if (resistances != null) {
+            json.put("resistances", resistances.toJson());
+        }
+        if (legendaryMechanics != null) {
+            json.put("legendaryMechanics", legendaryMechanics.toJson());
+        }
+        return json;
     }
 }

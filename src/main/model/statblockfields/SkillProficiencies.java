@@ -1,8 +1,10 @@
 package model.statblockfields;
 
 import model.StatBlock;
+import org.json.JSONObject;
+import persistence.Writable;
 
-public class SkillProficiencies {
+public class SkillProficiencies implements Writable {
     // optional fields
     private final boolean acrobatics; //dex
     private final boolean animalHandling; //wis
@@ -462,5 +464,29 @@ public class SkillProficiencies {
             this.survival = survival;
             return this;
         }
+    }
+
+    // constructs a json object with the fields of the skill proficiencies
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("acrobatics", acrobatics);
+        json.put("animalHandling", animalHandling);
+        json.put("arcana", arcana);
+        json.put("deception", deception);
+        json.put("history", history);
+        json.put("insight", insight);
+        json.put("intimidation", intimidation);
+        json.put("investigation", investigation);
+        json.put("medicine", medicine);
+        json.put("nature", nature);
+        json.put("perception", perception);
+        json.put("performance", performance);
+        json.put("persuasion", persuasion);
+        json.put("religion", religion);
+        json.put("sleightOfHand", sleightOfHand);
+        json.put("stealth", stealth);
+        json.put("survival", survival);
+        return json;
     }
 }

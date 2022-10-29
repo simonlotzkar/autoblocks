@@ -1,6 +1,8 @@
 package model;
 
 import model.statblockfields.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -9,7 +11,6 @@ public class Character extends StatBlock {
     private final int maxHP;
     private int hp;
     private final StatBlock parentStatBlock;
-    private String group;
 
     // EFFECTS: constructs a Character using a builder
     public Character(CharacterBuilder builder) {
@@ -73,4 +74,48 @@ public class Character extends StatBlock {
             return new Character(this);
         }
     }
+
+//    @Override
+//    public JSONObject toJson() {
+//        JSONObject json = new JSONObject();
+//        json.put("title", title.toJson());
+//        json.put("xp", xp);
+//        json.put("hpFormula", hpFormula.toJson());
+//        json.put("proficiency", proficiency);
+//        json.put("armour", armour.toJson());
+//        json.put("speeds", speeds.toJson());
+//        json.put("senses", senses.toJson());
+//        json.put("abilityScores", abilityScores.toJson());
+//        json.put("abilities", abilitiesToJson());
+//        json.put("actions", actionsToJson());
+//        json.put("languages", languages.toJson());
+//        json.put("savingThrowProficiencies", savingThrowProficiencies.toJson());
+//        json.put("skillProficiencies", skillProficiencies.toJson());
+//        json.put("conditionImmunities", conditionImmunities.toJson());
+//        json.put("resistances", resistances.toJson());
+//        json.put("legendaryMechanics", legendaryMechanics.toJson());
+//
+//        json.put("hp", hp);
+//        json.put("maxHP", maxHP);
+//        json.put("parentStatBlock", parentStatBlock.toJson());
+//        return json;
+//    }
+//
+//    // constructs a json array with the abilities
+//    public JSONArray abilitiesToJson() {
+//        JSONArray jsonArray = new JSONArray();
+//        for (Ability a : abilities) {
+//            jsonArray.put(a.toJson());
+//        }
+//        return jsonArray;
+//    }
+//
+//    // constructs a json array with the actions
+//    public JSONArray actionsToJson() {
+//        JSONArray jsonArray = new JSONArray();
+//        for (Action a : actions) {
+//            jsonArray.put(a.toJson());
+//        }
+//        return jsonArray;
+//    }
 }

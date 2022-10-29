@@ -1,6 +1,9 @@
 package model.statblockfields;
 
-public class Speeds {
+import org.json.JSONObject;
+import persistence.Writable;
+
+public class Speeds implements Writable {
     // required fields
     private final int speed;
 
@@ -110,5 +113,17 @@ public class Speeds {
             this.swim = swim;
             return this;
         }
+    }
+
+    // constructs a json object with the fields of the speeds
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("speed", speed);
+        json.put("burrow", burrow);
+        json.put("climb", climb);
+        json.put("fly", fly);
+        json.put("swim", swim);
+        return json;
     }
 }

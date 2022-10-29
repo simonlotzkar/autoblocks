@@ -1,6 +1,9 @@
 package model.statblockfields;
 
-public class Senses {
+import org.json.JSONObject;
+import persistence.Writable;
+
+public class Senses implements Writable {
     // required fields
     private final int passivePerception; //TODO make automatic in future
 
@@ -113,5 +116,17 @@ public class Senses {
             this.trueSight = trueSight;
             return this;
         }
+    }
+
+    // constructs a json object with the fields of the senses
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("passivePerception", passivePerception);
+        json.put("blindSight", blindSight);
+        json.put("darkVision", darkVision);
+        json.put("tremorSense", tremorSense);
+        json.put("trueSight", trueSight);
+        return json;
     }
 }

@@ -1,8 +1,9 @@
 package model.statblockfields;
 
-import java.util.List;
+import org.json.JSONObject;
+import persistence.Writable;
 
-public class Title {
+public class Title implements Writable {
     // required fields
     private final String name;
     private final String type;
@@ -86,5 +87,17 @@ public class Title {
             this.group = group;
             return this;
         }
+    }
+
+    // constructs a json object with the fields of the title
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("type", type);
+        json.put("size", size);
+        json.put("alignment", alignment);
+        json.put("group", group);
+        return json;
     }
 }

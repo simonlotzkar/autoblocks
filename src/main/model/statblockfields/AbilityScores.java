@@ -1,6 +1,9 @@
 package model.statblockfields;
 
-public class AbilityScores {
+import org.json.JSONObject;
+import persistence.Writable;
+
+public class AbilityScores implements Writable {
     // required fields
     private final int strength;
     private final int dexterity;
@@ -84,5 +87,19 @@ public class AbilityScores {
     // EFFECTS: gets charisma modifier
     public int getCharismaModifier() {
         return convertToModifier(charisma);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // constructs a json object with the fields of the ability scores
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("strength", strength);
+        json.put("dexterity", dexterity);
+        json.put("constitution", constitution);
+        json.put("intelligence", intelligence);
+        json.put("wisdom", wisdom);
+        json.put("charisma", charisma);
+        return json;
     }
 }
