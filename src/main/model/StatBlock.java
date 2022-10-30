@@ -251,7 +251,7 @@ public class StatBlock implements Writable {
     // REQUIRES: skill is in skill proficiencies
     // EFFECTS: returns a statement of the given skill including the bonus;
     public String getSavingThrowProficiencyString(String savingThrow) {
-        return savingThrow + (abilityScores.getModifier(savingThrow) + proficiency);
+        return savingThrow + " " + (abilityScores.getModifier(savingThrow) + proficiency);
     }
 
     // EFFECTS: gets skill proficiencies

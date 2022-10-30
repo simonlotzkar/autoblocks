@@ -267,6 +267,6 @@ public class JsonReader {
         }
         return new LegendaryMechanics(
                 jsonObject.getString("legendaryDescription"),
-                parseAbilities(jsonObject.getJSONArray("legendaryAbilities")));
+                parseAbilities(jsonObject.getJSONArray("legendaryActions")));
     }
 }

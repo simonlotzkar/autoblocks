@@ -42,7 +42,7 @@ As a user, I want to be able to:
       - change character group
       - delete character from play
   - select group in play and do the following:
-    - display characters in group by all stats **except for optional ones for now**
+    - display characters in group by all stats
     - enter roll menu for group and do the following: 
       - roll group action
       - roll group ability check
@@ -50,15 +50,16 @@ As a user, I want to be able to:
     - edit group hp
     - remove group from characters
     - delete group and its characters from play
-- automatically save the library to file when quitting the application, and 
-- optionally load the library from file
+- chose to save the library or play to a file (from main menu and when quitting the application), and 
+- chose to load the library or play from a file (from main menu and when launching the application)
 
 ### Currently added default statblocks:
 - Orc
+- Ancient Black Dragon
 
 ### Future additions:
-- save the current play environment to file when exiting the application ☐
-- load a play environment when starting the application ☐
+- add multiple damage rolls for actions ☐
+- add reactions ☐
 - delete statblocks from the library ☐
 - edit statblocks in the library ☐
 - turn order and automation of turns ☐

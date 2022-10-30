@@ -44,7 +44,7 @@ public class LegendaryMechanics implements Writable {
     public JSONArray legendaryActionsToJson() {
         JSONArray jsonArray = new JSONArray();
         for (Ability a : legendaryActions) {
-            jsonArray.put(a);
+            jsonArray.put(a.toJson());
         }
         return jsonArray;
     }

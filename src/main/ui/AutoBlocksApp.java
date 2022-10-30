@@ -25,6 +25,7 @@ public class AutoBlocksApp {
     private boolean runApp = true;
 
     private static final String commandInvalid = "Command invalid!";
+    private static final String lineSeparator = "---------------------------------------------------------------------";
 
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
@@ -76,7 +77,7 @@ public class AutoBlocksApp {
     //          - quit app
     private void displayMainMenu() {
         System.out.println("\nMain Menu. Current characters in play:");
-        System.out.println("----------------------------------------");
+        System.out.println(lineSeparator);
 
         displayPlay();
 
@@ -248,7 +249,7 @@ public class AutoBlocksApp {
     //          - go back *MainMenu*
     private void displayCharacterMenu() {
         System.out.println("\nCharacter Menu. Current character selected:");
-        System.out.println("---------------------------------------------");
+        System.out.println(lineSeparator);
 
         displayStats();
 
@@ -303,33 +304,20 @@ public class AutoBlocksApp {
     private void displayIndividualStats(StatBlock selected) {
         displayIndividualTitle(selected);
         displayIndividualCombat(selected);
+        System.out.println("\t" + lineSeparator);
+
         displayIndividualAbilityScores(selected);
+        System.out.println("\t" + lineSeparator);
+
+        displayIndividualOptionalFields(selected);
+        System.out.println("\t" + lineSeparator);
 
         if (!selected.getAbilities().isEmpty()) {
             displayIndividualAbilities(selected);
+            System.out.println("\t" + lineSeparator);
         }
 
         displayIndividualActions(selected);
-
-        if (selected.getSavingThrowProficiencies() != null) {
-            System.out.println("\tSaving Throw Proficiencies: " + selected.getSavingThrowProficienciesString());
-        }
-
-        if (selected.getConditionImmunities() != null) {
-            System.out.println("\tCondition Immunities: " + selected.getConditionImmunitiesString());
-        }
-
-        if (selected.getSkillProficiencies() != null) {
-            System.out.println("\tSkill Proficiencies: " + selected.getSkillProficienciesString());
-        }
-
-        if (selected.getResistances() != null) {
-            System.out.println("\tResistances: " + selected.getResistancesString());
-        }
-
-        if (selected.getLegendaryMechanics() != null) {
-            displayIndividualLegendaryMechanics(selected);
-        }
     }
 
     // EFFECTS: prints the title of the given statblock OR character
@@ -351,12 +339,12 @@ public class AutoBlocksApp {
 
     // EFFECTS: prints the selected StatBlock or Character combat related stats
     private void displayIndividualCombat(StatBlock selected) {
-        System.out.println("\t" + "Hit Points: " + selected.getHPString()
-                + "\tArmour Class: " + selected.getArmour().getArmourString()
-                + "\tSpeed: " + selected.getSpeeds().getSpeedsString()
-                + "\tSenses: " + selected.getSenses().getSensesString()
-                + "\tProficiency: " + selected.getProficiency()
-                + "\tChallenge " + selected.getChallengeRating()
+        System.out.println("\t" + "Hit Points: " + selected.getHPString());
+        System.out.println("\tArmour Class: " + selected.getArmour().getArmourString());
+        System.out.println("\tSpeeds: " + selected.getSpeeds().getSpeedsString());
+        System.out.println("\tSenses: " + selected.getSenses().getSensesString());
+        System.out.println("\tProficiency Bonus: " + selected.getProficiency());
+        System.out.println("\tChallenge Rating: " + selected.getChallengeRating()
                 + " (" + NumberFormat.getIntegerInstance().format(selected.getXP()) + "xp)");
     }
 
@@ -375,6 +363,30 @@ public class AutoBlocksApp {
                 + "(" + abilityScores.getModifier("wisdom") + ")"
                 + ", Cha: " + abilityScores.getCharisma()
                 + "(" + abilityScores.getModifier("charisma") + ")");
+    }
+
+    // EFFECTS: prints the selected StatBlock or Character optional fields if they exist
+    private void displayIndividualOptionalFields(StatBlock selected) {
+        if (selected.getSavingThrowProficiencies() != null) {
+            System.out.println("\tSaving Throw Proficiencies: " + selected.getSavingThrowProficienciesString());
+        }
+
+        if (selected.getConditionImmunities() != null) {
+            System.out.println("\tCondition Immunities: " + selected.getConditionImmunitiesString());
+        }
+
+        if (selected.getSkillProficiencies() != null) {
+            System.out.println("\tSkill Proficiencies: " + selected.getSkillProficienciesString());
+        }
+
+        if (selected.getResistances() != null) {
+            System.out.println("\tResistances: " + selected.getResistancesString());
+        }
+
+        if (selected.getLegendaryMechanics() != null) {
+            System.out.println("\t" + lineSeparator);
+            displayIndividualLegendaryMechanics(selected);
+        }
     }
 
     // EFFECTS: prints the selected StatBlock or Character abilities
@@ -398,9 +410,9 @@ public class AutoBlocksApp {
     // EFFECTS: prints the selected StatBlock or Character legendary mechanics
     private void displayIndividualLegendaryMechanics(StatBlock selected) {
         System.out.println("\tLegendary Mechanics:");
-        System.out.println(selected.getLegendaryMechanics().getLegendaryDescription());
+        System.out.println("\t" + selected.getLegendaryMechanics().getLegendaryDescription());
         for (Ability a : selected.getLegendaryMechanics().getLegendaryActions()) {
-            System.out.println("\t" + a.getName() + ": " + a.getDescription() + ". ");
+            System.out.println("\t\t" + a.getName() + ": " + a.getDescription() + ". ");
         }
     }
 
@@ -1374,6 +1386,7 @@ public class AutoBlocksApp {
     private void initializeLibrary() {
         System.out.println("Initializing library...");
         initializeOrcStatBlock();
+        initializeAncientBlackDragonStatBlock();
         System.out.println("All default statblocks added to library!");
     }
 
@@ -1425,5 +1438,102 @@ public class AutoBlocksApp {
         orcActions.add(orcJavelinRanged);
 
         return orcActions;
+    }
+
+    // EFFECTS: adds ancient black dragon and all its parameters to the library
+    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
+    private void initializeAncientBlackDragonStatBlock() {
+        List<String> ancientBlackDragonLanguages = new ArrayList<>();
+        ancientBlackDragonLanguages.add("Common");
+        ancientBlackDragonLanguages.add("Draconic");
+
+        List<String> ancientBlackDragonSkills = new ArrayList<>();
+        ancientBlackDragonSkills.add("perception");
+        ancientBlackDragonSkills.add("stealth");
+
+        List<String> ancientBlackDragonSavingThrows = new ArrayList<>();
+        ancientBlackDragonSavingThrows.add("dexterity");
+        ancientBlackDragonSavingThrows.add("constitution");
+        ancientBlackDragonSavingThrows.add("wisdom");
+        ancientBlackDragonSavingThrows.add("charisma");
+
+        HashMap<String, String> ancientBlackDragonResistances = new HashMap<>();
+        ancientBlackDragonResistances.put("acid", "immunity");
+
+        Ability amphibious = new Ability("Amphibious", "The dragon can breathe air and water.");
+        Ability breath = new Ability("Acid Breath (Recharge 5-6)", "The dragon exhales acid in a "
+                + "90-foot line that is 10 feet wide. Each creature in that line must make a DC 22 Dexterity saving "
+                + "throw, taking 67 (15d8) acid damage on a failed save, or half as much damage on a successful one");
+        Ability frightfulPresence = new Ability("Frightful Presence", "Each creature of the dragon's "
+                + "choice that is within 120 feet of the dragon and aware of it must succeed on a DC 19 Wisdom saving "
+                + "throw or become frightened for 1 minute. A creature can repeat the saving throw at the end of each "
+                + "of its turns, ending the effect on itself on a success. If a creature's saving throw is successful "
+                + "or the effect ends for it, the creature is immune to the dragon's Frightful Presence for the next "
+                + "24 hours");
+        Ability multiAttack = new Ability("Multiattack", "The dragon can use its Frightful Presence. "
+                + "It then makes three attacks: one with its bite and two with its claws");
+        Ability legendaryResistance = new Ability("Legendary Resistance (3/day)",
+                "If the dragon fails a saving throw, it can choose to succeed instead");
+        List<Ability> ancientBlackDragonAbilities = new ArrayList<>();
+        ancientBlackDragonAbilities.add(amphibious);
+        ancientBlackDragonAbilities.add(multiAttack);
+        ancientBlackDragonAbilities.add(legendaryResistance);
+        ancientBlackDragonAbilities.add(breath);
+        ancientBlackDragonAbilities.add(frightfulPresence);
+
+        Ability detect = new Ability("Detect", "The dragon makes a Wisdom (Perception) check");
+        Ability tailAttack = new Ability("Tail Attack", "The dragon makes a tail attack");
+        Ability wingAttack = new Ability("Wing Attack (Costs 2 Actions)", "The dragon beats its wings. "
+                + "Each creature within 15 ft. of the dragon must succeed on a DC 23 Dexterity saving throw or take 15 "
+                + "(2d6 + 8) bludgeoning damage and be knocked prone. The dragon can then fly up to half its flying "
+                + "speed");
+        List<Ability> legendaryActions = new ArrayList<>();
+        legendaryActions.add(detect);
+        legendaryActions.add(tailAttack);
+        legendaryActions.add(wingAttack);
+
+        LegendaryMechanics ancientBlackDragonLegendaryMechanics = new LegendaryMechanics(
+                ("The dragon can take 3 legendary actions, choosing from the options below. Only one "
+                        + "legendary action option can be used at a time and only at the end of another creature's "
+                        + "turn. The dragon regains spent legendary actions at the start of its turn"),
+                legendaryActions);
+
+        StatBlock ancientBlackDragon = new StatBlock.StatBlockBuilder(
+                (new Title.TitleBuilder("AncientBlackDragon", "Dragon", "Gargantuan", "Chaotic Evil").build()),
+                33000, new RollFormula(21, 20, 147), 7,
+                (new Armour.ArmourBuilder(22).armourName("Natural Armour").build()),
+                (new Speeds.SpeedsBuilder(40).fly(80).swim(40).build()),
+                (new Senses.SensesBuilder(26).darkVision(120).blindSight(60).build()),
+                (new AbilityScores(27, 14, 25, 16, 15, 19)),
+                (ancientBlackDragonAbilities),
+                returnAncientBlackDragonActions(),
+                (new Languages.LanguagesBuilder(ancientBlackDragonLanguages).build()))
+                .resistances(ancientBlackDragonResistances)
+                .skillProficiencies(ancientBlackDragonSkills)
+                .savingThrowProficiencies(ancientBlackDragonSavingThrows)
+                .legendaryMechanics(ancientBlackDragonLegendaryMechanics)
+                .build();
+
+        library.addStatBlock(ancientBlackDragon);
+    }
+
+    // EFFECTS: returns ancient black dragon actions
+    private List<Action> returnAncientBlackDragonActions() {
+        Action bite = new Action("Bite", "Melee Weapon Attack plus 9 (2d8) acid damage", "Piercing", "15ft",
+                new RollFormula(1, 20, 15),  //hit formula
+                new RollFormula(2, 10, 8)); //damage formula
+        Action claw = new Action("Claw", "Melee Weapon Attack", "Slashing", "10ft",
+                new RollFormula(1, 20, 15),  //hit formula
+                new RollFormula(2, 6, 8)); //damage formula
+        Action tail = new Action("Tail", "Melee Weapon Attack", "Bludgeoning", "20ft",
+                new RollFormula(1, 20, 15),  //hit formula
+                new RollFormula(2, 8, 8)); //damage formula
+
+        List<Action> ancientBlackDragonActions = new ArrayList<>();
+        ancientBlackDragonActions.add(bite);
+        ancientBlackDragonActions.add(claw);
+        ancientBlackDragonActions.add(tail);
+
+        return ancientBlackDragonActions;
     }
 }
