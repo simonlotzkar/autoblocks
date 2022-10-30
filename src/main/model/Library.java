@@ -6,17 +6,19 @@ import persistence.Writable;
 
 import java.util.List;
 
+// Represents...
 public class Library implements Writable {
-    private String name;
-    private List<StatBlock> statBlocks;
+    private final String name;
+    private final List<StatBlock> statBlocks;
 
+    // EFFECTS: constructs a library with the given parameters
     public Library(String name, List<StatBlock> statBlocks) {
         this.name = name;
         this.statBlocks = statBlocks;
     }
 
     // EFFECTS: gets the library list
-    public List<StatBlock> getStatBlocks() {
+    public List<StatBlock> getList() {
         return statBlocks;
     }
 
@@ -30,7 +32,6 @@ public class Library implements Writable {
         statBlocks.add(statBlock);
     }
 
-    // CITATION: from JsonSerializationDemo
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
@@ -40,7 +41,6 @@ public class Library implements Writable {
     }
 
     // EFFECTS: returns statblocks in this library as a JSON array
-    // CITATION: from JsonSerializationDemo
     private JSONArray statBlocksToJson() {
         JSONArray jsonArray = new JSONArray();
         for (StatBlock sb : statBlocks) {

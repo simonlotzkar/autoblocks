@@ -1,7 +1,8 @@
-package model;
+package model.statblockfields;
 
 import org.json.JSONObject;
 
+// Represents...
 public class Action extends Ability {
     // required fields
     private final String damageType;

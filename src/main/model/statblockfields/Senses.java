@@ -3,6 +3,7 @@ package model.statblockfields;
 import org.json.JSONObject;
 import persistence.Writable;
 
+// Represents...
 public class Senses implements Writable {
     // required fields
     private final int passivePerception; //TODO make automatic in future

@@ -3,6 +3,7 @@ package model.statblockfields;
 import org.json.JSONObject;
 import persistence.Writable;
 
+// Represents...
 public class AbilityScores implements Writable {
     // required fields
     private final int strength;

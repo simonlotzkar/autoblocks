@@ -26,13 +26,13 @@ As a user, I want to be able to:
 </p>
 
 - simulate rolling any number of dice, with any number of sides, and with any modifier
-- view a list of statblocks by their names, (aka the 'library') and do the following:
-    - select statblock in library and do the following:
+- view a list of statblocks by their names, (aka a 'library') and do the following:
+    - select statblock in a library and do the following:
         - display all statblock information
-        - add any number of statblock to play as new characters
-    - add new, custom statblock to the library.
-- view a list of characters (aka 'play') by their names, groups, and hp; and do the following:
-  - select character in play and do the following:
+        - add any number of statblock to encounter as new characters
+    - add new, custom statblock to a library.
+- view a list of characters (aka an 'encounter') by their names, groups, and hp; and do the following:
+  - select character in encounter and do the following:
       - display all character stats and actions
       - enter roll menu for character and do the following:
           - roll character action
@@ -40,8 +40,8 @@ As a user, I want to be able to:
           - roll character initiative
       - edit character hitpoints
       - change character group
-      - delete character from play
-  - select group in play and do the following:
+      - delete character from encounter
+  - select group in encounter and do the following:
     - display characters in group by all stats
     - enter roll menu for group and do the following: 
       - roll group action
@@ -49,9 +49,9 @@ As a user, I want to be able to:
       - roll group initiative
     - edit group hp
     - remove group from characters
-    - delete group and its characters from play
-- chose to save the library or play to a file (from main menu and when quitting the application), and 
-- chose to load the library or play from a file (from main menu and when launching the application)
+    - delete group and its characters from encounter
+- chose to save the current library or encounter to a file (from main menu and when quitting the application), and 
+- chose to load a library or encounter from a file (from main menu and when launching the application)
 
 ### Currently added default statblocks:
 - Orc
@@ -60,8 +60,8 @@ As a user, I want to be able to:
 ### Future additions:
 - add multiple damage rolls for actions ☐
 - add reactions ☐
-- delete statblocks from the library ☐
-- edit statblocks in the library ☐
+- delete statblocks from a library ☐
+- edit statblocks in a library ☐
 - turn order and automation of turns ☐
 - inventory/loot generation ☐
 - come with all default monsters in the 5th edition monsters manual (1/300) ☐

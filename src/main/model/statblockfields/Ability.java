@@ -1,8 +1,9 @@
-package model;
+package model.statblockfields;
 
 import org.json.JSONObject;
 import persistence.Writable;
 
+// Represents...
 public class Ability implements Writable {
     // required fields
     private final String name;

@@ -12,21 +12,26 @@ import java.text.NumberFormat;
 import java.util.*;
 
 public class AutoBlocksApp {
-    private Library library = new Library("main library", new ArrayList<>());
-    private List<Character> play = new ArrayList<>();
-    private final Scanner userInput = new Scanner(System.in);
+    // play and library environments
+    private Library library = new Library("default library", new ArrayList<>());
+    private Encounter encounter = new Encounter("default encounter", new ArrayList<>());
 
+    // selections
     private StatBlock selectedStatBlock;
     private Character selectedCharacter;
     private String selectedGroupName;
     private List<Character> selectedGroup;
 
+    // menus
+    private final Scanner userInput = new Scanner(System.in);
     private String menuLevel = "main";
     private boolean runApp = true;
 
+    // string constants
     private static final String commandInvalid = "Command invalid!";
     private static final String lineSeparator = "---------------------------------------------------------------------";
 
+    // persistence
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
     private static final String JSON_STORE = "./data/autoBlocksApp.json";
@@ -69,23 +74,23 @@ public class AutoBlocksApp {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    // EFFECTS: display characters in play and MainMenu commands:
+    // EFFECTS: display characters in encounter and MainMenu commands:
     //          - custom roll,
     //          - select character *CharacterMenu*,
     //          - select group *GroupMenu*
     //          - view library *LibraryMenu*
     //          - quit app
     private void displayMainMenu() {
-        System.out.println("\nMain Menu. Current characters in play:");
+        System.out.println("\nMain Menu. Current characters in encounter:");
         System.out.println(lineSeparator);
 
         displayPlay();
 
         System.out.println("\nMain Menu Commands:");
         System.out.println("\troll: Make a custom roll with any parameter.");
-        System.out.println("\tchar: Select a character in play. Take individual actions and edit hp from here.");
-        System.out.println("\tgroup: Select a group in play. Take group actions and edit group hp from here.");
-        System.out.println("\tlib: View statblock library. Add characters to play from here.");
+        System.out.println("\tchar: Select a character in encounter. Take individual actions and edit hp from here.");
+        System.out.println("\tgroup: Select a group in encounter. Take group actions and edit group hp from here.");
+        System.out.println("\tlib: View statblock library. Add characters to encounter from here.");
         System.out.println("\tload: Load a statblock library from file.");
         System.out.println("\tquit: Save library and exit to desktop.");
     }
@@ -113,8 +118,8 @@ public class AutoBlocksApp {
 
     // EFFECTS: prints all characters in play with their names, groups, and hp
     private void displayPlay() {
-        if (!play.isEmpty()) {
-            for (Character c : play) {
+        if (!encounter.getList().isEmpty()) {
+            for (Character c : encounter.getList()) {
                 Title selectedTitle = c.getTitle();
                 if (selectedTitle.getGroup() != null) {
                     System.out.println("\t" + selectedTitle.getName()
@@ -124,7 +129,7 @@ public class AutoBlocksApp {
                 }
             }
         } else {
-            System.out.println("\tThere are currently no characters in play.");
+            System.out.println("\tThere are currently no characters in encounter.");
         }
     }
 
@@ -142,7 +147,7 @@ public class AutoBlocksApp {
 
     // REQUIRES: selectType is either "character", "group", or "statblock"
     // MODIFIES: this
-    // EFFECTS: prompts user for the name of given selectType, searches play and selects them if they exist
+    // EFFECTS: prompts user for the name of given selectType, searches encounter and selects them if they exist
     private void searchForAndSelect(String selectType) {
         System.out.println("Enter " + selectType + " name.");
         String select = userInput.next().toLowerCase();
@@ -152,7 +157,7 @@ public class AutoBlocksApp {
         } else if ("character".equals(selectType)) {
             selectCharacterByName(select);
         } else if ("group".equals(selectType)) {
-            for (Character c : play) {
+            for (Character c : encounter.getList()) {
                 Title selectedTitle = c.getTitle();
                 if (selectedTitle.getGroup() != null && select.equals(selectedTitle.getGroup().toLowerCase())) {
                     selectGroupByName(select);
@@ -166,7 +171,7 @@ public class AutoBlocksApp {
 
     // EFFECTS: searches library for given statblock name, prints name, selects them, and changes to StatBlockMenu
     private void selectStatBlockByName(String statBlockName) {
-        for (StatBlock sb : library.getStatBlocks()) {
+        for (StatBlock sb : library.getList()) {
             if (statBlockName.equals(sb.getTitle().getName().toLowerCase())) {
                 System.out.println("Found " + statBlockName + "!");
                 selectedStatBlock = sb;
@@ -175,9 +180,9 @@ public class AutoBlocksApp {
         }
     }
 
-    // EFFECTS: searches play for given character name, prints name, selects them, and changes to CharacterMenu
+    // EFFECTS: searches encounter for given character name, prints name, selects them, and changes to CharacterMenu
     private void selectCharacterByName(String characterName) {
-        for (Character c : play) {
+        for (Character c : encounter.getList()) {
             if (characterName.equals(c.getTitle().getName().toLowerCase())) {
                 System.out.println("Found " + characterName + "!");
                 selectedCharacter = c;
@@ -191,7 +196,7 @@ public class AutoBlocksApp {
         selectedGroupName = groupName;
         System.out.println("Found " + groupName + "!");
         System.out.println("Selecting group members...");
-        for (Character c : play) {
+        for (Character c : encounter.getList()) {
             Title selectedTitle = c.getTitle();
             if (selectedTitle.getGroup() != null && selectedGroupName.equals(selectedTitle.getGroup())) {
                 selectedGroup.add(c);
@@ -245,7 +250,7 @@ public class AutoBlocksApp {
     //          - roll for character
     //          - edit character hp
     //          - change character group
-    //          - delete character from play
+    //          - delete character from encounter
     //          - go back *MainMenu*
     private void displayCharacterMenu() {
         System.out.println("\nCharacter Menu. Current character selected:");
@@ -257,7 +262,7 @@ public class AutoBlocksApp {
         System.out.println("\troll: Roll an action, initiative, skill check, or saving throw for this character.");
         System.out.println("\thp: Edit this character's hitpoints");
         System.out.println("\tgroup: Change this character's group");
-        System.out.println("\tdel: Delete this character from play.");
+        System.out.println("\tdel: Delete this character from this encounter.");
         System.out.println("\texit: Go back to the main menu.");
     }
 
@@ -458,7 +463,7 @@ public class AutoBlocksApp {
         }
     }
 
-    // EFFECTS: prompts user for confirmation, removes selected character from play, then exits menu *MainMenu*
+    // EFFECTS: prompts user for confirmation, removes selected character from encounter, then exits menu *MainMenu*
     private void displayDeleteCharacterMenu() {
         System.out.println("\nAre you sure you want to delete the selected character? Confirm:");
         System.out.println("\ty = yes,");
@@ -467,10 +472,10 @@ public class AutoBlocksApp {
         processDeleteCharacterCommand(command);
     }
 
-    // EFFECTS: processes deletecharactermenu commands
+    // EFFECTS: processes delete character menu commands
     private void processDeleteCharacterCommand(String command) {
         if (command.equals("y")) {
-            play.remove(selectedCharacter);
+            encounter.remove(selectedCharacter);
             System.out.println("Deleted character.");
             goToMainMenu();
         } else if (command.equals("n")) {
@@ -580,10 +585,10 @@ public class AutoBlocksApp {
         }
     }
 
-    // EFFECTS: removes all group members from selected group from play
+    // EFFECTS: removes all group members from selected group from encounter
     private void deleteGroupAndCharacters() {
         for (Character c : selectedGroup) {
-            play.remove(c);
+            encounter.remove(c);
         }
     }
 
@@ -831,7 +836,7 @@ public class AutoBlocksApp {
 
     // EFFECTS: prints all statblocks in the library with their names
     private void displayLibrary() {
-        for (StatBlock sb : library.getStatBlocks()) {
+        for (StatBlock sb : library.getList()) {
             System.out.println(sb.getTitle().getName());
         }
     }
@@ -960,7 +965,7 @@ public class AutoBlocksApp {
     //          until a unique name is provided, then returns that name.
     private String getCustomStatBlockName() {
         String name = getCustomStatBlockString("name");
-        for (StatBlock sb : library.getStatBlocks()) {
+        for (StatBlock sb : library.getList()) {
             if ((sb.getTitle().getName().toLowerCase()).equals(name)) {
                 System.out.println("This name is already in use. Try again...");
                 getCustomStatBlockName();
@@ -1304,12 +1309,12 @@ public class AutoBlocksApp {
         }
     }
 
-    // EFFECTS: add any number of the selected statblock to play as characters with no unique names
+    // EFFECTS: add any number of the selected statblock to encounter as characters with no unique names
     private void createCharacters() {
         System.out.println("How many copies of this statblock do you want to add?");
         int numberOfCopies = userInput.nextInt();
         System.out.println("Adding " + numberOfCopies + " copies of " + selectedStatBlock.getTitle().getName()
-                + " to play...");
+                + " to encounter...");
         for (int i = 1; i < (numberOfCopies + 1); i++) {
             Character character = new Character.CharacterBuilder(selectedStatBlock, getNewCharacterTitle(),
                     selectedStatBlock.getXP(), selectedStatBlock.getHpFormula(),selectedStatBlock.getProficiency(),
@@ -1317,7 +1322,7 @@ public class AutoBlocksApp {
                     selectedStatBlock.getAbilityScores(), selectedStatBlock.getAbilities(),
                     selectedStatBlock.getActions(), selectedStatBlock.getLanguages()).build();
             System.out.println("Added copy " + i + "of " + selectedStatBlock.getTitle().getName() + "!");
-            play.add(character);
+            encounter.add(character);
         }
         System.out.println("Done adding " + numberOfCopies + " statblocks.");
         goToLibraryMenu();
@@ -1331,34 +1336,23 @@ public class AutoBlocksApp {
                 parentTitle.getAlignment()).build();
     }
 
-    // EFFECTS: searches play for characters named after selectedStatBlock: if there's none, returns selected statblock
-    //          name with 1 as suffix, otherwise arrays the character suffixes and returns selected statblock name with
-    //          the lowest number not in the array as a suffix
+    // EFFECTS: searches encounter for characters named after selectedStatBlock: if there's none, returns selected
+    //          statblock name with 1 as suffix, otherwise arrays the character suffixes and returns selected statblock
+    //          name with  the lowest number not in the array as a suffix
     private String nameNewCharacter() {
         int lowestNumber = 1;
         List<Integer> suffixes;
-        if (playContainsSelectedStatBlockName()) {
+        if (encounter.contains(selectedStatBlock)) {
             suffixes = generateSuffixes();
             lowestNumber = findFirstIntegerGap(suffixes);
         }
         return selectedStatBlock.getTitle().getName().toLowerCase() + lowestNumber;
     }
 
-    // EFFECTS: returns true if play contains a character with the selected statblock name, excluding its suffix,
-    //          false otherwise
-    private boolean playContainsSelectedStatBlockName() {
-        for (Character c : play) {
-            if (c.getTitle().getName().toLowerCase().contains(selectedStatBlock.getTitle().getName().toLowerCase())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    // EFFECTS: returns list of suffixes for characters in play with selected statblock name
+    // EFFECTS: returns list of suffixes for characters in encounter with selected statblock name
     private List<Integer> generateSuffixes() {
         List<Integer> suffixes = new ArrayList<>();
-        for (Character c : play) {
+        for (Character c : encounter.getList()) {
             if (c.getTitle().getName().toLowerCase().contains(selectedStatBlock.getTitle().getName().toLowerCase())) {
                 suffixes.add(Integer.parseInt(c.getTitle().getName().toLowerCase().replaceAll("[^\\d]", "")));
             }
@@ -1391,6 +1385,7 @@ public class AutoBlocksApp {
     }
 
     // EFFECTS: adds orc and all its parameters to the library
+    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
     private void initializeOrcStatBlock() {
         List<String> orcLanguages = new ArrayList<>();
         orcLanguages.add("Common");
@@ -1404,24 +1399,6 @@ public class AutoBlocksApp {
         List<Ability> orcAbilities = new ArrayList<>();
         orcAbilities.add(aggression);
 
-        StatBlock orc = new StatBlock.StatBlockBuilder(
-                (new Title.TitleBuilder("Orc", "Humanoid (Orc)", "Medium", "Chaotic Evil").build()),
-                100, new RollFormula(2, 8, 6), 2,
-                (new Armour.ArmourBuilder(13).armourName("Hide Armour").build()),
-                (new Speeds.SpeedsBuilder(30).build()),
-                (new Senses.SensesBuilder(10).darkVision(60).build()),
-                (new AbilityScores(16, 12, 16, 7, 11, 10)),
-                (orcAbilities),
-                returnOrcActions(),
-                (new Languages.LanguagesBuilder(orcLanguages).build()))
-                .skillProficiencies(orcSkillProficiencies)
-                .build();
-
-        library.addStatBlock(orc);
-    }
-
-    // EFFECTS: returns orc actions
-    private List<Action> returnOrcActions() {
         Action orcGreatAxe = new Action("GreatAxe", "Melee Weapon Attack", "Slashing", "5ft",
                 new RollFormula(1, 20, 5),  //hit formula
                 new RollFormula(1, 12, 3)); //damage formula
@@ -1437,7 +1414,20 @@ public class AutoBlocksApp {
         orcActions.add(orcJavelinMelee);
         orcActions.add(orcJavelinRanged);
 
-        return orcActions;
+        StatBlock orc = new StatBlock.StatBlockBuilder(
+                (new Title.TitleBuilder("Orc", "Humanoid (Orc)", "Medium", "Chaotic Evil").build()),
+                100, new RollFormula(2, 8, 6), 2,
+                (new Armour.ArmourBuilder(13).armourName("Hide Armour").build()),
+                (new Speeds.SpeedsBuilder(30).build()),
+                (new Senses.SensesBuilder(10).darkVision(60).build()),
+                (new AbilityScores(16, 12, 16, 7, 11, 10)),
+                orcAbilities,
+                orcActions,
+                (new Languages.LanguagesBuilder(orcLanguages).build()))
+                .skillProficiencies(orcSkillProficiencies)
+                .build();
+
+        library.addStatBlock(orc);
     }
 
     // EFFECTS: adds ancient black dragon and all its parameters to the library
@@ -1481,6 +1471,21 @@ public class AutoBlocksApp {
         ancientBlackDragonAbilities.add(breath);
         ancientBlackDragonAbilities.add(frightfulPresence);
 
+        Action bite = new Action("Bite", "Melee Weapon Attack plus 9 (2d8) acid damage", "Piercing", "15ft",
+                new RollFormula(1, 20, 15),  //hit formula
+                new RollFormula(2, 10, 8)); //damage formula
+        Action claw = new Action("Claw", "Melee Weapon Attack", "Slashing", "10ft",
+                new RollFormula(1, 20, 15),  //hit formula
+                new RollFormula(2, 6, 8)); //damage formula
+        Action tail = new Action("Tail", "Melee Weapon Attack", "Bludgeoning", "20ft",
+                new RollFormula(1, 20, 15),  //hit formula
+                new RollFormula(2, 8, 8)); //damage formula
+
+        List<Action> ancientBlackDragonActions = new ArrayList<>();
+        ancientBlackDragonActions.add(bite);
+        ancientBlackDragonActions.add(claw);
+        ancientBlackDragonActions.add(tail);
+
         Ability detect = new Ability("Detect", "The dragon makes a Wisdom (Perception) check");
         Ability tailAttack = new Ability("Tail Attack", "The dragon makes a tail attack");
         Ability wingAttack = new Ability("Wing Attack (Costs 2 Actions)", "The dragon beats its wings. "
@@ -1505,8 +1510,8 @@ public class AutoBlocksApp {
                 (new Speeds.SpeedsBuilder(40).fly(80).swim(40).build()),
                 (new Senses.SensesBuilder(26).darkVision(120).blindSight(60).build()),
                 (new AbilityScores(27, 14, 25, 16, 15, 19)),
-                (ancientBlackDragonAbilities),
-                returnAncientBlackDragonActions(),
+                ancientBlackDragonAbilities,
+                ancientBlackDragonActions,
                 (new Languages.LanguagesBuilder(ancientBlackDragonLanguages).build()))
                 .resistances(ancientBlackDragonResistances)
                 .skillProficiencies(ancientBlackDragonSkills)
@@ -1515,25 +1520,5 @@ public class AutoBlocksApp {
                 .build();
 
         library.addStatBlock(ancientBlackDragon);
-    }
-
-    // EFFECTS: returns ancient black dragon actions
-    private List<Action> returnAncientBlackDragonActions() {
-        Action bite = new Action("Bite", "Melee Weapon Attack plus 9 (2d8) acid damage", "Piercing", "15ft",
-                new RollFormula(1, 20, 15),  //hit formula
-                new RollFormula(2, 10, 8)); //damage formula
-        Action claw = new Action("Claw", "Melee Weapon Attack", "Slashing", "10ft",
-                new RollFormula(1, 20, 15),  //hit formula
-                new RollFormula(2, 6, 8)); //damage formula
-        Action tail = new Action("Tail", "Melee Weapon Attack", "Bludgeoning", "20ft",
-                new RollFormula(1, 20, 15),  //hit formula
-                new RollFormula(2, 8, 8)); //damage formula
-
-        List<Action> ancientBlackDragonActions = new ArrayList<>();
-        ancientBlackDragonActions.add(bite);
-        ancientBlackDragonActions.add(claw);
-        ancientBlackDragonActions.add(tail);
-
-        return ancientBlackDragonActions;
     }
 }

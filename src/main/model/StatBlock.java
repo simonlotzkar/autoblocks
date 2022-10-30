@@ -7,6 +7,7 @@ import persistence.Writable;
 
 import java.util.*;
 
+// Represents...
 public class StatBlock implements Writable {
     // required fields
     protected final Title title;

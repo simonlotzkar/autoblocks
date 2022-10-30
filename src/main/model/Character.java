@@ -4,6 +4,7 @@ import model.statblockfields.*;
 
 import java.util.List;
 
+// Represents...
 public class Character extends StatBlock {
     // required fields
     private final int maxHP;
@@ -31,6 +32,7 @@ public class Character extends StatBlock {
     // -----------------------------------------------------------------------------------------------------------------
     // getters
     // EFFECTS: returns current hp and max hp as a fraction in a string
+    @Override
     public String getHPString() {
         return hp + "/" + maxHP;
     }

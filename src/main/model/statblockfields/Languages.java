@@ -1,12 +1,11 @@
 package model.statblockfields;
 
-import model.Ability;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.Writable;
 
 import java.util.List;
 
+// Represents...
 public class Languages implements Writable {
     // required fields
     private final List<String> languagesList;

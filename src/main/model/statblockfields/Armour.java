@@ -3,6 +3,7 @@ package model.statblockfields;
 import org.json.JSONObject;
 import persistence.Writable;
 
+// Represents...
 public class Armour implements Writable {
     // required fields
     private final int ac;

@@ -1,8 +1,8 @@
 package persistence;
 
-import model.Ability;
-import model.Action;
-import model.RollFormula;
+import model.statblockfields.Ability;
+import model.statblockfields.Action;
+import model.statblockfields.RollFormula;
 import model.StatBlock;
 import model.statblockfields.*;
 

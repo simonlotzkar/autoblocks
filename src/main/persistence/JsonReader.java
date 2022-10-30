@@ -15,18 +15,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-// Represents a reader that reads statblock library from JSON data stored in file
-// CITATION: based on JsonReader.java in JsonSerializationDemo
+// Represents a reader that reads libraries and encounters from JSON data stored in file
+// CITATION: from JsonReader.java in JsonSerializationDemo
 public class JsonReader {
     private String source;
 
     // EFFECTS: constructs reader to read from source file
+    // CITATION: from JsonReader.java in JsonSerializationDemo
     public JsonReader(String source) {
         this.source = source;
     }
 
     // EFFECTS: reads the library (list of statblocks) from file and returns them;
     // throws IOException if an error occurs reading data from file
+    // CITATION: from JsonReader.java in JsonSerializationDemo
     public Library read() throws IOException {
         String jsonData = readFile(source);
         JSONObject jsonObject = new JSONObject(jsonData);
@@ -34,6 +36,7 @@ public class JsonReader {
     }
 
     // EFFECTS: reads source file as string and returns it
+    // CITATION: from JsonReader.java in JsonSerializationDemo
     private String readFile(String source) throws IOException {
         StringBuilder contentBuilder = new StringBuilder();
 
@@ -45,6 +48,7 @@ public class JsonReader {
     }
 
     // EFFECTS: parses the library (list of statblocks) from JSON array and returns it
+    // CITATION: from JsonReader.java in JsonSerializationDemo
     private Library parseLibrary(JSONObject jsonObject) {
         String name = jsonObject.getString("name");
         Library library = new Library(name, new ArrayList<>());
@@ -54,6 +58,7 @@ public class JsonReader {
 
     // MODIFIES: library
     // EFFECTS: adds statblocks to library
+    // CITATION: from JsonReader.java in JsonSerializationDemo
     private void addStatBlocks(Library library, JSONObject jsonObject) {
         JSONArray jsonArray = jsonObject.getJSONArray("statBlocks");
         for (Object json : jsonArray) {
