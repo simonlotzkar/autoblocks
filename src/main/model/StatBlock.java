@@ -24,10 +24,10 @@ public class StatBlock implements Writable {
     protected final Languages languages;
 
     // optional fields
-    protected final SavingThrowProficiencies savingThrowProficiencies;
-    protected final SkillProficiencies skillProficiencies;
-    protected final ConditionImmunities conditionImmunities;
-    protected final Resistances resistances;
+    protected final List<String> savingThrowProficiencies;
+    protected final List<String> skillProficiencies;
+    protected final List<String> conditionImmunities;
+    protected final HashMap<String, String> resistances;
     protected final LegendaryMechanics legendaryMechanics;
 
     // EFFECTS: constructs a StatBlock using a builder
@@ -48,6 +48,34 @@ public class StatBlock implements Writable {
         this.languages = builder.languages;
         this.senses = builder.senses;
         this.legendaryMechanics = builder.legendaryMechanics;
+    }
+
+    // REQUIRES: given string is an ability score
+    // MODIFIES: this
+    // EFFECTS: adds the given saving throw proficiency to the saving throw proficiencies
+    public void addSavingThrowProficiency(String savingThrowProficiency) {
+        savingThrowProficiencies.add(savingThrowProficiency);
+    }
+
+    // REQUIRES: given string is a skill
+    // MODIFIES: this
+    // EFFECTS: adds the given skill proficiency to the skill proficiencies
+    public void addSkillProficiency(String skill) {
+        skillProficiencies.add(skill);
+    }
+
+    // REQUIRES: given string is a condition immunity
+    // MODIFIES: this
+    // EFFECTS: adds the given condition immunity to the condition immunities
+    public void addConditionImmunity(String conditionImmunity) {
+        conditionImmunities.add(conditionImmunity);
+    }
+
+    // REQUIRES: given strings are damage types and resistance types respectively
+    // MODIFIES: this
+    // EFFECTS: adds the given damage type and resistance type to resistances
+    public void addResistance(String damageType, String resistanceType) {
+        resistances.put(damageType, resistanceType);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -204,23 +232,105 @@ public class StatBlock implements Writable {
     }
 
     // EFFECTS: gets saving throw proficiencies
-    public SavingThrowProficiencies getSavingThrowProficiencies() {
+    public List<String> getSavingThrowProficiencies() {
         return savingThrowProficiencies;
     }
 
+    // EFFECTS: returns all saving throw proficiencies as a string, or "" if none
+    public String getSavingThrowProficienciesString() {
+        if (savingThrowProficiencies == null) {
+            return "";
+        }
+        StringBuilder savingThrowProficienciesString = new StringBuilder();
+        for (String savingThrow : savingThrowProficiencies) {
+            savingThrowProficienciesString.append(getSavingThrowProficiencyString(savingThrow)).append(", ");
+        }
+        return savingThrowProficienciesString.toString();
+    }
+
+    // REQUIRES: skill is in skill proficiencies
+    // EFFECTS: returns a statement of the given skill including the bonus;
+    public String getSavingThrowProficiencyString(String savingThrow) {
+        return savingThrow + (abilityScores.getModifier(savingThrow) + proficiency);
+    }
+
     // EFFECTS: gets skill proficiencies
-    public SkillProficiencies getSkillProficiencies() {
+    public List<String> getSkillProficiencies() {
         return skillProficiencies;
     }
 
+    // EFFECTS: returns all skill proficiencies as a string, or "" if none
+    public String getSkillProficienciesString() {
+        if (skillProficiencies == null) {
+            return "";
+        }
+        StringBuilder skillProficienciesString = new StringBuilder();
+        for (String skill : skillProficiencies) {
+            skillProficienciesString.append(getSkillProficiencyString(skill)).append(", ");
+        }
+        return skillProficienciesString.toString();
+    }
+
+    // REQUIRES: skill is in skill proficiencies
+    // EFFECTS: returns a statement of the given skill including the bonus;
+    public String getSkillProficiencyString(String skill) {
+        return skill + " " + (abilityScores.getModifier(getSkillAbilityScore(skill)) + proficiency);
+    }
+
+    // EFFECTS: returns the ability score for the given skill
+    public String getSkillAbilityScore(String skill) {
+        if ("acrobatics".equals(skill) || "sleightOfHand".equals(skill) || "stealth".equals(skill)) {
+            return "dexterity";
+        } else if ("arcana".equals(skill) || "history".equals(skill) || "religion".equals(skill)
+                || "investigation".equals(skill) || "nature".equals(skill)) {
+            return "intelligence";
+        } else if ("athletics".equals(skill)) {
+            return "strength";
+        } else if ("deception".equals(skill) || "intimidation".equals(skill) || "performance".equals(skill)
+                || "persuasion".equals(skill)) {
+            return "charisma";
+        } else {
+            return "wisdom";
+        }
+    }
+
     // EFFECTS: gets condition immunities
-    public ConditionImmunities getConditionImmunities() {
+    public List<String> getConditionImmunities() {
         return conditionImmunities;
     }
 
+    // EFFECTS: returns all condition immunities as a string, or "" if none
+    public String getConditionImmunitiesString() {
+        if (conditionImmunities == null) {
+            return "";
+        }
+        StringBuilder conditionImmunitiesString = new StringBuilder();
+        for (String conditionImmunity : conditionImmunities) {
+            conditionImmunitiesString.append(conditionImmunity).append(", ");
+        }
+        return conditionImmunitiesString.toString();
+    }
+
     // EFFECTS: gets resistances
-    public Resistances getResistances() {
+    public HashMap<String, String> getResistances() {
         return resistances;
+    }
+
+    // EFFECTS: returns all resistances as a string, or "" if none
+    public String getResistancesString() {
+        if (resistances == null) {
+            return "";
+        }
+        StringBuilder resistancesString = new StringBuilder();
+        resistances.forEach((String damageType, String resistanceType) -> resistancesString
+                .append(getResistanceString(damageType)).append(", "));
+        return resistancesString.toString();
+    }
+
+    // REQUIRES: damage type and resistance type are in resistances
+    // EFFECTS: returns a statement of the damage type and resistance type
+    public String getResistanceString(String damageType) {
+        return damageType + " " + resistances.get(damageType);
     }
 
     // EFFECTS: gets languages
@@ -252,10 +362,10 @@ public class StatBlock implements Writable {
         protected final List<Action> actions;
 
         // optional fields
-        protected SavingThrowProficiencies savingThrowProficiencies;
-        protected SkillProficiencies skillProficiencies;
-        protected ConditionImmunities conditionImmunities;
-        protected Resistances resistances;
+        protected List<String> savingThrowProficiencies;
+        protected List<String> skillProficiencies;
+        protected List<String> conditionImmunities;
+        protected HashMap<String, String> resistances;
         protected LegendaryMechanics legendaryMechanics;
 
         // EFFECTS: constructs a builder with required fields
@@ -282,25 +392,25 @@ public class StatBlock implements Writable {
         }
 
         // EFFECTS: returns a builder that assigns saving throw proficiencies to the StatBlock
-        public StatBlockBuilder savingThrowProficiencies(SavingThrowProficiencies savingThrowProficiencies) {
+        public StatBlockBuilder savingThrowProficiencies(List<String> savingThrowProficiencies) {
             this.savingThrowProficiencies = savingThrowProficiencies;
             return this;
         }
 
         // EFFECTS: returns a builder that assigns skill proficiencies to the StatBlock
-        public StatBlockBuilder skillProficiencies(SkillProficiencies skillProficiencies) {
+        public StatBlockBuilder skillProficiencies(List<String> skillProficiencies) {
             this.skillProficiencies = skillProficiencies;
             return this;
         }
 
         // EFFECTS: returns a builder that assigns condition immunities to the StatBlock
-        public StatBlockBuilder conditionImmunities(ConditionImmunities conditionImmunities) {
+        public StatBlockBuilder conditionImmunities(List<String> conditionImmunities) {
             this.conditionImmunities = conditionImmunities;
             return this;
         }
 
         // EFFECTS: returns a builder that assigns resistances to the StatBlock
-        public StatBlockBuilder resistances(Resistances resistances) {
+        public StatBlockBuilder resistances(HashMap<String, String> resistances) {
             this.resistances = resistances;
             return this;
         }
@@ -326,8 +436,7 @@ public class StatBlock implements Writable {
         json.put("abilities", abilitiesToJson());
         json.put("actions", actionsToJson());
         json.put("languages", languages.toJson());
-        return json;
-//        return optionalFieldsToJson(json);
+        return optionalFieldsToJson(json);
     }
 
     // constructs a json array with the abilities
@@ -348,18 +457,19 @@ public class StatBlock implements Writable {
         return jsonArray;
     }
 
+    // adds optional fields that exist to the given json object and returns it
     public JSONObject optionalFieldsToJson(JSONObject json) {
         if (savingThrowProficiencies != null) {
-            json.put("savingThrowProficiencies", savingThrowProficiencies.toJson());
+            json.put("savingThrowProficiencies", savingThrowProficiencies);
         }
         if (skillProficiencies != null) {
-            json.put("skillProficiencies", skillProficiencies.toJson());
+            json.put("skillProficiencies", skillProficiencies);
         }
         if (conditionImmunities != null) {
-            json.put("conditionImmunities", conditionImmunities.toJson());
+            json.put("conditionImmunities", conditionImmunities);
         }
         if (resistances != null) {
-            json.put("resistances", resistances.toJson());
+            json.put("resistances", resistances);
         }
         if (legendaryMechanics != null) {
             json.put("legendaryMechanics", legendaryMechanics.toJson());

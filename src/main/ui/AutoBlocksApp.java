@@ -28,7 +28,7 @@ public class AutoBlocksApp {
 
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
-    private static final String JSON_STORE = "./data/library.json";
+    private static final String JSON_STORE = "./data/autoBlocksApp.json";
 
     // EFFECTS: constructs the autoblocks app
     // CITATION: based on JsonSerializationDemo
@@ -304,13 +304,28 @@ public class AutoBlocksApp {
         displayIndividualTitle(selected);
         displayIndividualCombat(selected);
         displayIndividualAbilityScores(selected);
-        displayIndividualDescriptors(selected);
 
         if (!selected.getAbilities().isEmpty()) {
             displayIndividualAbilities(selected);
         }
 
         displayIndividualActions(selected);
+
+        if (selected.getSavingThrowProficiencies() != null) {
+            System.out.println("\tSaving Throw Proficiencies: " + selected.getSavingThrowProficienciesString());
+        }
+
+        if (selected.getConditionImmunities() != null) {
+            System.out.println("\tCondition Immunities: " + selected.getConditionImmunitiesString());
+        }
+
+        if (selected.getSkillProficiencies() != null) {
+            System.out.println("\tSkill Proficiencies: " + selected.getSkillProficienciesString());
+        }
+
+        if (selected.getResistances() != null) {
+            System.out.println("\tResistances: " + selected.getResistancesString());
+        }
 
         if (selected.getLegendaryMechanics() != null) {
             displayIndividualLegendaryMechanics(selected);
@@ -349,46 +364,17 @@ public class AutoBlocksApp {
     private void displayIndividualAbilityScores(StatBlock selected) {
         AbilityScores abilityScores = selected.getAbilityScores();
         System.out.println("\tStr: " + abilityScores.getStrength()
-                + "(" + abilityScores.getStrengthModifier() + ")"
+                + "(" + abilityScores.getModifier("strength") + ")"
                 + ", Dex: " + abilityScores.getDexterity()
-                + "(" + abilityScores.getDexterityModifier() + ")"
+                + "(" + abilityScores.getModifier("dexterity") + ")"
                 + ", Con: " + abilityScores.getConstitution()
-                + "(" + abilityScores.getConstitutionModifier() + ")"
+                + "(" + abilityScores.getModifier("constitution") + ")"
                 + ", Int: " + abilityScores.getIntelligence()
-                + "(" + abilityScores.getIntelligenceModifier() + ")"
+                + "(" + abilityScores.getModifier("intelligence") + ")"
                 + ", Wis: " + abilityScores.getWisdom()
-                + "(" + abilityScores.getWisdomModifier() + ")"
+                + "(" + abilityScores.getModifier("wisdom") + ")"
                 + ", Cha: " + abilityScores.getCharisma()
-                + "(" + abilityScores.getCharismaModifier() + ")");
-    }
-
-    // EFFECTS: prints the selected StatBlock or Character descriptors that are not empty
-    private void displayIndividualDescriptors(StatBlock selected) {
-        String descriptors = "";
-
-        SavingThrowProficiencies savingThrows = selected.getSavingThrowProficiencies();
-        SkillProficiencies skills = selected.getSkillProficiencies();
-        Resistances resistances = selected.getResistances();
-        ConditionImmunities conditionImmunities = selected.getConditionImmunities();
-
-        if (savingThrows != null) {
-            descriptors += "\tProficient Saving Throws: " + savingThrows.getSavingThrowProficienciesString(selected);
-        }
-
-        if (skills != null) {
-            descriptors += "\tProficient Skills: " + skills.getSkillProficienciesString(selected);
-        }
-
-        if (resistances != null) {
-            descriptors += resistances.getResistancesString();
-        }
-
-        if (conditionImmunities != null) {
-            descriptors += "\tCondition Immunities: " + conditionImmunities.getConditionImmunitiesString();
-        }
-
-        descriptors += ("\t" + selected.getLanguages().getLanguagesString());
-        System.out.println(descriptors);
+                + "(" + abilityScores.getModifier("charisma") + ")");
     }
 
     // EFFECTS: prints the selected StatBlock or Character abilities
@@ -756,37 +742,37 @@ public class AutoBlocksApp {
 
     // EFFECTS: rolls a strength check for the given character
     private int rollStrengthCheck(Character character) {
-        RollFormula rollFormula = new RollFormula(1, 20, character.getAbilityScores().getStrengthModifier());
+        RollFormula rollFormula = new RollFormula(1, 20, character.getAbilityScores().getModifier("strength"));
         return rollFormula.roll();
     }
 
     // EFFECTS: rolls a dexterity check for the given character
     private int rollDexterityCheck(Character character) {
-        RollFormula rollFormula = new RollFormula(1, 20, character.getAbilityScores().getDexterityModifier());
+        RollFormula rollFormula = new RollFormula(1, 20, character.getAbilityScores().getModifier("dexterity"));
         return rollFormula.roll();
     }
 
     // EFFECTS: rolls a constitution check for the given character
     private int rollConstitutionCheck(Character character) {
-        RollFormula rollFormula = new RollFormula(1, 20, character.getAbilityScores().getConstitutionModifier());
+        RollFormula rollFormula = new RollFormula(1, 20, character.getAbilityScores().getModifier("constitution"));
         return rollFormula.roll();
     }
 
     // EFFECTS: rolls a intelligence check for the given character
     private int rollIntelligenceCheck(Character character) {
-        RollFormula rollFormula = new RollFormula(1, 20, character.getAbilityScores().getIntelligenceModifier());
+        RollFormula rollFormula = new RollFormula(1, 20, character.getAbilityScores().getModifier("intelligence"));
         return rollFormula.roll();
     }
 
     // EFFECTS: rolls a wisdom skill for the given character
     private int rollWisdomCheck(Character character) {
-        RollFormula rollFormula = new RollFormula(1, 20, character.getAbilityScores().getWisdomModifier());
+        RollFormula rollFormula = new RollFormula(1, 20, character.getAbilityScores().getModifier("wisdom"));
         return rollFormula.roll();
     }
 
     // EFFECTS: rolls a charisma check for the given character
     private int rollCharismaCheck(Character character) {
-        RollFormula rollFormula = new RollFormula(1, 20, character.getAbilityScores().getCharismaModifier());
+        RollFormula rollFormula = new RollFormula(1, 20, character.getAbilityScores().getModifier("charisma"));
         return rollFormula.roll();
     }
 
@@ -1082,147 +1068,164 @@ public class AutoBlocksApp {
     // EFFECTS: prompts user if they want to add saving throw proficiencies to the custom statblock:
     //          if yes they are prompted for each saving throw and returns them as a SavingThrowProficiencies;
     //          if no, returns a default SavingThrowProficiencies
-    private SavingThrowProficiencies promptGetCustomStatBlockSavingThrowProficiencies() {
+    private List<String> promptGetCustomStatBlockSavingThrowProficiencies() {
         if (promptConfirmation("add custom statblock saving throw proficiencies")) {
             return getCustomStatBlockSavingThrowProficiencies();
         } else {
-            return new SavingThrowProficiencies.SavingThrowProficienciesBuilder().build();
+            return null;
         }
     }
 
-    // EFFECTS: prompts user for custom StatBlock all saving throw proficiencies,
-    //          then returns them as a SavingThrowProficiencies
-    private SavingThrowProficiencies getCustomStatBlockSavingThrowProficiencies() {
-        String suffix = " saving throw proficiency";
+    // EFFECTS: prompts user for custom StatBlock all saving throw proficiencies, then returns them as a list
+    private List<String> getCustomStatBlockSavingThrowProficiencies() {
+        List<String> savingThrowProficiencies = new ArrayList<>();
 
-        return new SavingThrowProficiencies.SavingThrowProficienciesBuilder()
-                .strengthProficiency(getCustomStatBlockBoolean("strength" + suffix))
-                .dexterityProficiency(getCustomStatBlockBoolean("dexterity" + suffix))
-                .constitutionProficiency(getCustomStatBlockBoolean("constitution" + suffix))
-                .intelligenceProficiency(getCustomStatBlockBoolean("intelligence" + suffix))
-                .wisdomProficiency(getCustomStatBlockBoolean("wisdom" + suffix))
-                .charismaProficiency(getCustomStatBlockBoolean("charisma" + suffix))
-                .build();
+        promptThenAddSavingThrowProficiency(savingThrowProficiencies, "strength");
+        promptThenAddSavingThrowProficiency(savingThrowProficiencies, "dexterity");
+        promptThenAddSavingThrowProficiency(savingThrowProficiencies, "constitution");
+        promptThenAddSavingThrowProficiency(savingThrowProficiencies, "intelligence");
+        promptThenAddSavingThrowProficiency(savingThrowProficiencies, "wisdom");
+        promptThenAddSavingThrowProficiency(savingThrowProficiencies, "charisma");
+
+        return savingThrowProficiencies;
+    }
+
+    // EFFECTS: prompts user to add given saving throw proficiency then adds it if they confirm or does nothing
+    private void promptThenAddSavingThrowProficiency(List<String> savingThrowProficiencies, String savingThrow) {
+        if (getCustomStatBlockBoolean(savingThrow + " saving throw proficiency")) {
+            savingThrowProficiencies.add(savingThrow);
+        }
     }
 
     // EFFECTS: prompts user if they want to add skill proficiencies to the custom statblock:
     //          if yes they are prompted for each skill and returns them as a SkillProficiencies;
     //          if no, returns a default SkillProficiencies
-    private SkillProficiencies promptGetCustomStatBlockSkillProficiencies() {
+    private List<String> promptGetCustomStatBlockSkillProficiencies() {
         if (promptConfirmation("add custom statblock skill proficiencies")) {
             return getCustomStatBlockSkillProficiencies();
         } else {
-            return new SkillProficiencies.SkillProficienciesBuilder().build();
+            return null;
         }
     }
 
     // EFFECTS: prompts user for custom StatBlock skill proficiencies then returns them as a SkillProficiencies
-    private SkillProficiencies getCustomStatBlockSkillProficiencies() {
-        String suffix = " skill proficiency";
+    private List<String> getCustomStatBlockSkillProficiencies() {
+        List<String> skillProficiencies = new ArrayList<>();
 
-        return new SkillProficiencies.SkillProficienciesBuilder()
-                .acrobatics(getCustomStatBlockBoolean("acrobatics" + suffix))
-                .animalHandling(getCustomStatBlockBoolean("animal handling" + suffix))
-                .arcana(getCustomStatBlockBoolean("arcana" + suffix))
-                .athletics(getCustomStatBlockBoolean("athletics" + suffix))
-                .deception(getCustomStatBlockBoolean("deception" + suffix))
-                .history(getCustomStatBlockBoolean("history" + suffix))
-                .insight(getCustomStatBlockBoolean("insight" + suffix))
-                .intimidation(getCustomStatBlockBoolean("intimidation" + suffix))
-                .investigation(getCustomStatBlockBoolean("investigation" + suffix))
-                .medicine(getCustomStatBlockBoolean("medicine" + suffix))
-                .nature(getCustomStatBlockBoolean("nature" + suffix))
-                .perception(getCustomStatBlockBoolean("perception" + suffix))
-                .performance(getCustomStatBlockBoolean("performance" + suffix))
-                .persuasion(getCustomStatBlockBoolean("persuasion" + suffix))
-                .religion(getCustomStatBlockBoolean("religion" + suffix))
-                .sleightOfHand(getCustomStatBlockBoolean("sleight of hand" + suffix))
-                .stealth(getCustomStatBlockBoolean("stealth" + suffix))
-                .survival(getCustomStatBlockBoolean("survival" + suffix))
-                .build();
+        promptThenAddSkillProficiency(skillProficiencies, "acrobatics");
+        promptThenAddSkillProficiency(skillProficiencies, "animal handling");
+        promptThenAddSkillProficiency(skillProficiencies, "arcana");
+        promptThenAddSkillProficiency(skillProficiencies, "athletics");
+        promptThenAddSkillProficiency(skillProficiencies, "deception");
+        promptThenAddSkillProficiency(skillProficiencies, "history");
+        promptThenAddSkillProficiency(skillProficiencies, "insight");
+        promptThenAddSkillProficiency(skillProficiencies, "intimidation");
+        promptThenAddSkillProficiency(skillProficiencies, "investigation");
+        promptThenAddSkillProficiency(skillProficiencies, "medicine");
+        promptThenAddSkillProficiency(skillProficiencies, "nature");
+        promptThenAddSkillProficiency(skillProficiencies, "perception");
+        promptThenAddSkillProficiency(skillProficiencies, "performance");
+        promptThenAddSkillProficiency(skillProficiencies, "persuasion");
+        promptThenAddSkillProficiency(skillProficiencies, "religion");
+        promptThenAddSkillProficiency(skillProficiencies, "sleight of hand");
+        promptThenAddSkillProficiency(skillProficiencies, "stealth");
+        promptThenAddSkillProficiency(skillProficiencies, "survival");
+
+        return skillProficiencies;
+    }
+
+    // EFFECTS: prompts user to add given skill proficiency then adds it if they confirm or does nothing
+    private void promptThenAddSkillProficiency(List<String> skillProficiencies, String skill) {
+        if (getCustomStatBlockBoolean(skill + " skill proficiency")) {
+            skillProficiencies.add(skill);
+        }
     }
 
     // EFFECTS: prompts user if they want to add condition immunities to the custom statblock:
     //          if yes they are prompted for each condition and returns them as a ConditionImmunities;
     //          if no, returns a default ConditionImmunities
-    private ConditionImmunities promptGetCustomStatBlockConditionImmunities() {
+    private List<String> promptGetCustomStatBlockConditionImmunities() {
         if (promptConfirmation("add custom statblock condition immunities")) {
             return getCustomStatBlockConditionImmunities();
         } else {
-            return new ConditionImmunities.ConditionImmunitiesBuilder().build();
+            return null;
         }
     }
 
     // EFFECTS: prompts user for custom StatBlock condition immunities then returns them as a ConditionImmunities
-    private ConditionImmunities getCustomStatBlockConditionImmunities() {
-        String suffix = " condition immunity";
+    private List<String> getCustomStatBlockConditionImmunities() {
+        List<String> conditionImmunities = new ArrayList<>();
 
-        return new ConditionImmunities.ConditionImmunitiesBuilder()
-                .blinded(getCustomStatBlockBoolean("blinded" + suffix))
-                .charmed(getCustomStatBlockBoolean("charmed" + suffix))
-                .deafened(getCustomStatBlockBoolean("deafened" + suffix))
-                .frightened(getCustomStatBlockBoolean("frightened" + suffix))
-                .grappled(getCustomStatBlockBoolean("grappled" + suffix))
-                .incapacitated(getCustomStatBlockBoolean("incapacitated" + suffix))
-                .invisible(getCustomStatBlockBoolean("invisible" + suffix))
-                .paralyzed(getCustomStatBlockBoolean("paralyzed" + suffix))
-                .petrified(getCustomStatBlockBoolean("petrified" + suffix))
-                .poisoned(getCustomStatBlockBoolean("poisoned" + suffix))
-                .prone(getCustomStatBlockBoolean("prone" + suffix))
-                .restrained(getCustomStatBlockBoolean("restrained" + suffix))
-                .stunned(getCustomStatBlockBoolean("stunned" + suffix))
-                .unconscious(getCustomStatBlockBoolean("unconscious" + suffix))
-                .build();
+        promptThenAddConditionImmunity(conditionImmunities, "blinded");
+        promptThenAddConditionImmunity(conditionImmunities, "charmed");
+        promptThenAddConditionImmunity(conditionImmunities, "deafened");
+        promptThenAddConditionImmunity(conditionImmunities, "frightened");
+        promptThenAddConditionImmunity(conditionImmunities, "grappled");
+        promptThenAddConditionImmunity(conditionImmunities, "incapacitated");
+        promptThenAddConditionImmunity(conditionImmunities, "invisible");
+        promptThenAddConditionImmunity(conditionImmunities, "paralyzed");
+        promptThenAddConditionImmunity(conditionImmunities, "petrified");
+        promptThenAddConditionImmunity(conditionImmunities, "poisoned");
+        promptThenAddConditionImmunity(conditionImmunities, "prone");
+        promptThenAddConditionImmunity(conditionImmunities, "restrained");
+        promptThenAddConditionImmunity(conditionImmunities, "stunned");
+        promptThenAddConditionImmunity(conditionImmunities, "unconscious");
+
+        return conditionImmunities;
+    }
+
+    // EFFECTS: prompts user to add given condition immunity then adds it if they confirm or does nothing
+    private void promptThenAddConditionImmunity(List<String> conditionImmunities, String condition) {
+        if (getCustomStatBlockBoolean(condition + " skill proficiency")) {
+            conditionImmunities.add(condition);
+        }
     }
 
     // EFFECTS: prompts user if they want to add damage type resistances to the custom statblock:
     //          if yes they are prompted for each damage type and returns them as a Resistances;
     //          if no, returns a default Resistances
-    private Resistances promptGetCustomStatBlockResistances() {
+    private HashMap<String, String> promptGetCustomStatBlockResistances() {
         if (promptConfirmation("add custom statblock damage type vulnerabilities/resistances/immunities")) {
             return getCustomStatBlockResistances();
         } else {
-            return new Resistances.ResistancesBuilder().build();
+            return null;
         }
     }
 
     // EFFECTS: prompts user for custom StatBlock resistances then returns them as a Resistances
-    private Resistances getCustomStatBlockResistances() {
-        String suffix = " damage resistance";
+    private HashMap<String, String> getCustomStatBlockResistances() {
+        HashMap<String, String> resistances = new HashMap<>();
 
-        return new Resistances.ResistancesBuilder()
-                .acid(getCustomStatBlockOptionalResistance("acid" + suffix))
-                .bludgeoning(getCustomStatBlockOptionalResistance("bludgeoning" + suffix))
-                .cold(getCustomStatBlockOptionalResistance("cold" + suffix))
-                .fire(getCustomStatBlockOptionalResistance("fire" + suffix))
-                .force(getCustomStatBlockOptionalResistance("force" + suffix))
-                .lightning(getCustomStatBlockOptionalResistance("lightning" + suffix))
-                .necrotic(getCustomStatBlockOptionalResistance("necrotic" + suffix))
-                .piercing(getCustomStatBlockOptionalResistance("piercing" + suffix))
-                .poison(getCustomStatBlockOptionalResistance("poison" + suffix))
-                .psychic(getCustomStatBlockOptionalResistance("psychic" + suffix))
-                .radiant(getCustomStatBlockOptionalResistance("radiant" + suffix))
-                .slashing(getCustomStatBlockOptionalResistance("slashing" + suffix))
-                .thunder(getCustomStatBlockOptionalResistance("thunder" + suffix))
-                .nonMagical(getCustomStatBlockOptionalResistance("non-magical" + suffix))
-                .nonSilver(getCustomStatBlockOptionalResistance("non-silver" + suffix))
-                .nonAdamantine(getCustomStatBlockOptionalResistance("non-adamantine" + suffix))
-                .build();
+        promptThenPutResistance(resistances, "acid");
+        promptThenPutResistance(resistances, "bludgeoning");
+        promptThenPutResistance(resistances, "cold");
+        promptThenPutResistance(resistances, "fire");
+        promptThenPutResistance(resistances, "force");
+        promptThenPutResistance(resistances, "lightning");
+        promptThenPutResistance(resistances, "necrotic");
+        promptThenPutResistance(resistances, "piercing");
+        promptThenPutResistance(resistances, "poison");
+        promptThenPutResistance(resistances, "psychic");
+        promptThenPutResistance(resistances, "radiant");
+        promptThenPutResistance(resistances, "slashing");
+        promptThenPutResistance(resistances, "thunder");
+        promptThenPutResistance(resistances, "non-magical");
+        promptThenPutResistance(resistances, "non-silver");
+        promptThenPutResistance(resistances, "non-adamantine");
+
+        return resistances;
     }
 
-    // EFFECTS: prompts user for confirmation to add the given damage type resistance;
-    //          if yes, prompts for which type of resistance to assign given damage type and then returns it;
-    //          if no, returns null.
-    private String getCustomStatBlockOptionalResistance(String customString) {
-        if (promptConfirmation("add custom " + customString)) {
-            return getCustomResistance(customString);
+    // EFFECTS: prompts user to add a resistanceType to given damageType then adds it if they confirm or does nothing
+    private void promptThenPutResistance(HashMap<String, String> resistances, String damageType) {
+        if (getCustomStatBlockBoolean(damageType + " resistance/immunity/vulnerability")) {
+            resistances.put(damageType, getCustomResistance(damageType));
         }
-        return null;
     }
 
     // EFFECTS: prompts for which type of resistance to assign given damage type and then returns it
-    private String getCustomResistance(String customString) {
-        System.out.println("Enter resistant, immune, or vulnerable for " + customString + ": ");
+    private String getCustomResistance(String damageType) {
+        System.out.println("Enter resistant, immune, or vulnerable for " + damageType + ": ");
         String command = userInput.next();
         switch (command) {
             case "resistant":
@@ -1233,7 +1236,7 @@ public class AutoBlocksApp {
                 return "vulnerability";
             default:
                 System.out.println(commandInvalid);
-                return getCustomResistance(customString);
+                return getCustomResistance(damageType);
         }
     }
 
@@ -1379,6 +1382,10 @@ public class AutoBlocksApp {
         List<String> orcLanguages = new ArrayList<>();
         orcLanguages.add("Common");
         orcLanguages.add("Orc");
+
+        List<String> orcSkillProficiencies = new ArrayList<>();
+        orcSkillProficiencies.add("intimidation");
+
         Ability aggression = new Ability("Aggressive", "As a bonus Action, the orc can move up to its "
                 + "speed toward a Hostile creature that it can see.");
         List<Ability> orcAbilities = new ArrayList<>();
@@ -1394,10 +1401,10 @@ public class AutoBlocksApp {
                 (orcAbilities),
                 returnOrcActions(),
                 (new Languages.LanguagesBuilder(orcLanguages).build()))
-                .skillProficiencies(new SkillProficiencies.SkillProficienciesBuilder().intimidation(true).build())
+                .skillProficiencies(orcSkillProficiencies)
                 .build();
 
-        //library.addStatBlock(orc);
+        library.addStatBlock(orc);
     }
 
     // EFFECTS: returns orc actions

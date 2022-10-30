@@ -29,14 +29,28 @@ public class AbilityScores implements Writable {
 
     // -----------------------------------------------------------------------------------------------------------------
     // getters
+    // REQUIRES: given string is an ability score
+    // EFFECTS: gets modifier for given ability score
+    public int getModifier(String abilityScore) {
+        switch (abilityScore) {
+            case "strength":
+                return convertToModifier(strength);
+            case "dexterity":
+                return convertToModifier(dexterity);
+            case "constitution":
+                return convertToModifier(constitution);
+            case "intelligence":
+                return convertToModifier(intelligence);
+            case "wisdom":
+                return convertToModifier(wisdom);
+            default:
+                return convertToModifier(charisma);
+        }
+    }
+
     // EFFECTS: gets strength
     public int getStrength() {
         return strength;
-    }
-
-    // EFFECTS: gets strength modifier
-    public int getStrengthModifier() {
-        return convertToModifier(strength);
     }
 
     // EFFECTS: gets dexterity
@@ -44,19 +58,9 @@ public class AbilityScores implements Writable {
         return dexterity;
     }
 
-    // EFFECTS: gets dexterity modifier
-    public int getDexterityModifier() {
-        return convertToModifier(dexterity);
-    }
-
     // EFFECTS: gets constitution
     public int getConstitution() {
         return constitution;
-    }
-
-    // EFFECTS: gets constitution modifier
-    public int getConstitutionModifier() {
-        return convertToModifier(constitution);
     }
 
     // EFFECTS: gets intelligence
@@ -64,29 +68,14 @@ public class AbilityScores implements Writable {
         return intelligence;
     }
 
-    // EFFECTS: gets intelligence modifier
-    public int getIntelligenceModifier() {
-        return convertToModifier(intelligence);
-    }
-
     // EFFECTS: gets wisdom
     public int getWisdom() {
         return wisdom;
     }
 
-    // EFFECTS: gets wisdom modifier
-    public int getWisdomModifier() {
-        return convertToModifier(wisdom);
-    }
-
     // EFFECTS: gets charisma
     public int getCharisma() {
         return charisma;
-    }
-
-    // EFFECTS: gets charisma modifier
-    public int getCharismaModifier() {
-        return convertToModifier(charisma);
     }
 
     // -----------------------------------------------------------------------------------------------------------------

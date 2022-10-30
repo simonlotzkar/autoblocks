@@ -6,6 +6,7 @@ import model.RollFormula;
 import model.StatBlock;
 import model.statblockfields.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -14,11 +15,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public interface JsonTest {
     // CITATION: from JsonSerializationDemo
     private void checkStatBlock(StatBlock statBlock, Title title, int xp, RollFormula hpFormula, int proficiency,
-                                  Armour armour, Speeds speeds, Senses senses, AbilityScores abilityScores,
-                                  List<Ability> abilities, List<Action> actions, Languages languages,
-                                  SavingThrowProficiencies savingThrowProficiencies,
-                                  SkillProficiencies skillProficiencies, ConditionImmunities conditionImmunities,
-                                  Resistances resistances, LegendaryMechanics legendaryMechanics) {
+                                Armour armour, Speeds speeds, Senses senses, AbilityScores abilityScores,
+                                List<Ability> abilities, List<Action> actions, Languages languages,
+                                List<String> savingThrowProficiencies, List<String> skillProficiencies,
+                                List<String> conditionImmunities, HashMap<String, String> resistances,
+                                LegendaryMechanics legendaryMechanics) {
         assertEquals(title, statBlock.getTitle());
         assertEquals(xp, statBlock.getXP());
         assertEquals(hpFormula, statBlock.getHpFormula());

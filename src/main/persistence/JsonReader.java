@@ -10,7 +10,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 // Represents a reader that reads statblock library from JSON data stored in file
@@ -19,14 +21,12 @@ public class JsonReader {
     private String source;
 
     // EFFECTS: constructs reader to read from source file
-    // CITATION: from JsonReader.java in JsonSerializationDemo
     public JsonReader(String source) {
         this.source = source;
     }
 
     // EFFECTS: reads the library (list of statblocks) from file and returns them;
     // throws IOException if an error occurs reading data from file
-    // CITATION: from JsonReader.java in JsonSerializationDemo
     public Library read() throws IOException {
         String jsonData = readFile(source);
         JSONObject jsonObject = new JSONObject(jsonData);
@@ -34,7 +34,6 @@ public class JsonReader {
     }
 
     // EFFECTS: reads source file as string and returns it
-    // CITATION: from JsonReader.java in JsonSerializationDemo
     private String readFile(String source) throws IOException {
         StringBuilder contentBuilder = new StringBuilder();
 
@@ -46,7 +45,6 @@ public class JsonReader {
     }
 
     // EFFECTS: parses the library (list of statblocks) from JSON array and returns it
-    // CITATION: from JsonReader.java in JsonSerializationDemo
     private Library parseLibrary(JSONObject jsonObject) {
         String name = jsonObject.getString("name");
         Library library = new Library(name, new ArrayList<>());
@@ -56,7 +54,6 @@ public class JsonReader {
 
     // MODIFIES: library
     // EFFECTS: adds statblocks to library
-    // CITATION: from JsonReader.java in JsonSerializationDemo
     private void addStatBlocks(Library library, JSONObject jsonObject) {
         JSONArray jsonArray = jsonObject.getJSONArray("statBlocks");
         for (Object json : jsonArray) {
@@ -80,12 +77,12 @@ public class JsonReader {
                 parseAbilities(jsonObject.getJSONArray("abilities")),
                 parseActions(jsonObject.getJSONArray("actions")),
                 parseLanguages(jsonObject.getJSONObject("languages")))
-//                .savingThrowProficiencies(
-//                        parseSavingThrowProficiencies(jsonObject.getJSONObject("savingThrowProficiencies")))
-//                .skillProficiencies(parseSkillProficiencies(jsonObject.getJSONObject("skillProficiencies")))
-//                .conditionImmunities(parseConditionImmunities(jsonObject.getJSONObject("conditionImmunities")))
-//                .resistances(parseResistances(jsonObject.getJSONObject("resistances")))
-//                .legendaryMechanics(parseLegendaryMechanics(jsonObject.getJSONObject("legendaryMechanics")))
+                .savingThrowProficiencies(
+                        parseSavingThrowProficiencies(jsonObject.optJSONArray("savingThrowProficiencies")))
+                .skillProficiencies(parseSkillProficiencies(jsonObject.optJSONArray("skillProficiencies")))
+                .conditionImmunities(parseConditionImmunities(jsonObject.optJSONArray("conditionImmunities")))
+                .resistances(parseResistances(jsonObject.optJSONObject("resistances")))
+                .legendaryMechanics(parseLegendaryMechanics(jsonObject.optJSONObject("legendaryMechanics")))
                 .build();
         library.addStatBlock(statBlock);
     }
@@ -96,7 +93,8 @@ public class JsonReader {
                 jsonObject.getString("name"),
                 jsonObject.getString("type"),
                 jsonObject.getString("size"),
-                jsonObject.getString("alignment")).build();
+                jsonObject.getString("alignment"))
+                .build();
     }
 
     // EFFECTS: parses hp formula from JSON object and returns it
@@ -199,85 +197,74 @@ public class JsonReader {
     }
 
     // EFFECTS: parses saving throw proficiencies from JSON object and returns it
-    private SavingThrowProficiencies parseSavingThrowProficiencies(JSONObject jsonObject) {
-        return new SavingThrowProficiencies.SavingThrowProficienciesBuilder()
-                .strengthProficiency(jsonObject.getBoolean("strengthProficiency"))
-                .dexterityProficiency(jsonObject.getBoolean("dexterityProficiency"))
-                .constitutionProficiency(jsonObject.getBoolean("constitutionProficiency"))
-                .intelligenceProficiency(jsonObject.getBoolean("intelligenceProficiency"))
-                .wisdomProficiency(jsonObject.getBoolean("wisdomProficiency"))
-                .charismaProficiency(jsonObject.getBoolean("charismaProficiency"))
-                .build();
-    }
-
-    // EFFECTS: parses resistances from JSON object and returns it
-    private Resistances parseResistances(JSONObject jsonObject) {
-        return new Resistances.ResistancesBuilder()
-                .acid(jsonObject.getString("acid"))
-                .bludgeoning(jsonObject.getString("bludgeoning"))
-                .cold(jsonObject.getString("cold"))
-                .fire(jsonObject.getString("fire"))
-                .force(jsonObject.getString("force"))
-                .lightning(jsonObject.getString("lightning"))
-                .necrotic(jsonObject.getString("necrotic"))
-                .piercing(jsonObject.getString("piercing"))
-                .poison(jsonObject.getString("poison"))
-                .psychic(jsonObject.getString("psychic"))
-                .radiant(jsonObject.getString("radiant"))
-                .slashing(jsonObject.getString("slashing"))
-                .thunder(jsonObject.getString("thunder"))
-                .nonMagical(jsonObject.getString("nonMagical"))
-                .nonSilver(jsonObject.getString("nonSilver"))
-                .nonAdamantine(jsonObject.getString("nonAdamantine"))
-                .build();
+    private List<String> parseSavingThrowProficiencies(JSONArray jsonArray) {
+        if (jsonArray == null) {
+            return null;
+        }
+        List<String> savingThrows = new ArrayList<>();
+        for (Object json : jsonArray) {
+            savingThrows.add(json.toString());
+        }
+        if (savingThrows.isEmpty()) {
+            return null;
+        } else {
+            return savingThrows;
+        }
     }
 
     // EFFECTS: parses condition immunities from JSON object and returns it
-    private ConditionImmunities parseConditionImmunities(JSONObject jsonObject) {
-        return new ConditionImmunities.ConditionImmunitiesBuilder()
-                .blinded(jsonObject.getBoolean("blinded"))
-                .charmed(jsonObject.getBoolean("charmed"))
-                .deafened(jsonObject.getBoolean("deafened"))
-                .frightened(jsonObject.getBoolean("frightened"))
-                .grappled(jsonObject.getBoolean("grappled"))
-                .incapacitated(jsonObject.getBoolean("incapacitated"))
-                .invisible(jsonObject.getBoolean("invisible"))
-                .paralyzed(jsonObject.getBoolean("paralyzed"))
-                .petrified(jsonObject.getBoolean("petrified"))
-                .poisoned(jsonObject.getBoolean("poisoned"))
-                .prone(jsonObject.getBoolean("prone"))
-                .restrained(jsonObject.getBoolean("restrained"))
-                .stunned(jsonObject.getBoolean("stunned"))
-                .unconscious(jsonObject.getBoolean("unconscious"))
-                .build();
+    private List<String> parseConditionImmunities(JSONArray jsonArray) {
+        if (jsonArray == null) {
+            return null;
+        }
+        List<String> conditionImmunities = new ArrayList<>();
+        for (Object json : jsonArray) {
+            conditionImmunities.add(json.toString());
+        }
+        if (conditionImmunities.isEmpty()) {
+            return null;
+        } else {
+            return conditionImmunities;
+        }
     }
 
     // EFFECTS: parses skill proficiencies from JSON object and returns it
-    private SkillProficiencies parseSkillProficiencies(JSONObject jsonObject) {
-        return new SkillProficiencies.SkillProficienciesBuilder()
-                .acrobatics(jsonObject.getBoolean("acrobatics"))
-                .animalHandling(jsonObject.getBoolean("animalHandling"))
-                .arcana(jsonObject.getBoolean("arcana"))
-                .athletics(jsonObject.getBoolean("athletics"))
-                .deception(jsonObject.getBoolean("deception"))
-                .history(jsonObject.getBoolean("history"))
-                .insight(jsonObject.getBoolean("insight"))
-                .intimidation(jsonObject.getBoolean("intimidation"))
-                .investigation(jsonObject.getBoolean("investigation"))
-                .medicine(jsonObject.getBoolean("medicine"))
-                .nature(jsonObject.getBoolean("nature"))
-                .perception(jsonObject.getBoolean("perception"))
-                .performance(jsonObject.getBoolean("performance"))
-                .persuasion(jsonObject.getBoolean("persuasion"))
-                .religion(jsonObject.getBoolean("religion"))
-                .sleightOfHand(jsonObject.getBoolean("sleightOfHand"))
-                .stealth(jsonObject.getBoolean("stealth"))
-                .survival(jsonObject.getBoolean("survival"))
-                .build();
+    private List<String> parseSkillProficiencies(JSONArray jsonArray) {
+        if (jsonArray == null) {
+            return null;
+        }
+        List<String> skillProficiencies = new ArrayList<>();
+        for (Object json : jsonArray) {
+            skillProficiencies.add(json.toString());
+        }
+        if (skillProficiencies.isEmpty()) {
+            return null;
+        } else {
+            return skillProficiencies;
+        }
+    }
+
+    // EFFECTS: parses resistances from JSON object and returns it
+    private HashMap<String, String> parseResistances(JSONObject jsonObject) {
+        if (jsonObject == null) {
+            return null;
+        }
+        Map<String, Object> jsonMap = jsonObject.toMap();
+        HashMap<String, String> resistances = new HashMap<>();
+
+        jsonMap.forEach((s, o) -> resistances.put(s, o.toString()));
+
+        if (!resistances.isEmpty()) {
+            return resistances;
+        }
+        return null;
     }
 
     // EFFECTS: parses legendary mechanics from JSON object and returns it
     private LegendaryMechanics parseLegendaryMechanics(JSONObject jsonObject) {
+        if (jsonObject == null) {
+            return null;
+        }
         return new LegendaryMechanics(
                 jsonObject.getString("legendaryDescription"),
                 parseAbilities(jsonObject.getJSONArray("legendaryAbilities")));

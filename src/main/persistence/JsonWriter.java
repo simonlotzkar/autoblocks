@@ -8,7 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
 // Represents a writer that writes JSON representation of statblock library to file
-// CITATION: based on JsonReader.java in JsonSerializationDemo
+// CITATION: from JsonWriter.java in JsonSerializationDemo
 public class JsonWriter {
     private static final int TAB = 4;
     private PrintWriter writer;
