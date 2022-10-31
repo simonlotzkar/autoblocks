@@ -22,7 +22,7 @@ public interface JsonTest {
                                 LegendaryMechanics legendaryMechanics) {
         assertEquals(title, statBlock.getTitle());
         assertEquals(xp, statBlock.getXP());
-        assertEquals(hpFormula, statBlock.getHpFormula());
+        assertEquals(hpFormula, statBlock.getHPFormula());
         assertEquals(proficiency, statBlock.getProficiency());
         assertEquals(armour, statBlock.getArmour());
         assertEquals(speeds, statBlock.getSpeeds());

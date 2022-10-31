@@ -1,4 +1,4 @@
-package model;
+package model.statblockfields;
 
 import model.statblockfields.Action;
 import model.statblockfields.RollFormula;

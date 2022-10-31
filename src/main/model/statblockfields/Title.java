@@ -98,7 +98,9 @@ public class Title implements Writable {
         json.put("type", type);
         json.put("size", size);
         json.put("alignment", alignment);
-        json.put("group", group);
+        if (group != null) {
+            json.put("group", group);
+        }
         return json;
     }
 }

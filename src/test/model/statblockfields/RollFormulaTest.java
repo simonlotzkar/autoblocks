@@ -1,4 +1,4 @@
-package model;
+package model.statblockfields;
 
 import model.statblockfields.RollFormula;
 import org.junit.jupiter.api.BeforeEach;

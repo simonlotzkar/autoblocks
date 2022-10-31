@@ -50,14 +50,15 @@ As a user, I want to be able to:
     - edit group hp
     - remove group from characters
     - delete group and its characters from encounter
-- chose to save the current library or encounter to a file (from main menu and when quitting the application), and 
-- chose to load a library or encounter from a file (from main menu and when launching the application)
+- chose to save the current library and/or encounter to file (from main menu and when quitting the application), and 
+- chose to load the library and/or encounter from file (from main menu and when launching the application)
 
 ### Currently added default statblocks:
 - Orc
 - Ancient Black Dragon
 
 ### Future additions:
+- save system to allow for multiple save/load files for any amount of encounters and libraries ☐
 - add multiple damage rolls for actions ☐
 - add reactions ☐
 - delete statblocks from a library ☐

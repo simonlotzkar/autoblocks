@@ -1,6 +1,6 @@
 package persistence;
 
-import model.Library;
+import model.LibraryAndEncounter;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -25,14 +25,14 @@ public class JsonWriter {
     // be opened for writing
     // CITATION: from JsonWriter.java in JsonSerializationDemo
     public void open() throws FileNotFoundException {
-        writer = new PrintWriter(new File(destination));
+        writer = new PrintWriter(destination);
     }
 
     // MODIFIES: this
     // EFFECTS: writes JSON representation of workroom to file
     // CITATION: from JsonWriter.java in JsonSerializationDemo
-    public void write(Library library) {
-        JSONObject json = library.toJson();
+    public void write(LibraryAndEncounter libraryAndEncounter) {
+        JSONObject json = libraryAndEncounter.toJson();
         saveToFile(json.toString(TAB));
     }
 

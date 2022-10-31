@@ -1,4 +1,4 @@
-package model;
+package model.statblockfields;
 
 import model.statblockfields.Ability;
 import org.junit.jupiter.api.BeforeEach;

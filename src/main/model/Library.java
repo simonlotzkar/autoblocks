@@ -28,7 +28,7 @@ public class Library implements Writable {
     }
 
     // EFFECTS: adds the given statblock to the library list
-    public void addStatBlock(StatBlock statBlock) {
+    public void add(StatBlock statBlock) {
         statBlocks.add(statBlock);
     }
 

@@ -193,7 +193,7 @@ public class StatBlock implements Writable {
     }
 
     // EFFECTS: gets hp formula
-    public RollFormula getHpFormula() {
+    public RollFormula getHPFormula() {
         return hpFormula;
     }
 
@@ -423,6 +423,7 @@ public class StatBlock implements Writable {
         }
     }
 
+    // converts the statblock to a json object
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();

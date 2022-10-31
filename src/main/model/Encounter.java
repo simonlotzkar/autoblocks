@@ -48,6 +48,7 @@ public class Encounter implements Writable {
         return false;
     }
 
+    // EFFECTS: returns encounter as a JSON object
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();

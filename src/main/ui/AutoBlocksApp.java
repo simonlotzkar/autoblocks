@@ -32,15 +32,14 @@ public class AutoBlocksApp {
     private static final String lineSeparator = "---------------------------------------------------------------------";
 
     // persistence
-    private JsonWriter jsonWriter;
-    private JsonReader jsonReader;
-    private static final String JSON_STORE = "./data/autoBlocksApp.json";
+    private final JsonWriter jsonWriter;
+    private final JsonReader jsonReader;
+    private static final String jsonDirectory = "./data/libraryAndEncounter.json";
 
     // EFFECTS: constructs the autoblocks app
-    // CITATION: based on JsonSerializationDemo
     public AutoBlocksApp() throws FileNotFoundException {
-        jsonWriter = new JsonWriter(JSON_STORE);
-        jsonReader = new JsonReader(JSON_STORE);
+        jsonWriter = new JsonWriter(jsonDirectory);
+        jsonReader = new JsonReader(jsonDirectory);
         runAutoBlocks();
     }
 
@@ -81,7 +80,7 @@ public class AutoBlocksApp {
     //          - view library *LibraryMenu*
     //          - quit app
     private void displayMainMenu() {
-        System.out.println("\nMain Menu. Current characters in encounter:");
+        System.out.println("\nMain Menu. Characters in currently loaded encounter (" + encounter.getName() + "):");
         System.out.println(lineSeparator);
 
         displayPlay();
@@ -107,7 +106,7 @@ public class AutoBlocksApp {
         } else if ("lib".equals(command)) {
             goToLibraryMenu();
         } else if ("load".equals(command)) {
-            loadLibrary();
+            loadLibraryAndEncounter();
         } else if ("quit".equals(command)) {
             saveLibrary();
             goToDesktop();
@@ -129,7 +128,7 @@ public class AutoBlocksApp {
                 }
             }
         } else {
-            System.out.println("\tThere are currently no characters in encounter.");
+            System.out.println("\tThere are currently no characters in this encounter.");
         }
     }
 
@@ -216,27 +215,31 @@ public class AutoBlocksApp {
     }
 
     // MODIFIES: this
-    // EFFECTS: loads workroom from file
+    // EFFECTS: loads library and encounter from file
     // CITATION: based on JsonSerializationDemo
-    private void loadLibrary() {
+    private void loadLibraryAndEncounter() {
         try {
-            library = jsonReader.read();
-            System.out.println("Loaded " + library.getName() + " from " + JSON_STORE);
+            LibraryAndEncounter libraryAndEncounter = jsonReader.read();
+            library = libraryAndEncounter.getLibrary();
+            encounter = libraryAndEncounter.getEncounter();
+            System.out.println("Loaded " + library.getName() + " and " + encounter.getName()
+                    + " from " + jsonDirectory);
         } catch (IOException e) {
-            System.out.println("Unable to read from file: " + JSON_STORE);
+            System.out.println("Unable to read from file: " + jsonDirectory);
         }
     }
 
-    // EFFECTS: saves the workroom to file
+    // EFFECTS: prompts the user to save the library and encounter to file
     // CITATION: based on JsonSerializationDemo
     private void saveLibrary() {
+        LibraryAndEncounter libraryAndEncounter = new LibraryAndEncounter(library, encounter);
         try {
             jsonWriter.open();
-            jsonWriter.write(library);
+            jsonWriter.write(libraryAndEncounter);
             jsonWriter.close();
-            System.out.println("Saved " + library.getName() + " to " + JSON_STORE);
+            System.out.println("Saved " + library.getName() + " and " + encounter.getName() + " to " + jsonDirectory);
         } catch (FileNotFoundException e) {
-            System.out.println("Unable to write to file: " + JSON_STORE);
+            System.out.println("Unable to write to file: " + jsonDirectory);
         }
     }
 
@@ -823,7 +826,7 @@ public class AutoBlocksApp {
     //          - add new StatBlocks
     //          - go back *MainMenu*
     private void displayLibraryMenu() {
-        System.out.println("\nLibrary Menu. Current statblocks in the library:");
+        System.out.println("\nLibrary Menu. Statblocks in currently loaded library (" + library.getName() + "):");
         System.out.println("--------------------------------------------------");
 
         displayLibrary();
@@ -831,7 +834,7 @@ public class AutoBlocksApp {
         System.out.println("\nLibrary Commands:");
         System.out.println("\tsel: Select a statblock from the library.");
         System.out.println("\tnew: Add a new, custom, statblock to the library.");
-        System.out.println("\texit: Go back to the main menu.");
+        System.out.println("\tback: Go back to the main menu.");
     }
 
     // EFFECTS: prints all statblocks in the library with their names
@@ -851,7 +854,7 @@ public class AutoBlocksApp {
             case "new":
                 createCustomStatBlock();
                 break;
-            case "exit":
+            case "back":
                 goToMainMenu();
                 break;
             default:
@@ -884,7 +887,7 @@ public class AutoBlocksApp {
                 .legendaryMechanics(promptGetCustomStatBlockLegendaryMechanics())
                 .build();
 
-        library.addStatBlock(customStatBlock);
+        library.add(customStatBlock);
     }
 
     // EFFECTS: prompts user for given string and returns it
@@ -1020,9 +1023,14 @@ public class AutoBlocksApp {
         List<Ability> abilities =  new ArrayList<>();
         System.out.println("How many " + abilityType + " do you want to give your custom statblock?");
         int numberOfAbilities = userInput.nextInt() + 1;
-        for (int i = 1; i < numberOfAbilities; i++) {
-            System.out.println("Adding " + abilityType + " " + i + "...");
-            abilities.add(getCustomAbility(abilityType));
+        if (numberOfAbilities <= 1) {
+            System.out.println(commandInvalid + " cannot add less than 1, try again.");
+            return getCustomStatBlockAbilities(abilityType);
+        } else {
+            for (int i = 1; i < numberOfAbilities; i++) {
+                System.out.println("Adding " + abilityType + " " + i + "...");
+                abilities.add(getCustomAbility(abilityType));
+            }
         }
         return abilities;
     }
@@ -1042,9 +1050,14 @@ public class AutoBlocksApp {
         List<Action> actions =  new ArrayList<>();
         System.out.println("How many actions do you want to give your custom statblock?");
         int numberOfActions = userInput.nextInt() + 1;
-        for (int i = 1; i < numberOfActions; i++) {
-            System.out.println("Adding action " + i + "...");
-            actions.add(getCustomAction());
+        if (numberOfActions <= 1) {
+            System.out.println(commandInvalid + " cannot add less than 1, try again.");
+            return getCustomStatBlockActions();
+        } else {
+            for (int i = 1; i < numberOfActions; i++) {
+                System.out.println("Adding action " + i + "...");
+                actions.add(getCustomAction());
+            }
         }
         return actions;
     }
@@ -1074,10 +1087,15 @@ public class AutoBlocksApp {
     private List<String> getCustomStatBlockListOfLanguages() {
         List<String> listOfLanguages =  new ArrayList<>();
         System.out.println("How many languages do you want to give your custom statblock?");
-        int numberOfActions = userInput.nextInt() + 1;
-        for (int i = 1; i < numberOfActions; i++) {
-            System.out.println("Adding language " + i + "...");
-            listOfLanguages.add(getCustomStatBlockString("language"));
+        int numberOfLanguages = userInput.nextInt() + 1;
+        if (numberOfLanguages <= 1) {
+            System.out.println(commandInvalid + " cannot add less than 1, try again.");
+            return getCustomStatBlockListOfLanguages();
+        } else {
+            for (int i = 1; i < numberOfLanguages; i++) {
+                System.out.println("Adding language " + i + "...");
+                listOfLanguages.add(getCustomStatBlockString("language"));
+            }
         }
         return listOfLanguages;
     }
@@ -1264,7 +1282,7 @@ public class AutoBlocksApp {
         if (promptConfirmation("add custom statblock legendary mechanics")) {
             return getCustomStatBlockLegendaryMechanics();
         } else {
-            return new LegendaryMechanics(null, null);
+            return null;
         }
     }
 
@@ -1313,19 +1331,24 @@ public class AutoBlocksApp {
     private void createCharacters() {
         System.out.println("How many copies of this statblock do you want to add?");
         int numberOfCopies = userInput.nextInt();
-        System.out.println("Adding " + numberOfCopies + " copies of " + selectedStatBlock.getTitle().getName()
-                + " to encounter...");
-        for (int i = 1; i < (numberOfCopies + 1); i++) {
-            Character character = new Character.CharacterBuilder(selectedStatBlock, getNewCharacterTitle(),
-                    selectedStatBlock.getXP(), selectedStatBlock.getHpFormula(),selectedStatBlock.getProficiency(),
-                    selectedStatBlock.getArmour(), selectedStatBlock.getSpeeds(), selectedStatBlock.getSenses(),
-                    selectedStatBlock.getAbilityScores(), selectedStatBlock.getAbilities(),
-                    selectedStatBlock.getActions(), selectedStatBlock.getLanguages()).build();
-            System.out.println("Added copy " + i + "of " + selectedStatBlock.getTitle().getName() + "!");
-            encounter.add(character);
+        if (numberOfCopies <= 0) {
+            System.out.println(commandInvalid + " cannot add less than 1, try again.");
+            createCharacters();
+        } else {
+            System.out.println("Adding " + numberOfCopies + " copies of " + selectedStatBlock.getTitle().getName()
+                    + " to encounter...");
+            for (int i = 1; i < (numberOfCopies + 1); i++) {
+                Character character = new Character.CharacterBuilder(selectedStatBlock, getNewCharacterTitle(),
+                        selectedStatBlock.getXP(), selectedStatBlock.getHPFormula(),selectedStatBlock.getProficiency(),
+                        selectedStatBlock.getArmour(), selectedStatBlock.getSpeeds(), selectedStatBlock.getSenses(),
+                        selectedStatBlock.getAbilityScores(), selectedStatBlock.getAbilities(),
+                        selectedStatBlock.getActions(), selectedStatBlock.getLanguages()).build();
+                System.out.println("Added copy " + i + " of " + selectedStatBlock.getTitle().getName() + ".");
+                encounter.add(character);
+            }
+            System.out.println("Done adding " + numberOfCopies + " statblocks!");
+            goToLibraryMenu();
         }
-        System.out.println("Done adding " + numberOfCopies + " statblocks.");
-        goToLibraryMenu();
     }
 
     // EFFECTS: returns a title with the parameters of the selected statblock, except for name which is generated
@@ -1427,7 +1450,7 @@ public class AutoBlocksApp {
                 .skillProficiencies(orcSkillProficiencies)
                 .build();
 
-        library.addStatBlock(orc);
+        library.add(orc);
     }
 
     // EFFECTS: adds ancient black dragon and all its parameters to the library
@@ -1519,6 +1542,6 @@ public class AutoBlocksApp {
                 .legendaryMechanics(ancientBlackDragonLegendaryMechanics)
                 .build();
 
-        library.addStatBlock(ancientBlackDragon);
+        library.add(ancientBlackDragon);
     }
 }

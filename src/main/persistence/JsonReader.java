@@ -1,6 +1,7 @@
 package persistence;
 
 import model.*;
+import model.Character;
 import model.statblockfields.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -18,7 +19,7 @@ import java.util.stream.Stream;
 // Represents a reader that reads libraries and encounters from JSON data stored in file
 // CITATION: from JsonReader.java in JsonSerializationDemo
 public class JsonReader {
-    private String source;
+    protected String source;
 
     // EFFECTS: constructs reader to read from source file
     // CITATION: from JsonReader.java in JsonSerializationDemo
@@ -26,30 +27,36 @@ public class JsonReader {
         this.source = source;
     }
 
-    // EFFECTS: reads the library (list of statblocks) from file and returns them;
+    // EFFECTS: reads the library from file and returns them;
     // throws IOException if an error occurs reading data from file
     // CITATION: from JsonReader.java in JsonSerializationDemo
-    public Library read() throws IOException {
+    public LibraryAndEncounter read() throws IOException {
         String jsonData = readFile(source);
         JSONObject jsonObject = new JSONObject(jsonData);
-        return parseLibrary(jsonObject);
+        return parseLibraryAndEncounter(jsonObject);
     }
 
     // EFFECTS: reads source file as string and returns it
     // CITATION: from JsonReader.java in JsonSerializationDemo
-    private String readFile(String source) throws IOException {
+    protected String readFile(String source) throws IOException {
         StringBuilder contentBuilder = new StringBuilder();
 
         try (Stream<String> stream = Files.lines(Paths.get(source), StandardCharsets.UTF_8)) {
-            stream.forEach(s -> contentBuilder.append(s));
+            stream.forEach(contentBuilder::append);
         }
 
         return contentBuilder.toString();
     }
 
-    // EFFECTS: parses the library (list of statblocks) from JSON array and returns it
-    // CITATION: from JsonReader.java in JsonSerializationDemo
-    private Library parseLibrary(JSONObject jsonObject) {
+    // EFFECTS: parses the given json object for library and encounter objects then returns their joined object
+    private LibraryAndEncounter parseLibraryAndEncounter(JSONObject jsonObject) {
+        return new LibraryAndEncounter(
+                parseLibrary(jsonObject.getJSONObject("library")),
+                parseEncounter(jsonObject.getJSONObject("encounter")));
+    }
+
+    // EFFECTS: parses the library from JSON array and returns it
+    protected Library parseLibrary(JSONObject jsonObject) {
         String name = jsonObject.getString("name");
         Library library = new Library(name, new ArrayList<>());
         addStatBlocks(library, jsonObject);
@@ -58,19 +65,16 @@ public class JsonReader {
 
     // MODIFIES: library
     // EFFECTS: adds statblocks to library
-    // CITATION: from JsonReader.java in JsonSerializationDemo
-    private void addStatBlocks(Library library, JSONObject jsonObject) {
+    protected void addStatBlocks(Library library, JSONObject jsonObject) {
         JSONArray jsonArray = jsonObject.getJSONArray("statBlocks");
         for (Object json : jsonArray) {
-            JSONObject statBlock = (JSONObject) json;
-            addStatBlock(library, statBlock);
+            library.add(parseStatBlock((JSONObject) json));
         }
     }
 
-    // MODIFIES: library
-    // EFFECTS: adds statblock from JSON object to library
-    private void addStatBlock(Library library, JSONObject jsonObject) {
-        StatBlock statBlock = new StatBlock.StatBlockBuilder(
+    // EFFECTS: converts to statblock from JSON object
+    protected StatBlock parseStatBlock(JSONObject jsonObject) {
+        return new StatBlock.StatBlockBuilder(
                 parseTitle(jsonObject.getJSONObject("title")),
                 jsonObject.getInt("xp"),
                 parseRollFormula(jsonObject.getJSONObject("hpFormula")),
@@ -82,6 +86,7 @@ public class JsonReader {
                 parseAbilities(jsonObject.getJSONArray("abilities")),
                 parseActions(jsonObject.getJSONArray("actions")),
                 parseLanguages(jsonObject.getJSONObject("languages")))
+
                 .savingThrowProficiencies(
                         parseSavingThrowProficiencies(jsonObject.optJSONArray("savingThrowProficiencies")))
                 .skillProficiencies(parseSkillProficiencies(jsonObject.optJSONArray("skillProficiencies")))
@@ -89,21 +94,30 @@ public class JsonReader {
                 .resistances(parseResistances(jsonObject.optJSONObject("resistances")))
                 .legendaryMechanics(parseLegendaryMechanics(jsonObject.optJSONObject("legendaryMechanics")))
                 .build();
-        library.addStatBlock(statBlock);
     }
 
     // EFFECTS: parses title from JSON object and returns it
-    private Title parseTitle(JSONObject jsonObject) {
-        return new Title.TitleBuilder(
-                jsonObject.getString("name"),
-                jsonObject.getString("type"),
-                jsonObject.getString("size"),
-                jsonObject.getString("alignment"))
-                .build();
+    protected Title parseTitle(JSONObject jsonObject) {
+        if (jsonObject.optString("group").equals("")) {
+            return new Title.TitleBuilder(
+                    jsonObject.getString("name"),
+                    jsonObject.getString("type"),
+                    jsonObject.getString("size"),
+                    jsonObject.getString("alignment"))
+                    .build();
+        } else {
+            return new Title.TitleBuilder(
+                    jsonObject.getString("name"),
+                    jsonObject.getString("type"),
+                    jsonObject.getString("size"),
+                    jsonObject.getString("alignment"))
+                    .group(jsonObject.getString("group"))
+                    .build();
+        }
     }
 
     // EFFECTS: parses hp formula from JSON object and returns it
-    private RollFormula parseRollFormula(JSONObject jsonObject) {
+    protected RollFormula parseRollFormula(JSONObject jsonObject) {
         return new RollFormula(
                 jsonObject.getInt("amountOfDice"),
                 jsonObject.getInt("dieSides"),
@@ -111,7 +125,7 @@ public class JsonReader {
     }
 
     // EFFECTS: parses armour from JSON object and returns it
-    private Armour parseArmour(JSONObject jsonObject) {
+    protected Armour parseArmour(JSONObject jsonObject) {
         return new Armour.ArmourBuilder(
                 jsonObject.getInt("ac"))
                 .armourName(jsonObject.getString("armourName"))
@@ -120,7 +134,7 @@ public class JsonReader {
     }
 
     // EFFECTS: parses speeds from JSON object and returns it
-    private Speeds parseSpeeds(JSONObject jsonObject) {
+    protected Speeds parseSpeeds(JSONObject jsonObject) {
         return new Speeds.SpeedsBuilder(
                 jsonObject.getInt("speed"))
                 .burrow(jsonObject.getInt("burrow"))
@@ -131,7 +145,7 @@ public class JsonReader {
     }
 
     // EFFECTS: parses senses from JSON object and returns it
-    private Senses parseSenses(JSONObject jsonObject) {
+    protected Senses parseSenses(JSONObject jsonObject) {
         return new Senses.SensesBuilder(
                 jsonObject.getInt("passivePerception"))
                 .darkVision(jsonObject.getInt("darkVision"))
@@ -142,7 +156,7 @@ public class JsonReader {
     }
 
     // EFFECTS: parses ability scores from JSON object and returns it
-    private AbilityScores parseAbilityScores(JSONObject jsonObject) {
+    protected AbilityScores parseAbilityScores(JSONObject jsonObject) {
         return new AbilityScores(
                 jsonObject.getInt("strength"),
                 jsonObject.getInt("dexterity"),
@@ -153,7 +167,7 @@ public class JsonReader {
     }
 
     // EFFECTS: parses abilities from JSON array and returns them as a list
-    private List<Ability> parseAbilities(JSONArray jsonArray) {
+    protected List<Ability> parseAbilities(JSONArray jsonArray) {
         List<Ability> abilities = new ArrayList<>();
         for (Object json : jsonArray) {
             abilities.add(parseAbility((JSONObject) json));
@@ -162,14 +176,14 @@ public class JsonReader {
     }
 
     // EFFECTS: parses ability from JSON object and returns it
-    private Ability parseAbility(JSONObject jsonObject) {
+    protected Ability parseAbility(JSONObject jsonObject) {
         return new Ability(
                 jsonObject.getString("name"),
                 jsonObject.getString("description"));
     }
 
     // EFFECTS: parses actions from JSON array and returns them as a list
-    private List<Action> parseActions(JSONArray jsonArray) {
+    protected List<Action> parseActions(JSONArray jsonArray) {
         List<Action> actions = new ArrayList<>();
         for (Object json : jsonArray) {
             actions.add(parseAction((JSONObject) json));
@@ -178,7 +192,7 @@ public class JsonReader {
     }
 
     // EFFECTS: parses action from JSON object and returns it
-    private Action parseAction(JSONObject jsonObject) {
+    protected Action parseAction(JSONObject jsonObject) {
         return new Action(
                 jsonObject.getString("name"),
                 jsonObject.getString("description"),
@@ -189,7 +203,7 @@ public class JsonReader {
     }
 
     // EFFECTS: parses languages from JSON object and returns it
-    private Languages parseLanguages(JSONObject jsonObject) {
+    protected Languages parseLanguages(JSONObject jsonObject) {
         List<String> languageList = new ArrayList<>();
         JSONArray languageListJsonArray = jsonObject.getJSONArray("languagesList");
         for (Object json : languageListJsonArray) {
@@ -202,7 +216,7 @@ public class JsonReader {
     }
 
     // EFFECTS: parses saving throw proficiencies from JSON object and returns it
-    private List<String> parseSavingThrowProficiencies(JSONArray jsonArray) {
+    protected List<String> parseSavingThrowProficiencies(JSONArray jsonArray) {
         if (jsonArray == null) {
             return null;
         }
@@ -218,7 +232,7 @@ public class JsonReader {
     }
 
     // EFFECTS: parses condition immunities from JSON object and returns it
-    private List<String> parseConditionImmunities(JSONArray jsonArray) {
+    protected List<String> parseConditionImmunities(JSONArray jsonArray) {
         if (jsonArray == null) {
             return null;
         }
@@ -234,7 +248,7 @@ public class JsonReader {
     }
 
     // EFFECTS: parses skill proficiencies from JSON object and returns it
-    private List<String> parseSkillProficiencies(JSONArray jsonArray) {
+    protected List<String> parseSkillProficiencies(JSONArray jsonArray) {
         if (jsonArray == null) {
             return null;
         }
@@ -250,7 +264,7 @@ public class JsonReader {
     }
 
     // EFFECTS: parses resistances from JSON object and returns it
-    private HashMap<String, String> parseResistances(JSONObject jsonObject) {
+    protected HashMap<String, String> parseResistances(JSONObject jsonObject) {
         if (jsonObject == null) {
             return null;
         }
@@ -266,12 +280,62 @@ public class JsonReader {
     }
 
     // EFFECTS: parses legendary mechanics from JSON object and returns it
-    private LegendaryMechanics parseLegendaryMechanics(JSONObject jsonObject) {
+    protected LegendaryMechanics parseLegendaryMechanics(JSONObject jsonObject) {
         if (jsonObject == null) {
             return null;
         }
         return new LegendaryMechanics(
                 jsonObject.getString("legendaryDescription"),
                 parseAbilities(jsonObject.getJSONArray("legendaryActions")));
+    }
+
+    // EFFECTS: parses the encounter from JSON array and returns it
+    // CITATION: from JsonReader.java in JsonSerializationDemo
+    private Encounter parseEncounter(JSONObject jsonObject) {
+        String name = jsonObject.getString("name");
+        Encounter encounter = new Encounter(name, new ArrayList<>());
+        addCharacters(encounter, jsonObject);
+        return encounter;
+    }
+
+    // MODIFIES: encounter
+    // EFFECTS: adds characters to encounter
+    // CITATION: from JsonReader.java in JsonSerializationDemo
+    private void addCharacters(Encounter encounter, JSONObject jsonObject) {
+        JSONArray jsonArray = jsonObject.getJSONArray("characters");
+        for (Object json : jsonArray) {
+            encounter.add(parseCharacter((JSONObject) json));
+        }
+    }
+
+    // MODIFIES: encounter
+    // EFFECTS: adds character from JSON object to encounter
+    private Character parseCharacter(JSONObject jsonObject) {
+        Character character = (Character) new Character.CharacterBuilder(
+                parseStatBlock(jsonObject.getJSONObject("parentStatBlock")),
+                parseTitle(jsonObject.getJSONObject("title")),
+                jsonObject.getInt("xp"),
+                parseRollFormula(jsonObject.getJSONObject("hpFormula")),
+                jsonObject.getInt("proficiency"),
+                parseArmour(jsonObject.getJSONObject("armour")),
+                parseSpeeds(jsonObject.getJSONObject("speeds")),
+                parseSenses(jsonObject.getJSONObject("senses")),
+                parseAbilityScores(jsonObject.getJSONObject("abilityScores")),
+                parseAbilities(jsonObject.getJSONArray("abilities")),
+                parseActions(jsonObject.getJSONArray("actions")),
+                parseLanguages(jsonObject.getJSONObject("languages")))
+
+                .savingThrowProficiencies(
+                        parseSavingThrowProficiencies(jsonObject.optJSONArray("savingThrowProficiencies")))
+                .skillProficiencies(parseSkillProficiencies(jsonObject.optJSONArray("skillProficiencies")))
+                .conditionImmunities(parseConditionImmunities(jsonObject.optJSONArray("conditionImmunities")))
+                .resistances(parseResistances(jsonObject.optJSONObject("resistances")))
+                .legendaryMechanics(parseLegendaryMechanics(jsonObject.optJSONObject("legendaryMechanics")))
+                .build();
+
+        character.setMaxHP(jsonObject.getInt("maxHP"));
+        character.setHP(jsonObject.getInt("hp"));
+
+        return character;
     }
 }

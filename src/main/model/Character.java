@@ -1,13 +1,14 @@
 package model;
 
 import model.statblockfields.*;
+import org.json.JSONObject;
 
 import java.util.List;
 
 // Represents...
 public class Character extends StatBlock {
     // required fields
-    private final int maxHP;
+    private int maxHP;
     private int hp;
     private final StatBlock parentStatBlock;
 
@@ -27,6 +28,18 @@ public class Character extends StatBlock {
         if (hp > maxHP) {
             hp = maxHP;
         }
+    }
+
+    // REQUIRES: given hp cannot be greater than maxHP
+    // EFFECTS: sets current hp to given hp
+    public void setHP(int hp) {
+        this.hp = hp;
+    }
+
+    // REQUIRES: given max HP cannot be greater than maxHP
+    // EFFECTS: sets current max HP to given max HP
+    public void setMaxHP(int maxHP) {
+        this.maxHP = maxHP;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -57,15 +70,16 @@ public class Character extends StatBlock {
                                 List<Ability> abilities, List<Action> actions, Languages languages) {
             super(title, xp, hpFormula, proficiency, armour, speeds, senses, abilityScores,
                     abilities, actions, languages);
+
+            this.maxHP = hpFormula.roll();
+            this.hp = maxHP;
+            this.parentStatBlock = parentStatBlock;
+
             super.savingThrowProficiencies(parentStatBlock.getSavingThrowProficiencies());
             super.skillProficiencies(parentStatBlock.getSkillProficiencies());
             super.conditionImmunities(parentStatBlock.getConditionImmunities());
             super.resistances(parentStatBlock.getResistances());
             super.legendaryMechanics(parentStatBlock.getLegendaryMechanics());
-
-            this.maxHP = hpFormula.roll();
-            this.hp = maxHP;
-            this.parentStatBlock = parentStatBlock;
         }
 
         // EFFECTS: returns a new Character with required fields,
@@ -73,5 +87,26 @@ public class Character extends StatBlock {
         public Character build() {
             return new Character(this);
         }
+    }
+
+    // converts the character to a json object
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("parentStatBlock", parentStatBlock.toJson());
+        json.put("title", title.toJson());
+        json.put("xp", xp);
+        json.put("hpFormula", hpFormula.toJson());
+        json.put("maxHP", maxHP);
+        json.put("hp", hp);
+        json.put("proficiency", proficiency);
+        json.put("armour", armour.toJson());
+        json.put("speeds", speeds.toJson());
+        json.put("senses", senses.toJson());
+        json.put("abilityScores", abilityScores.toJson());
+        json.put("abilities", abilitiesToJson());
+        json.put("actions", actionsToJson());
+        json.put("languages", languages.toJson());
+        return optionalFieldsToJson(json);
     }
 }
