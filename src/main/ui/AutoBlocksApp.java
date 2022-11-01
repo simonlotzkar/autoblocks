@@ -51,22 +51,22 @@ public class AutoBlocksApp {
         while (runApp) {
             if ("main".equals(menuLevel)) {
                 displayMainMenu();
-                processMainCommand(userInput.next().toLowerCase());
+                processMainCommand(userInput.nextLine().toLowerCase());
             } else if ("library".equals(menuLevel)) {
                 displayLibraryMenu();
-                processLibraryCommand(userInput.next().toLowerCase());
+                processLibraryCommand(userInput.nextLine().toLowerCase());
             } else if ("character".equals(menuLevel)) {
                 displayCharacterMenu();
-                processCharacterCommand(userInput.next().toLowerCase());
+                processCharacterCommand(userInput.nextLine().toLowerCase());
             } else if ("roll".equals(menuLevel)) {
                 displayRollMenu();
-                processRollCommand(userInput.next().toLowerCase());
+                processRollCommand(userInput.nextLine().toLowerCase());
             } else if ("group".equals(menuLevel)) {
                 displayGroupMenu();
-                processGroupCommand(userInput.next().toLowerCase());
+                processGroupCommand(userInput.nextLine().toLowerCase());
             } else if ("statblock".equals(menuLevel)) {
                 displayStatBlockMenu();
-                processStatBlockCommand(userInput.next().toLowerCase());
+                processStatBlockCommand(userInput.nextLine().toLowerCase());
             }
         }
         System.out.println("Quitting to desktop...");
@@ -146,25 +146,17 @@ public class AutoBlocksApp {
 
     // REQUIRES: selectType is either "character", "group", or "statblock"
     // MODIFIES: this
-    // EFFECTS: prompts user for the name of given selectType, searches encounter and selects them if they exist
+    // EFFECTS: prompts user for the name of given selectType, then searches for and selects them if they exist
     private void searchForAndSelect(String selectType) {
         System.out.println("Enter " + selectType + " name.");
-        String select = userInput.next().toLowerCase();
+        String selectCommand = userInput.nextLine().toLowerCase();
 
         if ("statblock".equals(selectType)) {
-            selectStatBlockByName(select);
+            selectStatBlockByName(selectCommand);
         } else if ("character".equals(selectType)) {
-            selectCharacterByName(select);
+            selectCharacterByName(selectCommand);
         } else if ("group".equals(selectType)) {
-            for (Character c : encounter.getList()) {
-                Title selectedTitle = c.getTitle();
-                if (selectedTitle.getGroup() != null && select.equals(selectedTitle.getGroup().toLowerCase())) {
-                    selectGroupByName(select);
-                    break;
-                }
-            }
-        } else {
-            System.out.println("Could not find specified " + selectType + ".");
+            selectGroupByName(selectCommand);
         }
     }
 
@@ -177,6 +169,7 @@ public class AutoBlocksApp {
                 menuLevel = "statblock";
             }
         }
+        System.out.println(commandInvalid + " Could not find specified statblock.");
     }
 
     // EFFECTS: searches encounter for given character name, prints name, selects them, and changes to CharacterMenu
@@ -188,21 +181,29 @@ public class AutoBlocksApp {
                 menuLevel = "character";
             }
         }
+        System.out.println(commandInvalid + " Could not find specified character.");
     }
 
-    // EFFECTS: prints given group name, selects it, creates an array, and changes to GroupMenu
+    // EFFECTS: searches all group members in encounter for ones with the given group's name,
+    //          selects those with a group of the given name then changes to GroupMenu,
+    //          or returns an error if no characters with the given group name are found.
     private void selectGroupByName(String groupName) {
-        selectedGroupName = groupName;
-        System.out.println("Found " + groupName + "!");
-        System.out.println("Selecting group members...");
+        selectedGroup = new ArrayList<>();
+        System.out.println("Searching for group members...");
         for (Character c : encounter.getList()) {
-            Title selectedTitle = c.getTitle();
-            if (selectedTitle.getGroup() != null && selectedGroupName.equals(selectedTitle.getGroup())) {
+            String nextCharacterGroup = c.getTitle().getGroup();
+            if (groupName.equalsIgnoreCase(nextCharacterGroup)) {
                 selectedGroup.add(c);
             }
         }
-        System.out.println("Group members accounted for!");
-        menuLevel = "group";
+        if (selectedGroup.isEmpty()) {
+            selectedGroup = null;
+            System.out.println(commandInvalid + "Could not find specified group.");
+        } else {
+            selectedGroupName = groupName;
+            System.out.println("Found " + groupName + "!");
+            menuLevel = "group";
+        }
     }
 
     // EFFECTS: switch to library menu and unselects everything
@@ -266,7 +267,7 @@ public class AutoBlocksApp {
         System.out.println("\thp: Edit this character's hitpoints");
         System.out.println("\tgroup: Change this character's group");
         System.out.println("\tdel: Delete this character from this encounter.");
-        System.out.println("\texit: Go back to the main menu.");
+        System.out.println("\tback: Go back to the main menu.");
     }
 
     // MODIFIES: this
@@ -285,7 +286,7 @@ public class AutoBlocksApp {
             case "del":
                 displayDeleteCharacterMenu();
                 break;
-            case "exit":
+            case "back":
                 goToMainMenu();
                 break;
             default:
@@ -410,8 +411,7 @@ public class AutoBlocksApp {
         System.out.println("\tActions:");
         for (Action a : selected.getActions()) {
             System.out.println("\t\t" + a.getName() + ": " + a.getDescription() + ". " + a.getReach() + " reach, "
-                    + "(" + a.getHitFormula().getRollString() + ") to hit, (" + a.getDamageFormula().getRollString()
-                    + ") " + a.getDamageType().toLowerCase() + " damage. ");
+                    + "(" + a.getHitFormula().getRollString() + ") to hit, " + a.getDamageMapString());
         }
     }
 
@@ -449,8 +449,8 @@ public class AutoBlocksApp {
     // EFFECTS: prompts user to either change or remove group then executes choice
     private void changeCharacterGroup() {
         if (selectedCharacter.getTitle().getGroup() != null) {
-            System.out.println("Enter the new group for this character (one word), or type rem to remove its group:");
-            String newGroup = userInput.next().toLowerCase();
+            System.out.println("Enter the new group for this character, or type rem to remove its group:");
+            String newGroup = userInput.nextLine().toLowerCase();
             if (newGroup.equals("rem")) {
                 selectedCharacter.getTitle().setGroup(null);
                 System.out.println("Removed this character's group.");
@@ -459,8 +459,8 @@ public class AutoBlocksApp {
                 System.out.println("Changed this character's group.");
             }
         } else {
-            System.out.println("Enter the new group (one word) for this character:");
-            String newGroup = userInput.next().toLowerCase();
+            System.out.println("Enter the new group for this character:");
+            String newGroup = userInput.nextLine().toLowerCase();
             selectedCharacter.getTitle().setGroup(newGroup.substring(0, 1).toUpperCase() + newGroup.substring(1));
             System.out.println("Changed this character's group.");
         }
@@ -471,7 +471,7 @@ public class AutoBlocksApp {
         System.out.println("\nAre you sure you want to delete the selected character? Confirm:");
         System.out.println("\ty = yes,");
         System.out.println("\tn = no");
-        String command = userInput.next().toLowerCase();
+        String command = userInput.nextLine().toLowerCase();
         processDeleteCharacterCommand(command);
     }
 
@@ -516,7 +516,7 @@ public class AutoBlocksApp {
         System.out.println("\thp: Multi-edit this group's hitpoints.");
         System.out.println("\trem: Remove this group. Keeps the characters in it.");
         System.out.println("\tdel: Delete this group **and** the characters in it.");
-        System.out.println("\texit: Go back to the main menu.");
+        System.out.println("\tback: Go back to the main menu.");
     }
 
     // MODIFIES: this
@@ -535,7 +535,7 @@ public class AutoBlocksApp {
             case "del":
                 displayReduceOrDeleteGroupMenu("delete");
                 break;
-            case "exit":
+            case "back":
                 goToMainMenu();
                 break;
             default:
@@ -555,7 +555,7 @@ public class AutoBlocksApp {
         }
         System.out.println("\ty = yes,");
         System.out.println("\tn = no");
-        String command = userInput.next().toLowerCase();
+        String command = userInput.nextLine().toLowerCase();
         processReduceOrDeleteGroupCommand(instruction, command);
     }
 
@@ -661,7 +661,7 @@ public class AutoBlocksApp {
     private void displayActionMenu() {
         System.out.println("\nWhich action do you want to roll?");
         displayRollMenuActions();
-        String command = userInput.next().toLowerCase();
+        String command = userInput.nextLine().toLowerCase();
         System.out.println("Rolling " + command + " action...");
         processActionCommand(command);
     }
@@ -681,7 +681,7 @@ public class AutoBlocksApp {
     private void rollCharacterActionByName(Character character, String action) {
         for (Action a : character.getActions()) {
             if (a.getName().equalsIgnoreCase(action)) {
-                System.out.println(a.rollAsStringForName(character.getTitle().getName()));
+                System.out.println(a.stringRoll(character.getTitle().getName()));
                 break;
             }
         }
@@ -697,8 +697,7 @@ public class AutoBlocksApp {
         System.out.println("\tint = Intelligence check.");
         System.out.println("\twis = Wisdom check.");
         System.out.println("\tcha = Charisma check.");
-        String command = userInput.next().toLowerCase();
-        System.out.println("Rolling " + command + " check...");
+        String command = userInput.nextLine().toLowerCase();
         processAbilityCheckCommand(command);
     }
 
@@ -893,7 +892,7 @@ public class AutoBlocksApp {
     // EFFECTS: prompts user for given string and returns it
     private String getCustomString(String customString) {
         System.out.println("Enter custom " + customString + ": ");
-        return userInput.next();
+        return userInput.nextLine();
     }
 
     // EFFECTS: prompts user for given integer and returns it
@@ -942,16 +941,11 @@ public class AutoBlocksApp {
     }
 
     // EFFECTS: prompts user to add an optional integer and gets it if the user confirms it, or 0
-    private int getCustomOptionalInteger(String customInteger) {
-        if (promptConfirmation("add custom " + customInteger)) {
+    private int getCustomStatBlockOptionalInteger(String customInteger) {
+        if (promptConfirmation("add custom statblock " + customInteger)) {
             return getCustomInteger(customInteger);
         }
         return 0;
-    }
-
-    // EFFECTS: prompts user to add an optional statblock integer field and gets it if the user confirms it, or 0
-    private int getCustomStatBlockOptionalInteger(String field) {
-        return getCustomOptionalInteger("statblock " + field);
     }
 
     // EFFECTS: prompts user for custom statblock title parameters then constructs a title with them, excluding group;
@@ -1066,13 +1060,12 @@ public class AutoBlocksApp {
     private Action getCustomAction() {
         String name = getCustomString("action name");
         String description = getCustomString("action description");
-        String damageType = getCustomString("action damage type");
         String reach = getCustomString("action reach");
 
         RollFormula hit = getRollFormula("action hit");
-        RollFormula damage = getRollFormula("action damage");
+        HashMap<String, RollFormula> damage = getCustomActionDamage();
 
-        return new Action(name, description, damageType, reach, hit, damage);
+        return new Action(name, description, reach, hit, damage);
     }
 
     // EFFECTS: prompts user for custom StatBlock languages and telepathy then returns them as a Languages
@@ -1081,6 +1074,24 @@ public class AutoBlocksApp {
         int telepathy = getCustomStatBlockOptionalInteger("telepathy range");
 
         return new Languages.LanguagesBuilder(listOfLanguages).telepathy(telepathy).build();
+    }
+
+    // EFFECTS: prompts user for number of action damage rolls to add, then prompts/builds for each roll
+    //          and returns them as a list
+    private HashMap<String, RollFormula> getCustomActionDamage() {
+        HashMap<String, RollFormula> damageRolls =  new HashMap<>();
+        System.out.println("How many damage rolls do you want to give your custom action?");
+        int numberOfDamageRolls = userInput.nextInt() + 1;
+        if (numberOfDamageRolls <= 1) {
+            System.out.println(commandInvalid + " cannot add less than 1, try again.");
+            return getCustomActionDamage();
+        } else {
+            for (int i = 1; i < numberOfDamageRolls; i++) {
+                System.out.println("Adding damage roll " + i + "...");
+                damageRolls.put(getCustomStatBlockString("damage " + i + " type"), getRollFormula("damage " + i));
+            }
+        }
+        return damageRolls;
     }
 
     // EFFECTS: prompts user for number of languages to add, then prompts for each language and returns them as a list
@@ -1261,7 +1272,7 @@ public class AutoBlocksApp {
     // EFFECTS: prompts for which type of resistance to assign given damage type and then returns it
     private String getCustomResistance(String damageType) {
         System.out.println("Enter resistant, immune, or vulnerable for " + damageType + ": ");
-        String command = userInput.next();
+        String command = userInput.nextLine();
         switch (command) {
             case "resistant":
                 return "resistance";
@@ -1422,15 +1433,19 @@ public class AutoBlocksApp {
         List<Ability> orcAbilities = new ArrayList<>();
         orcAbilities.add(aggression);
 
-        Action orcGreatAxe = new Action("GreatAxe", "Melee Weapon Attack", "Slashing", "5ft",
+        HashMap<String, RollFormula> greatAxeDamage = new HashMap<>();
+        greatAxeDamage.put("Slashing", new RollFormula(1, 12, 3));
+        Action orcGreatAxe = new Action("GreatAxe", "Melee Weapon Attack", "5ft",
                 new RollFormula(1, 20, 5),  //hit formula
-                new RollFormula(1, 12, 3)); //damage formula
-        Action orcJavelinMelee = new Action("Javelin", "Melee Weapon Attack", "Piercing", "5ft",
+                greatAxeDamage); //damage formula
+        HashMap<String, RollFormula> javelinDamage = new HashMap<>();
+        javelinDamage.put("Piercing", new RollFormula(1, 6, 3));
+        Action orcJavelinMelee = new Action("Javelin", "Melee Weapon Attack", "5ft",
                 new RollFormula(1, 20, 5),  //hit formula
-                new RollFormula(1, 6, 3)); //damage formula
-        Action orcJavelinRanged = new Action("Javelin", "Ranged Weapon Attack", "Piercing", "30/120ft",
+                javelinDamage); //damage formula
+        Action orcJavelinRanged = new Action("Javelin", "Ranged Weapon Attack", "30/120ft",
                 new RollFormula(1, 20, 5),  //hit formula
-                new RollFormula(1, 6, 3)); //damage formula
+                javelinDamage); //damage formula
 
         List<Action> orcActions = new ArrayList<>();
         orcActions.add(orcGreatAxe);
@@ -1494,15 +1509,22 @@ public class AutoBlocksApp {
         ancientBlackDragonAbilities.add(breath);
         ancientBlackDragonAbilities.add(frightfulPresence);
 
-        Action bite = new Action("Bite", "Melee Weapon Attack plus 9 (2d8) acid damage", "Piercing", "15ft",
+        HashMap<String, RollFormula> biteDamage = new HashMap<>();
+        biteDamage.put("Piercing", new RollFormula(1, 10, 8));
+        biteDamage.put("Acid", new RollFormula(2, 8, 0));
+        Action bite = new Action("Bite", "Melee Weapon Attack",  "15ft",
                 new RollFormula(1, 20, 15),  //hit formula
-                new RollFormula(2, 10, 8)); //damage formula
-        Action claw = new Action("Claw", "Melee Weapon Attack", "Slashing", "10ft",
+                biteDamage); //damage formula
+        HashMap<String, RollFormula> clawDamage = new HashMap<>();
+        clawDamage.put("Slashing", new RollFormula(2, 6, 8));
+        Action claw = new Action("Claw", "Melee Weapon Attack",  "10ft",
                 new RollFormula(1, 20, 15),  //hit formula
-                new RollFormula(2, 6, 8)); //damage formula
-        Action tail = new Action("Tail", "Melee Weapon Attack", "Bludgeoning", "20ft",
+                clawDamage); //damage formula
+        HashMap<String, RollFormula> tailDamage = new HashMap<>();
+        tailDamage.put("Bludgeoning", new RollFormula(2, 8, 8));
+        Action tail = new Action("Tail", "Melee Weapon Attack", "20ft",
                 new RollFormula(1, 20, 15),  //hit formula
-                new RollFormula(2, 8, 8)); //damage formula
+                tailDamage); //damage formula
 
         List<Action> ancientBlackDragonActions = new ArrayList<>();
         ancientBlackDragonActions.add(bite);
@@ -1527,7 +1549,7 @@ public class AutoBlocksApp {
                 legendaryActions);
 
         StatBlock ancientBlackDragon = new StatBlock.StatBlockBuilder(
-                (new Title.TitleBuilder("AncientBlackDragon", "Dragon", "Gargantuan", "Chaotic Evil").build()),
+                (new Title.TitleBuilder("Ancient Black Dragon", "Dragon", "Gargantuan", "Chaotic Evil").build()),
                 33000, new RollFormula(21, 20, 147), 7,
                 (new Armour.ArmourBuilder(22).armourName("Natural Armour").build()),
                 (new Speeds.SpeedsBuilder(40).fly(80).swim(40).build()),

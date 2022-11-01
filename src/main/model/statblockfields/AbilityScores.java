@@ -3,7 +3,7 @@ package model.statblockfields;
 import org.json.JSONObject;
 import persistence.Writable;
 
-// Represents...
+// Represents the six ability scores in D&D ranging from 1 to 30
 public class AbilityScores implements Writable {
     // required fields
     private final int strength;
@@ -13,6 +13,7 @@ public class AbilityScores implements Writable {
     private final int wisdom;
     private final int charisma;
 
+    // REQUIRES: ability scores must a positive integer from 1 to 30 //TODO throw exception
     // EFFECTS: constructs ability scores from given required fields
     public AbilityScores(int strength, int dexterity, int constitution, int intelligence, int wisdom, int charisma) {
         this.strength = strength;
@@ -23,14 +24,9 @@ public class AbilityScores implements Writable {
         this.charisma = charisma;
     }
 
-    // EFFECTS: calculates modifier from given ability score
-    protected int convertToModifier(int modifier) {
-        return (modifier - 10) / 2;
-    }
-
     // -----------------------------------------------------------------------------------------------------------------
     // getters
-    // REQUIRES: given string is an ability score
+    // REQUIRES: given string is an ability score //TODO throw exception
     // EFFECTS: gets modifier for given ability score
     public int getModifier(String abilityScore) {
         switch (abilityScore) {
@@ -47,6 +43,11 @@ public class AbilityScores implements Writable {
             default:
                 return convertToModifier(charisma);
         }
+    }
+
+    // EFFECTS: calculates modifier from given ability score
+    protected int convertToModifier(int modifier) {
+        return Math.floorDiv((modifier - 10), 2);
     }
 
     // EFFECTS: gets strength

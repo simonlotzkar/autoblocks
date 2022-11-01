@@ -3,7 +3,7 @@ package model.statblockfields;
 import org.json.JSONObject;
 import persistence.Writable;
 
-// Represents...
+// Represents an ability or legendary action that has a name and description
 public class Ability implements Writable {
     // required fields
     private final String name;

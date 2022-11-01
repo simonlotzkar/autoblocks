@@ -18,4 +18,9 @@ public class SensesTest {
     public void testGetSensesString() {
         //stub
     }
+
+    @Test
+    public void testToJson() {
+        //JSONObject json0 = X.toJson();
+    }
 }

@@ -13,4 +13,9 @@ public class LegendaryMechanicsTest {
     public void testConstructor() {
         //stub
     }
+
+    @Test
+    public void testToJson() {
+        //JSONObject json0 = X.toJson();
+    }
 }

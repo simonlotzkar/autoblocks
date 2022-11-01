@@ -3,7 +3,6 @@ package persistence;
 import model.LibraryAndEncounter;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
@@ -11,8 +10,8 @@ import java.io.PrintWriter;
 // CITATION: from JsonWriter.java in JsonSerializationDemo
 public class JsonWriter {
     private static final int TAB = 4;
+    private final String destination;
     private PrintWriter writer;
-    private String destination;
 
     // EFFECTS: constructs writer to write to destination file
     // CITATION: from JsonWriter.java in JsonSerializationDemo

@@ -57,12 +57,17 @@ As a user, I want to be able to:
 - Orc
 - Ancient Black Dragon
 
+### Current bugs/fixes to be done:
+- damage rolls not printing
+- no rolls for skills or saving throws
+- delete statblocks from a library
+- confirm to save on exit
+- confirm to load on launch
+- group actions print "Actions:" along with actions for each character, replace with no duplicates and one heading
+
 ### Future additions:
 - save system to allow for multiple save/load files for any amount of encounters and libraries ☐
-- add multiple damage rolls for actions ☐
-- add reactions ☐
-- delete statblocks from a library ☐
 - edit statblocks in a library ☐
 - turn order and automation of turns ☐
 - inventory/loot generation ☐
-- come with all default monsters in the 5th edition monsters manual (1/300) ☐
+- come with all default monsters in the 5th edition monsters manual (2/300) ☐

@@ -18,4 +18,9 @@ public class SpeedsTest {
     public void testGetSpeedsString() {
         //stub
     }
+
+    @Test
+    public void testToJson() {
+        //JSONObject json0 = X.toJson();
+    }
 }

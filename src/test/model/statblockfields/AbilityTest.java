@@ -1,6 +1,6 @@
 package model.statblockfields;
 
-import model.statblockfields.Ability;
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -32,5 +32,10 @@ public class AbilityTest {
         assertEquals(testAbilityName1, testAbility1.getName());
         assertEquals(testAbilityDescription0, testAbility0.getDescription());
         assertEquals(testAbilityDescription1, testAbility1.getDescription());
+    }
+
+    @Test
+    public void testToJson() {
+        //JSONObject json0 = X.toJson();
     }
 }

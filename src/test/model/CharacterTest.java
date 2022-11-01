@@ -84,4 +84,9 @@ public class CharacterTest {
     public void testChangeHPNegative() {
         //stub
     }
+
+    @Test
+    public void testToJson() {
+        //JSONObject json0 = X.toJson();
+    }
 }

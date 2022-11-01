@@ -74,4 +74,9 @@ public class RollFormulaTest {
         assertEquals("1d7", testRollFormula3.getRollString());
         assertEquals("3d30-3", testRollFormula4.getRollString());
     }
+
+    @Test
+    public void testToJson() {
+        //JSONObject json0 = X.toJson();
+    }
 }

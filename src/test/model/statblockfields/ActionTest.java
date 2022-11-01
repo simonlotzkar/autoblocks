@@ -1,7 +1,6 @@
 package model.statblockfields;
 
-import model.statblockfields.Action;
-import model.statblockfields.RollFormula;
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -67,6 +66,11 @@ public class ActionTest {
 
     @Test
     public void testRollAsStringForName() {
-        assertEquals("character0's " + rollString0, testAction0.rollAsStringForName("character0"));
+        assertEquals("character0's " + rollString0, testAction0.stringRoll("character0"));
+    }
+
+    @Test
+    public void testToJson() {
+        //JSONObject json0 = X.toJson();
     }
 }

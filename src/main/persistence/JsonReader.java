@@ -196,10 +196,17 @@ public class JsonReader {
         return new Action(
                 jsonObject.getString("name"),
                 jsonObject.getString("description"),
-                jsonObject.getString("damageType"),
                 jsonObject.getString("reach"),
                 parseRollFormula(jsonObject.getJSONObject("hitFormula")),
-                parseRollFormula(jsonObject.getJSONObject("damageFormula")));
+                parseDamageMap(jsonObject.getJSONObject("damageMap")));
+    }
+
+    // EFFECTS: parses damage rolls from JSON object and returns it
+    protected HashMap<String, RollFormula> parseDamageMap(JSONObject jsonObject) {
+        Map<String, Object> jsonMap = jsonObject.toMap();
+        HashMap<String, RollFormula> damageMap = new HashMap<>();
+        jsonMap.putAll(damageMap);
+        return damageMap;
     }
 
     // EFFECTS: parses languages from JSON object and returns it
@@ -271,12 +278,8 @@ public class JsonReader {
         Map<String, Object> jsonMap = jsonObject.toMap();
         HashMap<String, String> resistances = new HashMap<>();
 
-        jsonMap.forEach((s, o) -> resistances.put(s, o.toString()));
-
-        if (!resistances.isEmpty()) {
-            return resistances;
-        }
-        return null;
+        jsonMap.putAll(resistances);
+        return resistances;
     }
 
     // EFFECTS: parses legendary mechanics from JSON object and returns it

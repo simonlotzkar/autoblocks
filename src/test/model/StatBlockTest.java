@@ -23,4 +23,9 @@ public class StatBlockTest {
     public void testGetHPString() {
         //stub
     }
+
+    @Test
+    public void testToJson() {
+        //JSONObject json0 = X.toJson();
+    }
 }

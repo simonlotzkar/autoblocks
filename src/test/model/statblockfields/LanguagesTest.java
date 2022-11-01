@@ -1,7 +1,10 @@
 package model.statblockfields;
 
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class LanguagesTest {
     @BeforeEach
@@ -27,5 +30,10 @@ public class LanguagesTest {
     @Test
     public void testGetTelepathyString() {
         //stub
+    }
+
+    @Test
+    public void testToJson() {
+        //JSONObject json0 = X.toJson();
     }
 }
