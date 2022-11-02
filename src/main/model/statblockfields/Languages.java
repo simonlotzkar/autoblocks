@@ -22,28 +22,25 @@ public class Languages implements Writable {
     // -----------------------------------------------------------------------------------------------------------------
     // getters
     // EFFECTS: returns a string comprised of all languages that exist and telepathy if it exists
-    public String getLanguagesString() {
-        String languagesString = "";
-
-        languagesString += getLanguagesListString();
-        languagesString += getTelepathyString();
-
-        return languagesString;
+    public String getString() {
+        return "" + getListString() + getTelepathyString();
     }
 
     // EFFECTS: returns all languages that exist as a string
-    public String getLanguagesListString() {
-        String languagesListString = "";
+    private String getListString() {
+        StringBuilder languagesListStringBuilder = new StringBuilder();
         for (String l : languagesList) {
-            languagesListString += ", " + l;
+            languagesListStringBuilder
+                    .append(l)
+                    .append(", ");
         }
-        return languagesListString;
+        return languagesListStringBuilder.toString();
     }
 
     // EFFECTS: returns the telepathy range as a string if it exists
-    public String getTelepathyString() {
+    private String getTelepathyString() {
         if (telepathy != 0) {
-            return ", telepathy " + telepathy + "ft";
+            return "telepathy " + telepathy + "ft";
         }
         return "";
     }

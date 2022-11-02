@@ -1,6 +1,6 @@
 package model.statblockfields;
 
-import model.statblockfields.RollFormula;
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -67,16 +67,30 @@ public class RollFormulaTest {
     }
 
     @Test
-    public void testGetRollString() {
-        assertEquals("0d0", testRollFormula0.getRollString());
-        assertEquals("1d1", testRollFormula1.getRollString());
-        assertEquals("1d4+2", testRollFormula2.getRollString());
-        assertEquals("1d7", testRollFormula3.getRollString());
-        assertEquals("3d30-3", testRollFormula4.getRollString());
+    public void testGetString() {
+        assertEquals("0d0", testRollFormula0.getString());
+        assertEquals("1d1", testRollFormula1.getString());
+        assertEquals("1d4+2", testRollFormula2.getString());
+        assertEquals("1d7", testRollFormula3.getString());
+        assertEquals("3d30-3", testRollFormula4.getString());
     }
 
     @Test
     public void testToJson() {
-        //JSONObject json0 = X.toJson();
+        JSONObject json0 = testRollFormula0.toJson();
+        JSONObject json1 = testRollFormula1.toJson();
+        JSONObject json2 = testRollFormula2.toJson();
+
+        assertEquals(0, json0.get("amountOfDice"));
+        assertEquals(0, json0.get("dieSides"));
+        assertEquals(0, json0.get("modifier"));
+
+        assertEquals(1, json1.get("amountOfDice"));
+        assertEquals(1, json1.get("dieSides"));
+        assertEquals(0, json1.get("modifier"));
+
+        assertEquals(1, json2.get("amountOfDice"));
+        assertEquals(4, json2.get("dieSides"));
+        assertEquals(2, json2.get("modifier"));
     }
 }

@@ -22,17 +22,24 @@ public class Armour implements Writable {
     // -----------------------------------------------------------------------------------------------------------------
     // getters
     // EFFECTS: gets string representation of Armour depending on what fields exist
-    public String getArmourString() {
-        String armourString = String.valueOf(ac);
+    public String getString() {
+        StringBuilder armourStringBuilder = new StringBuilder();
+        armourStringBuilder.append(ac);
         if (armourName != null) {
-            armourString += " (" + armourName + ")";
+            armourStringBuilder
+                    .append(" (")
+                    .append(armourName)
+                    .append(")");
         }
 
         if (magicArmour != 0) {
-            return armourString += " or " + magicArmour + " (with Magic Armour)";
+            armourStringBuilder
+                    .append(" or ")
+                    .append(magicArmour)
+                    .append(" (with Magic Armour)");
         }
 
-        return armourString;
+        return armourStringBuilder.toString();
     }
 
     // EFFECTS: get ac

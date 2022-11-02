@@ -349,8 +349,8 @@ public class AutoBlocksApp {
     // EFFECTS: prints the selected StatBlock or Character combat related stats
     private void displayIndividualCombat(StatBlock selected) {
         System.out.println("\t" + "Hit Points: " + selected.getHPString());
-        System.out.println("\tArmour Class: " + selected.getArmour().getArmourString());
-        System.out.println("\tSpeeds: " + selected.getSpeeds().getSpeedsString());
+        System.out.println("\tArmour Class: " + selected.getArmour().getString());
+        System.out.println("\tSpeeds: " + selected.getSpeeds().getString());
         System.out.println("\tSenses: " + selected.getSenses().getSensesString());
         System.out.println("\tProficiency Bonus: " + selected.getProficiency());
         System.out.println("\tChallenge Rating: " + selected.getChallengeRating()
@@ -410,8 +410,7 @@ public class AutoBlocksApp {
     private void displayIndividualActions(StatBlock selected) {
         System.out.println("\tActions:");
         for (Action a : selected.getActions()) {
-            System.out.println("\t\t" + a.getName() + ": " + a.getDescription() + ". " + a.getReach() + " reach, "
-                    + "(" + a.getHitFormula().getRollString() + ") to hit, " + a.getDamageMapString());
+            System.out.println(a.getString());
         }
     }
 
@@ -681,7 +680,7 @@ public class AutoBlocksApp {
     private void rollCharacterActionByName(Character character, String action) {
         for (Action a : character.getActions()) {
             if (a.getName().equalsIgnoreCase(action)) {
-                System.out.println(a.stringRoll(character.getTitle().getName()));
+                System.out.println(character.getTitle().getName() + "'s " + a.getRollString());
                 break;
             }
         }

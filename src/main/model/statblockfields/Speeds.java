@@ -26,21 +26,22 @@ public class Speeds implements Writable {
     // -----------------------------------------------------------------------------------------------------------------
     // getters
     // EFFECTS: gets string representation of Speeds depending on what fields exist
-    public String getSpeedsString() {
-        String speedsString = speed + " ft";
+    public String getString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(speed).append("ft");
         if (burrow != 0) {
-            speedsString += ", burrow " + burrow + " ft";
+            stringBuilder.append(", burrow ").append(burrow).append("ft");
         }
         if (climb != 0) {
-            speedsString += ", climb " + climb + " ft";
+            stringBuilder.append(", climb ").append(climb).append("ft");
         }
         if (fly != 0) {
-            speedsString += ", fly " + fly + " ft";
+            stringBuilder.append(", fly ").append(fly).append("ft");
         }
         if (swim != 0) {
-            speedsString += ", swim " + swim + " ft";
+            stringBuilder.append(", swim ").append(swim).append("ft");
         }
-        return speedsString;
+        return stringBuilder.append(".").toString();
     }
 
     // EFFECTS: get ground speed

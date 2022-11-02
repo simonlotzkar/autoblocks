@@ -33,7 +33,7 @@ public class RollFormula implements Writable {
 
     // getters
     // EFFECTS: get roll formula as a string, uses + or - appropriately
-    public String getRollString() {
+    public String getString() {
         if (modifier > 0) {
             return amountOfDice + "d" + dieSides + "+" + modifier;
         } else if (modifier < 0) {

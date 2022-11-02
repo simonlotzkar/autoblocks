@@ -4,14 +4,14 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-// REPRESENTS: an action with a name, description, reach, hit roll formula,
-//             and at least one damage roll with its damage type
+// REPRESENTS: an action with a name, description, reach, hit roll formula, and a set of damage types with rolls
 public class Action extends Ability {
     // required fields
     private final String reach;
     private final RollFormula hitFormula;
     private final HashMap<String, RollFormula> damageMap;
 
+    // REQUIRES: damage map has no duplicate damage types (prebuilt in) and there is at least one damage pair //TODO
     // EFFECTS: constructs an action with the given parameters
     public Action(String name, String description, String reach, RollFormula hitFormula,
                   HashMap<String, RollFormula> damageMap) {
@@ -23,17 +23,55 @@ public class Action extends Ability {
 
     // -----------------------------------------------------------------------------------------------------------------
     // getters
-    // EFFECTS: returns string with the action's rolled hit and damage
-    public String stringRoll(String name) {
-        return (name + "'s " + super.getDescription() + ", " + super.getName() + " (" + reach + "ft), did "
-                + hitFormula.roll() + " to hit, and " + stringDamageMapRoll());
+    // EFFECTS: gets a descriptive string of this action
+    public String getString() {
+        return getDescription()
+                + ", "
+                + getName()
+                + " ("
+                + reach
+                + "ft), ("
+                + hitFormula.getString()
+                + ") to hit"
+                + getDamageString()
+                + ".";
     }
 
-    // EFFECTS: returns string of all damage rolls *post roll*
-    public String stringDamageMapRoll() {
+    // EFFECTS: gets a descriptive string of the damage for this action
+    private String getDamageString() {
         StringBuilder damageStringBuilder = new StringBuilder();
-        damageMap.forEach((s, rollFormula) ->
-                damageStringBuilder.append(rollFormula.roll()).append(" ").append(s).append(" damage, "));
+        damageMap.forEach((s, rollFormula) -> damageStringBuilder
+                .append(" and (")
+                .append(rollFormula.getString())
+                .append(") ")
+                .append(s)
+                .append(" damage"));
+        return damageStringBuilder.toString();
+    }
+
+    // EFFECTS: gets a descriptive string of this action with its hit and damage formulae rolled
+    public String getRollString() {
+        return getDescription()
+                + ", "
+                + getName()
+                + " ("
+                + reach
+                + "ft), did ("
+                + hitFormula.roll()
+                + ") to hit"
+                + getDamageRollString()
+                + ".";
+    }
+
+    // EFFECTS: gets a descriptive string of the damage for this action with its formula rolled
+    private String getDamageRollString() {
+        StringBuilder damageStringBuilder = new StringBuilder();
+        damageMap.forEach((s, rollFormula) -> damageStringBuilder
+                .append(" and (")
+                .append(rollFormula.roll())
+                .append(") ")
+                .append(s)
+                .append(" damage"));
         return damageStringBuilder.toString();
     }
 
@@ -50,14 +88,6 @@ public class Action extends Ability {
     // EFFECTS: get damage map
     public HashMap<String, RollFormula> getDamageMap() {
         return damageMap;
-    }
-
-    // EFFECTS: returns string of all damage roll formulae
-    public String getDamageMapString() {
-        StringBuilder damageStringBuilder = new StringBuilder();
-        damageMap.forEach((s, rollFormula) -> damageStringBuilder.append("(").append(rollFormula.getRollString())
-                .append(") ").append(s).append(" damage, "));
-        return damageStringBuilder.toString();
     }
 
     // -----------------------------------------------------------------------------------------------------------------

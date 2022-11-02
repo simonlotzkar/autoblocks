@@ -36,6 +36,11 @@ public class AbilityTest {
 
     @Test
     public void testToJson() {
-        //JSONObject json0 = X.toJson();
+        JSONObject json0 = testAbility0.toJson();
+        JSONObject json1 = testAbility1.toJson();
+        assertEquals(testAbilityName0, json0.get("name"));
+        assertEquals(testAbilityName1, json1.get("name"));
+        assertEquals(testAbilityDescription0, json0.get("description"));
+        assertEquals(testAbilityDescription1, json1.get("description"));
     }
 }
