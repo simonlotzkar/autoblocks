@@ -3,18 +3,21 @@ package ui;
 import model.*;
 import model.Character;
 import model.statblockfields.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import persistence.JsonReader;
-import persistence.JsonWriter;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.NumberFormat;
 import java.util.*;
 
+//Represents...
 public class AutoBlocksApp {
-    // play and library environments
-    private Library library = new Library("default library", new ArrayList<>());
-    private Encounter encounter = new Encounter("default encounter", new ArrayList<>());
+    // play and library lists
+    private List<StatBlock> library = new ArrayList<>();
+    private List<Character> encounter = new ArrayList<>();
 
     // selections
     private StatBlock selectedStatBlock;
@@ -32,14 +35,11 @@ public class AutoBlocksApp {
     private static final String lineSeparator = "---------------------------------------------------------------------";
 
     // persistence
-    private final JsonWriter jsonWriter;
-    private final JsonReader jsonReader;
-    private static final String jsonDirectory = "./data/libraryAndEncounter.json";
+    private static final String jsonDirectory = "./data/autoBlocksApp.json";
+    private static final int tab = 4;
 
     // EFFECTS: constructs the autoblocks app
     public AutoBlocksApp() throws FileNotFoundException {
-        jsonWriter = new JsonWriter(jsonDirectory);
-        jsonReader = new JsonReader(jsonDirectory);
         runAutoBlocks();
     }
 
@@ -80,7 +80,7 @@ public class AutoBlocksApp {
     //          - view library *LibraryMenu*
     //          - quit app
     private void displayMainMenu() {
-        System.out.println("\nMain Menu. Characters in currently loaded encounter (" + encounter.getName() + "):");
+        System.out.println("\nMain Menu. Characters in currently loaded encounter:");
         System.out.println(lineSeparator);
 
         displayPlay();
@@ -90,7 +90,7 @@ public class AutoBlocksApp {
         System.out.println("\tchar: Select a character in encounter. Take individual actions and edit hp from here.");
         System.out.println("\tgroup: Select a group in encounter. Take group actions and edit group hp from here.");
         System.out.println("\tlib: View statblock library. Add characters to encounter from here.");
-        System.out.println("\tload: Load a statblock library from file.");
+        System.out.println("\tload: Load the statblock library from file.");
         System.out.println("\tquit: Save library and exit to desktop.");
     }
 
@@ -106,9 +106,13 @@ public class AutoBlocksApp {
         } else if ("lib".equals(command)) {
             goToLibraryMenu();
         } else if ("load".equals(command)) {
-            loadLibraryAndEncounter();
+            load();
         } else if ("quit".equals(command)) {
-            saveLibrary();
+            try {
+                save();
+            } catch (FileNotFoundException e) {
+                System.out.println("Unable to write to file: " + jsonDirectory);
+            }
             goToDesktop();
         } else {
             System.out.println(commandInvalid);
@@ -117,8 +121,8 @@ public class AutoBlocksApp {
 
     // EFFECTS: prints all characters in play with their names, groups, and hp
     private void displayPlay() {
-        if (!encounter.getList().isEmpty()) {
-            for (Character c : encounter.getList()) {
+        if (!encounter.isEmpty()) {
+            for (Character c : encounter) {
                 Title selectedTitle = c.getTitle();
                 if (selectedTitle.getGroup() != null) {
                     System.out.println("\t" + selectedTitle.getName()
@@ -162,7 +166,7 @@ public class AutoBlocksApp {
 
     // EFFECTS: searches library for given statblock name, prints name, selects them, and changes to StatBlockMenu
     private void selectStatBlockByName(String statBlockName) {
-        for (StatBlock sb : library.getList()) {
+        for (StatBlock sb : library) {
             if (statBlockName.equals(sb.getTitle().getName().toLowerCase())) {
                 System.out.println("Found " + statBlockName + "!");
                 selectedStatBlock = sb;
@@ -174,7 +178,7 @@ public class AutoBlocksApp {
 
     // EFFECTS: searches encounter for given character name, prints name, selects them, and changes to CharacterMenu
     private void selectCharacterByName(String characterName) {
-        for (Character c : encounter.getList()) {
+        for (Character c : encounter) {
             if (characterName.equals(c.getTitle().getName().toLowerCase())) {
                 System.out.println("Found " + characterName + "!");
                 selectedCharacter = c;
@@ -190,7 +194,7 @@ public class AutoBlocksApp {
     private void selectGroupByName(String groupName) {
         selectedGroup = new ArrayList<>();
         System.out.println("Searching for group members...");
-        for (Character c : encounter.getList()) {
+        for (Character c : encounter) {
             String nextCharacterGroup = c.getTitle().getGroup();
             if (groupName.equalsIgnoreCase(nextCharacterGroup)) {
                 selectedGroup.add(c);
@@ -216,32 +220,41 @@ public class AutoBlocksApp {
     }
 
     // MODIFIES: this
-    // EFFECTS: loads library and encounter from file
-    // CITATION: based on JsonSerializationDemo
-    private void loadLibraryAndEncounter() {
+    // EFFECTS: prompts to load the library and then encounter from file
+    private void load() {
+        JsonReader jsonReader = new JsonReader(jsonDirectory);
         try {
-            LibraryAndEncounter libraryAndEncounter = jsonReader.read();
-            library = libraryAndEncounter.getLibrary();
-            encounter = libraryAndEncounter.getEncounter();
-            System.out.println("Loaded " + library.getName() + " and " + encounter.getName()
-                    + " from " + jsonDirectory);
+            if (promptConfirmation("Load saved library")) {
+                library = jsonReader.readLibrary();
+                System.out.println("Loaded library from " + jsonDirectory);
+            }
+            if (promptConfirmation("Load saved encounter")) {
+                encounter = jsonReader.readEncounter();
+                System.out.println("Loaded encounter from " + jsonDirectory);
+            }
         } catch (IOException e) {
             System.out.println("Unable to read from file: " + jsonDirectory);
         }
     }
 
-    // EFFECTS: prompts the user to save the library and encounter to file
-    // CITATION: based on JsonSerializationDemo
-    private void saveLibrary() {
-        LibraryAndEncounter libraryAndEncounter = new LibraryAndEncounter(library, encounter);
-        try {
-            jsonWriter.open();
-            jsonWriter.write(libraryAndEncounter);
-            jsonWriter.close();
-            System.out.println("Saved " + library.getName() + " and " + encounter.getName() + " to " + jsonDirectory);
-        } catch (FileNotFoundException e) {
-            System.out.println("Unable to write to file: " + jsonDirectory);
+    // MODIFIES: this
+    // EFFECTS: writes JSON representation of library and then encounter to file while prompting for each
+    public void save() throws FileNotFoundException {
+        PrintWriter jsonWriter = new PrintWriter(jsonDirectory);
+        JSONArray jsonLibrary = new JSONArray();
+        for (StatBlock sb : library) {
+            jsonLibrary.put(sb.toJson());
         }
+        JSONArray jsonEncounter = new JSONArray();
+        for (Character c : encounter) {
+            jsonEncounter.put(c.toJson());
+        }
+        JSONObject json = new JSONObject();
+        json.putOpt("library", jsonLibrary);
+        json.putOpt("encounter", jsonEncounter);
+        System.out.println("Saved to " + jsonDirectory);
+        jsonWriter.print(json.toString(tab));
+        jsonWriter.close();
     }
 
     // EFFECTS: quits the app
@@ -351,7 +364,7 @@ public class AutoBlocksApp {
         System.out.println("\t" + "Hit Points: " + selected.getHPString());
         System.out.println("\tArmour Class: " + selected.getArmour().getString());
         System.out.println("\tSpeeds: " + selected.getSpeeds().getString());
-        System.out.println("\tSenses: " + selected.getSenses().getSensesString());
+        System.out.println("\tSenses: " + selected.getSenses().getString());
         System.out.println("\tProficiency Bonus: " + selected.getProficiency());
         System.out.println("\tChallenge Rating: " + selected.getChallengeRating()
                 + " (" + NumberFormat.getIntegerInstance().format(selected.getXP()) + "xp)");
@@ -824,7 +837,7 @@ public class AutoBlocksApp {
     //          - add new StatBlocks
     //          - go back *MainMenu*
     private void displayLibraryMenu() {
-        System.out.println("\nLibrary Menu. Statblocks in currently loaded library (" + library.getName() + "):");
+        System.out.println("\nLibrary Menu. Statblocks in currently loaded library:");
         System.out.println("--------------------------------------------------");
 
         displayLibrary();
@@ -837,7 +850,7 @@ public class AutoBlocksApp {
 
     // EFFECTS: prints all statblocks in the library with their names
     private void displayLibrary() {
-        for (StatBlock sb : library.getList()) {
+        for (StatBlock sb : library) {
             System.out.println(sb.getTitle().getName());
         }
     }
@@ -961,7 +974,7 @@ public class AutoBlocksApp {
     //          until a unique name is provided, then returns that name.
     private String getCustomStatBlockName() {
         String name = getCustomStatBlockString("name");
-        for (StatBlock sb : library.getList()) {
+        for (StatBlock sb : library) {
             if ((sb.getTitle().getName().toLowerCase()).equals(name)) {
                 System.out.println("This name is already in use. Try again...");
                 getCustomStatBlockName();
@@ -1375,17 +1388,28 @@ public class AutoBlocksApp {
     private String nameNewCharacter() {
         int lowestNumber = 1;
         List<Integer> suffixes;
-        if (encounter.contains(selectedStatBlock)) {
+        if (checkEncounterForCharacterNamedAfterSelectedStatBlock()) {
             suffixes = generateSuffixes();
             lowestNumber = findFirstIntegerGap(suffixes);
         }
         return selectedStatBlock.getTitle().getName().toLowerCase() + lowestNumber;
     }
 
+    // EFFECTS: searches encounter for any characters with a parent statblock of the selected one
+    //          and returns true if yes or no if not
+    private boolean checkEncounterForCharacterNamedAfterSelectedStatBlock() {
+        for (Character c : encounter) {
+            if (c.getParentStatBlock().getTitle().getName().equals(selectedStatBlock.getTitle().getName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     // EFFECTS: returns list of suffixes for characters in encounter with selected statblock name
     private List<Integer> generateSuffixes() {
         List<Integer> suffixes = new ArrayList<>();
-        for (Character c : encounter.getList()) {
+        for (Character c : encounter) {
             if (c.getTitle().getName().toLowerCase().contains(selectedStatBlock.getTitle().getName().toLowerCase())) {
                 suffixes.add(Integer.parseInt(c.getTitle().getName().toLowerCase().replaceAll("[^\\d]", "")));
             }

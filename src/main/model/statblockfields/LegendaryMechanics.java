@@ -6,7 +6,7 @@ import persistence.Writable;
 
 import java.util.List;
 
-// Represents...
+// Represents the legendary rules for a character with a description and list of legendary actions which have no rolls
 public class LegendaryMechanics implements Writable {
     // required fields
     private final String legendaryDescription;
@@ -41,7 +41,7 @@ public class LegendaryMechanics implements Writable {
     }
 
     // constructs a json array with the legendary actions
-    public JSONArray legendaryActionsToJson() {
+    private JSONArray legendaryActionsToJson() {
         JSONArray jsonArray = new JSONArray();
         for (Ability a : legendaryActions) {
             jsonArray.put(a.toJson());

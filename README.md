@@ -5,7 +5,7 @@ This is a tool for dungeon and dragons (D&D) dungeon masters (DMs) to automate m
 simulate any form of map, it's intended to be used with an external one.
 </p>
 
-- with this application you can do the following for NPCs:
+- with this application you can do the following for non-player-characters (NPCs):
   - **view and create statblocks**
   - **create characters from stablocks**
   - **autoroll for characters (initiative, actions, etc)**

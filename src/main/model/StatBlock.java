@@ -7,7 +7,7 @@ import persistence.Writable;
 
 import java.util.*;
 
-// Represents...
+// Represents all stats and details of an NPC
 public class StatBlock implements Writable {
     // required fields
     protected final Title title;
@@ -116,7 +116,7 @@ public class StatBlock implements Writable {
     }
 
     // EFFECTS: calculates and returns the challenge rating ratings from xp (3,400-19,000)
-    public String getChallengeRatingPartTwo() {
+    private String getChallengeRatingPartTwo() {
         if (xp < 3899) {
             return "7";
         } else if (xp < 4999) {
@@ -143,7 +143,7 @@ public class StatBlock implements Writable {
     }
 
     // EFFECTS: calculates and returns the challenge rating ratings from xp (20,000-inf)
-    public String getChallengeRatingPartThree() {
+    private String getChallengeRatingPartThree() {
         if (xp < 19999) {
             return "17";
         } else if (xp < 21999) {
@@ -170,7 +170,7 @@ public class StatBlock implements Writable {
     }
 
     // EFFECTS: calculates and returns the challenge rating from xp, third helper
-    public String getChallengeRatingPartFour() {
+    private String getChallengeRatingPartFour() {
         if (xp < 119999) {
             return "27";
         } else if (xp < 134999) {

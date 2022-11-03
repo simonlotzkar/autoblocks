@@ -5,7 +5,7 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-// Represents...
+// Represents a statblock with mutable hp and parent statblock
 public class Character extends StatBlock {
     // required fields
     private int maxHP;

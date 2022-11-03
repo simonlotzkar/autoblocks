@@ -3,10 +3,10 @@ package model.statblockfields;
 import org.json.JSONObject;
 import persistence.Writable;
 
-// Represents...
+// Represents a collection of senses where passive perception is required and the rest are not
 public class Senses implements Writable {
     // required fields
-    private final int passivePerception; //TODO make automatic in future
+    private final int passivePerception;
 
     // optional fields
     private final int blindSight;
@@ -26,24 +26,25 @@ public class Senses implements Writable {
     // -----------------------------------------------------------------------------------------------------------------
     // getters
     // EFFECTS: gets all senses as a string, excluding those that are 0
-    public String getSensesString() {
-        String sensesString = "Passive perception " + passivePerception;
+    public String getString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Passive perception ").append(passivePerception);
         if (blindSight != 0) {
-            sensesString += ", blindsight " + blindSight + " ft";
+            stringBuilder.append(", blindsight ").append(blindSight).append("ft");
         }
 
         if (darkVision != 0) {
-            sensesString += ", darkvision " + darkVision + " ft";
+            stringBuilder.append(", darkvision ").append(darkVision).append("ft");
         }
 
         if (tremorSense != 0) {
-            sensesString += ", tremorsense " + tremorSense + " ft";
+            stringBuilder.append(", tremorSense ").append(tremorSense).append("ft");
         }
 
         if (trueSight != 0) {
-            sensesString += ", truesight " + trueSight + " ft";
+            stringBuilder.append(", truesight ").append(trueSight).append("ft");
         }
-        return sensesString;
+        return stringBuilder.append(".").toString();
     }
 
     // EFFECTS: gets passive perception score
