@@ -44,7 +44,7 @@ public class Senses implements Writable {
         if (trueSight != 0) {
             stringBuilder.append(", truesight ").append(trueSight).append("ft");
         }
-        return stringBuilder.append(".").toString();
+        return stringBuilder.toString();
     }
 
     // EFFECTS: gets passive perception score
@@ -76,7 +76,7 @@ public class Senses implements Writable {
     // builder class
     public static class SensesBuilder {
         // required fields
-        private int passivePerception;
+        private final int passivePerception;
 
         // optional fields
         private int blindSight;

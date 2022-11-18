@@ -11,20 +11,18 @@ import java.util.*;
 public class StatBlock implements Writable {
     // required fields
     protected final Title title;
-
     protected final RollFormula hpFormula;
     protected final Armour armour;
     protected final Speeds speeds;
     protected final Senses senses;
     protected final int proficiency;
     protected final int xp;
-
     protected final AbilityScores abilityScores;
-    protected final List<Ability> abilities;
     protected final List<Action> actions;
-    protected final Languages languages;
 
     // optional fields
+    protected final Languages languages;
+    protected final List<Ability> abilities;
     protected final List<String> savingThrowProficiencies;
     protected final List<String> skillProficiencies;
     protected final List<String> conditionImmunities;
@@ -51,44 +49,9 @@ public class StatBlock implements Writable {
         this.legendaryMechanics = builder.legendaryMechanics;
     }
 
-    // REQUIRES: given string is an ability score
-    // MODIFIES: this
-    // EFFECTS: adds the given saving throw proficiency to the saving throw proficiencies
-    public void addSavingThrowProficiency(String savingThrowProficiency) {
-        savingThrowProficiencies.add(savingThrowProficiency);
-    }
-
-    // REQUIRES: given string is a skill
-    // MODIFIES: this
-    // EFFECTS: adds the given skill proficiency to the skill proficiencies
-    public void addSkillProficiency(String skill) {
-        skillProficiencies.add(skill);
-    }
-
-    // REQUIRES: given string is a condition immunity
-    // MODIFIES: this
-    // EFFECTS: adds the given condition immunity to the condition immunities
-    public void addConditionImmunity(String conditionImmunity) {
-        conditionImmunities.add(conditionImmunity);
-    }
-
-    // REQUIRES: given strings are damage types and resistance types respectively
-    // MODIFIES: this
-    // EFFECTS: adds the given damage type and resistance type to resistances
-    public void addResistance(String damageType, String resistanceType) {
-        resistances.put(damageType, resistanceType);
-    }
-
     // -----------------------------------------------------------------------------------------------------------------
     // getters:
-    // EFFECTS: returns hp formula as a string
-    public String getHPString() {
-        return "(" + hpFormula.getAmountOfDice() + "d"
-                + hpFormula.getDieSides() + " + "
-                + hpFormula.getModifier() + ")";
-    }
-
-    // EFFECTS: calculates and returns the challenge ratings from xp (0-2,899)
+    // EFFECTS: calculates and returns the challenge ratings from xp
     public String getChallengeRating() {
         if (xp < 24) {
             return "0";
@@ -116,7 +79,7 @@ public class StatBlock implements Writable {
     }
 
     // EFFECTS: calculates and returns the challenge rating ratings from xp (3,400-19,000)
-    private String getChallengeRatingPartTwo() {
+    protected String getChallengeRatingPartTwo() {
         if (xp < 3899) {
             return "7";
         } else if (xp < 4999) {
@@ -143,7 +106,7 @@ public class StatBlock implements Writable {
     }
 
     // EFFECTS: calculates and returns the challenge rating ratings from xp (20,000-inf)
-    private String getChallengeRatingPartThree() {
+    protected String getChallengeRatingPartThree() {
         if (xp < 19999) {
             return "17";
         } else if (xp < 21999) {
@@ -170,7 +133,7 @@ public class StatBlock implements Writable {
     }
 
     // EFFECTS: calculates and returns the challenge rating from xp, third helper
-    private String getChallengeRatingPartFour() {
+    protected String getChallengeRatingPartFour() {
         if (xp < 119999) {
             return "27";
         } else if (xp < 134999) {
@@ -195,6 +158,11 @@ public class StatBlock implements Writable {
     // EFFECTS: gets hp formula
     public RollFormula getHPFormula() {
         return hpFormula;
+    }
+
+    // EFFECTS: returns hp formula as a string
+    public String getHPString() {
+        return hpFormula.getString();
     }
 
     // EFFECTS: gets proficiency
@@ -251,8 +219,8 @@ public class StatBlock implements Writable {
 
     // REQUIRES: skill is in skill proficiencies
     // EFFECTS: returns a statement of the given skill including the bonus;
-    public String getSavingThrowProficiencyString(String savingThrow) {
-        return savingThrow + " " + (abilityScores.getModifier(savingThrow) + proficiency);
+    protected String getSavingThrowProficiencyString(String savingThrow) {
+        return savingThrow + " " + (abilityScores.getModifier(savingThrow.toLowerCase()) + proficiency);
     }
 
     // EFFECTS: gets skill proficiencies
@@ -274,21 +242,28 @@ public class StatBlock implements Writable {
 
     // REQUIRES: skill is in skill proficiencies
     // EFFECTS: returns a statement of the given skill including the bonus;
-    public String getSkillProficiencyString(String skill) {
+    protected String getSkillProficiencyString(String skill) {
         return skill + " " + (abilityScores.getModifier(getSkillAbilityScore(skill)) + proficiency);
     }
 
     // EFFECTS: returns the ability score for the given skill
-    public String getSkillAbilityScore(String skill) {
-        if ("acrobatics".equals(skill) || "sleightOfHand".equals(skill) || "stealth".equals(skill)) {
+    protected String getSkillAbilityScore(String skill) {
+        if ("acrobatics".equalsIgnoreCase(skill)
+                || "sleightOfHand".equalsIgnoreCase(skill)
+                || "stealth".equalsIgnoreCase(skill)) {
             return "dexterity";
-        } else if ("arcana".equals(skill) || "history".equals(skill) || "religion".equals(skill)
-                || "investigation".equals(skill) || "nature".equals(skill)) {
+        } else if ("arcana".equalsIgnoreCase(skill)
+                || "history".equalsIgnoreCase(skill)
+                || "religion".equalsIgnoreCase(skill)
+                || "investigation".equalsIgnoreCase(skill)
+                || "nature".equalsIgnoreCase(skill)) {
             return "intelligence";
-        } else if ("athletics".equals(skill)) {
+        } else if ("athletics".equalsIgnoreCase(skill)) {
             return "strength";
-        } else if ("deception".equals(skill) || "intimidation".equals(skill) || "performance".equals(skill)
-                || "persuasion".equals(skill)) {
+        } else if ("deception".equalsIgnoreCase(skill)
+                || "intimidation".equalsIgnoreCase(skill)
+                || "performance".equalsIgnoreCase(skill)
+                || "persuasion".equalsIgnoreCase(skill)) {
             return "charisma";
         } else {
             return "wisdom";
@@ -349,20 +324,18 @@ public class StatBlock implements Writable {
     public static class StatBlockBuilder {
         // required fields
         protected final Title title;
-
         protected final RollFormula hpFormula;
         protected final Armour armour;
         protected final Speeds speeds;
         protected final Senses senses;
         protected final int proficiency;
         protected final int xp;
-        protected Languages languages;
-
         protected final AbilityScores abilityScores;
-        protected final List<Ability> abilities;
-        protected final List<Action> actions;
+        protected List<Action> actions;
 
         // optional fields
+        protected Languages languages;
+        protected List<Ability> abilities;
         protected List<String> savingThrowProficiencies;
         protected List<String> skillProficiencies;
         protected List<String> conditionImmunities;
@@ -371,8 +344,7 @@ public class StatBlock implements Writable {
 
         // EFFECTS: constructs a builder with required fields
         public StatBlockBuilder(Title title, int xp, RollFormula hpFormula, int proficiency, Armour armour,
-                                Speeds speeds, Senses senses, AbilityScores abilityScores, List<Ability> abilities,
-                                List<Action> actions, Languages languages) {
+                                Speeds speeds, Senses senses, AbilityScores abilityScores, List<Action> actions) {
             this.title = title;
             this.hpFormula = hpFormula;
             this.armour = armour;
@@ -381,9 +353,7 @@ public class StatBlock implements Writable {
             this.proficiency = proficiency;
             this.xp = xp;
             this.abilityScores = abilityScores;
-            this.abilities = abilities;
             this.actions = actions;
-            this.languages = languages;
         }
 
         // EFFECTS: returns a new StatBlock with required fields,
@@ -392,31 +362,43 @@ public class StatBlock implements Writable {
             return new StatBlock(this);
         }
 
-        // EFFECTS: returns a builder that assigns saving throw proficiencies to the StatBlock
+        // EFFECTS: returns a builder that assigns the given abilities to the StatBlock
+        public StatBlockBuilder abilities(List<Ability> abilities) {
+            this.abilities = abilities;
+            return this;
+        }
+
+        // EFFECTS: returns a builder that assigns the given languages to the StatBlock
+        public StatBlockBuilder languages(Languages languages) {
+            this.languages = languages;
+            return this;
+        }
+
+        // EFFECTS: returns a builder that assigns the given saving throw proficiencies to the StatBlock
         public StatBlockBuilder savingThrowProficiencies(List<String> savingThrowProficiencies) {
             this.savingThrowProficiencies = savingThrowProficiencies;
             return this;
         }
 
-        // EFFECTS: returns a builder that assigns skill proficiencies to the StatBlock
+        // EFFECTS: returns a builder that assigns the given skill proficiencies to the StatBlock
         public StatBlockBuilder skillProficiencies(List<String> skillProficiencies) {
             this.skillProficiencies = skillProficiencies;
             return this;
         }
 
-        // EFFECTS: returns a builder that assigns condition immunities to the StatBlock
+        // EFFECTS: returns a builder that assigns the given condition immunities to the StatBlock
         public StatBlockBuilder conditionImmunities(List<String> conditionImmunities) {
             this.conditionImmunities = conditionImmunities;
             return this;
         }
 
-        // EFFECTS: returns a builder that assigns resistances to the StatBlock
+        // EFFECTS: returns a builder that assigns the given resistances to the StatBlock
         public StatBlockBuilder resistances(HashMap<String, String> resistances) {
             this.resistances = resistances;
             return this;
         }
 
-        // EFFECTS: returns a builder that assigns saving legendary mechanics to the StatBlock
+        // EFFECTS: returns a builder that assigns the given legendary mechanics to the StatBlock
         public StatBlockBuilder legendaryMechanics(LegendaryMechanics legendaryMechanics) {
             this.legendaryMechanics = legendaryMechanics;
             return this;
@@ -442,7 +424,7 @@ public class StatBlock implements Writable {
     }
 
     // constructs a json array with the abilities
-    public JSONArray abilitiesToJson() {
+    protected JSONArray abilitiesToJson() {
         JSONArray jsonArray = new JSONArray();
         for (Ability a : abilities) {
             jsonArray.put(a.toJson());
@@ -451,7 +433,7 @@ public class StatBlock implements Writable {
     }
 
     // constructs a json array with the actions
-    public JSONArray actionsToJson() {
+    protected JSONArray actionsToJson() {
         JSONArray jsonArray = new JSONArray();
         for (Action a : actions) {
             jsonArray.put(a.toJson());
@@ -460,7 +442,7 @@ public class StatBlock implements Writable {
     }
 
     // adds optional fields that exist to the given json object and returns it
-    public JSONObject optionalFieldsToJson(JSONObject json) {
+    protected JSONObject optionalFieldsToJson(JSONObject json) {
         if (savingThrowProficiencies != null) {
             json.put("savingThrowProficiencies", savingThrowProficiencies);
         }

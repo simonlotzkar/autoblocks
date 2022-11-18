@@ -3,6 +3,8 @@ package model.statblockfields;
 import org.json.JSONObject;
 import persistence.Writable;
 
+import java.util.Random;
+
 // Represents a die roll by the number of times to roll it, the sides for the roll, and a modifier to the total
 public class RollFormula implements Writable {
     private final int amountOfDice;
@@ -20,13 +22,10 @@ public class RollFormula implements Writable {
     //          modifier to the total and returns it;
     //          but if given dice sides of 1 just returns 1 * amount of dice + modifier
     public int roll() {
-        if (dieSides == 1) {
-            return amountOfDice + modifier;
-        }
-
+        Random random = new Random();
         int total = 0;
         for (int i = 0; i < amountOfDice; i++) {
-            total += Math.random() * dieSides;
+            total += (random.nextInt(dieSides) + 1);
         }
         return total + modifier;
     }

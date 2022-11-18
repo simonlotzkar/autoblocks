@@ -61,9 +61,9 @@ As a user, I want to be able to:
 - damage rolls not printing
 - no rolls for skills or saving throws
 - delete statblocks from a library
-- confirm to save on exit
-- confirm to load on launch
 - group actions print "Actions:" along with actions for each character, replace with no duplicates and one heading
+- when saving or loading, everything works as intended except when returning to the main menu, the invalid command
+warning triggers and the menu resets but then works as normal
 
 ### Future additions:
 - save system to allow for multiple save/load files for any amount of encounters and libraries ☐

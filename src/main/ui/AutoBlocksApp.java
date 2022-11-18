@@ -109,13 +109,14 @@ public class AutoBlocksApp {
             load();
         } else if ("quit".equals(command)) {
             try {
-                save();
+                promptSave();
             } catch (FileNotFoundException e) {
                 System.out.println("Unable to write to file: " + jsonDirectory);
             }
             goToDesktop();
         } else {
             System.out.println(commandInvalid);
+            //TODO: triggers when saving or loading
         }
     }
 
@@ -235,24 +236,49 @@ public class AutoBlocksApp {
         } catch (IOException e) {
             System.out.println("Unable to read from file: " + jsonDirectory);
         }
+        goToMainMenu();
     }
 
     // MODIFIES: this
     // EFFECTS: writes JSON representation of library and then encounter to file while prompting for each
-    public void save() throws FileNotFoundException {
+    public void promptSave() throws FileNotFoundException {
+        boolean saveLibrary = false;
+        boolean saveEncounter = false;
+        if (promptConfirmation("Save (overwrites) current library to file")) {
+            saveLibrary = true;
+        }
+        if (promptConfirmation("Save (overwrites) current encounter to file")) {
+            saveEncounter = true;
+        }
+        if (!saveLibrary && !saveEncounter) {
+            return;
+        }
+        save(saveLibrary, saveEncounter);
+        goToMainMenu();
+    }
+
+    // EFFECTS: saves encounter and/or library depending on given booleans
+    public void save(boolean saveLibrary, boolean saveEncounter) throws FileNotFoundException {
         PrintWriter jsonWriter = new PrintWriter(jsonDirectory);
         JSONArray jsonLibrary = new JSONArray();
-        for (StatBlock sb : library) {
-            jsonLibrary.put(sb.toJson());
-        }
         JSONArray jsonEncounter = new JSONArray();
-        for (Character c : encounter) {
-            jsonEncounter.put(c.toJson());
-        }
         JSONObject json = new JSONObject();
-        json.putOpt("library", jsonLibrary);
-        json.putOpt("encounter", jsonEncounter);
-        System.out.println("Saved to " + jsonDirectory);
+
+        if (saveLibrary) {
+            for (StatBlock sb : library) {
+                jsonLibrary.put(sb.toJson());
+            }
+            System.out.println("Saved library to " + jsonDirectory);
+        }
+        if (saveEncounter) {
+            for (Character c : encounter) {
+                jsonEncounter.put(c.toJson());
+            }
+            System.out.println("Saved encounter to " + jsonDirectory);
+        }
+
+        json.put("library", jsonLibrary);
+        json.put("encounter", jsonEncounter);
         jsonWriter.print(json.toString(tab));
         jsonWriter.close();
     }
@@ -361,13 +387,13 @@ public class AutoBlocksApp {
 
     // EFFECTS: prints the selected StatBlock or Character combat related stats
     private void displayIndividualCombat(StatBlock selected) {
-        System.out.println("\t" + "Hit Points: " + selected.getHPString());
-        System.out.println("\tArmour Class: " + selected.getArmour().getString());
-        System.out.println("\tSpeeds: " + selected.getSpeeds().getString());
-        System.out.println("\tSenses: " + selected.getSenses().getString());
-        System.out.println("\tProficiency Bonus: " + selected.getProficiency());
+        System.out.println("\t" + "Hit Points: (" + selected.getHPString() + ").");
+        System.out.println("\tArmour Class: " + selected.getArmour().getString() + ".");
+        System.out.println("\tSpeeds: " + selected.getSpeeds().getString() + ".");
+        System.out.println("\tSenses: " + selected.getSenses().getString() + ".");
+        System.out.println("\tProficiency Bonus: " + selected.getProficiency() + ".");
         System.out.println("\tChallenge Rating: " + selected.getChallengeRating()
-                + " (" + NumberFormat.getIntegerInstance().format(selected.getXP()) + "xp)");
+                + " (" + NumberFormat.getIntegerInstance().format(selected.getXP()) + "xp).");
     }
 
     // EFFECTS: prints the selected StatBlock or Character ability scores with modifiers
@@ -423,7 +449,7 @@ public class AutoBlocksApp {
     private void displayIndividualActions(StatBlock selected) {
         System.out.println("\tActions:");
         for (Action a : selected.getActions()) {
-            System.out.println(a.getString());
+            System.out.println("\t\t" + a.getString());
         }
     }
 
@@ -672,7 +698,6 @@ public class AutoBlocksApp {
     //          then rolls it once per character with that action
     private void displayActionMenu() {
         System.out.println("\nWhich action do you want to roll?");
-        displayRollMenuActions();
         String command = userInput.nextLine().toLowerCase();
         System.out.println("Rolling " + command + " action...");
         processActionCommand(command);
@@ -885,12 +910,12 @@ public class AutoBlocksApp {
         Speeds speeds = getCustomStatBlockSpeeds();
         Senses senses = getCustomStatBlockSenses();
         AbilityScores abilityScores = getCustomStatBlockAbilityScores();
-        List<Ability> abilities = getCustomStatBlockAbilities("abilities");
-        List<Action> actions = getCustomStatBlockActions();
-        Languages languages = getCustomStatBlockLanguages();
 
         StatBlock customStatBlock = new StatBlock.StatBlockBuilder(title, xp, hpFormula, proficiency, armour, speeds,
-                senses, abilityScores, abilities, actions, languages)
+                senses, abilityScores)
+                .abilities(getCustomStatBlockAbilities("abilities"))
+                .actions(getCustomStatBlockActions())
+                .languages(getCustomStatBlockLanguages())
                 .savingThrowProficiencies(promptGetCustomStatBlockSavingThrowProficiencies())
                 .skillProficiencies(promptGetCustomStatBlockSkillProficiencies())
                 .conditionImmunities(promptGetCustomStatBlockConditionImmunities())
@@ -1024,12 +1049,14 @@ public class AutoBlocksApp {
     }
 
     // EFFECTS: prompts user for number of given ability types to add, then prompts for each field for each ability
-    //          and returns them as a list
+    //          and returns them as a list or null if they say 0 for abilities (not legendary actions)
     private List<Ability> getCustomStatBlockAbilities(String abilityType) {
-        List<Ability> abilities =  new ArrayList<>();
+        List<Ability> abilities = new ArrayList<>();
         System.out.println("How many " + abilityType + " do you want to give your custom statblock?");
         int numberOfAbilities = userInput.nextInt() + 1;
-        if (numberOfAbilities <= 1) {
+        if (numberOfAbilities == 0 && abilityType.equals("abilities")) {
+            return null;
+        } else if (numberOfAbilities <= 1) {
             System.out.println(commandInvalid + " cannot add less than 1, try again.");
             return getCustomStatBlockAbilities(abilityType);
         } else {
@@ -1051,12 +1078,14 @@ public class AutoBlocksApp {
     }
 
     // EFFECTS: prompts user for number of actions to add, then prompts for each field for each action
-    //          and returns them as a list
+    //          and returns them as a list or null if they say 0
     private List<Action> getCustomStatBlockActions() {
         List<Action> actions =  new ArrayList<>();
         System.out.println("How many actions do you want to give your custom statblock?");
         int numberOfActions = userInput.nextInt() + 1;
-        if (numberOfActions <= 1) {
+        if (numberOfActions == 0) {
+            return null;
+        } else if (numberOfActions <= 1) {
             System.out.println(commandInvalid + " cannot add less than 1, try again.");
             return getCustomStatBlockActions();
         } else {
@@ -1436,13 +1465,12 @@ public class AutoBlocksApp {
     // EFFECTS: initializes default statblocks in the library
     private void initializeLibrary() {
         System.out.println("Initializing library...");
-        initializeOrcStatBlock();
-        initializeAncientBlackDragonStatBlock();
+        //initializeOrcStatBlock();
+        //initializeAncientBlackDragonStatBlock();
         System.out.println("All default statblocks added to library!");
     }
-
+    /*
     // EFFECTS: adds orc and all its parameters to the library
-    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
     private void initializeOrcStatBlock() {
         List<String> orcLanguages = new ArrayList<>();
         orcLanguages.add("Common");
@@ -1457,23 +1485,19 @@ public class AutoBlocksApp {
         orcAbilities.add(aggression);
 
         HashMap<String, RollFormula> greatAxeDamage = new HashMap<>();
-        greatAxeDamage.put("Slashing", new RollFormula(1, 12, 3));
-        Action orcGreatAxe = new Action("GreatAxe", "Melee Weapon Attack", "5ft",
+        greatAxeDamage.put("slashing", new RollFormula(1, 12, 3));
+        Action orcGreatAxe = new Action("GreatAxe", "Melee Weapon Attack", "5",
                 new RollFormula(1, 20, 5),  //hit formula
                 greatAxeDamage); //damage formula
         HashMap<String, RollFormula> javelinDamage = new HashMap<>();
-        javelinDamage.put("Piercing", new RollFormula(1, 6, 3));
-        Action orcJavelinMelee = new Action("Javelin", "Melee Weapon Attack", "5ft",
-                new RollFormula(1, 20, 5),  //hit formula
-                javelinDamage); //damage formula
-        Action orcJavelinRanged = new Action("Javelin", "Ranged Weapon Attack", "30/120ft",
+        javelinDamage.put("piercing", new RollFormula(1, 6, 3));
+        Action orcJavelin = new Action("Javelin", "Melee or Ranged Weapon Attack", "5 or 30/120",
                 new RollFormula(1, 20, 5),  //hit formula
                 javelinDamage); //damage formula
 
         List<Action> orcActions = new ArrayList<>();
         orcActions.add(orcGreatAxe);
-        orcActions.add(orcJavelinMelee);
-        orcActions.add(orcJavelinRanged);
+        orcActions.add(orcJavelin);
 
         StatBlock orc = new StatBlock.StatBlockBuilder(
                 (new Title.TitleBuilder("Orc", "Humanoid (Orc)", "Medium", "Chaotic Evil").build()),
@@ -1492,7 +1516,6 @@ public class AutoBlocksApp {
     }
 
     // EFFECTS: adds ancient black dragon and all its parameters to the library
-    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
     private void initializeAncientBlackDragonStatBlock() {
         List<String> ancientBlackDragonLanguages = new ArrayList<>();
         ancientBlackDragonLanguages.add("Common");
@@ -1533,19 +1556,19 @@ public class AutoBlocksApp {
         ancientBlackDragonAbilities.add(frightfulPresence);
 
         HashMap<String, RollFormula> biteDamage = new HashMap<>();
-        biteDamage.put("Piercing", new RollFormula(1, 10, 8));
-        biteDamage.put("Acid", new RollFormula(2, 8, 0));
-        Action bite = new Action("Bite", "Melee Weapon Attack",  "15ft",
+        biteDamage.put("piercing", new RollFormula(1, 10, 8));
+        biteDamage.put("acid", new RollFormula(2, 8, 0));
+        Action bite = new Action("Bite", "Melee Weapon Attack",  "15",
                 new RollFormula(1, 20, 15),  //hit formula
                 biteDamage); //damage formula
         HashMap<String, RollFormula> clawDamage = new HashMap<>();
-        clawDamage.put("Slashing", new RollFormula(2, 6, 8));
-        Action claw = new Action("Claw", "Melee Weapon Attack",  "10ft",
+        clawDamage.put("slashing", new RollFormula(2, 6, 8));
+        Action claw = new Action("Claw", "Melee Weapon Attack",  "10",
                 new RollFormula(1, 20, 15),  //hit formula
                 clawDamage); //damage formula
         HashMap<String, RollFormula> tailDamage = new HashMap<>();
-        tailDamage.put("Bludgeoning", new RollFormula(2, 8, 8));
-        Action tail = new Action("Tail", "Melee Weapon Attack", "20ft",
+        tailDamage.put("bludgeoning", new RollFormula(2, 8, 8));
+        Action tail = new Action("Tail", "Melee Weapon Attack", "20",
                 new RollFormula(1, 20, 15),  //hit formula
                 tailDamage); //damage formula
 
@@ -1589,4 +1612,5 @@ public class AutoBlocksApp {
 
         library.add(ancientBlackDragon);
     }
+     */
 }

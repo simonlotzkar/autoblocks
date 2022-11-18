@@ -6,29 +6,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-public class CharacterTest {
-    private StatBlock testStatBlock0;
-    private StatBlock testStatBlock1;
-
+public class CharacterTest extends StatBlockTest {
     private Character testCharacter0;
     private Character testCharacter1;
-
-    Ability ability0;
-    Ability ability1;
-    Ability ability2;
-    List<Ability> abilities0;
-    List<Ability> abilities1;
-
-    String legendaryDescription;
-
-    List<String> languages0;
-    List<String> languages1;
-
-    Action action0;
-    Action action1;
-    Action action2;
-    List<Action> actions0;
-    List<Action> actions1;
 
     // EFFECTS: constructs actions0
     private void initializeActions0() {

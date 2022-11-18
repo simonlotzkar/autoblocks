@@ -41,7 +41,7 @@ public class Speeds implements Writable {
         if (swim != 0) {
             stringBuilder.append(", swim ").append(swim).append("ft");
         }
-        return stringBuilder.append(".").toString();
+        return stringBuilder.toString();
     }
 
     // EFFECTS: get ground speed
