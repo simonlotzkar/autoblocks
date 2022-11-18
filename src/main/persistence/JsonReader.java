@@ -72,10 +72,9 @@ public class JsonReader {
                 parseSpeeds(jsonObject.getJSONObject("speeds")),
                 parseSenses(jsonObject.getJSONObject("senses")),
                 parseAbilityScores(jsonObject.getJSONObject("abilityScores")),
-                parseAbilities(jsonObject.getJSONArray("abilities")),
-                parseActions(jsonObject.getJSONArray("actions")),
-                parseLanguages(jsonObject.getJSONObject("languages")))
-
+                parseActions(jsonObject.getJSONArray("actions")))
+                .languages(parseLanguages(jsonObject.getJSONObject("languages")))
+                .abilities(parseAbilities(jsonObject.getJSONArray("abilities")))
                 .savingThrowProficiencies(
                         parseSavingThrowProficiencies(jsonObject.optJSONArray("savingThrowProficiencies")))
                 .skillProficiencies(parseSkillProficiencies(jsonObject.optJSONArray("skillProficiencies")))
@@ -304,10 +303,9 @@ public class JsonReader {
                 parseSpeeds(jsonObject.getJSONObject("speeds")),
                 parseSenses(jsonObject.getJSONObject("senses")),
                 parseAbilityScores(jsonObject.getJSONObject("abilityScores")),
-                parseAbilities(jsonObject.getJSONArray("abilities")),
-                parseActions(jsonObject.getJSONArray("actions")),
-                parseLanguages(jsonObject.getJSONObject("languages")))
-
+                parseActions(jsonObject.getJSONArray("actions")))
+                .languages(parseLanguages(jsonObject.getJSONObject("languages")))
+                .abilities(parseAbilities(jsonObject.getJSONArray("abilities")))
                 .savingThrowProficiencies(
                         parseSavingThrowProficiencies(jsonObject.optJSONArray("savingThrowProficiencies")))
                 .skillProficiencies(parseSkillProficiencies(jsonObject.optJSONArray("skillProficiencies")))

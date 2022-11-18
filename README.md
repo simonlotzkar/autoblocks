@@ -20,7 +20,7 @@ person. This app allows the DM to only exclude repetitive simple rolls and hp ma
 of the game. So in short, I made this for personal use, but also because I think it solves a problem in a unique way.
 </p>
 
-### User Stories
+## User Stories
 <p>
 As a user, I want to be able to:
 </p>
@@ -58,16 +58,22 @@ As a user, I want to be able to:
 - Ancient Black Dragon
 
 ### Current bugs/fixes to be done:
-- damage rolls not printing
-- no rolls for skills or saving throws
-- delete statblocks from a library
 - group actions print "Actions:" along with actions for each character, replace with no duplicates and one heading
 - when saving or loading, everything works as intended except when returning to the main menu, the invalid command
 warning triggers and the menu resets but then works as normal
 
 ### Future additions:
-- save system to allow for multiple save/load files for any amount of encounters and libraries ☐
-- edit statblocks in a library ☐
-- turn order and automation of turns ☐
-- inventory/loot generation ☐
-- come with all default monsters in the 5th edition monsters manual (2/300) ☐
+- rolls for skills and saving throws
+- save system to allow for multiple save/load files for any amount of encounters and libraries
+- edit statblocks in a library
+- delete statblocks from a library
+- turn order and automation of turns
+- inventory/loot generation
+- come with all default monsters in the 5th edition monsters manual (2/300)
+
+# Instructions for grader
+- You can generate the first required event related to adding Xs to a Y by...
+- You can generate the second required event related to adding Xs to a Y by...
+- You can locate my visual component by...
+- You can save the state of my application by...
+- You can reload the state of my application by...

@@ -912,9 +912,8 @@ public class AutoBlocksApp {
         AbilityScores abilityScores = getCustomStatBlockAbilityScores();
 
         StatBlock customStatBlock = new StatBlock.StatBlockBuilder(title, xp, hpFormula, proficiency, armour, speeds,
-                senses, abilityScores)
+                senses, abilityScores, getCustomStatBlockActions())
                 .abilities(getCustomStatBlockAbilities("abilities"))
-                .actions(getCustomStatBlockActions())
                 .languages(getCustomStatBlockLanguages())
                 .savingThrowProficiencies(promptGetCustomStatBlockSavingThrowProficiencies())
                 .skillProficiencies(promptGetCustomStatBlockSkillProficiencies())
@@ -1393,8 +1392,7 @@ public class AutoBlocksApp {
                 Character character = new Character.CharacterBuilder(selectedStatBlock, getNewCharacterTitle(),
                         selectedStatBlock.getXP(), selectedStatBlock.getHPFormula(),selectedStatBlock.getProficiency(),
                         selectedStatBlock.getArmour(), selectedStatBlock.getSpeeds(), selectedStatBlock.getSenses(),
-                        selectedStatBlock.getAbilityScores(), selectedStatBlock.getAbilities(),
-                        selectedStatBlock.getActions(), selectedStatBlock.getLanguages()).build();
+                        selectedStatBlock.getAbilityScores(), selectedStatBlock.getActions()).build();
                 System.out.println("Added copy " + i + " of " + selectedStatBlock.getTitle().getName() + ".");
                 encounter.add(character);
             }
@@ -1469,8 +1467,9 @@ public class AutoBlocksApp {
         //initializeAncientBlackDragonStatBlock();
         System.out.println("All default statblocks added to library!");
     }
-    /*
+
     // EFFECTS: adds orc and all its parameters to the library
+    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
     private void initializeOrcStatBlock() {
         List<String> orcLanguages = new ArrayList<>();
         orcLanguages.add("Common");
@@ -1506,9 +1505,9 @@ public class AutoBlocksApp {
                 (new Speeds.SpeedsBuilder(30).build()),
                 (new Senses.SensesBuilder(10).darkVision(60).build()),
                 (new AbilityScores(16, 12, 16, 7, 11, 10)),
-                orcAbilities,
-                orcActions,
-                (new Languages.LanguagesBuilder(orcLanguages).build()))
+                orcActions)
+                .abilities(orcAbilities)
+                .languages(new Languages.LanguagesBuilder(orcLanguages).build())
                 .skillProficiencies(orcSkillProficiencies)
                 .build();
 
@@ -1516,6 +1515,7 @@ public class AutoBlocksApp {
     }
 
     // EFFECTS: adds ancient black dragon and all its parameters to the library
+    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
     private void initializeAncientBlackDragonStatBlock() {
         List<String> ancientBlackDragonLanguages = new ArrayList<>();
         ancientBlackDragonLanguages.add("Common");
@@ -1601,9 +1601,9 @@ public class AutoBlocksApp {
                 (new Speeds.SpeedsBuilder(40).fly(80).swim(40).build()),
                 (new Senses.SensesBuilder(26).darkVision(120).blindSight(60).build()),
                 (new AbilityScores(27, 14, 25, 16, 15, 19)),
-                ancientBlackDragonAbilities,
-                ancientBlackDragonActions,
-                (new Languages.LanguagesBuilder(ancientBlackDragonLanguages).build()))
+                ancientBlackDragonActions)
+                .abilities(ancientBlackDragonAbilities)
+                .languages(new Languages.LanguagesBuilder(ancientBlackDragonLanguages).build())
                 .resistances(ancientBlackDragonResistances)
                 .skillProficiencies(ancientBlackDragonSkills)
                 .savingThrowProficiencies(ancientBlackDragonSavingThrows)
@@ -1612,5 +1612,5 @@ public class AutoBlocksApp {
 
         library.add(ancientBlackDragon);
     }
-     */
+
 }

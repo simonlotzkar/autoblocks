@@ -67,14 +67,15 @@ public class Character extends StatBlock {
         //          and ALL the parent StatBlock's fields whether they were built or not.
         public CharacterBuilder(StatBlock parentStatBlock, Title title, int xp, RollFormula hpFormula, int proficiency,
                                 Armour armour, Speeds speeds, Senses senses, AbilityScores abilityScores,
-                                List<Ability> abilities, List<Action> actions, Languages languages) {
-            super(title, xp, hpFormula, proficiency, armour, speeds, senses, abilityScores,
-                    abilities, actions, languages);
+                                List<Action> actions) {
+            super(title, xp, hpFormula, proficiency, armour, speeds, senses, abilityScores, actions);
 
             this.maxHP = hpFormula.roll();
             this.hp = maxHP;
             this.parentStatBlock = parentStatBlock;
 
+            super.languages(parentStatBlock.getLanguages());
+            super.abilities(parentStatBlock.getAbilities());
             super.savingThrowProficiencies(parentStatBlock.getSavingThrowProficiencies());
             super.skillProficiencies(parentStatBlock.getSkillProficiencies());
             super.conditionImmunities(parentStatBlock.getConditionImmunities());
@@ -104,9 +105,7 @@ public class Character extends StatBlock {
         json.put("speeds", speeds.toJson());
         json.put("senses", senses.toJson());
         json.put("abilityScores", abilityScores.toJson());
-        json.put("abilities", abilitiesToJson());
         json.put("actions", actionsToJson());
-        json.put("languages", languages.toJson());
         return optionalFieldsToJson(json);
     }
 }

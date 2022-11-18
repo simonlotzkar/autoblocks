@@ -417,9 +417,7 @@ public class StatBlock implements Writable {
         json.put("speeds", speeds.toJson());
         json.put("senses", senses.toJson());
         json.put("abilityScores", abilityScores.toJson());
-        json.put("abilities", abilitiesToJson());
         json.put("actions", actionsToJson());
-        json.put("languages", languages.toJson());
         return optionalFieldsToJson(json);
     }
 
@@ -443,6 +441,12 @@ public class StatBlock implements Writable {
 
     // adds optional fields that exist to the given json object and returns it
     protected JSONObject optionalFieldsToJson(JSONObject json) {
+        if (languages != null) {
+            json.put("languages", languages.toJson());
+        }
+        if (abilities != null) {
+            json.put("abilities", abilitiesToJson());
+        }
         if (savingThrowProficiencies != null) {
             json.put("savingThrowProficiencies", savingThrowProficiencies);
         }
