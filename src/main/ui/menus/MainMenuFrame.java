@@ -2,7 +2,7 @@ package ui.menus;
 
 import model.Character;
 import model.StatBlock;
-import ui.menus.encountermenus.CharacterMenu;
+import ui.menus.encountermenus.CharacterMenuFrame;
 import ui.menus.encountermenus.GroupMenu;
 import ui.menus.prompts.LoadPrompt;
 import ui.menus.prompts.SavePrompt;
@@ -10,14 +10,13 @@ import ui.menus.prompts.SavePrompt;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
 // represents...
-public class MainMenu extends JFrame implements ActionListener, ListSelectionListener {
+public class MainMenuFrame extends JFrame implements ActionListener, ListSelectionListener {
     private JList<model.Character> encounterJList = new JList<>();
     private JList<model.StatBlock> libraryJList = new JList<>();
 
@@ -33,7 +32,7 @@ public class MainMenu extends JFrame implements ActionListener, ListSelectionLis
     private final JButton quitAutoBlocksButton = new JButton("Quit AutoBlocks");
 
     // EFFECTS: constructs...
-    public MainMenu() {
+    public MainMenuFrame() {
         initializeEncounterJList();
         initializeButtons();
 
@@ -41,7 +40,6 @@ public class MainMenu extends JFrame implements ActionListener, ListSelectionLis
         this.setSize(WIDTH, HEIGHT);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setVisible(true);
-        this.setResizable(false);
 
         JLabel title = new JLabel();
         title.setText("Main Menu. Characters in currently loaded encounter:");
@@ -96,11 +94,11 @@ public class MainMenu extends JFrame implements ActionListener, ListSelectionLis
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == goToCustomRollButton) {
             this.dispose();
-            new RollMenu();
+            new CustomRollFrame();
         }
         if (e.getSource() == goToSelectedCharacterButton) {
             this.dispose();
-            new CharacterMenu();
+            new CharacterMenuFrame();
         }
         if (e.getSource() == goToSelectedGroupButton) {
             this.dispose();

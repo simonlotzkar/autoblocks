@@ -3,7 +3,7 @@ package ui.menus.prompts;
 import model.Character;
 import model.StatBlock;
 import persistence.JsonReader;
-import ui.menus.MainMenu;
+import ui.menus.MainMenuFrame;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -11,12 +11,12 @@ import java.io.IOException;
 
 // Represents...
 public class LoadPrompt extends ConfirmationPrompt {
-    private final MainMenu mainMenu;
+    private final MainMenuFrame mainMenuFrame;
 
     // EFFECTS: constructs a load prompt...
-    public LoadPrompt(MainMenu mainMenu) {
+    public LoadPrompt(MainMenuFrame mainMenuFrame) {
         super();
-        this.mainMenu = mainMenu;
+        this.mainMenuFrame = mainMenuFrame;
     }
 
     // EFFECTS: sets the mainmenu's encounter and library jlists to that which is saved on file
@@ -28,8 +28,8 @@ public class LoadPrompt extends ConfirmationPrompt {
         try {
             encounterListModel.addAll(jsonReader.readEncounter());
             libraryListModel.addAll(jsonReader.readLibrary());
-            mainMenu.setEncounterJList(new JList<>(encounterListModel));
-            mainMenu.setLibraryJList(new JList<>(libraryListModel));
+            mainMenuFrame.setEncounterJList(new JList<>(encounterListModel));
+            mainMenuFrame.setLibraryJList(new JList<>(libraryListModel));
         } catch (IOException e) {
             System.out.println("Unable to read from file");
         }

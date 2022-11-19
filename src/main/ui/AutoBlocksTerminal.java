@@ -14,7 +14,7 @@ import java.text.NumberFormat;
 import java.util.*;
 
 //Represents...
-public class AutoBlocksApp {
+public class AutoBlocksTerminal {
     // play and library lists
     private List<StatBlock> library = new ArrayList<>();
     private List<Character> encounter = new ArrayList<>();
@@ -39,7 +39,7 @@ public class AutoBlocksApp {
     private static final int tab = 4;
 
     // EFFECTS: constructs the autoblocks app
-    public AutoBlocksApp() throws FileNotFoundException {
+    public AutoBlocksTerminal() throws FileNotFoundException {
         runAutoBlocks();
     }
 
@@ -1389,10 +1389,8 @@ public class AutoBlocksApp {
             System.out.println("Adding " + numberOfCopies + " copies of " + selectedStatBlock.getTitle().getName()
                     + " to encounter...");
             for (int i = 1; i < (numberOfCopies + 1); i++) {
-                Character character = new Character.CharacterBuilder(selectedStatBlock, getNewCharacterTitle(),
-                        selectedStatBlock.getXP(), selectedStatBlock.getHPFormula(),selectedStatBlock.getProficiency(),
-                        selectedStatBlock.getArmour(), selectedStatBlock.getSpeeds(), selectedStatBlock.getSenses(),
-                        selectedStatBlock.getAbilityScores(), selectedStatBlock.getActions()).build();
+                Character character = new Character(selectedStatBlock,
+                        Character.generateNameForEncounter(selectedStatBlock, encounter));
                 System.out.println("Added copy " + i + " of " + selectedStatBlock.getTitle().getName() + ".");
                 encounter.add(character);
             }
@@ -1401,70 +1399,12 @@ public class AutoBlocksApp {
         }
     }
 
-    // EFFECTS: returns a title with the parameters of the selected statblock, except for name which is generated
-    //          based on the names of already existing character names (keeps all names unique)
-    private Title getNewCharacterTitle() {
-        Title parentTitle = selectedStatBlock.getTitle();
-        return new Title.TitleBuilder(nameNewCharacter(), parentTitle.getSize(), parentTitle.getType(),
-                parentTitle.getAlignment()).build();
-    }
-
-    // EFFECTS: searches encounter for characters named after selectedStatBlock: if there's none, returns selected
-    //          statblock name with 1 as suffix, otherwise arrays the character suffixes and returns selected statblock
-    //          name with  the lowest number not in the array as a suffix
-    private String nameNewCharacter() {
-        int lowestNumber = 1;
-        List<Integer> suffixes;
-        if (checkEncounterForCharacterNamedAfterSelectedStatBlock()) {
-            suffixes = generateSuffixes();
-            lowestNumber = findFirstIntegerGap(suffixes);
-        }
-        return selectedStatBlock.getTitle().getName().toLowerCase() + lowestNumber;
-    }
-
-    // EFFECTS: searches encounter for any characters with a parent statblock of the selected one
-    //          and returns true if yes or no if not
-    private boolean checkEncounterForCharacterNamedAfterSelectedStatBlock() {
-        for (Character c : encounter) {
-            if (c.getParentStatBlock().getTitle().getName().equals(selectedStatBlock.getTitle().getName())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    // EFFECTS: returns list of suffixes for characters in encounter with selected statblock name
-    private List<Integer> generateSuffixes() {
-        List<Integer> suffixes = new ArrayList<>();
-        for (Character c : encounter) {
-            if (c.getTitle().getName().toLowerCase().contains(selectedStatBlock.getTitle().getName().toLowerCase())) {
-                suffixes.add(Integer.parseInt(c.getTitle().getName().toLowerCase().replaceAll("[^\\d]", "")));
-            }
-        }
-        return suffixes;
-    }
-
-    // REQUIRES: given interger list contains at least one integer
-    // EFFECTS: returns lowest integer that is not already in the given list, starting with 1
-    private int findFirstIntegerGap(List<Integer> integerList) {
-        int firstLowest = 1;
-        integerList.sort(Comparator.naturalOrder());
-        for (int i : integerList) {
-            if (i == firstLowest) {
-                firstLowest++;
-            } else if (i > firstLowest) {
-                return firstLowest;
-            }
-        }
-        return firstLowest;
-    }
-
     // -----------------------------------------------------------------------------------------------------------------
     // EFFECTS: initializes default statblocks in the library
     private void initializeLibrary() {
         System.out.println("Initializing library...");
-        //initializeOrcStatBlock();
-        //initializeAncientBlackDragonStatBlock();
+        initializeOrcStatBlock();
+        initializeAncientBlackDragonStatBlock();
         System.out.println("All default statblocks added to library!");
     }
 

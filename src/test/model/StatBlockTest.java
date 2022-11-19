@@ -111,9 +111,9 @@ public class StatBlockTest {
     protected LegendaryMechanics legendaryMechanics0;
 
     protected List<Action> actions2 = new ArrayList<>();
-    protected List<String> languagesList0;
-    protected List<Ability> abilities0;
-    protected List<Ability> legendaryActions0;
+    protected List<String> languagesList0 = new ArrayList<>();
+    protected List<Ability> abilities0 = new ArrayList<>();
+    protected List<Ability> legendaryActions0 = new ArrayList<>();
 
     protected HashMap<String, RollFormula> damageMap2 = new HashMap<>();
     protected HashMap<String, RollFormula> damageMap3 = new HashMap<>();
@@ -139,7 +139,7 @@ public class StatBlockTest {
     // EFFECTS: builds statblock1 from constants
     protected void initializeStatBlock1() {
         damageMap1.put(DAMAGE_TYPE_1, DAMAGE_FORMULA_1);
-        action1 = new Action(ACTION_NAME_1, ACTION_DESCRIPTION_1, ACTION_REACH_1, HIT_FORMULA_1, damageMap2);
+        action1 = new Action(ACTION_NAME_1, ACTION_DESCRIPTION_1, ACTION_REACH_1, HIT_FORMULA_1, damageMap1);
         actions1.add(action1);
 
         statBlock1 = new StatBlock.StatBlockBuilder(
@@ -326,7 +326,7 @@ public class StatBlockTest {
 
         assertEquals(2, statBlock2.getLanguages().getLanguagesList().size());
         assertEquals(LANGUAGE_0, statBlock2.getLanguages().getLanguagesList().get(0));
-        assertEquals(LANGUAGE_0, statBlock2.getLanguages().getLanguagesList().get(1));
+        assertEquals(LANGUAGE_1, statBlock2.getLanguages().getLanguagesList().get(1));
 
         assertEquals(2, statBlock2.getAbilities().size());
         assertEquals(ABILITY_0, statBlock2.getAbilities().get(0));
@@ -335,7 +335,7 @@ public class StatBlockTest {
         assertEquals(18, statBlock2.getSkillProficiencies().size());
         assertEquals(15, statBlock2.getConditionImmunities().size());
         assertEquals(6, statBlock2.getSavingThrowProficiencies().size());
-        assertEquals(12, statBlock2.getResistances().size());
+        assertEquals(13, statBlock2.getResistances().size());
 
         assertEquals(2, statBlock2.getLegendaryMechanics().getLegendaryActions().size());
         assertEquals(LEGENDARY_MECHANIC_DESCRIPTION_0, statBlock2.getLegendaryMechanics().getLegendaryDescription());
@@ -346,7 +346,7 @@ public class StatBlockTest {
     @Test
     public void testGetChallengeRating() {
         assertEquals("0", statBlock0.getChallengeRating());
-        assertEquals("2", statBlock1.getChallengeRating());
+        assertEquals("0", statBlock1.getChallengeRating());
         assertEquals("30+", statBlock2.getChallengeRating());
     }
 
@@ -360,6 +360,8 @@ public class StatBlockTest {
                 + ", Charisma " + (statBlock2.getAbilityScores().getModifier("Charisma") + PROFICIENCY_2)
                 + ", ";
 
+        assertEquals("", statBlock0.getSavingThrowProficienciesString());
+        assertEquals("", statBlock1.getSavingThrowProficienciesString());
         assertEquals(testString, statBlock2.getSavingThrowProficienciesString());
     }
 
@@ -385,6 +387,8 @@ public class StatBlockTest {
                 + ", survival " + (statBlock2.getAbilityScores().getModifier("wisdom") + PROFICIENCY_2)
                 + ", ";
 
+        assertEquals("", statBlock0.getSkillProficienciesString());
+        assertEquals("", statBlock1.getSkillProficienciesString());
         assertEquals(testString, statBlock2.getSkillProficienciesString());
     }
 
@@ -393,16 +397,30 @@ public class StatBlockTest {
         String testString = "blinded, charmed, deafened, exhaustion, frightened, grappled, incapacitated, invisible, "
                 + "paralyzed, petrified, poisoned, prone, restrained, stunned, unconscious, ";
 
+        assertEquals("", statBlock0.getConditionImmunitiesString());
+        assertEquals("", statBlock1.getConditionImmunitiesString());
         assertEquals(testString, statBlock2.getConditionImmunitiesString());
     }
 
     @Test
     public void testGetResistancesString() {
-        String testString = "acid resistance, bludgeoning resistance, cold resistance, fire immunity, force immunity, "
-                + " lightning vulnerability, necrotic resistance, piercing resistance, poison vulnerability, "
-                + "psychic resistance, radiant resistance, slashing immunity, thunder resistance, ";
+        String testString = statBlock2.getResistancesString();
 
-        assertEquals(testString, statBlock2.getResistancesString());
+        assertEquals("", statBlock0.getResistancesString());
+        assertEquals("", statBlock1.getResistancesString());
+        
+        assertTrue(testString.contains("acid resistance, "));
+        assertTrue(testString.contains("bludgeoning resistance, "));
+        assertTrue(testString.contains("fire immunity, "));
+        assertTrue(testString.contains("force immunity, "));
+        assertTrue(testString.contains("lightning vulnerability, "));
+        assertTrue(testString.contains("necrotic resistance, "));
+        assertTrue(testString.contains("piercing resistance, "));
+        assertTrue(testString.contains("poison vulnerability, "));
+        assertTrue(testString.contains("psychic resistance, "));
+        assertTrue(testString.contains("radiant resistance, "));
+        assertTrue(testString.contains("slashing immunity, "));
+        assertTrue(testString.contains("thunder resistance, "));
     }
 
     @Test
@@ -413,6 +431,7 @@ public class StatBlockTest {
         assertEquals(STRING_0, json.getJSONObject("title").get("type"));
         assertEquals(STRING_0, json.getJSONObject("title").get("size"));
         assertEquals(STRING_0, json.getJSONObject("title").get("alignment"));
+        assertFalse(json.getJSONObject("title").has("group"));
 
         assertEquals(INTEGER_0, json.get("xp"));
         assertEquals(INTEGER_0, json.getJSONObject("hpFormula").get("amountOfDice"));
@@ -436,12 +455,13 @@ public class StatBlockTest {
 
     @Test
     public void testToJson1() {
-        JSONObject json = statBlock0.toJson();
+        JSONObject json = statBlock1.toJson();
 
-        assertEquals(STRING_0, json.getJSONObject("title").get("name"));
-        assertEquals(STRING_0, json.getJSONObject("title").get("type"));
-        assertEquals(STRING_0, json.getJSONObject("title").get("size"));
-        assertEquals(STRING_0, json.getJSONObject("title").get("alignment"));
+        assertEquals(TITLE_1.getName(), json.getJSONObject("title").get("name"));
+        assertEquals(TITLE_1.getType(), json.getJSONObject("title").get("type"));
+        assertEquals(TITLE_1.getSize(), json.getJSONObject("title").get("size"));
+        assertEquals(TITLE_1.getAlignment(), json.getJSONObject("title").get("alignment"));
+        assertFalse(json.getJSONObject("title").has("group"));
 
         assertEquals(XP_1, json.get("xp"));
         assertEquals(HP_FORMULA_0.getAmountOfDice(), json.getJSONObject("hpFormula").get("amountOfDice"));
@@ -461,11 +481,72 @@ public class StatBlockTest {
         assertEquals(ABILITY_SCORES_1.getCharisma(), json.getJSONObject("abilityScores").get("charisma"));
 
         assertEquals(1, json.getJSONArray("actions").length());
-        assertEquals(HIT_FORMULA_1.getAmountOfDice(), json.getJSONArray("actions").getJSONObject(0).getJSONObject("hitFormula").get("amountOfDice"));
-        assertEquals(HIT_FORMULA_1.getDieSides(), json.getJSONArray("actions").getJSONObject(0).getJSONObject("hitFormula").get("dieSides"));
-        assertEquals(HIT_FORMULA_1.getModifier(), json.getJSONArray("actions").getJSONObject(0).getJSONObject("hitFormula").get("modifier"));
-        assertEquals(DAMAGE_FORMULA_1.getAmountOfDice(), json.getJSONArray("actions").getJSONObject(0).getJSONObject("damageMap").getJSONObject(DAMAGE_TYPE_1).get("amountOfDice"));
-        assertEquals(DAMAGE_FORMULA_1.getDieSides(), json.getJSONArray("actions").getJSONObject(0).getJSONObject("damageMap").getJSONObject(DAMAGE_TYPE_1).get("dieSides"));
-        assertEquals(DAMAGE_FORMULA_1.getModifier(), json.getJSONArray("actions").getJSONObject(0).getJSONObject("damageMap").getJSONObject(DAMAGE_TYPE_1).get("modifier"));
+        assertEquals(HIT_FORMULA_1.getAmountOfDice(), json.getJSONArray("actions").getJSONObject(0)
+                .getJSONObject("hitFormula").get("amountOfDice"));
+        assertEquals(HIT_FORMULA_1.getDieSides(), json.getJSONArray("actions").getJSONObject(0)
+                .getJSONObject("hitFormula").get("dieSides"));
+        assertEquals(HIT_FORMULA_1.getModifier(), json.getJSONArray("actions").getJSONObject(0)
+                .getJSONObject("hitFormula").get("modifier"));
+        assertEquals(DAMAGE_FORMULA_1.getAmountOfDice(), json.getJSONArray("actions").getJSONObject(0)
+                .getJSONObject("damageMap").getJSONObject(DAMAGE_TYPE_1).get("amountOfDice"));
+        assertEquals(DAMAGE_FORMULA_1.getDieSides(), json.getJSONArray("actions").getJSONObject(0)
+                .getJSONObject("damageMap").getJSONObject(DAMAGE_TYPE_1).get("dieSides"));
+        assertEquals(DAMAGE_FORMULA_1.getModifier(), json.getJSONArray("actions").getJSONObject(0)
+                .getJSONObject("damageMap").getJSONObject(DAMAGE_TYPE_1).get("modifier"));
+    }
+
+    @Test
+    public void testToJson2() {
+        JSONObject json = statBlock2.toJson();
+
+        assertEquals(TITLE_2.getName(), json.getJSONObject("title").get("name"));
+        assertEquals(TITLE_2.getType(), json.getJSONObject("title").get("type"));
+        assertEquals(TITLE_2.getSize(), json.getJSONObject("title").get("size"));
+        assertEquals(TITLE_2.getAlignment(), json.getJSONObject("title").get("alignment"));
+        assertFalse(json.getJSONObject("title").has("group"));
+
+        assertEquals(XP_2, json.get("xp"));
+        assertEquals(HP_FORMULA_1.getAmountOfDice(), json.getJSONObject("hpFormula").get("amountOfDice"));
+        assertEquals(HP_FORMULA_1.getDieSides(), json.getJSONObject("hpFormula").get("dieSides"));
+        assertEquals(HP_FORMULA_1.getModifier(), json.getJSONObject("hpFormula").get("modifier"));
+        assertEquals(PROFICIENCY_2, json.get("proficiency"));
+
+        assertEquals(ARMOUR_2.getAC(), json.getJSONObject("armour").get("ac"));
+        assertEquals(SPEEDS_2.getSpeed(), json.getJSONObject("speeds").get("speed"));
+        assertEquals(SENSES_2.getPassivePerception(), json.getJSONObject("senses").get("passivePerception"));
+
+        assertEquals(ABILITY_SCORES_2.getStrength(), json.getJSONObject("abilityScores").get("strength"));
+        assertEquals(ABILITY_SCORES_2.getDexterity(), json.getJSONObject("abilityScores").get("dexterity"));
+        assertEquals(ABILITY_SCORES_2.getConstitution(), json.getJSONObject("abilityScores").get("constitution"));
+        assertEquals(ABILITY_SCORES_2.getIntelligence(), json.getJSONObject("abilityScores").get("intelligence"));
+        assertEquals(ABILITY_SCORES_2.getWisdom(), json.getJSONObject("abilityScores").get("wisdom"));
+        assertEquals(ABILITY_SCORES_2.getCharisma(), json.getJSONObject("abilityScores").get("charisma"));
+
+        assertEquals(2, json.getJSONArray("actions").length());
+        assertEquals(HIT_FORMULA_2.getAmountOfDice(), json.getJSONArray("actions").getJSONObject(0)
+                .getJSONObject("hitFormula").get("amountOfDice"));
+        assertEquals(HIT_FORMULA_2.getDieSides(), json.getJSONArray("actions").getJSONObject(0)
+                .getJSONObject("hitFormula").get("dieSides"));
+        assertEquals(HIT_FORMULA_2.getModifier(), json.getJSONArray("actions").getJSONObject(0)
+                .getJSONObject("hitFormula").get("modifier"));
+        assertEquals(DAMAGE_FORMULA_2.getAmountOfDice(), json.getJSONArray("actions").getJSONObject(0)
+                .getJSONObject("damageMap").getJSONObject(DAMAGE_TYPE_2).get("amountOfDice"));
+        assertEquals(DAMAGE_FORMULA_2.getDieSides(), json.getJSONArray("actions").getJSONObject(0)
+                .getJSONObject("damageMap").getJSONObject(DAMAGE_TYPE_2).get("dieSides"));
+        assertEquals(DAMAGE_FORMULA_2.getModifier(), json.getJSONArray("actions").getJSONObject(0)
+                .getJSONObject("damageMap").getJSONObject(DAMAGE_TYPE_2).get("modifier"));
+
+        assertEquals(HIT_FORMULA_3.getAmountOfDice(), json.getJSONArray("actions").getJSONObject(1)
+                .getJSONObject("hitFormula").get("amountOfDice"));
+        assertEquals(HIT_FORMULA_3.getDieSides(), json.getJSONArray("actions").getJSONObject(1)
+                .getJSONObject("hitFormula").get("dieSides"));
+        assertEquals(HIT_FORMULA_3.getModifier(), json.getJSONArray("actions").getJSONObject(1)
+                .getJSONObject("hitFormula").get("modifier"));
+        assertEquals(DAMAGE_FORMULA_3.getAmountOfDice(), json.getJSONArray("actions").getJSONObject(1)
+                .getJSONObject("damageMap").getJSONObject(DAMAGE_TYPE_3).get("amountOfDice"));
+        assertEquals(DAMAGE_FORMULA_3.getDieSides(), json.getJSONArray("actions").getJSONObject(1)
+                .getJSONObject("damageMap").getJSONObject(DAMAGE_TYPE_3).get("dieSides"));
+        assertEquals(DAMAGE_FORMULA_3.getModifier(), json.getJSONArray("actions").getJSONObject(1)
+                .getJSONObject("damageMap").getJSONObject(DAMAGE_TYPE_3).get("modifier"));
     }
 }

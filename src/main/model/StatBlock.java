@@ -145,7 +145,7 @@ public class StatBlock implements Writable {
         }
     }
 
-    // EFFECTS: gets name
+    // EFFECTS: gets title
     public Title getTitle() {
         return title;
     }

@@ -3,21 +3,93 @@ package model;
 import model.statblockfields.*;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
-// Represents a statblock with mutable hp and parent statblock
+// Represents a statblock with mutable hp and parent statblock stats apart from name
 public class Character extends StatBlock {
     // required fields
     private int maxHP;
     private int hp;
     private final StatBlock parentStatBlock;
 
-    // EFFECTS: constructs a Character using a builder
-    public Character(CharacterBuilder builder) {
-        super(builder);
-        this.maxHP = builder.maxHP;
-        this.hp = builder.hp;
-        this.parentStatBlock = builder.parentStatBlock;
+    // EFFECTS: constructs a character with fields from given parent statblock,
+    //          but makes a new unique name for the given encounter context
+    public Character(StatBlock parentStatBlock, String name) {
+        super(new StatBlockBuilder(
+                new Title.TitleBuilder(name, parentStatBlock.title.getType(), parentStatBlock.title.getSize(),
+                        parentStatBlock.title.getAlignment()).build(),
+                parentStatBlock.xp,
+                parentStatBlock.hpFormula,
+                parentStatBlock.proficiency,
+                parentStatBlock.armour,
+                parentStatBlock.speeds,
+                parentStatBlock.senses,
+                parentStatBlock.abilityScores,
+                parentStatBlock.actions)
+                .languages(parentStatBlock.languages)
+                .abilities(parentStatBlock.abilities)
+                .savingThrowProficiencies(parentStatBlock.savingThrowProficiencies)
+                .skillProficiencies(parentStatBlock.skillProficiencies)
+                .conditionImmunities(parentStatBlock.conditionImmunities)
+                .resistances(parentStatBlock.resistances)
+                .legendaryMechanics(parentStatBlock.legendaryMechanics));
+
+        this.maxHP = hpFormula.roll();
+        this.hp = maxHP;
+        this.parentStatBlock = parentStatBlock;
+    }
+
+    // EFFECTS: searches encounter for characters named after the parent statblock: if there's none, returns the parent
+    //          statblock name with 1 as suffix, otherwise arrays the character suffixes and returns the parent
+    //          statblock name with the lowest number not in the array as a suffix
+    public static String generateNameForEncounter(StatBlock parentStatBlock, List<Character> encounter) {
+        Title title = parentStatBlock.getTitle();
+        int lowestNumber = 1;
+        List<Integer> suffixes;
+        if (checkEncounterForSameParentTitle(title, encounter)) {
+            suffixes = generateSuffixes(title, encounter);
+            lowestNumber = findFirstIntegerGap(suffixes);
+        }
+        return title.getName().toLowerCase() + lowestNumber;
+    }
+
+    // EFFECTS: searches encounter for any characters with a parent statblock of the current character's parent
+    //          and returns true if yes or no if not
+    private static boolean checkEncounterForSameParentTitle(Title parentTitle, List<Character> encounter) {
+        for (Character c : encounter) {
+            if (c.getParentStatBlock().getTitle().getName().equals(parentTitle.getName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // EFFECTS: returns list of suffixes for characters in encounter with selected statblock name
+    private static List<Integer> generateSuffixes(Title parentTitle, List<Character> encounter) {
+        List<Integer> suffixes = new ArrayList<>();
+        for (Character c : encounter) {
+            if (c.getTitle().getName().toLowerCase().contains(parentTitle.getName().toLowerCase())) {
+                suffixes.add(Integer.parseInt(c.getTitle().getName().toLowerCase().replaceAll("[^\\d]", "")));
+            }
+        }
+        return suffixes;
+    }
+
+    // REQUIRES: given interger list contains at least one integer
+    // EFFECTS: returns lowest integer that is not already in the given list, starting with 1
+    private static int findFirstIntegerGap(List<Integer> integerList) {
+        int firstLowest = 1;
+        integerList.sort(Comparator.naturalOrder());
+        for (int i : integerList) {
+            if (i == firstLowest) {
+                firstLowest++;
+            } else if (i > firstLowest) {
+                return firstLowest;
+            }
+        }
+        return firstLowest;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -55,43 +127,8 @@ public class Character extends StatBlock {
         return parentStatBlock;
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
-    // builder class
-    public static class CharacterBuilder extends StatBlockBuilder {
-        // required fields
-        private final int maxHP;
-        private final StatBlock parentStatBlock;
-        private final int hp;
-
-        // EFFECTS: constructs a builder with required fields,
-        //          and ALL the parent StatBlock's fields whether they were built or not.
-        public CharacterBuilder(StatBlock parentStatBlock, Title title, int xp, RollFormula hpFormula, int proficiency,
-                                Armour armour, Speeds speeds, Senses senses, AbilityScores abilityScores,
-                                List<Action> actions) {
-            super(title, xp, hpFormula, proficiency, armour, speeds, senses, abilityScores, actions);
-
-            this.maxHP = hpFormula.roll();
-            this.hp = maxHP;
-            this.parentStatBlock = parentStatBlock;
-
-            super.languages(parentStatBlock.getLanguages());
-            super.abilities(parentStatBlock.getAbilities());
-            super.savingThrowProficiencies(parentStatBlock.getSavingThrowProficiencies());
-            super.skillProficiencies(parentStatBlock.getSkillProficiencies());
-            super.conditionImmunities(parentStatBlock.getConditionImmunities());
-            super.resistances(parentStatBlock.getResistances());
-            super.legendaryMechanics(parentStatBlock.getLegendaryMechanics());
-        }
-
-        // EFFECTS: returns a new Character with required fields,
-        //          and any optional fields that had their builder called.
-        public Character build() {
-            return new Character(this);
-        }
-    }
-
-    // converts the character to a json object
     @Override
+    // converts the character to a json object
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("parentStatBlock", parentStatBlock.toJson());
@@ -110,6 +147,7 @@ public class Character extends StatBlock {
     }
 
     @Override
+    // returns a string representation of the character
     public String toString() {
         Title title = getTitle();
         String name = title.getName().substring(0,1).toUpperCase() + title.getName().substring(1).toLowerCase();

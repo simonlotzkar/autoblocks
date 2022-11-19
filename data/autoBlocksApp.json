@@ -3,7 +3,7 @@
     "encounter": [
         {
             "skillProficiencies": ["intimidation"],
-            "maxHP": 16,
+            "maxHP": 21,
             "languages": {
                 "telepathy": 0,
                 "languagesList": [
@@ -18,11 +18,11 @@
                 "blindSight": 0,
                 "tremorSense": 0
             },
-            "hp": 16,
+            "hp": 21,
             "title": {
-                "size": "Humanoid (Orc)",
+                "size": "Medium",
                 "name": "orc1",
-                "type": "Medium",
+                "type": "Humanoid (Orc)",
                 "alignment": "Chaotic Evil"
             },
             "proficiency": 2,
@@ -91,7 +91,12 @@
                         },
                         "reach": "5",
                         "name": "GreatAxe",
-                        "damageMap": {},
+                        "damageMap": {"slashing": {
+                            "string": "1d12+3",
+                            "modifier": 3,
+                            "amountOfDice": 1,
+                            "dieSides": 12
+                        }},
                         "description": "Melee Weapon Attack"
                     },
                     {
@@ -102,7 +107,12 @@
                         },
                         "reach": "5 or 30/120",
                         "name": "Javelin",
-                        "damageMap": {},
+                        "damageMap": {"piercing": {
+                            "string": "1d6+3",
+                            "modifier": 3,
+                            "amountOfDice": 1,
+                            "dieSides": 6
+                        }},
                         "description": "Melee or Ranged Weapon Attack"
                     }
                 ],
@@ -143,7 +153,12 @@
                     },
                     "reach": "5",
                     "name": "GreatAxe",
-                    "damageMap": {},
+                    "damageMap": {"slashing": {
+                        "string": "1d12+3",
+                        "modifier": 3,
+                        "amountOfDice": 1,
+                        "dieSides": 12
+                    }},
                     "description": "Melee Weapon Attack"
                 },
                 {
@@ -154,14 +169,19 @@
                     },
                     "reach": "5 or 30/120",
                     "name": "Javelin",
-                    "damageMap": {},
+                    "damageMap": {"piercing": {
+                        "string": "1d6+3",
+                        "modifier": 3,
+                        "amountOfDice": 1,
+                        "dieSides": 6
+                    }},
                     "description": "Melee or Ranged Weapon Attack"
                 }
             ]
         },
         {
             "skillProficiencies": ["intimidation"],
-            "maxHP": 16,
+            "maxHP": 15,
             "languages": {
                 "telepathy": 0,
                 "languagesList": [
@@ -176,11 +196,11 @@
                 "blindSight": 0,
                 "tremorSense": 0
             },
-            "hp": 16,
+            "hp": 15,
             "title": {
-                "size": "Humanoid (Orc)",
+                "size": "Medium",
                 "name": "orc2",
-                "type": "Medium",
+                "type": "Humanoid (Orc)",
                 "alignment": "Chaotic Evil"
             },
             "proficiency": 2,
@@ -249,7 +269,12 @@
                         },
                         "reach": "5",
                         "name": "GreatAxe",
-                        "damageMap": {},
+                        "damageMap": {"slashing": {
+                            "string": "1d12+3",
+                            "modifier": 3,
+                            "amountOfDice": 1,
+                            "dieSides": 12
+                        }},
                         "description": "Melee Weapon Attack"
                     },
                     {
@@ -260,7 +285,12 @@
                         },
                         "reach": "5 or 30/120",
                         "name": "Javelin",
-                        "damageMap": {},
+                        "damageMap": {"piercing": {
+                            "string": "1d6+3",
+                            "modifier": 3,
+                            "amountOfDice": 1,
+                            "dieSides": 6
+                        }},
                         "description": "Melee or Ranged Weapon Attack"
                     }
                 ],
@@ -301,7 +331,12 @@
                     },
                     "reach": "5",
                     "name": "GreatAxe",
-                    "damageMap": {},
+                    "damageMap": {"slashing": {
+                        "string": "1d12+3",
+                        "modifier": 3,
+                        "amountOfDice": 1,
+                        "dieSides": 12
+                    }},
                     "description": "Melee Weapon Attack"
                 },
                 {
@@ -312,14 +347,19 @@
                     },
                     "reach": "5 or 30/120",
                     "name": "Javelin",
-                    "damageMap": {},
+                    "damageMap": {"piercing": {
+                        "string": "1d6+3",
+                        "modifier": 3,
+                        "amountOfDice": 1,
+                        "dieSides": 6
+                    }},
                     "description": "Melee or Ranged Weapon Attack"
                 }
             ]
         },
         {
             "skillProficiencies": ["intimidation"],
-            "maxHP": 18,
+            "maxHP": 15,
             "languages": {
                 "telepathy": 0,
                 "languagesList": [
@@ -334,11 +374,11 @@
                 "blindSight": 0,
                 "tremorSense": 0
             },
-            "hp": 18,
+            "hp": 15,
             "title": {
-                "size": "Humanoid (Orc)",
+                "size": "Medium",
                 "name": "orc3",
-                "type": "Medium",
+                "type": "Humanoid (Orc)",
                 "alignment": "Chaotic Evil"
             },
             "proficiency": 2,
@@ -407,7 +447,12 @@
                         },
                         "reach": "5",
                         "name": "GreatAxe",
-                        "damageMap": {},
+                        "damageMap": {"slashing": {
+                            "string": "1d12+3",
+                            "modifier": 3,
+                            "amountOfDice": 1,
+                            "dieSides": 12
+                        }},
                         "description": "Melee Weapon Attack"
                     },
                     {
@@ -418,7 +463,12 @@
                         },
                         "reach": "5 or 30/120",
                         "name": "Javelin",
-                        "damageMap": {},
+                        "damageMap": {"piercing": {
+                            "string": "1d6+3",
+                            "modifier": 3,
+                            "amountOfDice": 1,
+                            "dieSides": 6
+                        }},
                         "description": "Melee or Ranged Weapon Attack"
                     }
                 ],
@@ -459,7 +509,12 @@
                     },
                     "reach": "5",
                     "name": "GreatAxe",
-                    "damageMap": {},
+                    "damageMap": {"slashing": {
+                        "string": "1d12+3",
+                        "modifier": 3,
+                        "amountOfDice": 1,
+                        "dieSides": 12
+                    }},
                     "description": "Melee Weapon Attack"
                 },
                 {
@@ -470,7 +525,12 @@
                     },
                     "reach": "5 or 30/120",
                     "name": "Javelin",
-                    "damageMap": {},
+                    "damageMap": {"piercing": {
+                        "string": "1d6+3",
+                        "modifier": 3,
+                        "amountOfDice": 1,
+                        "dieSides": 6
+                    }},
                     "description": "Melee or Ranged Weapon Attack"
                 }
             ]

@@ -1,7 +1,12 @@
 package model.statblockfields;
 
+import model.Character;
 import org.json.JSONObject;
 import persistence.Writable;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 // Represents...
 public class Title implements Writable {

@@ -292,29 +292,10 @@ public class JsonReader {
         return encounter;
     }
 
-    // MODIFIES: encounter
-    // EFFECTS: adds character from JSON object to encounter
+    // EFFECTS: takes a json object representing a character and returns it as a character object
     private Character parseCharacter(JSONObject jsonObject) {
-        Character character = (Character) new Character.CharacterBuilder(
-                parseStatBlock(jsonObject.getJSONObject("parentStatBlock")),
-                parseTitle(jsonObject.getJSONObject("title")),
-                jsonObject.getInt("xp"),
-                parseRollFormula(jsonObject.getJSONObject("hpFormula")),
-                jsonObject.getInt("proficiency"),
-                parseArmour(jsonObject.getJSONObject("armour")),
-                parseSpeeds(jsonObject.getJSONObject("speeds")),
-                parseSenses(jsonObject.getJSONObject("senses")),
-                parseAbilityScores(jsonObject.getJSONObject("abilityScores")),
-                parseActions(jsonObject.getJSONArray("actions")))
-                .languages(parseLanguages(jsonObject.getJSONObject("languages")))
-                .abilities(parseAbilities(jsonObject.getJSONArray("abilities")))
-                .savingThrowProficiencies(
-                        parseSavingThrowProficiencies(jsonObject.optJSONArray("savingThrowProficiencies")))
-                .skillProficiencies(parseSkillProficiencies(jsonObject.optJSONArray("skillProficiencies")))
-                .conditionImmunities(parseConditionImmunities(jsonObject.optJSONArray("conditionImmunities")))
-                .resistances(parseResistances(jsonObject.optJSONObject("resistances")))
-                .legendaryMechanics(parseLegendaryMechanics(jsonObject.optJSONObject("legendaryMechanics")))
-                .build();
+        Character character = new Character(parseStatBlock(jsonObject.getJSONObject("parentStatBlock")),
+                jsonObject.getJSONObject("title").getString("name"));
 
         character.setMaxHP(jsonObject.getInt("maxHP"));
         character.setHP(jsonObject.getInt("hp"));
