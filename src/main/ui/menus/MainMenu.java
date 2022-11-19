@@ -1,113 +1,133 @@
 package ui.menus;
 
+import model.Character;
+import model.StatBlock;
 import ui.menus.encountermenus.CharacterMenu;
 import ui.menus.encountermenus.GroupMenu;
-import ui.menus.librarymenus.LibraryMenu;
+import ui.menus.prompts.LoadPrompt;
+import ui.menus.prompts.SavePrompt;
 
 import javax.swing.*;
-import java.awt.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 // represents...
-public class MainMenu extends JFrame implements ActionListener {
-    private JList encounterJList;
+public class MainMenu extends JFrame implements ActionListener, ListSelectionListener {
+    private JList<model.Character> encounterJList = new JList<>();
+    private JList<model.StatBlock> libraryJList = new JList<>();
 
     private static final int WIDTH = 720;
     private static final int HEIGHT = 480;
 
-    // buttons
-    private final JButton goToCustomRollButton = new JButton();
-    private final JButton goToSelectedCharacterButton = new JButton();
-    private final JButton goToSelectedGroupButton = new JButton();
-    private final JButton goToLibraryButton = new JButton();
-    private final JButton quitAutoBlocksButton = new JButton();
+    private final List<JButton> buttonList = new ArrayList<>();
+    private final JButton goToCustomRollButton = new JButton("Go To Custom Roll Menu");
+    private final JButton goToSelectedCharacterButton = new JButton("Go To Selected Character's Menu");
+    private final JButton goToSelectedGroupButton = new JButton("Go To Selected Character's Group Menu");
+    private final JButton goToLibraryButton = new JButton("Go To Library");
+    private final JButton loadButton = new JButton("Load encounter and library from file");
+    private final JButton quitAutoBlocksButton = new JButton("Quit AutoBlocks");
 
     // EFFECTS: constructs...
-    public MainMenu(DefaultListModel encounterListModel) {
-        initializeEncounterJList(encounterListModel);
-        this.add(encounterJList);
+    public MainMenu() {
+        initializeEncounterJList();
         initializeButtons();
-        this.add(goToCustomRollButton);
-
-        this.add(goToSelectedCharacterButton);
-        this.add(goToSelectedGroupButton);
-        this.add(goToLibraryButton);
-        this.add(quitAutoBlocksButton);
-
-        JLabel mainMenuTitle = new JLabel();
-        mainMenuTitle.setText("Main Menu. Characters in currently loaded encounter:");
-        mainMenuTitle.setHorizontalAlignment(SwingConstants.CENTER);
-        mainMenuTitle.setVerticalAlignment(SwingConstants.TOP);
-        this.add(mainMenuTitle);
 
         this.setTitle("AutoBlocks");
         this.setSize(WIDTH, HEIGHT);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setVisible(true);
         this.setResizable(false);
+
+        JLabel title = new JLabel();
+        title.setText("Main Menu. Characters in currently loaded encounter:");
+        title.setHorizontalAlignment(SwingConstants.CENTER);
+        title.setVerticalAlignment(SwingConstants.TOP);
+        this.add(title);
     }
 
-    // EFFECTS: sets encounter jlist's parameters from given encounter list model
-    private void initializeEncounterJList(DefaultListModel encounterListModel) {
-        encounterJList = new JList(encounterListModel);
+    // encounter jlist setter
+    public void setEncounterJList(JList<Character> encounterJList) {
+        this.encounterJList = encounterJList;
+    }
+
+    // library jlist setter
+    public void setLibraryJList(JList<StatBlock> libraryJList) {
+        this.libraryJList = libraryJList;
+    }
+
+    // EFFECTS: sets encounter jlist's parameters
+    private void initializeEncounterJList() {
         encounterJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         encounterJList.setLayoutOrientation(JList.VERTICAL_WRAP);
         encounterJList.setVisibleRowCount(-1);
         encounterJList.setVisible(true);
-        encounterJList.setBounds(0, 20, WIDTH, 260);
-        JScrollPane listScroller = new JScrollPane(encounterJList);
+        encounterJList.setBounds(WIDTH / 4, 20, WIDTH / 2, HEIGHT / 4);
+        encounterJList.addListSelectionListener(this);
+        this.add(encounterJList);
     }
 
     // EFFECTS: sets parameters for all buttons
     private void initializeButtons() {
-        goToCustomRollButton.setBounds(0, HEIGHT - 190, WIDTH, 30);
-        goToCustomRollButton.addActionListener(this);
-        goToCustomRollButton.setText("Go To Custom Roll Menu");
-        goToCustomRollButton.setFocusable(false);
+        buttonList.add(goToCustomRollButton);
+        buttonList.add(goToSelectedCharacterButton);
+        buttonList.add(goToSelectedGroupButton);
+        buttonList.add(goToLibraryButton);
+        buttonList.add(loadButton);
+        buttonList.add(quitAutoBlocksButton);
 
-        goToSelectedCharacterButton.setBounds(0, HEIGHT - 160, WIDTH, 30);
-        goToSelectedCharacterButton.addActionListener(this);
-        goToSelectedCharacterButton.setText("Go To Selected Character's Menu");
-        goToSelectedCharacterButton.setFocusable(false);
+        int height = HEIGHT - 220;
 
-        goToSelectedGroupButton.setBounds(0, HEIGHT - 130, WIDTH, 30);
-        goToSelectedGroupButton.addActionListener(this);
-        goToSelectedGroupButton.setText("Go To Selected Character's Group Menu");
-        goToSelectedGroupButton.setFocusable(false);
-
-        goToLibraryButton.setBounds(0, HEIGHT - 100, WIDTH, 30);
-        goToLibraryButton.addActionListener(this);
-        goToLibraryButton.setText("Go To Library");
-        goToLibraryButton.setFocusable(false);
-
-        quitAutoBlocksButton.setBounds(0, HEIGHT - 70, WIDTH, 30);
-        quitAutoBlocksButton.addActionListener(this);
-        quitAutoBlocksButton.setText("Quit AutoBlocks");
-        quitAutoBlocksButton.setFocusable(false);
+        for (JButton jb : buttonList) {
+            jb.setBounds(0, height, WIDTH, 30);
+            jb.addActionListener(this);
+            jb.setFocusable(false);
+            this.add(jb);
+            height += 30;
+        }
     }
 
     @Override
+    // EFFECTS: ...
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == goToCustomRollButton) {
             this.dispose();
-            RollMenu rollMenu = new RollMenu();
+            new RollMenu();
         }
         if (e.getSource() == goToSelectedCharacterButton) {
             this.dispose();
-            CharacterMenu characterMenu = new CharacterMenu();
+            new CharacterMenu();
         }
         if (e.getSource() == goToSelectedGroupButton) {
             this.dispose();
-            GroupMenu groupMenu = new GroupMenu();
+            new GroupMenu();
         }
         if (e.getSource() == goToLibraryButton) {
             this.dispose();
-            LibraryMenu libraryMenu = new LibraryMenu();
+            //new LibraryMenu(libraryJList);
+        }
+        if (e.getSource() == loadButton) {
+            new LoadPrompt(this);
         }
         if (e.getSource() == quitAutoBlocksButton) {
-            this.dispose();
-            QuitMenu quitMenu = new QuitMenu();
+            new SavePrompt(encounterJList, libraryJList);
+        }
+    }
+
+    @Override
+    // EFFECTS: ...
+    public void valueChanged(ListSelectionEvent e) {
+        if (!e.getValueIsAdjusting()) {
+            if (encounterJList.getSelectedIndex() == -1) {
+                goToSelectedCharacterButton.setEnabled(false);
+                goToSelectedGroupButton.setEnabled(false);
+            } else {
+                goToSelectedCharacterButton.setEnabled(true);
+                goToSelectedGroupButton.setEnabled(true);
+            }
         }
     }
 }
