@@ -108,4 +108,15 @@ public class Character extends StatBlock {
         json.put("actions", actionsToJson());
         return optionalFieldsToJson(json);
     }
+
+    @Override
+    public String toString() {
+        Title title = getTitle();
+        String name = title.getName().substring(0,1).toUpperCase() + title.getName().substring(1).toLowerCase();
+        if (title.getGroup() != null) {
+            return (name + " (Group: " + title.getGroup() + "), HP: " + getHPString());
+        } else {
+            return (name + ", HP: " + getHPString());
+        }
+    }
 }

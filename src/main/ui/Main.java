@@ -1,14 +1,23 @@
 package ui;
 
-import java.io.FileNotFoundException;
+import persistence.JsonReader;
+import ui.menus.MainMenu;
 
-// CITATION: trycatch from JsonSerializationDemo
+import javax.swing.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 public class Main {
     public static void main(String[] args) {
+        JsonReader jsonReader = new JsonReader("./data/autoBlocksApp.json");
+        DefaultListModel<model.Character> defaultListModel = new DefaultListModel<model.Character>();
         try {
-            new AutoBlocksApp();
+            defaultListModel.addAll(jsonReader.readEncounter());
         } catch (FileNotFoundException e) {
-            System.out.println("Unable to run application: file not found");
+            System.out.println("File not found!");
+        } catch (IOException e) {
+            System.out.println("IO exception!");
         }
+        new MainMenu(defaultListModel);
     }
 }
