@@ -1,5 +1,6 @@
 package model.statblockfields;
 
+import model.RollFormula;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

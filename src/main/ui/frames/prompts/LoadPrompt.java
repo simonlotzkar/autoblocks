@@ -1,9 +1,9 @@
-package ui.menus.prompts;
+package ui.frames.prompts;
 
 import model.Character;
 import model.StatBlock;
 import persistence.JsonReader;
-import ui.menus.MainMenuFrame;
+import ui.frames.menus.MainMenuFrame;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

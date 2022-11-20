@@ -1,5 +1,6 @@
 package model.statblockfields;
 
+import model.RollFormula;
 import org.json.JSONObject;
 
 import java.util.HashMap;

@@ -20,7 +20,7 @@ public class StatBlockTest {
     protected final static String STRING_0 = "";
     protected final static RollFormula ROLL_FORMULA_0 = new RollFormula(INTEGER_0, INTEGER_0, INTEGER_0);
 
-    protected final static Title TITLE_0 = new Title.TitleBuilder(STRING_0, STRING_0, STRING_0, STRING_0).build();
+    protected final static Title TITLE_0 = new Title.TitleBuilder("statblock zero", STRING_0, STRING_0, STRING_0).build();
     protected final static Armour ARMOUR_0 = new Armour.ArmourBuilder(INTEGER_0).build();
     protected final static Speeds SPEEDS_0 = new Speeds.SpeedsBuilder(INTEGER_0).build();
     protected final static Senses SENSES_0 = new Senses.SensesBuilder(INTEGER_0).build();
@@ -427,7 +427,7 @@ public class StatBlockTest {
     public void testToJson0() {
         JSONObject json = statBlock0.toJson();
 
-        assertEquals(STRING_0, json.getJSONObject("title").get("name"));
+        assertEquals(TITLE_0.getName(), json.getJSONObject("title").get("name"));
         assertEquals(STRING_0, json.getJSONObject("title").get("type"));
         assertEquals(STRING_0, json.getJSONObject("title").get("size"));
         assertEquals(STRING_0, json.getJSONObject("title").get("alignment"));

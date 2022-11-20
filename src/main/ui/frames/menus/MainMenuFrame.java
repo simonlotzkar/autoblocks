@@ -1,11 +1,12 @@
-package ui.menus;
+package ui.frames.menus;
 
 import model.Character;
 import model.StatBlock;
-import ui.menus.encountermenus.CharacterMenuFrame;
-import ui.menus.encountermenus.GroupMenu;
-import ui.menus.prompts.LoadPrompt;
-import ui.menus.prompts.SavePrompt;
+import ui.frames.CustomRollFrame;
+import ui.frames.menus.CharacterMenuFrame;
+import ui.frames.menus.GroupMenuFrame;
+import ui.frames.prompts.LoadPrompt;
+import ui.frames.prompts.SavePrompt;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -83,7 +84,7 @@ public class MainMenuFrame extends JFrame implements ActionListener, ListSelecti
         for (JButton jb : buttonList) {
             jb.setBounds(0, height, WIDTH, 30);
             jb.addActionListener(this);
-            jb.setFocusable(false);
+            //jb.setFocusable(false);
             this.add(jb);
             height += 30;
         }
@@ -102,7 +103,7 @@ public class MainMenuFrame extends JFrame implements ActionListener, ListSelecti
         }
         if (e.getSource() == goToSelectedGroupButton) {
             this.dispose();
-            new GroupMenu();
+            new GroupMenuFrame();
         }
         if (e.getSource() == goToLibraryButton) {
             this.dispose();

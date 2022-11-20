@@ -58,12 +58,12 @@ As a user, I want to be able to:
 - Ancient Black Dragon
 
 ### Current bugs/fixes to be done:
-- group actions print "Actions:" along with actions for each character, replace with no duplicates and one heading
-- when saving or loading, everything works as intended except when returning to the main menu, the invalid command
+- (terminal) group actions print "Actions:" along with actions for each character, replace with no duplicates and one heading
+- (terminal) when saving or loading, everything works as intended except when returning to the main menu, the invalid command
 warning triggers and the menu resets but then works as normal
 
 ### Future additions:
-- rolls for skills and saving throws
+- automated rolls for skills and saving throws
 - save system to allow for multiple save/load files for any amount of encounters and libraries
 - edit statblocks in a library
 - delete statblocks from a library

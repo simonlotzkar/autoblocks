@@ -7,7 +7,6 @@ import model.statblockfields.Action;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -23,7 +22,6 @@ public class JsonReader {
     private String source;
 
     // EFFECTS: constructs reader to read from source file
-    // CITATION: from JsonReader.java in JsonSerializationDemo
     public JsonReader(String source) {
         this.source = source;
     }

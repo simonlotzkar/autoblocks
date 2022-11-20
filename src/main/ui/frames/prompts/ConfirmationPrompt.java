@@ -1,4 +1,4 @@
-package ui.menus.prompts;
+package ui.frames.prompts;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

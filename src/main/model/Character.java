@@ -52,7 +52,7 @@ public class Character extends StatBlock {
             suffixes = generateSuffixes(title, encounter);
             lowestNumber = findFirstIntegerGap(suffixes);
         }
-        return title.getName().toLowerCase() + lowestNumber;
+        return title.getName() + " " + lowestNumber;
     }
 
     // EFFECTS: searches encounter for any characters with a parent statblock of the current character's parent
@@ -127,6 +127,16 @@ public class Character extends StatBlock {
         return parentStatBlock;
     }
 
+    // EFFECTS: get max hp
+    public int getMaxHP() {
+        return maxHP;
+    }
+
+    // EFFECTS: get current hp
+    public int getHP() {
+        return hp;
+    }
+
     @Override
     // converts the character to a json object
     public JSONObject toJson() {
@@ -150,7 +160,7 @@ public class Character extends StatBlock {
     // returns a string representation of the character
     public String toString() {
         Title title = getTitle();
-        String name = title.getName().substring(0,1).toUpperCase() + title.getName().substring(1).toLowerCase();
+        String name = title.getName();
         if (title.getGroup() != null) {
             return (name + " (Group: " + title.getGroup() + "), HP: " + getHPString());
         } else {

@@ -1,6 +1,6 @@
 package ui;
 
-import ui.menus.MainMenuFrame;
+import ui.frames.menus.MainMenuFrame;
 
 import java.io.IOException;
 

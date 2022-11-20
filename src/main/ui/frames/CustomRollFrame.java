@@ -1,4 +1,4 @@
-package ui.menus;
+package ui.frames;
 
 public class CustomRollFrame {
 }

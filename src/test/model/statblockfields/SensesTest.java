@@ -50,8 +50,8 @@ public class SensesTest {
                 + "ft, darkvision " + testDarkVision0
                 + "ft, tremorSense " + testTremorSense0
                 + "ft, truesight " + testTrueSight0
-                + "ft.";
-        String string1 = "Passive perception " + testPassivePerception1 + ".";
+                + "ft";
+        String string1 = "Passive perception " + testPassivePerception1;
 
         assertEquals(string0, testSenses0.getString());
         assertEquals(string1, testSenses1.getString());

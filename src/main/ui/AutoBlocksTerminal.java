@@ -1403,8 +1403,8 @@ public class AutoBlocksTerminal {
     // EFFECTS: initializes default statblocks in the library
     private void initializeLibrary() {
         System.out.println("Initializing library...");
-        initializeOrcStatBlock();
-        initializeAncientBlackDragonStatBlock();
+        //initializeOrcStatBlock();
+        //initializeAncientBlackDragonStatBlock();
         System.out.println("All default statblocks added to library!");
     }
 

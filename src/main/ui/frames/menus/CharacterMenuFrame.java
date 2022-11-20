@@ -1,4 +1,4 @@
-package ui.menus.encountermenus;
+package ui.frames.menus;
 
 public class CharacterMenuFrame {
 }

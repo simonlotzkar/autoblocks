@@ -50,8 +50,8 @@ public class SpeedsTest {
                 + "burrow " + testBurrowSpeed0 + "ft, "
                 + "climb " + testClimbSpeed0 + "ft, "
                 + "fly " + testFlySpeed0 + "ft, "
-                + "swim " + testSwimSpeed0 + "ft.";
-        String testString1 = testSpeed1 + "ft.";
+                + "swim " + testSwimSpeed0 + "ft";
+        String testString1 = testSpeed1 + "ft";
 
         assertEquals(testString0, testSpeeds0.getString());
         assertEquals(testString1, testSpeeds1.getString());

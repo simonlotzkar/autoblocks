@@ -1,4 +1,4 @@
-package model.statblockfields;
+package model;
 
 import org.json.JSONObject;
 import persistence.Writable;
