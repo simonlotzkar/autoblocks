@@ -1,4 +1,6 @@
 package ui.frames;
 
-public class CustomRollFrame {
+import javax.swing.*;
+
+public class CustomRollFrame extends JFrame {
 }

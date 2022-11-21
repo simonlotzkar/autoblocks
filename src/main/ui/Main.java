@@ -1,12 +1,12 @@
 package ui;
 
-import ui.frames.menus.MainMenuFrame;
+import ui.frames.MainFrame;
 
 import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) {
-        new MainMenuFrame();
+        new MainFrame();
         try {
             new AutoBlocksTerminal();
         } catch (IOException e) {
