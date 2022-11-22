@@ -29,27 +29,19 @@ public class MenuCardPanel extends JPanel {
         this.setVisible(true);
         this.setLayout(cardLayout);
         this.add(new MainMenuPanel(this), "mainMenu");
-        this.add(new LibraryMenuPanel(this), "libraryMenu");
-        this.add(new EncounterMenuPanel(this), "encounterMenu");
+//        this.add(new LibraryMenuPanel(this), "libraryMenu");
+//        this.add(new EncounterMenuPanel(this), "encounterMenu");
+//        this.add(new CharacterMenuPanel(this), "characterMenu");
+//        this.add(new GroupMenuPanel(this), "groupMenu");
+//        this.add(new StatBlockMenuPanel(this), "statBlockMenu");
+//        this.add(new StatBlockCreationMenuPanel(this), "statBlockCreationMenu");
         cardLayout.show(this, "mainMenu");
     }
 
     // MODIFIES: this
     // EFFECTS: changes menu based on given string or does nothing if given incorrect string
     public void changeMenu(String s) {
-        switch (s) {
-            case "mainMenu":
-                cardLayout.show(this, "mainMenu");
-                break;
-            case "libraryMenu":
-                cardLayout.show(this, "libraryMenu");
-                break;
-            case "encounterMenu":
-                cardLayout.show(this, "encounterMenu");
-                break;
-            default:
-                break;
-        }
+        cardLayout.show(this, s);
     }
 
     // MODIFIES: this

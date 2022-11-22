@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainMenuPanel extends JPanel implements ActionListener {
+    // constants
+    private static final String ICON_DIRECTORY = "./data/images/icons/";
+
     // panels
     private final MenuCardPanel menuCardMenu;
     private final JPanel buttonsPanel = new JPanel();
@@ -18,9 +21,13 @@ public class MainMenuPanel extends JPanel implements ActionListener {
 
     // images
     private static final JLabel MAIN_BANNER_LABEL = new JLabel(new ImageIcon(
-            "./data/images/banners/mainMenuBanner.gif"));
-    private static final JLabel DIVIDER_LABEL = new JLabel(new ImageIcon(
-            "./data/images/divider.gif"));
+            "./data/images/banners/tallBanner.gif"));
+    private static final ImageIcon D20_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "d20BlueIcon");
+    private static final ImageIcon EXIT_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "exitIcon");
+    private static final ImageIcon LIBRARY_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "libraryIcon");
+    private static final ImageIcon ENCOUNTER_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "crossedSwordsIcon");
+    private static final ImageIcon LOAD_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "fileIcon");
+    private static final ImageIcon SAVE_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "saveIcon");
 
     // buttons
     private final JButton customRollButton = new JButton("Open Custom Roll Window");
@@ -53,6 +60,13 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         buttonList.add(loadButton);
         buttonList.add(saveButton);
 
+        customRollButton.setIcon(D20_IMAGE_ICON);
+        quitButton.setIcon(EXIT_IMAGE_ICON);
+        encounterButton.setIcon(ENCOUNTER_IMAGE_ICON);
+        libraryButton.setIcon(LIBRARY_IMAGE_ICON);
+        loadButton.setIcon(LOAD_IMAGE_ICON);
+        saveButton.setIcon(SAVE_IMAGE_ICON);
+
         for (JButton jb : buttonList) {
             jb.addActionListener(this);
             jb.setVisible(true);
@@ -81,7 +95,7 @@ public class MainMenuPanel extends JPanel implements ActionListener {
 
         buttonsPanel.setLayout(new GridLayout(3, 1));
         buttonsPanel.add(customRollButton);
-        buttonsPanel.add(DIVIDER_LABEL);
+        buttonsPanel.add(new JLabel());
         buttonsPanel.add(smallButtonsPanel);
         buttonsPanel.setVisible(true);
     }
