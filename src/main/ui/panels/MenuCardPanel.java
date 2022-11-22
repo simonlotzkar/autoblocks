@@ -15,8 +15,8 @@ import java.io.PrintWriter;
 
 // represents a panel that manages the menu panels by switching between them
 public class MenuCardPanel extends JPanel {
-    private JList<model.Character> encounterJList = new JList<>();
-    private JList<model.StatBlock> libraryJList = new JList<>();
+    private DefaultListModel<Character> encounterListModel = new DefaultListModel<>();
+    private DefaultListModel<StatBlock> libraryListModel = new DefaultListModel<>();
 
     private final CardLayout cardLayout = new CardLayout();
 
@@ -53,17 +53,15 @@ public class MenuCardPanel extends JPanel {
     }
 
     // MODIFIES: this
-    // EFFECTS: sets the encounter and library jlists to that which is saved on file
+    // EFFECTS: sets the encounter and library model lists to that which is saved on file
     private void load() throws IOException {
         JsonReader jsonReader = new JsonReader(JSON_DIRECTORY);
-        DefaultListModel<Character> encounterListModel = new DefaultListModel<>();
-        DefaultListModel<StatBlock> libraryListModel = new DefaultListModel<>();
 
+        encounterListModel.removeAllElements();
         encounterListModel.addAll(jsonReader.readEncounter());
-        libraryListModel.addAll(jsonReader.readLibrary());
 
-        this.encounterJList = new JList<>(encounterListModel);
-        this.libraryJList = new JList<>(libraryListModel);
+        libraryListModel.removeAllElements();
+        libraryListModel.addAll(jsonReader.readLibrary());
     }
 
     // EFFECTS: saves the current library and encounter to file
@@ -73,11 +71,9 @@ public class MenuCardPanel extends JPanel {
         JSONArray jsonEncounter = new JSONArray();
         JSONObject json = new JSONObject();
 
-        ListModel<Character> encounterListModel = encounterJList.getModel();
         for (int i = 0; i < encounterListModel.getSize(); i++) {
             jsonEncounter.put((encounterListModel.getElementAt(i)).toJson());
         }
-        ListModel<StatBlock> libraryListModel = libraryJList.getModel();
         for (int i = 0; i < libraryListModel.getSize(); i++) {
             jsonLibrary.put((libraryListModel.getElementAt(i)).toJson());
         }
@@ -129,25 +125,25 @@ public class MenuCardPanel extends JPanel {
 
     // -----------------------------------------------------------------------
     // getters
-    // EFFECTS: gets the encounter jlist
-    public JList<Character> getEncounterJList() {
-        return encounterJList;
+    // EFFECTS: gets the encounter list model
+    public DefaultListModel<Character> getEncounterListModel() {
+        return encounterListModel;
     }
 
-    // EFFECTS: gets the library jlist
-    public JList<StatBlock> getLibraryJList() {
-        return libraryJList;
+    // EFFECTS: gets the library list model
+    public DefaultListModel<StatBlock> getLibraryListModel() {
+        return libraryListModel;
     }
 
     // -----------------------------------------------------------------------
     // setters
-    // EFFECTS: sets the encounter jlist
-    public void setEncounterJList(JList<Character> encounterJList) {
-        this.encounterJList = encounterJList;
+    // EFFECTS: sets the encounter list model
+    public void setEncounterListModel(DefaultListModel<Character> encounterListModel) {
+        this.encounterListModel = encounterListModel;
     }
 
-    // EFFECTS: sets the library jlist
-    public void setLibraryJList(JList<StatBlock> libraryJList) {
-        this.libraryJList = libraryJList;
+    // EFFECTS: sets the library list model
+    public void setLibraryListModel(DefaultListModel<StatBlock> libraryListModel) {
+        this.libraryListModel = libraryListModel;
     }
 }

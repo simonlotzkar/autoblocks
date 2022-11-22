@@ -48,12 +48,7 @@
                     },
                     "reach": "5",
                     "name": "GreatAxe",
-                    "damageMap": {"slashing": {
-                        "string": "1d12+3",
-                        "modifier": 3,
-                        "amountOfDice": 1,
-                        "dieSides": 12
-                    }},
+                    "damageMap": {},
                     "description": "Melee Weapon Attack"
                 },
                 {
@@ -64,12 +59,7 @@
                     },
                     "reach": "5 or 30/120",
                     "name": "Javelin",
-                    "damageMap": {"piercing": {
-                        "string": "1d6+3",
-                        "modifier": 3,
-                        "amountOfDice": 1,
-                        "dieSides": 6
-                    }},
+                    "damageMap": {},
                     "description": "Melee or Ranged Weapon Attack"
                 }
             ],
@@ -107,7 +97,7 @@
                 "blindSight": 60,
                 "tremorSense": 0
             },
-            "resistances": {"acid": "immunity"},
+            "resistances": {},
             "title": {
                 "size": "Gargantuan",
                 "name": "Ancient Black Dragon",
@@ -195,20 +185,7 @@
                     },
                     "reach": "15",
                     "name": "Bite",
-                    "damageMap": {
-                        "acid": {
-                            "string": "2d8",
-                            "modifier": 0,
-                            "amountOfDice": 2,
-                            "dieSides": 8
-                        },
-                        "piercing": {
-                            "string": "1d10+8",
-                            "modifier": 8,
-                            "amountOfDice": 1,
-                            "dieSides": 10
-                        }
-                    },
+                    "damageMap": {},
                     "description": "Melee Weapon Attack"
                 },
                 {
@@ -219,12 +196,7 @@
                     },
                     "reach": "10",
                     "name": "Claw",
-                    "damageMap": {"slashing": {
-                        "string": "2d6+8",
-                        "modifier": 8,
-                        "amountOfDice": 2,
-                        "dieSides": 6
-                    }},
+                    "damageMap": {},
                     "description": "Melee Weapon Attack"
                 },
                 {
@@ -235,12 +207,7 @@
                     },
                     "reach": "20",
                     "name": "Tail",
-                    "damageMap": {"bludgeoning": {
-                        "string": "2d8+8",
-                        "modifier": 8,
-                        "amountOfDice": 2,
-                        "dieSides": 8
-                    }},
+                    "damageMap": {},
                     "description": "Melee Weapon Attack"
                 }
             ]
@@ -337,12 +304,7 @@
                         },
                         "reach": "5",
                         "name": "GreatAxe",
-                        "damageMap": {"slashing": {
-                            "string": "1d12+3",
-                            "modifier": 3,
-                            "amountOfDice": 1,
-                            "dieSides": 12
-                        }},
+                        "damageMap": {},
                         "description": "Melee Weapon Attack"
                     },
                     {
@@ -353,12 +315,7 @@
                         },
                         "reach": "5 or 30/120",
                         "name": "Javelin",
-                        "damageMap": {"piercing": {
-                            "string": "1d6+3",
-                            "modifier": 3,
-                            "amountOfDice": 1,
-                            "dieSides": 6
-                        }},
+                        "damageMap": {},
                         "description": "Melee or Ranged Weapon Attack"
                     }
                 ],
@@ -399,12 +356,7 @@
                     },
                     "reach": "5",
                     "name": "GreatAxe",
-                    "damageMap": {"slashing": {
-                        "string": "1d12+3",
-                        "modifier": 3,
-                        "amountOfDice": 1,
-                        "dieSides": 12
-                    }},
+                    "damageMap": {},
                     "description": "Melee Weapon Attack"
                 },
                 {
@@ -415,12 +367,7 @@
                     },
                     "reach": "5 or 30/120",
                     "name": "Javelin",
-                    "damageMap": {"piercing": {
-                        "string": "1d6+3",
-                        "modifier": 3,
-                        "amountOfDice": 1,
-                        "dieSides": 6
-                    }},
+                    "damageMap": {},
                     "description": "Melee or Ranged Weapon Attack"
                 }
             ]
@@ -515,12 +462,7 @@
                         },
                         "reach": "5",
                         "name": "GreatAxe",
-                        "damageMap": {"slashing": {
-                            "string": "1d12+3",
-                            "modifier": 3,
-                            "amountOfDice": 1,
-                            "dieSides": 12
-                        }},
+                        "damageMap": {},
                         "description": "Melee Weapon Attack"
                     },
                     {
@@ -531,12 +473,7 @@
                         },
                         "reach": "5 or 30/120",
                         "name": "Javelin",
-                        "damageMap": {"piercing": {
-                            "string": "1d6+3",
-                            "modifier": 3,
-                            "amountOfDice": 1,
-                            "dieSides": 6
-                        }},
+                        "damageMap": {},
                         "description": "Melee or Ranged Weapon Attack"
                     }
                 ],
@@ -577,12 +514,7 @@
                     },
                     "reach": "5",
                     "name": "GreatAxe",
-                    "damageMap": {"slashing": {
-                        "string": "1d12+3",
-                        "modifier": 3,
-                        "amountOfDice": 1,
-                        "dieSides": 12
-                    }},
+                    "damageMap": {},
                     "description": "Melee Weapon Attack"
                 },
                 {
@@ -593,12 +525,7 @@
                     },
                     "reach": "5 or 30/120",
                     "name": "Javelin",
-                    "damageMap": {"piercing": {
-                        "string": "1d6+3",
-                        "modifier": 3,
-                        "amountOfDice": 1,
-                        "dieSides": 6
-                    }},
+                    "damageMap": {},
                     "description": "Melee or Ranged Weapon Attack"
                 }
             ]
@@ -693,12 +620,7 @@
                         },
                         "reach": "5",
                         "name": "GreatAxe",
-                        "damageMap": {"slashing": {
-                            "string": "1d12+3",
-                            "modifier": 3,
-                            "amountOfDice": 1,
-                            "dieSides": 12
-                        }},
+                        "damageMap": {},
                         "description": "Melee Weapon Attack"
                     },
                     {
@@ -709,12 +631,7 @@
                         },
                         "reach": "5 or 30/120",
                         "name": "Javelin",
-                        "damageMap": {"piercing": {
-                            "string": "1d6+3",
-                            "modifier": 3,
-                            "amountOfDice": 1,
-                            "dieSides": 6
-                        }},
+                        "damageMap": {},
                         "description": "Melee or Ranged Weapon Attack"
                     }
                 ],
@@ -755,12 +672,7 @@
                     },
                     "reach": "5",
                     "name": "GreatAxe",
-                    "damageMap": {"slashing": {
-                        "string": "1d12+3",
-                        "modifier": 3,
-                        "amountOfDice": 1,
-                        "dieSides": 12
-                    }},
+                    "damageMap": {},
                     "description": "Melee Weapon Attack"
                 },
                 {
@@ -771,12 +683,7 @@
                     },
                     "reach": "5 or 30/120",
                     "name": "Javelin",
-                    "damageMap": {"piercing": {
-                        "string": "1d6+3",
-                        "modifier": 3,
-                        "amountOfDice": 1,
-                        "dieSides": 6
-                    }},
+                    "damageMap": {},
                     "description": "Melee or Ranged Weapon Attack"
                 }
             ]

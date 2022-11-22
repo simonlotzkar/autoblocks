@@ -8,7 +8,7 @@ public class MainFrame extends JFrame {
     private static final int WIDTH = 1080;
     private static final int HEIGHT = 720;
 
-    private static final ImageIcon DND_ICON = new ImageIcon("./data/images/icons/dndIcon.png");
+    private static final ImageIcon DND_ICON = new ImageIcon("./data/images/icons/dndIcon.gif");
 
     // EFFECTS: constructs this frame
     public MainFrame() {

@@ -9,9 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainMenuPanel extends JPanel implements ActionListener {
-    private JList<model.Character> encounterJList = new JList<>();
-    private JList<model.StatBlock> libraryJList = new JList<>();
-
     // panels
     private final MenuCardPanel menuCardMenu;
     private final JPanel buttonsPanel = new JPanel();
@@ -19,19 +16,11 @@ public class MainMenuPanel extends JPanel implements ActionListener {
     private final JPanel libraryAndSaveButtonPanel = new JPanel();
     private final JPanel encounterAndLoadButtonPanel = new JPanel();
 
-    // constants
-    private static final String ICONS_DIRECTORY = "./data/images/icons/";
-    private static final String BANNERS_DIRECTORY = "./data/images/banners/";
-
     // images
-    private static final JLabel MAIN_BANNER_LABEL = new JLabel(new ImageIcon(BANNERS_DIRECTORY + "mainMenuBanner.gif"));
-    private static final JLabel DIVIDER_LABEL = new JLabel(new ImageIcon("./data/images/divider.gif"));
-    private static final ImageIcon ROLL_ICON = new ImageIcon(ICONS_DIRECTORY + "d20Icon.gif");
-    private static final ImageIcon SAVE_ICON = new ImageIcon(ICONS_DIRECTORY + "saveIcon.gif");
-    private static final ImageIcon LOAD_ICON = new ImageIcon(ICONS_DIRECTORY + "fileIcon.gif");
-    private static final ImageIcon LIBRARY_ICON = new ImageIcon(ICONS_DIRECTORY + "libraryIcon.gif");
-    private static final ImageIcon ENCOUNTER_ICON = new ImageIcon(ICONS_DIRECTORY + "crossedSwordsIcon.gif");
-    private static final ImageIcon QUIT_ICON = new ImageIcon(ICONS_DIRECTORY + "exitIcon.gif");
+    private static final JLabel MAIN_BANNER_LABEL = new JLabel(new ImageIcon(
+            "./data/images/banners/mainMenuBanner.gif"));
+    private static final JLabel DIVIDER_LABEL = new JLabel(new ImageIcon(
+            "./data/images/divider.gif"));
 
     // buttons
     private final JButton customRollButton = new JButton("Open Custom Roll Window");
@@ -43,11 +32,10 @@ public class MainMenuPanel extends JPanel implements ActionListener {
 
     // EFFECTS: constructs this panel
     public MainMenuPanel(MenuCardPanel menuCardPanel) {
-        super();
+        super(new GridLayout(2, 1));
         this.menuCardMenu = menuCardPanel;
         this.setSize(menuCardPanel.getSize());
         this.setVisible(true);
-        this.setLayout(new GridLayout(2, 1));
         this.add(MAIN_BANNER_LABEL);
         initializeButtons();
         this.add(buttonsPanel);
@@ -56,13 +44,6 @@ public class MainMenuPanel extends JPanel implements ActionListener {
     // MODIFIES: this
     // EFFECTS: sets parameters for all buttons
     private void initializeButtons() {
-        customRollButton.setIcon(ROLL_ICON);
-        quitButton.setIcon(QUIT_ICON);
-        encounterButton.setIcon(ENCOUNTER_ICON);
-        libraryButton.setIcon(LIBRARY_ICON);
-        loadButton.setIcon(LOAD_ICON);
-        saveButton.setIcon(SAVE_ICON);
-
         List<JButton> buttonList = new ArrayList<>();
 
         buttonList.add(customRollButton);
@@ -74,7 +55,6 @@ public class MainMenuPanel extends JPanel implements ActionListener {
 
         for (JButton jb : buttonList) {
             jb.addActionListener(this);
-            jb.setFocusable(false);
             jb.setVisible(true);
         }
         initializeButtonPanels();

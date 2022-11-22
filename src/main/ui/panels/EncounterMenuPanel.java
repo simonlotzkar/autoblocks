@@ -1,68 +1,94 @@
 package ui.panels;
 
+import model.Character;
 import ui.frames.CharacterFrame;
-import ui.frames.CustomRollFrame;
 import ui.frames.GroupFrame;
-
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EncounterMenuPanel extends JPanel implements ActionListener, ListSelectionListener {
-    private JList<model.Character> encounterJList = new JList<>();
-    private JList<model.StatBlock> libraryJList = new JList<>();
+    private final JList<model.Character> encounterJList;
 
     // panels
     private final MenuCardPanel menuCardPanel;
     private final JPanel buttonsPanel = new JPanel();
-    private final JPanel smallButtonsPanel = new JPanel();
-    private final JPanel libraryAndSaveButtonPanel = new JPanel();
-    private final JPanel encounterAndLoadButtonPanel = new JPanel();
-
-    // constants
-    private static final String ICONS_DIRECTORY = "./data/images/icons/";
-    private static final String BANNERS_DIRECTORY = "./data/images/banners/";
 
     // images
-    private static final JLabel MAIN_BANNER_LABEL = new JLabel(new ImageIcon(BANNERS_DIRECTORY + "mainMenuBanner.jpg"));
-    private static final JLabel DIVIDER_LABEL = new JLabel(new ImageIcon("./data/images/divider.jpg"));
-    private static final ImageIcon ROLL_ICON = new ImageIcon(ICONS_DIRECTORY + "d20Icon.png");
-    private static final ImageIcon SAVE_ICON = new ImageIcon(ICONS_DIRECTORY + "saveIcon.png");
-    private static final ImageIcon LOAD_ICON = new ImageIcon(ICONS_DIRECTORY + "fileIcon.png");
-    private static final ImageIcon LIBRARY_ICON = new ImageIcon(ICONS_DIRECTORY + "libraryIcon.png");
-    private static final ImageIcon ENCOUNTER_ICON = new ImageIcon(ICONS_DIRECTORY + "crossedSwordsIcon.png");
-    private static final ImageIcon QUIT_ICON = new ImageIcon(ICONS_DIRECTORY + "exitIcon.png");
+    private static final JLabel BANNER_LABEL = new JLabel(new ImageIcon(
+            "./data/images/banners/encounterMenuBanner.gif"));
 
     // buttons
     private final JButton selectCharacterButton = new JButton("Open character's sheet");
     private final JButton selectGroupButton = new JButton("Open character's group");
-    private final JButton addToNewGroupButton = new JButton("Add selected to new group");
+    private final JButton addToGroupButton = new JButton("Add selected to group");
     private final JButton backButton = new JButton("Back");
 
     // EFFECTS: constructs this frame
     public EncounterMenuPanel(MenuCardPanel menuCardPanel) {
-        super();
+        super(new BorderLayout());
         this.menuCardPanel = menuCardPanel;
+        this.encounterJList = new JList<>(menuCardPanel.getEncounterListModel());
         this.setSize(menuCardPanel.getSize());
+
+        JScrollPane scrollPane = new JScrollPane(encounterJList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+        initializeButtons();
+        initializeJList();
+
+        JPanel northBorderPanel = new JPanel();
+        northBorderPanel.setLayout(new BorderLayout());
+        northBorderPanel.add(BANNER_LABEL, BorderLayout.CENTER);
+        northBorderPanel.add(new JPanel(), BorderLayout.SOUTH);
+        BANNER_LABEL.setPreferredSize(new Dimension(menuCardPanel.getWidth(), 144));
+
+        this.add(scrollPane, BorderLayout.CENTER);
+        this.add(northBorderPanel, BorderLayout.NORTH);
+        this.add(new JPanel(), BorderLayout.EAST);
+        this.add(buttonsPanel, BorderLayout.SOUTH);
+        this.add(new JPanel(), BorderLayout.WEST);
         this.setVisible(true);
-        this.setLayout(new GridLayout(2, 1));
-        this.add(MAIN_BANNER_LABEL);
-        //initializeButtons();
-        this.add(buttonsPanel);
     }
 
-    // EFFECTS: sets encounter jlist's parameters
-    private void initializeEncounterJList() {
-        encounterJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    // MODIFIES: this
+    // EFFECTS: sets the jlist's parameters
+    private void initializeJList() {
+        encounterJList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         encounterJList.setLayoutOrientation(JList.VERTICAL_WRAP);
         encounterJList.setVisibleRowCount(-1);
-        encounterJList.setVisible(true);
-        encounterJList.setBounds(WIDTH / 4, 20, WIDTH / 2, HEIGHT / 4);
         encounterJList.addListSelectionListener(this);
-        this.add(encounterJList);
+        encounterJList.setFixedCellWidth(720);
+        //((DefaultListCellRenderer) jList.getCellRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
+        encounterJList.setVisible(true);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: sets parameters for all buttons
+    private void initializeButtons() {
+        List<JButton> buttonList = new ArrayList<>();
+
+        buttonList.add(selectCharacterButton);
+        buttonList.add(selectGroupButton);
+        buttonList.add(addToGroupButton);
+        buttonList.add(backButton);
+
+        for (JButton jb : buttonList) {
+            jb.addActionListener(this);
+            jb.setVisible(true);
+        }
+
+        buttonsPanel.setLayout(new FlowLayout());
+        buttonsPanel.add(selectCharacterButton);
+        buttonsPanel.add(selectGroupButton);
+        buttonsPanel.add(addToGroupButton);
+        buttonsPanel.add(backButton);
+        buttonsPanel.setVisible(true);
     }
 
     @Override
@@ -74,11 +100,39 @@ public class EncounterMenuPanel extends JPanel implements ActionListener, ListSe
         if (e.getSource() == selectGroupButton) {
             new GroupFrame();
         }
-        if (e.getSource() == addToNewGroupButton) {
-            // prompt for new group name with cancel option
+        if (e.getSource() == addToGroupButton) {
+            addSelectedToGroup();
+            this.revalidate();
+            this.repaint();
         }
         if (e.getSource() == backButton) {
             menuCardPanel.changeMenu("mainMenu");
+        }
+    }
+
+    // EFFECTS: prompts user for a group name, sets selected characters to the given group name
+    //          or if nothing is given does nothing
+    private void addSelectedToGroup() {
+        ListModel<Character> encounterListModel = encounterJList.getModel();
+        try {
+            String command = JOptionPane.showInputDialog(this,
+                    "What do you want to name this group?",
+                    "User Input Needed",
+                    JOptionPane.INFORMATION_MESSAGE,
+                    null,
+                    null,
+                    "").toString();
+
+            if (command.isBlank() || command.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Invalid group name given.", "Failure!",
+                        JOptionPane.WARNING_MESSAGE);
+            } else {
+                for (int i : encounterJList.getSelectedIndices()) {
+                    encounterListModel.getElementAt(i).getTitle().setGroup(command);
+                }
+            }
+        } catch (NullPointerException exception) {
+            // user cancelled so do nothing
         }
     }
 
@@ -86,9 +140,13 @@ public class EncounterMenuPanel extends JPanel implements ActionListener, ListSe
     // EFFECTS: disables and enables buttons when user is changing list selection
     public void valueChanged(ListSelectionEvent e) {
         if (e.getValueIsAdjusting()) {
-            //disable list buttons
+            selectCharacterButton.setEnabled(false);
+            selectGroupButton.setEnabled(false);
+            addToGroupButton.setEnabled(false);
         } else if (!e.getValueIsAdjusting()) {
-            //enable list buttons
+            selectCharacterButton.setEnabled(true);
+            selectGroupButton.setEnabled(true);
+            addToGroupButton.setEnabled(true);
         }
     }
 }

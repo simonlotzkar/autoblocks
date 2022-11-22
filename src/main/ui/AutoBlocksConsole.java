@@ -14,7 +14,7 @@ import java.text.NumberFormat;
 import java.util.*;
 
 //Represents...
-public class AutoBlocksTerminal {
+public class AutoBlocksConsole {
     // play and library lists
     private List<StatBlock> library = new ArrayList<>();
     private List<Character> encounter = new ArrayList<>();
@@ -39,7 +39,7 @@ public class AutoBlocksTerminal {
     private static final int tab = 4;
 
     // EFFECTS: constructs the autoblocks app
-    public AutoBlocksTerminal() throws FileNotFoundException {
+    public AutoBlocksConsole() throws FileNotFoundException {
         runAutoBlocks();
     }
 

@@ -1,9 +1,8 @@
 package ui.panels;
 
-import ui.frames.CharacterFrame;
-import ui.frames.CustomRollFrame;
-import ui.frames.GroupFrame;
-import ui.frames.StatBlockCreatorFrame;
+import model.Character;
+import model.StatBlock;
+import ui.frames.*;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -11,27 +10,19 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LibraryMenuPanel extends JPanel implements ActionListener, ListSelectionListener {
-    private JList<model.Character> encounterJList = new JList<>();
-    private JList<model.StatBlock> libraryJList = new JList<>();
+    private final JList<model.StatBlock> libraryJList;
 
     // panels
     private final MenuCardPanel menuCardPanel;
     private final JPanel buttonsPanel = new JPanel();
-    private final JPanel smallButtonsPanel = new JPanel();
-    private final JPanel libraryAndSaveButtonPanel = new JPanel();
-    private final JPanel encounterAndLoadButtonPanel = new JPanel();
-
-    // constants
-    private static final String ICONS_DIRECTORY = "./data/images/icons/";
-    private static final String BANNERS_DIRECTORY = "./data/images/banners/";
 
     // images
-    private static final JLabel MAIN_BANNER_LABEL = new JLabel(new ImageIcon(BANNERS_DIRECTORY + "mainMenuBanner.jpg"));
-    private static final JLabel DIVIDER_LABEL = new JLabel(new ImageIcon("./data/images/divider.jpg"));
-    private static final ImageIcon ROLL_ICON = new ImageIcon(ICONS_DIRECTORY + "d20Icon.png");
-    private static final ImageIcon QUIT_ICON = new ImageIcon(ICONS_DIRECTORY + "exitIcon.png");
+    private static final JLabel BANNER_LABEL = new JLabel(new ImageIcon(
+            "./data/images/banners/libraryMenuBanner.gif"));
 
     // buttons
     private final JButton selectStatBlockButton = new JButton("Open statblock's sheet");
@@ -39,58 +30,141 @@ public class LibraryMenuPanel extends JPanel implements ActionListener, ListSele
     private final JButton addToEncounterButton = new JButton("Add selected to encounter");
     private final JButton backButton = new JButton("Back");
 
-    // EFFECTS: constructs this panel
+    // EFFECTS: constructs this frame
     public LibraryMenuPanel(MenuCardPanel menuCardPanel) {
-        super();
+        super(new BorderLayout());
         this.menuCardPanel = menuCardPanel;
+        this.libraryJList = new JList<>(menuCardPanel.getLibraryListModel());
         this.setSize(menuCardPanel.getSize());
-        this.setVisible(true);
-        this.setLayout(new GridLayout(2, 1));
-        this.add(MAIN_BANNER_LABEL);
+
+        JScrollPane scrollPane = new JScrollPane(libraryJList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
         initializeButtons();
-        this.add(buttonsPanel);
+        initializeJList();
+
+        JPanel northBorderPanel = new JPanel();
+        northBorderPanel.setLayout(new BorderLayout());
+        northBorderPanel.add(BANNER_LABEL, BorderLayout.CENTER);
+        northBorderPanel.add(new JPanel(), BorderLayout.SOUTH);
+        BANNER_LABEL.setPreferredSize(new Dimension(menuCardPanel.getWidth(), 144));
+
+        this.add(scrollPane, BorderLayout.CENTER);
+        this.add(northBorderPanel, BorderLayout.NORTH);
+        this.add(new JPanel(), BorderLayout.EAST);
+        this.add(buttonsPanel, BorderLayout.SOUTH);
+        this.add(new JPanel(), BorderLayout.WEST);
+        this.setVisible(true);
     }
 
-    // EFFECTS: sets encounter jlist's parameters
-    private void initializeLibraryList() {
-        libraryJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    // MODIFIES: this
+    // EFFECTS: sets the jlist's parameters
+    private void initializeJList() {
+        libraryJList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         libraryJList.setLayoutOrientation(JList.VERTICAL_WRAP);
         libraryJList.setVisibleRowCount(-1);
-        libraryJList.setVisible(true);
-        libraryJList.setBounds(WIDTH / 4, 20, WIDTH / 2, HEIGHT / 4);
         libraryJList.addListSelectionListener(this);
-        this.add(libraryJList);
+        libraryJList.setFixedCellWidth(720);
+        //((DefaultListCellRenderer) jList.getCellRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
+        libraryJList.setVisible(true);
     }
 
-    // EFFECTS: constructs buttons
-    public void initializeButtons() {
-        //stub
+    // MODIFIES: this
+    // EFFECTS: sets parameters for all buttons
+    private void initializeButtons() {
+        List<JButton> buttonList = new ArrayList<>();
+
+        buttonList.add(selectStatBlockButton);
+        buttonList.add(createNewStatBlockButton);
+        buttonList.add(addToEncounterButton);
+        buttonList.add(backButton);
+
+        for (JButton jb : buttonList) {
+            jb.addActionListener(this);
+            jb.setVisible(true);
+        }
+
+        buttonsPanel.setLayout(new FlowLayout());
+        buttonsPanel.add(selectStatBlockButton);
+        buttonsPanel.add(createNewStatBlockButton);
+        buttonsPanel.add(addToEncounterButton);
+        buttonsPanel.add(backButton);
+        buttonsPanel.setVisible(true);
     }
 
     @Override
     // EFFECTS: processes button presses from user
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == selectStatBlockButton) {
-            new CharacterFrame();
+            new StatBlockFrame();
         }
         if (e.getSource() == createNewStatBlockButton) {
             new StatBlockCreatorFrame();
         }
         if (e.getSource() == addToEncounterButton) {
-            // prompt for number of copies to add with cancel option
+            tryAddSelectedToEncounter();
         }
         if (e.getSource() == backButton) {
             menuCardPanel.changeMenu("mainMenu");
         }
     }
 
+    // EFFECTS: prompts user for the number of copies to add then adds them or cancels or catches exceptions
+    private void tryAddSelectedToEncounter() {
+        try {
+            int command = Integer.parseInt((JOptionPane.showInputDialog(this,
+                    "How many copies of the selected statblocks do you want to add?",
+                    "User Input Needed",
+                    JOptionPane.INFORMATION_MESSAGE,
+                    null,
+                    null,
+                    "")).toString());
+            DefaultListModel<Character> newEncounterListModel = addSelectedToEncounter(command);
+            menuCardPanel.setEncounterListModel(newEncounterListModel);
+        } catch (NumberFormatException exception) {
+            JOptionPane.showMessageDialog(this, "NumberFormatException caught. Message: "
+                    + exception.getMessage() + ".", "Failure!", JOptionPane.WARNING_MESSAGE);
+        } catch (NullPointerException exception) {
+            // user cancelled so do nothing
+        }
+    }
+
+    // EFFECTS: adds the selected statblocks to the menucard's encounter list model as new characters,
+    //          repeating each for number equal to the given integer
+    private DefaultListModel<Character> addSelectedToEncounter(int copies) {
+        DefaultListModel<Character> encounterListModel = menuCardPanel.getEncounterListModel();
+        ListModel<StatBlock> libraryListModel = libraryJList.getModel();
+        List<Character> encounterList = new ArrayList<>();
+        List<StatBlock> toBeAdded = new ArrayList<>();
+
+        // converts menucard's encounter list model to an array list
+        for (int i = 0; i < encounterListModel.getSize(); i++) {
+            encounterList.add(encounterListModel.getElementAt(i));
+        }
+
+        for (int i : libraryJList.getSelectedIndices()) {
+            StatBlock statBlock = libraryListModel.getElementAt(i);
+            for (int n = 0; n < copies; n++) {
+                encounterList.add(new Character(statBlock,
+                        Character.generateNameForEncounter(statBlock, encounterList)));
+            }
+        }
+        encounterListModel.removeAllElements();
+        encounterListModel.addAll(encounterList);
+        return encounterListModel;
+    }
+
     @Override
     // EFFECTS: disables and enables buttons when user is changing list selection
     public void valueChanged(ListSelectionEvent e) {
         if (e.getValueIsAdjusting()) {
-            //disable list buttons
+            selectStatBlockButton.setEnabled(false);
+            createNewStatBlockButton.setEnabled(false);
+            addToEncounterButton.setEnabled(false);
         } else if (!e.getValueIsAdjusting()) {
-            //enable list buttons
+            selectStatBlockButton.setEnabled(true);
+            createNewStatBlockButton.setEnabled(true);
+            addToEncounterButton.setEnabled(true);
         }
     }
 }
