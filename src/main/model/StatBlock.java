@@ -464,4 +464,10 @@ public class StatBlock implements Writable {
         }
         return json;
     }
+
+    @Override
+    // returns a string representation of the character
+    public String toString() {
+        return this.title.getName() + ". CR: " + this.getChallengeRating();
+    }
 }

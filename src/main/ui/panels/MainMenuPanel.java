@@ -1,125 +1,66 @@
 package ui.panels;
 
-import ui.frames.CustomRollFrame;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
+/*
+structure:
+mainmenupanel (borderlayout)
+	NORTH = titlePanel (figure it out)
+	CENTER = mainpanel(borderlayout)
+		NORTH = scrollpanesheader(gridlayout2x1)
+			row1 = mainDisplayTitleLabel
+			row2 = sideDisplayTitlePanel (cardlayout)
+				card 1 = siderolloutputtitlepanel (gridlayout1x2)
+					col1 = rolloutputlabel
+					col2 = customrollbutton
+				card2 = statblockTitleLabel
+		CENTER = scrollPanesPanel (gridlayout1x2)
+			col1 = mainDisplayScrollPanel (cardlayout)
+				card1 = encounterLIST
+				card2 = libraryLIST
+				card3 = statBlockPanel
+				card4 = statBlockCreationPanel
+				card5 = characterPanel
+				card6 = groupLIST
+			col2 = sideDisplayScrollPane (cardlayout)
+				card1 = encounterSideDisplayPanel (gridlayout2x1)
+					row1 = rolloutputlogscrollpane [rolloutputlog]
+					row2 = actionspanel (borderlayout)
+						NORTH = actionspanel (gridlayout1x2)
+							col1 = actionslabel
+							col2 = customactionbutton
+						CENTER = actionsscrollpane [actions]
+						SOUTH = rollactionbutton
+				card 2 = librarySideDisplayPanel (cardlayout)
+					card1 = statBlockPanel
+					card2 = statblockcreationPanel
+		SOUTH = buttonpanel (cardlayout)
+			card1 = libraryButtonPanel (gridlayout2x1)
+				row1 = librarybuttonpanel0 (grid1x2)
+					col1 = addselectedtoencounterbutton
+					col2 = openstatblockbutton
+				row2 = librarybuttonpanel1 (grid1x3)
+					col1 = createnewstatblockbutton
+					col2 = deleteselectedstatblocksbutton
+					col3 = backbutton
+			card2 = encounterButtonPanel (gridlayout3x1)
+				row1 = encounterbuttonpanel0 (gridlayout1x2)
+					col1 = opencharbutton
+					col2 = opengroupbutton
+				row2 = encounterbuttonpanel1 (gridlayout1x3)
+					col1 = rollcheckbutton
+					col2 = rollinitiativebutton
+					col3 = edithpbutton
+				row3 = encounterbuttonpanel2 (gridlayout1x3)
+					col1 = editgroupbutton
+					col2 = deletebutton
+					col3 = backbutton
+			card3 = characterButtonPanel (gridlayout2x1)
+				row1 = encounterbuttonpanel1
+				row2 = encounterbuttonpanel2
+			card4 = groupButtonPanel (gridlayout3x1)
+				row1 = opencharbutton
+				row2 = encounterbuttonpanel1
+				row3 = encounterbuttonpanel2
+ */
 
-public class MainMenuPanel extends JPanel implements ActionListener {
-    // constants
-    private static final String ICON_DIRECTORY = "./data/images/icons/";
-
-    // panels
-    private final MenuCardPanel menuCardMenu;
-    private final JPanel buttonsPanel = new JPanel();
-    private final JPanel smallButtonsPanel = new JPanel();
-    private final JPanel libraryAndSaveButtonPanel = new JPanel();
-    private final JPanel encounterAndLoadButtonPanel = new JPanel();
-
-    // images
-    private static final JLabel MAIN_BANNER_LABEL = new JLabel(new ImageIcon(
-            "./data/images/banners/tallBanner.gif"));
-    private static final ImageIcon D20_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "d20BlueIcon");
-    private static final ImageIcon EXIT_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "exitIcon");
-    private static final ImageIcon LIBRARY_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "libraryIcon");
-    private static final ImageIcon ENCOUNTER_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "crossedSwordsIcon");
-    private static final ImageIcon LOAD_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "fileIcon");
-    private static final ImageIcon SAVE_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "saveIcon");
-
-    // buttons
-    private final JButton customRollButton = new JButton("Open Custom Roll Window");
-    private final JButton quitButton = new JButton("Quit AutoBlocks");
-    private final JButton libraryButton = new JButton("Library Menu");
-    private final JButton encounterButton = new JButton("Encounter Menu");
-    private final JButton loadButton = new JButton("Load encounter and library from file");
-    private final JButton saveButton = new JButton("Save encounter and library to file");
-
-    // EFFECTS: constructs this panel
-    public MainMenuPanel(MenuCardPanel menuCardPanel) {
-        super(new GridLayout(2, 1));
-        this.menuCardMenu = menuCardPanel;
-        this.setSize(menuCardPanel.getSize());
-        this.setVisible(true);
-        this.add(MAIN_BANNER_LABEL);
-        initializeButtons();
-        this.add(buttonsPanel);
-    }
-
-    // MODIFIES: this
-    // EFFECTS: sets parameters for all buttons
-    private void initializeButtons() {
-        List<JButton> buttonList = new ArrayList<>();
-
-        buttonList.add(customRollButton);
-        buttonList.add(quitButton);
-        buttonList.add(encounterButton);
-        buttonList.add(libraryButton);
-        buttonList.add(loadButton);
-        buttonList.add(saveButton);
-
-        customRollButton.setIcon(D20_IMAGE_ICON);
-        quitButton.setIcon(EXIT_IMAGE_ICON);
-        encounterButton.setIcon(ENCOUNTER_IMAGE_ICON);
-        libraryButton.setIcon(LIBRARY_IMAGE_ICON);
-        loadButton.setIcon(LOAD_IMAGE_ICON);
-        saveButton.setIcon(SAVE_IMAGE_ICON);
-
-        for (JButton jb : buttonList) {
-            jb.addActionListener(this);
-            jb.setVisible(true);
-        }
-        initializeButtonPanels();
-    }
-
-    // MODIFIES: this
-    // EFFECTS: sets up button panels with buttons and layouts
-    private void initializeButtonPanels() {
-        libraryAndSaveButtonPanel.setLayout(new GridLayout(2, 1));
-        libraryAndSaveButtonPanel.add(libraryButton);
-        libraryAndSaveButtonPanel.add(saveButton);
-        libraryAndSaveButtonPanel.setVisible(true);
-
-        encounterAndLoadButtonPanel.setLayout(new GridLayout(2, 1));
-        encounterAndLoadButtonPanel.add(encounterButton);
-        encounterAndLoadButtonPanel.add(loadButton);
-        encounterAndLoadButtonPanel.setVisible(true);
-
-        smallButtonsPanel.setLayout(new GridLayout(1, 3));
-        smallButtonsPanel.add(libraryAndSaveButtonPanel);
-        smallButtonsPanel.add(encounterAndLoadButtonPanel);
-        smallButtonsPanel.add(quitButton);
-        smallButtonsPanel.setVisible(true);
-
-        buttonsPanel.setLayout(new GridLayout(3, 1));
-        buttonsPanel.add(customRollButton);
-        buttonsPanel.add(new JLabel());
-        buttonsPanel.add(smallButtonsPanel);
-        buttonsPanel.setVisible(true);
-    }
-
-    @Override
-    // EFFECTS: processes button presses from user
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == customRollButton) {
-            new CustomRollFrame();
-        }
-        if (e.getSource() == encounterButton) {
-            menuCardMenu.changeMenu("encounterMenu");
-        }
-        if (e.getSource() == libraryButton) {
-            menuCardMenu.changeMenu("libraryMenu");
-        }
-        if (e.getSource() == loadButton) {
-            menuCardMenu.tryLoad();
-        }
-        if (e.getSource() == saveButton) {
-            menuCardMenu.trySave();
-        }
-        if (e.getSource() == quitButton) {
-            menuCardMenu.confirmQuit();
-        }
-    }
+public class MainMenuPanel {
 }

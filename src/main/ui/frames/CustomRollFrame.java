@@ -1,8 +1,6 @@
 package ui.frames;
 
-import model.Character;
 import model.RollFormula;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,6 +9,11 @@ import java.util.ArrayList;
 
 // Represents a custom roll frame that has a log of previous rolls
 public class CustomRollFrame extends JFrame implements ActionListener {
+    // constants
+    private static final String ICON_DIRECTORY = "./data/images/icons/";
+    private static final int WIDTH = 480;
+    private static final int HEIGHT = 320;
+
     // panels
     JPanel rollParametersPanel = new JPanel();
     JPanel outputLogPanel = new JPanel();
@@ -27,22 +30,22 @@ public class CustomRollFrame extends JFrame implements ActionListener {
     JTextField modifierTextField = new JTextField();
     ArrayList<JTextField> textFieldList = new ArrayList<>();
 
-    private static final int WIDTH = 480;
-    private static final int HEIGHT = 320;
-
-    private static final ImageIcon D20_ICON = new ImageIcon("./data/images/icons/d20Icon.gif");
+    // images
+    private static final ImageIcon D20_BLUE_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "d20BlueIcon.png");
+    private static final ImageIcon DICE_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "diceIcon.png");
 
     // EFFECTS: constructs a custom roll frame
     public CustomRollFrame() {
         super("Custom Roll");
         this.setSize(WIDTH, HEIGHT);
-        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.setIconImage(D20_ICON.getImage());
+        this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        this.setIconImage(D20_BLUE_IMAGE_ICON.getImage());
 
         initializeComponents();
 
         rollButton.addActionListener(this);
         rollButton.setVisible(true);
+        rollButton.setIcon(DICE_IMAGE_ICON);
         rollButton.setPreferredSize(new Dimension(WIDTH, 50));
 
         JPanel customRollPanel = new JPanel();
@@ -58,6 +61,19 @@ public class CustomRollFrame extends JFrame implements ActionListener {
 
     // EFFECTS: sets up most of the components for this frame
     private void initializeComponents() {
+        initializeParameterPanel();
+
+        outputLogTextArea = new JTextArea("Custom Roll Output Log:", 10, WIDTH / 12);
+        outputLogTextArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(outputLogTextArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+        outputLogPanel.add(scrollPane);
+        outputLogPanel.setVisible(true);
+    }
+
+    // EFFECTS: sets up the components of the roll parameters panel
+    private void initializeParameterPanel() {
         textFieldList.add(amountOfDiceTextField);
         textFieldList.add(dieSidesTextField);
         textFieldList.add(modifierTextField);
@@ -75,14 +91,6 @@ public class CustomRollFrame extends JFrame implements ActionListener {
         rollParametersPanel.add(new JLabel("modifier:"));
         rollParametersPanel.add(modifierTextField);
         rollParametersPanel.setVisible(true);
-
-        outputLogTextArea = new JTextArea("Custom Roll Output Log:", 10, WIDTH / 12);
-        outputLogTextArea.setEditable(false);
-        JScrollPane scrollPane = new JScrollPane(outputLogTextArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-
-        outputLogPanel.add(scrollPane);
-        outputLogPanel.setVisible(true);
     }
 
     @Override
