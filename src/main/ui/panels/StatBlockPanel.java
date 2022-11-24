@@ -1,6 +1,8 @@
 package ui.panels;
 
 import model.StatBlock;
+import ui.panels.menus.MenuManagerPanel;
+import ui.panels.menus.MenuPanel;
 
 import java.awt.*;
 
@@ -9,8 +11,8 @@ public class StatBlockPanel extends MenuPanel {
     private final StatBlock statBlock;
 
     // constructs this panel
-    public StatBlockPanel(MenuCardPanel menuCardPanel) {
-        super(new BorderLayout(), menuCardPanel);
-        this.statBlock = menuCardPanel.getSelectedStatBlock();
+    public StatBlockPanel(MenuManagerPanel menuManagerPanel) {
+        super(new BorderLayout(), menuManagerPanel);
+        this.statBlock = menuManagerPanel.getSelectedStatBlock();
     }
 }

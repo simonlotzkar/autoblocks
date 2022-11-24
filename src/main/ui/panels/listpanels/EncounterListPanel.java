@@ -1,15 +1,15 @@
-package ui.scrollpanes;
+package ui.panels.listpanels;
 
 import model.Character;
-import ui.panels.ListMenuPanelDELETE;
-import ui.panels.MenuCardPanel;
+import ui.panels.menus.MenuManagerPanel;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
-public class EncounterScrollPane extends ListMenuPanelDELETE {
+public class EncounterListPanel extends ScrollPane implements ListSelectionListener {
     private final JList<model.Character> encounterJList;
     private JScrollPane scrollPane;
 
@@ -23,22 +23,17 @@ public class EncounterScrollPane extends ListMenuPanelDELETE {
     private final JButton addToGroupButton = new JButton("Add selected to group");
 
     // EFFECTS: constructs this frame
-    public EncounterScrollPane(MenuCardPanel menuCardPanel) {
-        super(new BorderLayout(), menuCardPanel);
-        this.encounterJList = new JList<>(menuCardPanel.getEncounterListModel());
+    public EncounterListPanel(MenuManagerPanel menuManagerPanel) {
+        super(new BorderLayout(), menuManagerPanel);
+        this.encounterJList = new JList<>(menuManagerPanel.getEncounterListModel());
         initializeAll();
     }
 
     // EFFECTS: constructs all components/containers in this panel
     protected void initializeAll() {
         initializeScrollPane();
-        initializeNorthBorderPanel(BANNER_IMAGE_ICON);
-        initializeButtonPanel();
 
         this.add(scrollPane, BorderLayout.CENTER);
-        this.add(northBorderPanel, BorderLayout.NORTH);
-        this.add(new JPanel(), BorderLayout.EAST);
-        this.add(buttonsPanel, BorderLayout.SOUTH);
         this.add(new JPanel(), BorderLayout.WEST);
         this.setVisible(true);
     }
@@ -103,7 +98,7 @@ public class EncounterScrollPane extends ListMenuPanelDELETE {
     // EFFECTS: processes button presses from user
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == selectCharacterButton) {
-            menuCardPanel.changeMenu("characterMenu");
+            mainPanel.changeMenu("characterMenu");
             menuCardPanel.setSelectedCharacter(encounterJList.getModel()
                     .getElementAt(encounterJList.getSelectedIndex()));
         }

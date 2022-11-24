@@ -1,7 +1,7 @@
 package ui.frames;
 
 import javax.swing.*;
-import ui.panels.MenuCardPanel;
+import ui.panels.menus.MenuManagerPanel;
 
 // represents the main frame that contains the main panel
 public class MainFrame extends JFrame {
@@ -16,7 +16,7 @@ public class MainFrame extends JFrame {
         this.setSize(WIDTH, HEIGHT);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setIconImage(DND_ICON.getImage());
-        this.add(new MenuCardPanel(this));
+        this.add(new MenuManagerPanel(this));
         this.setVisible(true);
     }
 }

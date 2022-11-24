@@ -1,4 +1,4 @@
-package ui.panels;
+package ui.panels.menus;
 
 import model.Character;
 import model.StatBlock;
@@ -6,10 +6,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.JsonReader;
 import ui.frames.MainFrame;
-import ui.scrollpanes.EncounterScrollPane;
-import ui.scrollpanes.GroupScrollPane;
-import ui.scrollpanes.LibraryScrollPane;
-
 import javax.swing.*;
 import java.awt.*;
 import java.io.FileNotFoundException;
@@ -17,32 +13,23 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 // represents a panel that manages the menu panels by switching between them
-public class MenuCardPanel extends JPanel {
+public class MenuManagerPanel extends JPanel {
     private DefaultListModel<Character> encounterListModel = new DefaultListModel<>();
     private DefaultListModel<StatBlock> libraryListModel = new DefaultListModel<>();
-
-    private model.Character selectedCharacter;
-    private StatBlock selectedStatBlock;
-    private String selectedGroup;
 
     private final CardLayout cardLayout = new CardLayout();
 
     private static final String JSON_DIRECTORY = "./data/autoBlocksApp.json";
 
     // EFFECTS: constructs this panel
-    public MenuCardPanel(MainFrame mainFrame) {
+    public MenuManagerPanel(MainFrame mainFrame) {
         super();
         this.setSize(mainFrame.getSize());
         this.setVisible(true);
         this.setLayout(cardLayout);
-        this.add(new TitleMenuPanel(this), "mainMenu");
-        this.add(new LibraryScrollPane(this), "libraryMenu");
-        this.add(new EncounterScrollPane(this), "encounterMenu");
-        this.add(new CharacterPanel(this), "characterMenu");
-        this.add(new GroupScrollPane(this), "groupMenu");
-        this.add(new StatBlockPanel(this), "statBlockMenu");
-        this.add(new StatBlockCreationPanel(this), "statBlockCreationMenu");
-        cardLayout.show(this, "mainMenu");
+        this.add(new TitleMenuPanel(this), "titleMenu");
+        this.add(new MenuManagerPanel(this), "mainMenu");
+        cardLayout.show(this, "titleMenu");
     }
 
     // MODIFIES: this
@@ -136,21 +123,6 @@ public class MenuCardPanel extends JPanel {
         return libraryListModel;
     }
 
-    // EFFECTS: gets the selected character
-    public model.Character getSelectedCharacter() {
-        return selectedCharacter;
-    }
-
-    // EFFECTS: gets the selected statblock
-    public StatBlock getSelectedStatBlock() {
-        return selectedStatBlock;
-    }
-
-    // EFFECTS: gets the selected group name
-    public String getSelectedGroup() {
-        return selectedGroup;
-    }
-
     // -----------------------------------------------------------------------
     // setters
     // EFFECTS: sets the encounter list model
@@ -161,20 +133,5 @@ public class MenuCardPanel extends JPanel {
     // EFFECTS: sets the library list model
     public void setLibraryListModel(DefaultListModel<StatBlock> libraryListModel) {
         this.libraryListModel = libraryListModel;
-    }
-
-    // EFFECTS: sets the selected character
-    public void setSelectedCharacter(Character selectedCharacter) {
-        this.selectedCharacter = selectedCharacter;
-    }
-
-    // EFFECTS: sets the selected statblock
-    public void setSelectedStatBlock(StatBlock selectedStatBlock) {
-        this.selectedStatBlock = selectedStatBlock;
-    }
-
-    // EFFECTS: sets the selected group name
-    public void setSelectedGroup(String selectedGroup) {
-        this.selectedGroup = selectedGroup;
     }
 }

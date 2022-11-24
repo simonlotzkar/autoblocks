@@ -1,9 +1,8 @@
-package ui.scrollpanes;
+package ui.panels.listpanels;
 
 import model.Character;
 import model.StatBlock;
-import ui.panels.ListMenuPanelDELETE;
-import ui.panels.MenuCardPanel;
+import ui.panels.menus.MenuManagerPanel;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -12,7 +11,7 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LibraryScrollPane extends ListMenuPanelDELETE {
+public class LibraryListPanel extends ListMenuPanelDELETE {
     private final JList<model.StatBlock> libraryJList;
     private JScrollPane scrollPane;
 
@@ -26,9 +25,9 @@ public class LibraryScrollPane extends ListMenuPanelDELETE {
     private final JButton addToEncounterButton = new JButton("Add selected to encounter");
 
     // EFFECTS: constructs this frame
-    public LibraryScrollPane(MenuCardPanel menuCardPanel) {
-        super(new BorderLayout(), menuCardPanel);
-        this.libraryJList = new JList<>(menuCardPanel.getLibraryListModel());
+    public LibraryListPanel(MenuManagerPanel menuManagerPanel) {
+        super(new BorderLayout(), menuManagerPanel);
+        this.libraryJList = new JList<>(menuManagerPanel.getLibraryListModel());
         initializeAll();
     }
 

@@ -1,14 +1,16 @@
 package ui.panels;
 
+import ui.panels.menus.MenuManagerPanel;
+
 import java.awt.*;
 
 // Represents...
-public class CharacterPanel extends MenuPanel {
+public class CharacterPanel {
     private final model.Character character;
 
     // constructs this panel
-    public CharacterPanel(MenuCardPanel menuCardPanel) {
-        super(new BorderLayout(), menuCardPanel);
-        this.character = menuCardPanel.getSelectedCharacter();
+    public CharacterPanel(MenuManagerPanel menuManagerPanel) {
+        super(new BorderLayout(), menuManagerPanel);
+        this.character = menuManagerPanel.getSelectedCharacter();
     }
 }

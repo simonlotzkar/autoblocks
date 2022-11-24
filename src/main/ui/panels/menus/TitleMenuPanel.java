@@ -1,4 +1,4 @@
-package ui.panels;
+package ui.panels.menus;
 
 import ui.frames.CustomRollFrame;
 
@@ -43,8 +43,8 @@ public class TitleMenuPanel extends MenuPanel implements ActionListener {
     private final JButton saveButton = new JButton("Save encounter and library to file");
 
     // EFFECTS: constructs this panel
-    public TitleMenuPanel(MenuCardPanel menuCardPanel) {
-        super(new BorderLayout(), menuCardPanel);
+    public TitleMenuPanel(MenuManagerPanel menuManagerPanel) {
+        super(new BorderLayout(), menuManagerPanel); // sets layout and menu managers, visibility, and size
 
         initializeButtons();
 
@@ -110,19 +110,19 @@ public class TitleMenuPanel extends MenuPanel implements ActionListener {
             new CustomRollFrame();
         }
         if (e.getSource() == encounterButton) {
-            menuCardPanel.changeMenu("encounterMenu");
+            menuManagerPanel.changeMenu("encounterMenu");
         }
         if (e.getSource() == libraryButton) {
-            menuCardPanel.changeMenu("libraryMenu");
+            menuManagerPanel.changeMenu("libraryMenu");
         }
         if (e.getSource() == loadButton) {
-            menuCardPanel.tryLoad();
+            menuManagerPanel.tryLoad();
         }
         if (e.getSource() == saveButton) {
-            menuCardPanel.trySave();
+            menuManagerPanel.trySave();
         }
         if (e.getSource() == quitButton) {
-            menuCardPanel.confirmQuit();
+            menuManagerPanel.confirmQuit();
         }
     }
 }
