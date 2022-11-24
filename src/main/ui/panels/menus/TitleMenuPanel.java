@@ -9,24 +9,13 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
-titleMenuPanel = borderlayout
-	NORTH = bannerCardPanel (cardlayout)
-		card1 = banner image
-		card2 = mainMenuTitleLabel
-CENTER = buttonPanel (gridlayout2x3)
- */
-
 public class TitleMenuPanel extends MenuPanel implements ActionListener {
     // panels
-    private final JPanel buttonsPanel = new JPanel();
-    private final JPanel smallButtonsPanel = new JPanel();
-    private final JPanel libraryAndSaveButtonPanel = new JPanel();
-    private final JPanel encounterAndLoadButtonPanel = new JPanel();
+    private final JPanel buttonsPanel = new JPanel(new GridLayout(2, 1));
 
     // images
     private static final JLabel MAIN_BANNER_LABEL = new JLabel(new ImageIcon(
-            "./data/images/banners/tallBanner.jpg"));
+            "./data/images/banners/banner0.jpg"));
     private static final ImageIcon D20_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "d20Icon.png");
     private static final ImageIcon EXIT_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "exitIcon.png");
     private static final ImageIcon LIBRARY_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "libraryIcon.png");
@@ -47,8 +36,13 @@ public class TitleMenuPanel extends MenuPanel implements ActionListener {
         super(new BorderLayout(), menuManagerPanel); // sets layout and menu managers, visibility, and size
 
         initializeButtons();
+        initializeButtonPanel();
 
-        this.add(MAIN_BANNER_LABEL, BorderLayout.CENTER);
+        JPanel tempLabel = new JPanel();
+        tempLabel.setBackground(Color.BLUE);
+
+        this.add(tempLabel, BorderLayout.CENTER);
+        //this.add(MAIN_BANNER_LABEL, BorderLayout.CENTER);
         this.add(buttonsPanel, BorderLayout.SOUTH);
     }
 
@@ -73,34 +67,27 @@ public class TitleMenuPanel extends MenuPanel implements ActionListener {
 
         for (JButton jb : buttonList) {
             jb.addActionListener(this);
-            jb.setVisible(true);
         }
-        initializeButtonPanels();
     }
 
     // MODIFIES: this
     // EFFECTS: sets up button panels with buttons and layouts
-    private void initializeButtonPanels() {
-        libraryAndSaveButtonPanel.setLayout(new GridLayout(2, 1));
+    private void initializeButtonPanel() {
+        JPanel libraryAndSaveButtonPanel = new JPanel(new GridLayout(2, 1));
         libraryAndSaveButtonPanel.add(libraryButton);
         libraryAndSaveButtonPanel.add(saveButton);
-        libraryAndSaveButtonPanel.setVisible(true);
 
-        encounterAndLoadButtonPanel.setLayout(new GridLayout(2, 1));
+        JPanel encounterAndLoadButtonPanel = new JPanel(new GridLayout(2, 1));
         encounterAndLoadButtonPanel.add(encounterButton);
         encounterAndLoadButtonPanel.add(loadButton);
-        encounterAndLoadButtonPanel.setVisible(true);
 
-        smallButtonsPanel.setLayout(new GridLayout(1, 3));
+        JPanel smallButtonsPanel = new JPanel(new GridLayout(1, 3));
         smallButtonsPanel.add(libraryAndSaveButtonPanel);
         smallButtonsPanel.add(encounterAndLoadButtonPanel);
         smallButtonsPanel.add(quitButton);
-        smallButtonsPanel.setVisible(true);
 
-        buttonsPanel.setLayout(new GridLayout(2, 1));
         buttonsPanel.add(customRollButton);
         buttonsPanel.add(smallButtonsPanel);
-        buttonsPanel.setVisible(true);
     }
 
     @Override
@@ -108,20 +95,17 @@ public class TitleMenuPanel extends MenuPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == customRollButton) {
             new CustomRollFrame();
-        }
-        if (e.getSource() == encounterButton) {
-            menuManagerPanel.changeMenu("encounterMenu");
-        }
-        if (e.getSource() == libraryButton) {
-            menuManagerPanel.changeMenu("libraryMenu");
-        }
-        if (e.getSource() == loadButton) {
+        } else if (e.getSource() == encounterButton) {
+            menuManagerPanel.setMenu("main");
+            menuManagerPanel.getMainMenuPanel().setState("encounter");
+        } else if (e.getSource() == libraryButton) {
+            menuManagerPanel.setMenu("main");
+            menuManagerPanel.getMainMenuPanel().setState("library");
+        } else if (e.getSource() == loadButton) {
             menuManagerPanel.tryLoad();
-        }
-        if (e.getSource() == saveButton) {
+        } else if (e.getSource() == saveButton) {
             menuManagerPanel.trySave();
-        }
-        if (e.getSource() == quitButton) {
+        } else if (e.getSource() == quitButton) {
             menuManagerPanel.confirmQuit();
         }
     }

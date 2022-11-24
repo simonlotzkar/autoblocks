@@ -17,6 +17,9 @@ public class MenuManagerPanel extends JPanel {
     private DefaultListModel<Character> encounterListModel = new DefaultListModel<>();
     private DefaultListModel<StatBlock> libraryListModel = new DefaultListModel<>();
 
+    private final TitleMenuPanel titleMenuPanel = new TitleMenuPanel(this);
+    private final MainMenuPanel mainMenuPanel = new MainMenuPanel(this);
+
     private final CardLayout cardLayout = new CardLayout();
 
     private static final String JSON_DIRECTORY = "./data/autoBlocksApp.json";
@@ -25,16 +28,16 @@ public class MenuManagerPanel extends JPanel {
     public MenuManagerPanel(MainFrame mainFrame) {
         super();
         this.setSize(mainFrame.getSize());
-        this.setVisible(true);
         this.setLayout(cardLayout);
-        this.add(new TitleMenuPanel(this), "titleMenu");
-        this.add(new MenuManagerPanel(this), "mainMenu");
-        cardLayout.show(this, "titleMenu");
+        this.add(titleMenuPanel, "title");
+        this.add(mainMenuPanel, "main");
+        this.setVisible(true);
+        cardLayout.show(this, "title");
     }
 
     // MODIFIES: this
     // EFFECTS: changes menu based on given string or does nothing if given incorrect string
-    public void changeMenu(String s) {
+    public void setMenu(String s) {
         cardLayout.show(this, s);
     }
 
@@ -121,6 +124,16 @@ public class MenuManagerPanel extends JPanel {
     // EFFECTS: gets the library list model
     public DefaultListModel<StatBlock> getLibraryListModel() {
         return libraryListModel;
+    }
+
+    // EFFECTS: gets the
+    public TitleMenuPanel getTitleMenuPanel() {
+        return titleMenuPanel;
+    }
+
+    // EFFECTS: gets the
+    public MainMenuPanel getMainMenuPanel() {
+        return mainMenuPanel;
     }
 
     // -----------------------------------------------------------------------

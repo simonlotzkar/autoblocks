@@ -24,20 +24,6 @@ public class Action extends Ability {
 
     // -----------------------------------------------------------------------------------------------------------------
     // getters
-    // EFFECTS: gets a descriptive string of this action
-    public String getString() {
-        return getDescription()
-                + ", "
-                + getName()
-                + " ("
-                + reach
-                + "ft), ("
-                + hitFormula.getString()
-                + ") to hit"
-                + getDamageString()
-                + ".";
-    }
-
     // EFFECTS: gets a descriptive string of the damage for this action
     private String getDamageString() {
         StringBuilder damageStringBuilder = new StringBuilder();
@@ -102,5 +88,20 @@ public class Action extends Ability {
         json.put("hitFormula", hitFormula.toJson());
         json.put("damageMap", damageMap);
         return json;
+    }
+
+    @Override
+    // EFFECTS: gets a descriptive string of this action
+    public String toString() {
+        return getDescription()
+                + ", "
+                + getName()
+                + " ("
+                + reach
+                + "ft), ("
+                + hitFormula.getString()
+                + ") to hit"
+                + getDamageString()
+                + ".";
     }
 }

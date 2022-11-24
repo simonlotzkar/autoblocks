@@ -87,21 +87,21 @@ public class ActionTest {
     public void testGetStringAction0() {
         String testRollString = "something something weapon, test action 0 (5ft), "
                 + "(0d0) to hit and (0d0) slashing damage.";
-        assertEquals(testRollString, testAction0.getString());
+        assertEquals(testRollString, testAction0.toString());
     }
 
     @Test
     public void testGetStringAction1() {
         String testRollString = "Something Something Spell, Test Action 1 (30/120ft), "
                 + "(1d1+1) to hit and (1d1+1) slashing damage and (1d1+1) Fire damage.";
-        assertEquals(testRollString, testAction1.getString());
+        assertEquals(testRollString, testAction1.toString());
     }
 
     @Test
     public void testGetStringAction2() {
         String testRollString = "something something weapon, Test Action 1 (5ft), "
                 + "(3d12-4) to hit and (1d1+1) slashing damage and (1d20+3) Fire damage.";
-        assertEquals(testRollString, testAction2.getString());
+        assertEquals(testRollString, testAction2.toString());
     }
 
     @Test

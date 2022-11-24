@@ -16,7 +16,7 @@ public class CustomRollFrame extends JFrame implements ActionListener {
 
     // panels
     JPanel rollParametersPanel = new JPanel();
-    JPanel outputLogPanel = new JPanel();
+    JScrollPane outputLogScrollPane = new JScrollPane();
 
     // buttons
     JButton rollButton = new JButton("Roll!");
@@ -41,35 +41,31 @@ public class CustomRollFrame extends JFrame implements ActionListener {
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         this.setIconImage(D20_BLUE_IMAGE_ICON.getImage());
 
-        initializeComponents();
+        initializeParameterPanel();
+        initializeOutputLogScrollPane();
 
         rollButton.addActionListener(this);
-        rollButton.setVisible(true);
         rollButton.setIcon(DICE_IMAGE_ICON);
         rollButton.setPreferredSize(new Dimension(WIDTH, 50));
 
         JPanel customRollPanel = new JPanel();
         customRollPanel.setLayout(new BorderLayout());
-        customRollPanel.add(outputLogPanel, BorderLayout.CENTER);
+        customRollPanel.add(outputLogScrollPane, BorderLayout.CENTER);
         customRollPanel.add(rollParametersPanel, BorderLayout.NORTH);
         customRollPanel.add(rollButton, BorderLayout.SOUTH);
-        customRollPanel.setVisible(true);
 
         this.add(customRollPanel);
         this.setVisible(true);
     }
 
     // EFFECTS: sets up most of the components for this frame
-    private void initializeComponents() {
-        initializeParameterPanel();
-
+    private void initializeOutputLogScrollPane() {
         outputLogTextArea = new JTextArea("Custom Roll Output Log:", 10, WIDTH / 12);
         outputLogTextArea.setEditable(false);
-        JScrollPane scrollPane = new JScrollPane(outputLogTextArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
-        outputLogPanel.add(scrollPane);
-        outputLogPanel.setVisible(true);
+        outputLogScrollPane.setViewportView(outputLogTextArea);
+        outputLogScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        outputLogScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
     }
 
     // EFFECTS: sets up the components of the roll parameters panel
@@ -80,7 +76,6 @@ public class CustomRollFrame extends JFrame implements ActionListener {
 
         for (JTextField tf : textFieldList) {
             tf.setPreferredSize(new Dimension(WIDTH / 8, HEIGHT / 8));
-            tf.setVisible(true);
         }
 
         rollParametersPanel.setLayout(new FlowLayout());

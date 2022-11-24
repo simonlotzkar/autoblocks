@@ -449,7 +449,7 @@ public class AutoBlocksConsole {
     private void displayIndividualActions(StatBlock selected) {
         System.out.println("\tActions:");
         for (Action a : selected.getActions()) {
-            System.out.println("\t\t" + a.getString());
+            System.out.println("\t\t" + a.toString());
         }
     }
 
