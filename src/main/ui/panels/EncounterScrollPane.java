@@ -7,6 +7,7 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +24,8 @@ public class EncounterScrollPane extends JScrollPane implements ListSelectionLis
     private JButton changeHPButton;
     private JButton setCharacterGroupButton;
     private JButton deleteCharacterButton;
+    private JButton rollCheckButton;
+    private JButton rollInitiativeButton;
 
     // EFFECTS: constructs this display panel
     public EncounterScrollPane(MainMenuPanel mainMenuPanel) {
@@ -50,20 +53,21 @@ public class EncounterScrollPane extends JScrollPane implements ListSelectionLis
         changeHPButton = mainMenuPanel.getChangeHPButton();
         setCharacterGroupButton = mainMenuPanel.getSetCharacterGroupButton();
         deleteCharacterButton = mainMenuPanel.getDeleteCharacterButton();
+        rollCheckButton = mainMenuPanel.getRollCheckButton();
+        rollInitiativeButton = mainMenuPanel.getRollInitiativeButton();
     }
 
     // MODIFIES: this
     // EFFECTS: ...
     protected void initializeJList() {
         encounterJList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-        encounterJList.setLayoutOrientation(JList.VERTICAL_WRAP);
+        encounterJList.setLayoutOrientation(JList.VERTICAL);
         encounterJList.setVisibleRowCount(-1);
         encounterJList.addListSelectionListener(this);
     }
 
     // EFFECTS: prompts user for a group name, sets selected characters to the given group name
     private void setCharactersGroup() {
-        ListModel<Character> encounterListModel = encounterJList.getModel();
         try {
             String command = JOptionPane.showInputDialog(this,
                     "Group Name",
@@ -81,15 +85,15 @@ public class EncounterScrollPane extends JScrollPane implements ListSelectionLis
                     encounterListModel.getElementAt(i).getTitle().setGroup(command);
                 }
             }
-
         } catch (NullPointerException exception) {
             // user cancelled so do nothing
         }
+        this.revalidate();
+        this.repaint();
     }
 
     // EFFECTS: prompts user for amount of hitpoints to add to selected characters' hp
     private void changeCharactersHP() {
-        ListModel<Character> encounterListModel = encounterJList.getModel();
         try {
             int command = Integer.parseInt((JOptionPane.showInputDialog(this,
                     "HitPoints",
@@ -109,6 +113,8 @@ public class EncounterScrollPane extends JScrollPane implements ListSelectionLis
         } catch (NullPointerException exception) {
             // user cancelled so do nothing
         }
+        this.revalidate();
+        this.repaint();
     }
 
     // EFFECTS: prompts user for confirmation and number of selected then deletes them from the encounter
@@ -124,6 +130,41 @@ public class EncounterScrollPane extends JScrollPane implements ListSelectionLis
                 encounterListModel.removeElement(o);
             }
         }
+        this.revalidate();
+        this.repaint();
+    }
+
+    // EFFECTS: ...
+    private void rollInitiative() {
+        for (int i : encounterJList.getSelectedIndices()) {
+            mainMenuPanel.getSideDisplayPanel().printToOutputLog(
+                    encounterListModel.getElementAt(i).rollInitiative());
+        }
+    }
+
+    // EFFECTS: ...
+    private void rollCheck() {
+        try {
+            String command = JOptionPane.showInputDialog(this,
+                    "Ability for Check",
+                    "User Input Needed",
+                    JOptionPane.INFORMATION_MESSAGE,
+                    null,
+                    null,
+                    "").toString();
+
+            if (!("strengthconstitutiondexterityintelligencewisdomcharisma").contains(command.toLowerCase())) {
+                JOptionPane.showMessageDialog(this, "Invalid check given.", "Failure!",
+                        JOptionPane.WARNING_MESSAGE);
+            } else {
+                for (int i : encounterJList.getSelectedIndices()) {
+                    mainMenuPanel.getSideDisplayPanel().printToOutputLog(
+                            encounterListModel.getElementAt(i).rollCheckAsString(command));
+                }
+            }
+        } catch (NullPointerException exception) {
+            // user cancelled so do nothing
+        }
     }
 
     // EFFECTS: processes button presses from user
@@ -131,25 +172,22 @@ public class EncounterScrollPane extends JScrollPane implements ListSelectionLis
         if (e.getSource() == backButton) {
             mainMenuPanel.getMenuManagerPanel().setMenu("title");
         } else if (e.getSource() == openCharacterButton) {
-            mainMenuPanel.setSelectedCharacter(encounterJList.getModel()
-                    .getElementAt(encounterJList.getSelectedIndex()));
+            mainMenuPanel.setSelectedCharacter(encounterListModel.getElementAt(encounterJList.getSelectedIndex()));
             mainMenuPanel.getMainDisplayPanel().setMainDisplay("character");
         } else if (e.getSource() == openGroupButton) {
-            mainMenuPanel.setSelectedGroup(encounterJList.getModel()
+            mainMenuPanel.setSelectedGroup(encounterListModel
                     .getElementAt(encounterJList.getSelectedIndex()).getTitle().getGroup());
             mainMenuPanel.getMainDisplayPanel().setMainDisplay("group");
         } else if (e.getSource() == changeHPButton) {
             changeCharactersHP();
-            this.revalidate();
-            this.repaint();
         } else if (e.getSource() == setCharacterGroupButton) {
             setCharactersGroup();
-            this.revalidate();
-            this.repaint();
         } else if (e.getSource() == deleteCharacterButton) {
             deleteCharacters();
-            this.revalidate();
-            this.repaint();
+        } else if (e.getSource() == rollCheckButton) {
+            rollCheck();
+        } else if (e.getSource() == rollInitiativeButton) {
+            rollInitiative();
         }
     }
 
@@ -159,6 +197,8 @@ public class EncounterScrollPane extends JScrollPane implements ListSelectionLis
         changeHPButton.setEnabled(!e.getValueIsAdjusting());
         setCharacterGroupButton.setEnabled(!e.getValueIsAdjusting());
         deleteCharacterButton.setEnabled(!e.getValueIsAdjusting());
+        rollCheckButton.setEnabled(!e.getValueIsAdjusting());
+        rollInitiativeButton.setEnabled(!e.getValueIsAdjusting());
 
         mainMenuPanel.getSideDisplayPanel().valueChanged(e);
 

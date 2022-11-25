@@ -1,5 +1,6 @@
 package model.statblockfields;
 
+import model.RollFormula;
 import org.json.JSONObject;
 import persistence.Writable;
 
@@ -22,6 +23,12 @@ public class AbilityScores implements Writable {
         this.intelligence = intelligence;
         this.wisdom = wisdom;
         this.charisma = charisma;
+    }
+
+    // EFFECTS: rolls a check for the given ability score
+    public int rollCheckAsInt(String abilityScore) {
+        RollFormula rollFormula = new RollFormula(1, 20, getModifier(abilityScore));
+        return rollFormula.roll();
     }
 
     // -----------------------------------------------------------------------------------------------------------------

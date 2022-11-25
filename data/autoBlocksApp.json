@@ -48,7 +48,12 @@
                     },
                     "reach": "5",
                     "name": "GreatAxe",
-                    "damageMap": {},
+                    "damageMap": {"slashing": {
+                        "string": "1d12+3",
+                        "modifier": 3,
+                        "amountOfDice": 1,
+                        "dieSides": 12
+                    }},
                     "description": "Melee Weapon Attack"
                 },
                 {
@@ -59,7 +64,12 @@
                     },
                     "reach": "5 or 30/120",
                     "name": "Javelin",
-                    "damageMap": {},
+                    "damageMap": {"piercing": {
+                        "string": "1d6+3",
+                        "modifier": 3,
+                        "amountOfDice": 1,
+                        "dieSides": 6
+                    }},
                     "description": "Melee or Ranged Weapon Attack"
                 }
             ],
@@ -97,7 +107,7 @@
                 "blindSight": 60,
                 "tremorSense": 0
             },
-            "resistances": {},
+            "resistances": {"acid": "immunity"},
             "title": {
                 "size": "Gargantuan",
                 "name": "Ancient Black Dragon",
@@ -185,7 +195,20 @@
                     },
                     "reach": "15",
                     "name": "Bite",
-                    "damageMap": {},
+                    "damageMap": {
+                        "acid": {
+                            "string": "2d8",
+                            "modifier": 0,
+                            "amountOfDice": 2,
+                            "dieSides": 8
+                        },
+                        "piercing": {
+                            "string": "1d10+8",
+                            "modifier": 8,
+                            "amountOfDice": 1,
+                            "dieSides": 10
+                        }
+                    },
                     "description": "Melee Weapon Attack"
                 },
                 {
@@ -196,7 +219,12 @@
                     },
                     "reach": "10",
                     "name": "Claw",
-                    "damageMap": {},
+                    "damageMap": {"slashing": {
+                        "string": "2d6+8",
+                        "modifier": 8,
+                        "amountOfDice": 2,
+                        "dieSides": 6
+                    }},
                     "description": "Melee Weapon Attack"
                 },
                 {
@@ -207,7 +235,12 @@
                     },
                     "reach": "20",
                     "name": "Tail",
-                    "damageMap": {},
+                    "damageMap": {"bludgeoning": {
+                        "string": "2d8+8",
+                        "modifier": 8,
+                        "amountOfDice": 2,
+                        "dieSides": 8
+                    }},
                     "description": "Melee Weapon Attack"
                 }
             ]
@@ -216,7 +249,7 @@
     "encounter": [
         {
             "skillProficiencies": ["intimidation"],
-            "maxHP": 10,
+            "maxHP": 14,
             "languages": {
                 "telepathy": 0,
                 "languagesList": [
@@ -231,7 +264,7 @@
                 "blindSight": 0,
                 "tremorSense": 0
             },
-            "hp": 10,
+            "hp": 14,
             "title": {
                 "size": "Medium",
                 "name": "Orc 1",
@@ -304,7 +337,12 @@
                         },
                         "reach": "5",
                         "name": "GreatAxe",
-                        "damageMap": {},
+                        "damageMap": {"slashing": {
+                            "string": "1d12+3",
+                            "modifier": 3,
+                            "amountOfDice": 1,
+                            "dieSides": 12
+                        }},
                         "description": "Melee Weapon Attack"
                     },
                     {
@@ -315,7 +353,12 @@
                         },
                         "reach": "5 or 30/120",
                         "name": "Javelin",
-                        "damageMap": {},
+                        "damageMap": {"piercing": {
+                            "string": "1d6+3",
+                            "modifier": 3,
+                            "amountOfDice": 1,
+                            "dieSides": 6
+                        }},
                         "description": "Melee or Ranged Weapon Attack"
                     }
                 ],
@@ -356,7 +399,12 @@
                     },
                     "reach": "5",
                     "name": "GreatAxe",
-                    "damageMap": {},
+                    "damageMap": {"slashing": {
+                        "string": "1d12+3",
+                        "modifier": 3,
+                        "amountOfDice": 1,
+                        "dieSides": 12
+                    }},
                     "description": "Melee Weapon Attack"
                 },
                 {
@@ -367,14 +415,19 @@
                     },
                     "reach": "5 or 30/120",
                     "name": "Javelin",
-                    "damageMap": {},
+                    "damageMap": {"piercing": {
+                        "string": "1d6+3",
+                        "modifier": 3,
+                        "amountOfDice": 1,
+                        "dieSides": 6
+                    }},
                     "description": "Melee or Ranged Weapon Attack"
                 }
             ]
         },
         {
             "skillProficiencies": ["intimidation"],
-            "maxHP": 20,
+            "maxHP": 16,
             "languages": {
                 "telepathy": 0,
                 "languagesList": [
@@ -389,7 +442,7 @@
                 "blindSight": 0,
                 "tremorSense": 0
             },
-            "hp": 20,
+            "hp": 16,
             "title": {
                 "size": "Medium",
                 "name": "Orc 2",
@@ -462,7 +515,12 @@
                         },
                         "reach": "5",
                         "name": "GreatAxe",
-                        "damageMap": {},
+                        "damageMap": {"slashing": {
+                            "string": "1d12+3",
+                            "modifier": 3,
+                            "amountOfDice": 1,
+                            "dieSides": 12
+                        }},
                         "description": "Melee Weapon Attack"
                     },
                     {
@@ -473,7 +531,12 @@
                         },
                         "reach": "5 or 30/120",
                         "name": "Javelin",
-                        "damageMap": {},
+                        "damageMap": {"piercing": {
+                            "string": "1d6+3",
+                            "modifier": 3,
+                            "amountOfDice": 1,
+                            "dieSides": 6
+                        }},
                         "description": "Melee or Ranged Weapon Attack"
                     }
                 ],
@@ -514,7 +577,12 @@
                     },
                     "reach": "5",
                     "name": "GreatAxe",
-                    "damageMap": {},
+                    "damageMap": {"slashing": {
+                        "string": "1d12+3",
+                        "modifier": 3,
+                        "amountOfDice": 1,
+                        "dieSides": 12
+                    }},
                     "description": "Melee Weapon Attack"
                 },
                 {
@@ -525,14 +593,19 @@
                     },
                     "reach": "5 or 30/120",
                     "name": "Javelin",
-                    "damageMap": {},
+                    "damageMap": {"piercing": {
+                        "string": "1d6+3",
+                        "modifier": 3,
+                        "amountOfDice": 1,
+                        "dieSides": 6
+                    }},
                     "description": "Melee or Ranged Weapon Attack"
                 }
             ]
         },
         {
             "skillProficiencies": ["intimidation"],
-            "maxHP": 10,
+            "maxHP": 18,
             "languages": {
                 "telepathy": 0,
                 "languagesList": [
@@ -547,7 +620,7 @@
                 "blindSight": 0,
                 "tremorSense": 0
             },
-            "hp": 10,
+            "hp": 18,
             "title": {
                 "size": "Medium",
                 "name": "Orc 3",
@@ -620,7 +693,12 @@
                         },
                         "reach": "5",
                         "name": "GreatAxe",
-                        "damageMap": {},
+                        "damageMap": {"slashing": {
+                            "string": "1d12+3",
+                            "modifier": 3,
+                            "amountOfDice": 1,
+                            "dieSides": 12
+                        }},
                         "description": "Melee Weapon Attack"
                     },
                     {
@@ -631,7 +709,12 @@
                         },
                         "reach": "5 or 30/120",
                         "name": "Javelin",
-                        "damageMap": {},
+                        "damageMap": {"piercing": {
+                            "string": "1d6+3",
+                            "modifier": 3,
+                            "amountOfDice": 1,
+                            "dieSides": 6
+                        }},
                         "description": "Melee or Ranged Weapon Attack"
                     }
                 ],
@@ -672,7 +755,12 @@
                     },
                     "reach": "5",
                     "name": "GreatAxe",
-                    "damageMap": {},
+                    "damageMap": {"slashing": {
+                        "string": "1d12+3",
+                        "modifier": 3,
+                        "amountOfDice": 1,
+                        "dieSides": 12
+                    }},
                     "description": "Melee Weapon Attack"
                 },
                 {
@@ -683,8 +771,1001 @@
                     },
                     "reach": "5 or 30/120",
                     "name": "Javelin",
-                    "damageMap": {},
+                    "damageMap": {"piercing": {
+                        "string": "1d6+3",
+                        "modifier": 3,
+                        "amountOfDice": 1,
+                        "dieSides": 6
+                    }},
                     "description": "Melee or Ranged Weapon Attack"
+                }
+            ]
+        },
+        {
+            "skillProficiencies": ["intimidation"],
+            "maxHP": 18,
+            "languages": {
+                "telepathy": 0,
+                "languagesList": [
+                    "Common",
+                    "Orc"
+                ]
+            },
+            "senses": {
+                "trueSight": 0,
+                "passivePerception": 10,
+                "darkVision": 60,
+                "blindSight": 0,
+                "tremorSense": 0
+            },
+            "hp": 18,
+            "title": {
+                "size": "Medium",
+                "name": "Orc 4",
+                "type": "Humanoid (Orc)",
+                "alignment": "Chaotic Evil"
+            },
+            "proficiency": 2,
+            "abilityScores": {
+                "dexterity": 12,
+                "constitution": 16,
+                "strength": 16,
+                "charisma": 10,
+                "intelligence": 7,
+                "wisdom": 11
+            },
+            "armour": {
+                "ac": 13,
+                "armourName": "Hide Armour",
+                "magicArmour": 0
+            },
+            "abilities": [{
+                "name": "Aggressive",
+                "description": "As a bonus Action, the orc can move up to its speed toward a Hostile creature that it can see."
+            }],
+            "parentStatBlock": {
+                "abilities": [{
+                    "name": "Aggressive",
+                    "description": "As a bonus Action, the orc can move up to its speed toward a Hostile creature that it can see."
+                }],
+                "skillProficiencies": ["intimidation"],
+                "languages": {
+                    "telepathy": 0,
+                    "languagesList": [
+                        "Common",
+                        "Orc"
+                    ]
+                },
+                "senses": {
+                    "trueSight": 0,
+                    "passivePerception": 10,
+                    "darkVision": 60,
+                    "blindSight": 0,
+                    "tremorSense": 0
+                },
+                "hpFormula": {
+                    "modifier": 6,
+                    "amountOfDice": 2,
+                    "dieSides": 8
+                },
+                "xp": 100,
+                "speeds": {
+                    "climb": 0,
+                    "fly": 0,
+                    "burrow": 0,
+                    "speed": 30,
+                    "swim": 0
+                },
+                "title": {
+                    "size": "Medium",
+                    "name": "Orc",
+                    "type": "Humanoid (Orc)",
+                    "alignment": "Chaotic Evil"
+                },
+                "actions": [
+                    {
+                        "hitFormula": {
+                            "modifier": 5,
+                            "amountOfDice": 1,
+                            "dieSides": 20
+                        },
+                        "reach": "5",
+                        "name": "GreatAxe",
+                        "damageMap": {"slashing": {
+                            "string": "1d12+3",
+                            "modifier": 3,
+                            "amountOfDice": 1,
+                            "dieSides": 12
+                        }},
+                        "description": "Melee Weapon Attack"
+                    },
+                    {
+                        "hitFormula": {
+                            "modifier": 5,
+                            "amountOfDice": 1,
+                            "dieSides": 20
+                        },
+                        "reach": "5 or 30/120",
+                        "name": "Javelin",
+                        "damageMap": {"piercing": {
+                            "string": "1d6+3",
+                            "modifier": 3,
+                            "amountOfDice": 1,
+                            "dieSides": 6
+                        }},
+                        "description": "Melee or Ranged Weapon Attack"
+                    }
+                ],
+                "proficiency": 2,
+                "abilityScores": {
+                    "dexterity": 12,
+                    "constitution": 16,
+                    "strength": 16,
+                    "charisma": 10,
+                    "intelligence": 7,
+                    "wisdom": 11
+                },
+                "armour": {
+                    "ac": 13,
+                    "armourName": "Hide Armour",
+                    "magicArmour": 0
+                }
+            },
+            "hpFormula": {
+                "modifier": 6,
+                "amountOfDice": 2,
+                "dieSides": 8
+            },
+            "xp": 100,
+            "speeds": {
+                "climb": 0,
+                "fly": 0,
+                "burrow": 0,
+                "speed": 30,
+                "swim": 0
+            },
+            "actions": [
+                {
+                    "hitFormula": {
+                        "modifier": 5,
+                        "amountOfDice": 1,
+                        "dieSides": 20
+                    },
+                    "reach": "5",
+                    "name": "GreatAxe",
+                    "damageMap": {"slashing": {
+                        "string": "1d12+3",
+                        "modifier": 3,
+                        "amountOfDice": 1,
+                        "dieSides": 12
+                    }},
+                    "description": "Melee Weapon Attack"
+                },
+                {
+                    "hitFormula": {
+                        "modifier": 5,
+                        "amountOfDice": 1,
+                        "dieSides": 20
+                    },
+                    "reach": "5 or 30/120",
+                    "name": "Javelin",
+                    "damageMap": {"piercing": {
+                        "string": "1d6+3",
+                        "modifier": 3,
+                        "amountOfDice": 1,
+                        "dieSides": 6
+                    }},
+                    "description": "Melee or Ranged Weapon Attack"
+                }
+            ]
+        },
+        {
+            "skillProficiencies": ["intimidation"],
+            "maxHP": 15,
+            "languages": {
+                "telepathy": 0,
+                "languagesList": [
+                    "Common",
+                    "Orc"
+                ]
+            },
+            "senses": {
+                "trueSight": 0,
+                "passivePerception": 10,
+                "darkVision": 60,
+                "blindSight": 0,
+                "tremorSense": 0
+            },
+            "hp": 15,
+            "title": {
+                "size": "Medium",
+                "name": "Orc 5",
+                "type": "Humanoid (Orc)",
+                "alignment": "Chaotic Evil"
+            },
+            "proficiency": 2,
+            "abilityScores": {
+                "dexterity": 12,
+                "constitution": 16,
+                "strength": 16,
+                "charisma": 10,
+                "intelligence": 7,
+                "wisdom": 11
+            },
+            "armour": {
+                "ac": 13,
+                "armourName": "Hide Armour",
+                "magicArmour": 0
+            },
+            "abilities": [{
+                "name": "Aggressive",
+                "description": "As a bonus Action, the orc can move up to its speed toward a Hostile creature that it can see."
+            }],
+            "parentStatBlock": {
+                "abilities": [{
+                    "name": "Aggressive",
+                    "description": "As a bonus Action, the orc can move up to its speed toward a Hostile creature that it can see."
+                }],
+                "skillProficiencies": ["intimidation"],
+                "languages": {
+                    "telepathy": 0,
+                    "languagesList": [
+                        "Common",
+                        "Orc"
+                    ]
+                },
+                "senses": {
+                    "trueSight": 0,
+                    "passivePerception": 10,
+                    "darkVision": 60,
+                    "blindSight": 0,
+                    "tremorSense": 0
+                },
+                "hpFormula": {
+                    "modifier": 6,
+                    "amountOfDice": 2,
+                    "dieSides": 8
+                },
+                "xp": 100,
+                "speeds": {
+                    "climb": 0,
+                    "fly": 0,
+                    "burrow": 0,
+                    "speed": 30,
+                    "swim": 0
+                },
+                "title": {
+                    "size": "Medium",
+                    "name": "Orc",
+                    "type": "Humanoid (Orc)",
+                    "alignment": "Chaotic Evil"
+                },
+                "actions": [
+                    {
+                        "hitFormula": {
+                            "modifier": 5,
+                            "amountOfDice": 1,
+                            "dieSides": 20
+                        },
+                        "reach": "5",
+                        "name": "GreatAxe",
+                        "damageMap": {"slashing": {
+                            "string": "1d12+3",
+                            "modifier": 3,
+                            "amountOfDice": 1,
+                            "dieSides": 12
+                        }},
+                        "description": "Melee Weapon Attack"
+                    },
+                    {
+                        "hitFormula": {
+                            "modifier": 5,
+                            "amountOfDice": 1,
+                            "dieSides": 20
+                        },
+                        "reach": "5 or 30/120",
+                        "name": "Javelin",
+                        "damageMap": {"piercing": {
+                            "string": "1d6+3",
+                            "modifier": 3,
+                            "amountOfDice": 1,
+                            "dieSides": 6
+                        }},
+                        "description": "Melee or Ranged Weapon Attack"
+                    }
+                ],
+                "proficiency": 2,
+                "abilityScores": {
+                    "dexterity": 12,
+                    "constitution": 16,
+                    "strength": 16,
+                    "charisma": 10,
+                    "intelligence": 7,
+                    "wisdom": 11
+                },
+                "armour": {
+                    "ac": 13,
+                    "armourName": "Hide Armour",
+                    "magicArmour": 0
+                }
+            },
+            "hpFormula": {
+                "modifier": 6,
+                "amountOfDice": 2,
+                "dieSides": 8
+            },
+            "xp": 100,
+            "speeds": {
+                "climb": 0,
+                "fly": 0,
+                "burrow": 0,
+                "speed": 30,
+                "swim": 0
+            },
+            "actions": [
+                {
+                    "hitFormula": {
+                        "modifier": 5,
+                        "amountOfDice": 1,
+                        "dieSides": 20
+                    },
+                    "reach": "5",
+                    "name": "GreatAxe",
+                    "damageMap": {"slashing": {
+                        "string": "1d12+3",
+                        "modifier": 3,
+                        "amountOfDice": 1,
+                        "dieSides": 12
+                    }},
+                    "description": "Melee Weapon Attack"
+                },
+                {
+                    "hitFormula": {
+                        "modifier": 5,
+                        "amountOfDice": 1,
+                        "dieSides": 20
+                    },
+                    "reach": "5 or 30/120",
+                    "name": "Javelin",
+                    "damageMap": {"piercing": {
+                        "string": "1d6+3",
+                        "modifier": 3,
+                        "amountOfDice": 1,
+                        "dieSides": 6
+                    }},
+                    "description": "Melee or Ranged Weapon Attack"
+                }
+            ]
+        },
+        {
+            "skillProficiencies": [
+                "perception",
+                "stealth"
+            ],
+            "maxHP": 341,
+            "languages": {
+                "telepathy": 0,
+                "languagesList": [
+                    "Common",
+                    "Draconic"
+                ]
+            },
+            "senses": {
+                "trueSight": 0,
+                "passivePerception": 26,
+                "darkVision": 120,
+                "blindSight": 60,
+                "tremorSense": 0
+            },
+            "hp": 341,
+            "resistances": {"acid": "immunity"},
+            "title": {
+                "size": "Gargantuan",
+                "name": "Ancient Black Dragon 1",
+                "type": "Dragon",
+                "alignment": "Chaotic Evil"
+            },
+            "savingThrowProficiencies": [
+                "dexterity",
+                "constitution",
+                "wisdom",
+                "charisma"
+            ],
+            "proficiency": 7,
+            "abilityScores": {
+                "dexterity": 14,
+                "constitution": 25,
+                "strength": 27,
+                "charisma": 19,
+                "intelligence": 16,
+                "wisdom": 15
+            },
+            "armour": {
+                "ac": 22,
+                "armourName": "Natural Armour",
+                "magicArmour": 0
+            },
+            "abilities": [
+                {
+                    "name": "Amphibious",
+                    "description": "The dragon can breathe air and water."
+                },
+                {
+                    "name": "Multiattack",
+                    "description": "The dragon can use its Frightful Presence. It then makes three attacks: one with its bite and two with its claws"
+                },
+                {
+                    "name": "Legendary Resistance (3/day)",
+                    "description": "If the dragon fails a saving throw, it can choose to succeed instead"
+                },
+                {
+                    "name": "Acid Breath (Recharge 5-6)",
+                    "description": "The dragon exhales acid in a 90-foot line that is 10 feet wide. Each creature in that line must make a DC 22 Dexterity saving throw, taking 67 (15d8) acid damage on a failed save, or half as much damage on a successful one"
+                },
+                {
+                    "name": "Frightful Presence",
+                    "description": "Each creature of the dragon's choice that is within 120 feet of the dragon and aware of it must succeed on a DC 19 Wisdom saving throw or become frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the dragon's Frightful Presence for the next 24 hours"
+                }
+            ],
+            "parentStatBlock": {
+                "skillProficiencies": [
+                    "perception",
+                    "stealth"
+                ],
+                "languages": {
+                    "telepathy": 0,
+                    "languagesList": [
+                        "Common",
+                        "Draconic"
+                    ]
+                },
+                "senses": {
+                    "trueSight": 0,
+                    "passivePerception": 26,
+                    "darkVision": 120,
+                    "blindSight": 60,
+                    "tremorSense": 0
+                },
+                "resistances": {"acid": "immunity"},
+                "title": {
+                    "size": "Gargantuan",
+                    "name": "Ancient Black Dragon",
+                    "type": "Dragon",
+                    "alignment": "Chaotic Evil"
+                },
+                "savingThrowProficiencies": [
+                    "dexterity",
+                    "constitution",
+                    "wisdom",
+                    "charisma"
+                ],
+                "proficiency": 7,
+                "abilityScores": {
+                    "dexterity": 14,
+                    "constitution": 25,
+                    "strength": 27,
+                    "charisma": 19,
+                    "intelligence": 16,
+                    "wisdom": 15
+                },
+                "armour": {
+                    "ac": 22,
+                    "armourName": "Natural Armour",
+                    "magicArmour": 0
+                },
+                "abilities": [
+                    {
+                        "name": "Amphibious",
+                        "description": "The dragon can breathe air and water."
+                    },
+                    {
+                        "name": "Multiattack",
+                        "description": "The dragon can use its Frightful Presence. It then makes three attacks: one with its bite and two with its claws"
+                    },
+                    {
+                        "name": "Legendary Resistance (3/day)",
+                        "description": "If the dragon fails a saving throw, it can choose to succeed instead"
+                    },
+                    {
+                        "name": "Acid Breath (Recharge 5-6)",
+                        "description": "The dragon exhales acid in a 90-foot line that is 10 feet wide. Each creature in that line must make a DC 22 Dexterity saving throw, taking 67 (15d8) acid damage on a failed save, or half as much damage on a successful one"
+                    },
+                    {
+                        "name": "Frightful Presence",
+                        "description": "Each creature of the dragon's choice that is within 120 feet of the dragon and aware of it must succeed on a DC 19 Wisdom saving throw or become frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the dragon's Frightful Presence for the next 24 hours"
+                    }
+                ],
+                "legendaryMechanics": {
+                    "legendaryDescription": "The dragon can take 3 legendary actions, choosing from the options below. Only one legendary action option can be used at a time and only at the end of another creature's turn. The dragon regains spent legendary actions at the start of its turn",
+                    "legendaryActions": [
+                        {
+                            "name": "Detect",
+                            "description": "The dragon makes a Wisdom (Perception) check"
+                        },
+                        {
+                            "name": "Tail Attack",
+                            "description": "The dragon makes a tail attack"
+                        },
+                        {
+                            "name": "Wing Attack (Costs 2 Actions)",
+                            "description": "The dragon beats its wings. Each creature within 15 ft. of the dragon must succeed on a DC 23 Dexterity saving throw or take 15 (2d6 + 8) bludgeoning damage and be knocked prone. The dragon can then fly up to half its flying speed"
+                        }
+                    ]
+                },
+                "hpFormula": {
+                    "modifier": 147,
+                    "amountOfDice": 21,
+                    "dieSides": 20
+                },
+                "xp": 33000,
+                "speeds": {
+                    "climb": 0,
+                    "fly": 80,
+                    "burrow": 0,
+                    "speed": 40,
+                    "swim": 40
+                },
+                "actions": [
+                    {
+                        "hitFormula": {
+                            "modifier": 15,
+                            "amountOfDice": 1,
+                            "dieSides": 20
+                        },
+                        "reach": "15",
+                        "name": "Bite",
+                        "damageMap": {
+                            "acid": {
+                                "string": "2d8",
+                                "modifier": 0,
+                                "amountOfDice": 2,
+                                "dieSides": 8
+                            },
+                            "piercing": {
+                                "string": "1d10+8",
+                                "modifier": 8,
+                                "amountOfDice": 1,
+                                "dieSides": 10
+                            }
+                        },
+                        "description": "Melee Weapon Attack"
+                    },
+                    {
+                        "hitFormula": {
+                            "modifier": 15,
+                            "amountOfDice": 1,
+                            "dieSides": 20
+                        },
+                        "reach": "10",
+                        "name": "Claw",
+                        "damageMap": {"slashing": {
+                            "string": "2d6+8",
+                            "modifier": 8,
+                            "amountOfDice": 2,
+                            "dieSides": 6
+                        }},
+                        "description": "Melee Weapon Attack"
+                    },
+                    {
+                        "hitFormula": {
+                            "modifier": 15,
+                            "amountOfDice": 1,
+                            "dieSides": 20
+                        },
+                        "reach": "20",
+                        "name": "Tail",
+                        "damageMap": {"bludgeoning": {
+                            "string": "2d8+8",
+                            "modifier": 8,
+                            "amountOfDice": 2,
+                            "dieSides": 8
+                        }},
+                        "description": "Melee Weapon Attack"
+                    }
+                ]
+            },
+            "legendaryMechanics": {
+                "legendaryDescription": "The dragon can take 3 legendary actions, choosing from the options below. Only one legendary action option can be used at a time and only at the end of another creature's turn. The dragon regains spent legendary actions at the start of its turn",
+                "legendaryActions": [
+                    {
+                        "name": "Detect",
+                        "description": "The dragon makes a Wisdom (Perception) check"
+                    },
+                    {
+                        "name": "Tail Attack",
+                        "description": "The dragon makes a tail attack"
+                    },
+                    {
+                        "name": "Wing Attack (Costs 2 Actions)",
+                        "description": "The dragon beats its wings. Each creature within 15 ft. of the dragon must succeed on a DC 23 Dexterity saving throw or take 15 (2d6 + 8) bludgeoning damage and be knocked prone. The dragon can then fly up to half its flying speed"
+                    }
+                ]
+            },
+            "hpFormula": {
+                "modifier": 147,
+                "amountOfDice": 21,
+                "dieSides": 20
+            },
+            "xp": 33000,
+            "speeds": {
+                "climb": 0,
+                "fly": 80,
+                "burrow": 0,
+                "speed": 40,
+                "swim": 40
+            },
+            "actions": [
+                {
+                    "hitFormula": {
+                        "modifier": 15,
+                        "amountOfDice": 1,
+                        "dieSides": 20
+                    },
+                    "reach": "15",
+                    "name": "Bite",
+                    "damageMap": {
+                        "acid": {
+                            "string": "2d8",
+                            "modifier": 0,
+                            "amountOfDice": 2,
+                            "dieSides": 8
+                        },
+                        "piercing": {
+                            "string": "1d10+8",
+                            "modifier": 8,
+                            "amountOfDice": 1,
+                            "dieSides": 10
+                        }
+                    },
+                    "description": "Melee Weapon Attack"
+                },
+                {
+                    "hitFormula": {
+                        "modifier": 15,
+                        "amountOfDice": 1,
+                        "dieSides": 20
+                    },
+                    "reach": "10",
+                    "name": "Claw",
+                    "damageMap": {"slashing": {
+                        "string": "2d6+8",
+                        "modifier": 8,
+                        "amountOfDice": 2,
+                        "dieSides": 6
+                    }},
+                    "description": "Melee Weapon Attack"
+                },
+                {
+                    "hitFormula": {
+                        "modifier": 15,
+                        "amountOfDice": 1,
+                        "dieSides": 20
+                    },
+                    "reach": "20",
+                    "name": "Tail",
+                    "damageMap": {"bludgeoning": {
+                        "string": "2d8+8",
+                        "modifier": 8,
+                        "amountOfDice": 2,
+                        "dieSides": 8
+                    }},
+                    "description": "Melee Weapon Attack"
+                }
+            ]
+        },
+        {
+            "skillProficiencies": [
+                "perception",
+                "stealth"
+            ],
+            "maxHP": 395,
+            "languages": {
+                "telepathy": 0,
+                "languagesList": [
+                    "Common",
+                    "Draconic"
+                ]
+            },
+            "senses": {
+                "trueSight": 0,
+                "passivePerception": 26,
+                "darkVision": 120,
+                "blindSight": 60,
+                "tremorSense": 0
+            },
+            "hp": 395,
+            "resistances": {"acid": "immunity"},
+            "title": {
+                "size": "Gargantuan",
+                "name": "Ancient Black Dragon 2",
+                "type": "Dragon",
+                "alignment": "Chaotic Evil"
+            },
+            "savingThrowProficiencies": [
+                "dexterity",
+                "constitution",
+                "wisdom",
+                "charisma"
+            ],
+            "proficiency": 7,
+            "abilityScores": {
+                "dexterity": 14,
+                "constitution": 25,
+                "strength": 27,
+                "charisma": 19,
+                "intelligence": 16,
+                "wisdom": 15
+            },
+            "armour": {
+                "ac": 22,
+                "armourName": "Natural Armour",
+                "magicArmour": 0
+            },
+            "abilities": [
+                {
+                    "name": "Amphibious",
+                    "description": "The dragon can breathe air and water."
+                },
+                {
+                    "name": "Multiattack",
+                    "description": "The dragon can use its Frightful Presence. It then makes three attacks: one with its bite and two with its claws"
+                },
+                {
+                    "name": "Legendary Resistance (3/day)",
+                    "description": "If the dragon fails a saving throw, it can choose to succeed instead"
+                },
+                {
+                    "name": "Acid Breath (Recharge 5-6)",
+                    "description": "The dragon exhales acid in a 90-foot line that is 10 feet wide. Each creature in that line must make a DC 22 Dexterity saving throw, taking 67 (15d8) acid damage on a failed save, or half as much damage on a successful one"
+                },
+                {
+                    "name": "Frightful Presence",
+                    "description": "Each creature of the dragon's choice that is within 120 feet of the dragon and aware of it must succeed on a DC 19 Wisdom saving throw or become frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the dragon's Frightful Presence for the next 24 hours"
+                }
+            ],
+            "parentStatBlock": {
+                "skillProficiencies": [
+                    "perception",
+                    "stealth"
+                ],
+                "languages": {
+                    "telepathy": 0,
+                    "languagesList": [
+                        "Common",
+                        "Draconic"
+                    ]
+                },
+                "senses": {
+                    "trueSight": 0,
+                    "passivePerception": 26,
+                    "darkVision": 120,
+                    "blindSight": 60,
+                    "tremorSense": 0
+                },
+                "resistances": {"acid": "immunity"},
+                "title": {
+                    "size": "Gargantuan",
+                    "name": "Ancient Black Dragon",
+                    "type": "Dragon",
+                    "alignment": "Chaotic Evil"
+                },
+                "savingThrowProficiencies": [
+                    "dexterity",
+                    "constitution",
+                    "wisdom",
+                    "charisma"
+                ],
+                "proficiency": 7,
+                "abilityScores": {
+                    "dexterity": 14,
+                    "constitution": 25,
+                    "strength": 27,
+                    "charisma": 19,
+                    "intelligence": 16,
+                    "wisdom": 15
+                },
+                "armour": {
+                    "ac": 22,
+                    "armourName": "Natural Armour",
+                    "magicArmour": 0
+                },
+                "abilities": [
+                    {
+                        "name": "Amphibious",
+                        "description": "The dragon can breathe air and water."
+                    },
+                    {
+                        "name": "Multiattack",
+                        "description": "The dragon can use its Frightful Presence. It then makes three attacks: one with its bite and two with its claws"
+                    },
+                    {
+                        "name": "Legendary Resistance (3/day)",
+                        "description": "If the dragon fails a saving throw, it can choose to succeed instead"
+                    },
+                    {
+                        "name": "Acid Breath (Recharge 5-6)",
+                        "description": "The dragon exhales acid in a 90-foot line that is 10 feet wide. Each creature in that line must make a DC 22 Dexterity saving throw, taking 67 (15d8) acid damage on a failed save, or half as much damage on a successful one"
+                    },
+                    {
+                        "name": "Frightful Presence",
+                        "description": "Each creature of the dragon's choice that is within 120 feet of the dragon and aware of it must succeed on a DC 19 Wisdom saving throw or become frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the dragon's Frightful Presence for the next 24 hours"
+                    }
+                ],
+                "legendaryMechanics": {
+                    "legendaryDescription": "The dragon can take 3 legendary actions, choosing from the options below. Only one legendary action option can be used at a time and only at the end of another creature's turn. The dragon regains spent legendary actions at the start of its turn",
+                    "legendaryActions": [
+                        {
+                            "name": "Detect",
+                            "description": "The dragon makes a Wisdom (Perception) check"
+                        },
+                        {
+                            "name": "Tail Attack",
+                            "description": "The dragon makes a tail attack"
+                        },
+                        {
+                            "name": "Wing Attack (Costs 2 Actions)",
+                            "description": "The dragon beats its wings. Each creature within 15 ft. of the dragon must succeed on a DC 23 Dexterity saving throw or take 15 (2d6 + 8) bludgeoning damage and be knocked prone. The dragon can then fly up to half its flying speed"
+                        }
+                    ]
+                },
+                "hpFormula": {
+                    "modifier": 147,
+                    "amountOfDice": 21,
+                    "dieSides": 20
+                },
+                "xp": 33000,
+                "speeds": {
+                    "climb": 0,
+                    "fly": 80,
+                    "burrow": 0,
+                    "speed": 40,
+                    "swim": 40
+                },
+                "actions": [
+                    {
+                        "hitFormula": {
+                            "modifier": 15,
+                            "amountOfDice": 1,
+                            "dieSides": 20
+                        },
+                        "reach": "15",
+                        "name": "Bite",
+                        "damageMap": {
+                            "acid": {
+                                "string": "2d8",
+                                "modifier": 0,
+                                "amountOfDice": 2,
+                                "dieSides": 8
+                            },
+                            "piercing": {
+                                "string": "1d10+8",
+                                "modifier": 8,
+                                "amountOfDice": 1,
+                                "dieSides": 10
+                            }
+                        },
+                        "description": "Melee Weapon Attack"
+                    },
+                    {
+                        "hitFormula": {
+                            "modifier": 15,
+                            "amountOfDice": 1,
+                            "dieSides": 20
+                        },
+                        "reach": "10",
+                        "name": "Claw",
+                        "damageMap": {"slashing": {
+                            "string": "2d6+8",
+                            "modifier": 8,
+                            "amountOfDice": 2,
+                            "dieSides": 6
+                        }},
+                        "description": "Melee Weapon Attack"
+                    },
+                    {
+                        "hitFormula": {
+                            "modifier": 15,
+                            "amountOfDice": 1,
+                            "dieSides": 20
+                        },
+                        "reach": "20",
+                        "name": "Tail",
+                        "damageMap": {"bludgeoning": {
+                            "string": "2d8+8",
+                            "modifier": 8,
+                            "amountOfDice": 2,
+                            "dieSides": 8
+                        }},
+                        "description": "Melee Weapon Attack"
+                    }
+                ]
+            },
+            "legendaryMechanics": {
+                "legendaryDescription": "The dragon can take 3 legendary actions, choosing from the options below. Only one legendary action option can be used at a time and only at the end of another creature's turn. The dragon regains spent legendary actions at the start of its turn",
+                "legendaryActions": [
+                    {
+                        "name": "Detect",
+                        "description": "The dragon makes a Wisdom (Perception) check"
+                    },
+                    {
+                        "name": "Tail Attack",
+                        "description": "The dragon makes a tail attack"
+                    },
+                    {
+                        "name": "Wing Attack (Costs 2 Actions)",
+                        "description": "The dragon beats its wings. Each creature within 15 ft. of the dragon must succeed on a DC 23 Dexterity saving throw or take 15 (2d6 + 8) bludgeoning damage and be knocked prone. The dragon can then fly up to half its flying speed"
+                    }
+                ]
+            },
+            "hpFormula": {
+                "modifier": 147,
+                "amountOfDice": 21,
+                "dieSides": 20
+            },
+            "xp": 33000,
+            "speeds": {
+                "climb": 0,
+                "fly": 80,
+                "burrow": 0,
+                "speed": 40,
+                "swim": 40
+            },
+            "actions": [
+                {
+                    "hitFormula": {
+                        "modifier": 15,
+                        "amountOfDice": 1,
+                        "dieSides": 20
+                    },
+                    "reach": "15",
+                    "name": "Bite",
+                    "damageMap": {
+                        "acid": {
+                            "string": "2d8",
+                            "modifier": 0,
+                            "amountOfDice": 2,
+                            "dieSides": 8
+                        },
+                        "piercing": {
+                            "string": "1d10+8",
+                            "modifier": 8,
+                            "amountOfDice": 1,
+                            "dieSides": 10
+                        }
+                    },
+                    "description": "Melee Weapon Attack"
+                },
+                {
+                    "hitFormula": {
+                        "modifier": 15,
+                        "amountOfDice": 1,
+                        "dieSides": 20
+                    },
+                    "reach": "10",
+                    "name": "Claw",
+                    "damageMap": {"slashing": {
+                        "string": "2d6+8",
+                        "modifier": 8,
+                        "amountOfDice": 2,
+                        "dieSides": 6
+                    }},
+                    "description": "Melee Weapon Attack"
+                },
+                {
+                    "hitFormula": {
+                        "modifier": 15,
+                        "amountOfDice": 1,
+                        "dieSides": 20
+                    },
+                    "reach": "20",
+                    "name": "Tail",
+                    "damageMap": {"bludgeoning": {
+                        "string": "2d8+8",
+                        "modifier": 8,
+                        "amountOfDice": 2,
+                        "dieSides": 8
+                    }},
+                    "description": "Melee Weapon Attack"
                 }
             ]
         }

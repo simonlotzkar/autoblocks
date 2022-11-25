@@ -50,7 +50,6 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
     private final JPanel groupButtonPanel = new JPanel(new GridLayout(3, 1));
 
     // buttons
-    private final List<JButton> buttonList = new ArrayList<>();
     private final JButton backButton = new JButton("Back");
 
     private final JButton addStatBlocksToEncounterButton = new JButton("Add to Encounter");
@@ -95,6 +94,8 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
 
     // EFFECTS: ...
     private void initializeButtons() {
+        ArrayList<JButton> buttonList = new ArrayList<>();
+
         buttonList.add(backButton);
         buttonList.add(addStatBlocksToEncounterButton);
         buttonList.add(openStatBlockButton);

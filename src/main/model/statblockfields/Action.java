@@ -1,6 +1,7 @@
 package model.statblockfields;
 
 import model.RollFormula;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -37,7 +38,7 @@ public class Action extends Ability {
     }
 
     // EFFECTS: gets a descriptive string of this action with its hit and damage formulae rolled
-    public String getRollString() {
+    public String rollAsString() {
         return getDescription()
                 + ", "
                 + getName()
@@ -80,13 +81,23 @@ public class Action extends Ability {
     // -----------------------------------------------------------------------------------------------------------------
     // constructs a json object with the fields of the action
     @Override
+    // EFFECTS: ...
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("name", getName());
         json.put("description", getDescription());
         json.put("reach", reach);
         json.put("hitFormula", hitFormula.toJson());
-        json.put("damageMap", damageMap);
+        json.put("damageMap", damageMapToJson());
+        return json;
+    }
+
+    // EFFECTS: ...
+    private JSONObject damageMapToJson() {
+        JSONObject json = new JSONObject();
+
+        damageMap.forEach((s, rollFormula) -> json.put(s, rollFormula.toJson()));
+
         return json;
     }
 

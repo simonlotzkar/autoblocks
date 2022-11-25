@@ -31,12 +31,13 @@ public class CustomRollFrame extends JFrame implements ActionListener {
     ArrayList<JTextField> textFieldList = new ArrayList<>();
 
     // images
-    private static final ImageIcon D20_BLUE_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "d20BlueIcon.png");
-    private static final ImageIcon DICE_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "diceIcon.png");
+    private static final ImageIcon D20_BLUE_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "d20.png");
+    private static final ImageIcon DICE_IMAGE_ICON = new ImageIcon((new ImageIcon(ICON_DIRECTORY + "dice.png"))
+            .getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
 
     // EFFECTS: constructs a custom roll frame
     public CustomRollFrame() {
-        super("Custom Roll");
+        super("Custom Dice Roller");
         this.setSize(WIDTH, HEIGHT);
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         this.setIconImage(D20_BLUE_IMAGE_ICON.getImage());
@@ -60,7 +61,7 @@ public class CustomRollFrame extends JFrame implements ActionListener {
 
     // EFFECTS: sets up most of the components for this frame
     private void initializeOutputLogScrollPane() {
-        outputLogTextArea = new JTextArea("Custom Roll Output Log:", 10, WIDTH / 12);
+        outputLogTextArea = new JTextArea("Custom Dice Roll Output Log:", 10, WIDTH / 12);
         outputLogTextArea.setEditable(false);
 
         outputLogScrollPane.setViewportView(outputLogTextArea);

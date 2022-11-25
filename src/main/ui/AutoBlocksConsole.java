@@ -718,7 +718,7 @@ public class AutoBlocksConsole {
     private void rollCharacterActionByName(Character character, String action) {
         for (Action a : character.getActions()) {
             if (a.getName().equalsIgnoreCase(action)) {
-                System.out.println(character.getTitle().getName() + "'s " + a.getRollString());
+                System.out.println(character.getTitle().getName() + "'s " + a.rollAsString());
                 break;
             }
         }
@@ -1403,8 +1403,8 @@ public class AutoBlocksConsole {
     // EFFECTS: initializes default statblocks in the library
     private void initializeLibrary() {
         System.out.println("Initializing library...");
-        //initializeOrcStatBlock();
-        //initializeAncientBlackDragonStatBlock();
+        initializeOrcStatBlock();
+        initializeAncientBlackDragonStatBlock();
         System.out.println("All default statblocks added to library!");
     }
 

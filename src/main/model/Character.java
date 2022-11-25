@@ -92,6 +92,16 @@ public class Character extends StatBlock {
         return firstLowest;
     }
 
+    // EFFECTS: //TODO
+    public String rollCheckAsString(String abilityScore) {
+        return title.getName() + "'s " + abilityScore + " check: " + abilityScores.rollCheckAsInt(abilityScore);
+    }
+
+    // EFFECTS: //TODO
+    public String rollInitiative() {
+        return title.getName() + "'s initiative: " + abilityScores.rollCheckAsInt("dexterity");
+    }
+
     // -----------------------------------------------------------------------------------------------------------------
     // setters
     // EFFECTS: sets current hp to sum of given int and hp; if hp is greater than maxhp, sets hp to maxhp.

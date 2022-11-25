@@ -108,14 +108,14 @@ public class ActionTest {
     public void testGetRollStringAction0() {
         String testRollString = "something something weapon, test action 0 (5ft), "
                 + "did (0) to hit and (0) slashing damage.";
-        assertEquals(testRollString, testAction0.getRollString());
+        assertEquals(testRollString, testAction0.rollAsString());
     }
 
     @Test
     public void testGetRollStringAction1() {
         String testRollString = "Something Something Spell, Test Action 1 (30/120ft), "
                 + "did (2) to hit and (2) slashing damage and (2) Fire damage.";
-        assertEquals(testRollString, testAction1.getRollString());
+        assertEquals(testRollString, testAction1.rollAsString());
     }
 
     @Test

@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,21 +16,21 @@ public class TitleMenuPanel extends MenuPanel implements ActionListener {
 
     // images
     private static final JLabel MAIN_BANNER_LABEL = new JLabel(new ImageIcon(
-            "./data/images/banners/banner0.jpg"));
-    private static final ImageIcon D20_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "d20Icon.png");
-    private static final ImageIcon EXIT_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "exitIcon.png");
-    private static final ImageIcon LIBRARY_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "libraryIcon.png");
-    private static final ImageIcon ENCOUNTER_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "crossedSwordsIcon.png");
-    private static final ImageIcon LOAD_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "fileIcon.png");
-    private static final ImageIcon SAVE_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "saveIcon.png");
+            "./data/images/banner0.jpg"));
+    private static final ImageIcon D20_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "d20.png");
+    private static final ImageIcon EXIT_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "exit.png");
+    private static final ImageIcon LIBRARY_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "books.png");
+    private static final ImageIcon ENCOUNTER_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "crossedSwords.png");
+    private static final ImageIcon LOAD_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "folder.png");
+    private static final ImageIcon SAVE_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "save.png");
 
     // buttons
-    private final JButton customRollButton = new JButton("Open Custom Roll Window");
-    private final JButton quitButton = new JButton("Quit AutoBlocks");
-    private final JButton libraryButton = new JButton("Library Menu");
-    private final JButton encounterButton = new JButton("Encounter Menu");
-    private final JButton loadButton = new JButton("Load encounter and library from file");
-    private final JButton saveButton = new JButton("Save encounter and library to file");
+    private final JButton customRollButton = new JButton("Open Custom Roller");
+    private final JButton quitButton = new JButton("Quit");
+    private final JButton libraryButton = new JButton("Library");
+    private final JButton encounterButton = new JButton("Encounter");
+    private final JButton loadButton = new JButton("Load");
+    private final JButton saveButton = new JButton("Save");
 
     // EFFECTS: constructs this panel
     public TitleMenuPanel(MenuManagerPanel menuManagerPanel) {
@@ -38,11 +39,7 @@ public class TitleMenuPanel extends MenuPanel implements ActionListener {
         initializeButtons();
         initializeButtonPanel();
 
-        JPanel tempLabel = new JPanel();
-        tempLabel.setBackground(Color.BLUE);
-
-        this.add(tempLabel, BorderLayout.CENTER);
-        //this.add(MAIN_BANNER_LABEL, BorderLayout.CENTER);
+        this.add(MAIN_BANNER_LABEL, BorderLayout.CENTER);
         this.add(buttonsPanel, BorderLayout.SOUTH);
     }
 
@@ -50,13 +47,6 @@ public class TitleMenuPanel extends MenuPanel implements ActionListener {
     // EFFECTS: sets parameters for all buttons
     private void initializeButtons() {
         List<JButton> buttonList = new ArrayList<>();
-
-        customRollButton.setIcon(D20_IMAGE_ICON);
-        quitButton.setIcon(EXIT_IMAGE_ICON);
-        encounterButton.setIcon(ENCOUNTER_IMAGE_ICON);
-        libraryButton.setIcon(LIBRARY_IMAGE_ICON);
-        loadButton.setIcon(LOAD_IMAGE_ICON);
-        saveButton.setIcon(SAVE_IMAGE_ICON);
 
         buttonList.add(customRollButton);
         buttonList.add(quitButton);
@@ -68,6 +58,22 @@ public class TitleMenuPanel extends MenuPanel implements ActionListener {
         for (JButton jb : buttonList) {
             jb.addActionListener(this);
         }
+        initializeButtonIcons();
+    }
+
+    // EFFECTS: ...
+    private void initializeButtonIcons() {
+        customRollButton.setIcon(scaleIcon(D20_IMAGE_ICON));
+        quitButton.setIcon(scaleIcon(EXIT_IMAGE_ICON));
+        encounterButton.setIcon(scaleIcon(ENCOUNTER_IMAGE_ICON));
+        libraryButton.setIcon(scaleIcon(LIBRARY_IMAGE_ICON));
+        loadButton.setIcon(scaleIcon(LOAD_IMAGE_ICON));
+        saveButton.setIcon(scaleIcon(SAVE_IMAGE_ICON));
+    }
+
+    // EFFECTS: ...
+    private ImageIcon scaleIcon(ImageIcon imageIcon) {
+        return new ImageIcon(imageIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
     }
 
     // MODIFIES: this

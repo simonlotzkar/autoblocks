@@ -11,10 +11,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Stream;
 
 // Represents a reader that reads libraries and encounters from JSON data stored in file
@@ -191,9 +188,16 @@ public class JsonReader {
 
     // EFFECTS: parses damage rolls from JSON object and returns it
     private HashMap<String, RollFormula> parseDamageMap(JSONObject jsonObject) {
-        Map<String, Object> jsonMap = jsonObject.toMap();
         HashMap<String, RollFormula> damageMap = new HashMap<>();
-        jsonMap.putAll(damageMap);
+        Iterator<String> keys = jsonObject.keys();
+
+        while (keys.hasNext()) {
+            String key = keys.next();
+            if (jsonObject.get(key) instanceof JSONObject) {
+                damageMap.put(key, parseRollFormula((JSONObject) jsonObject.get(key)));
+            }
+        }
+
         return damageMap;
     }
 
