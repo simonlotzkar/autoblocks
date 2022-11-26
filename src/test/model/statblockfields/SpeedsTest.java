@@ -53,8 +53,8 @@ public class SpeedsTest {
                 + "swim " + testSwimSpeed0 + "ft";
         String testString1 = testSpeed1 + "ft";
 
-        assertEquals(testString0, testSpeeds0.getString());
-        assertEquals(testString1, testSpeeds1.getString());
+        assertEquals(testString0, testSpeeds0.toString());
+        assertEquals(testString1, testSpeeds1.toString());
     }
 
     @Test

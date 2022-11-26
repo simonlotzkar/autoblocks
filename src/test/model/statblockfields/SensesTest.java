@@ -53,8 +53,8 @@ public class SensesTest {
                 + "ft";
         String string1 = "Passive perception " + testPassivePerception1;
 
-        assertEquals(string0, testSenses0.getString());
-        assertEquals(string1, testSenses1.getString());
+        assertEquals(string0, testSenses0.toString());
+        assertEquals(string1, testSenses1.toString());
     }
 
     @Test

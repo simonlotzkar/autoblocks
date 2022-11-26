@@ -25,8 +25,9 @@ public class Senses implements Writable {
 
     // -----------------------------------------------------------------------------------------------------------------
     // getters
+    @Override
     // EFFECTS: gets all senses as a string, excluding those that are 0
-    public String getString() {
+    public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Passive perception ").append(passivePerception);
         if (blindSight != 0) {

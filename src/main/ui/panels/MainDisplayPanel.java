@@ -17,7 +17,7 @@ public class MainDisplayPanel extends DisplayPanel {
     // panels
     private final JPanel mainDisplayManagerPanel = new JPanel(cardLayout);
 
-    private final LibraryDisplayPanel libraryDisplayPanel = new LibraryDisplayPanel(mainMenuPanel);
+    private final LibraryScrollPane libraryScrollPane = new LibraryScrollPane(mainMenuPanel);
     private final EncounterScrollPane encounterScrollPane = new EncounterScrollPane(mainMenuPanel);
     private final GroupDisplayPanel groupDisplayPanel = new GroupDisplayPanel(mainMenuPanel);
     private final CharacterDisplayPanel characterDisplayPanel = new CharacterDisplayPanel(mainMenuPanel);
@@ -26,7 +26,7 @@ public class MainDisplayPanel extends DisplayPanel {
     public MainDisplayPanel(MainMenuPanel mainMenuPanel) {
         super(new BorderLayout(), mainMenuPanel); // sets the layout manager, mainmenu panel, size, and visibility
 
-        mainDisplayManagerPanel.add(libraryDisplayPanel, "library");
+        mainDisplayManagerPanel.add(libraryScrollPane, "library");
         mainDisplayManagerPanel.add(encounterScrollPane, "encounter");
         mainDisplayManagerPanel.add(groupDisplayPanel, "group");
         mainDisplayManagerPanel.add(characterDisplayPanel, "character");
@@ -43,14 +43,14 @@ public class MainDisplayPanel extends DisplayPanel {
 
     // EFFECTS: depending on what display is showing, sends the given action event to the corresponding display panel
     public void passAction(ActionEvent e) {
-        if (libraryDisplayPanel.isShowing()) {
-            //libraryDisplayPanel.actionPerformed(e);
+        if (libraryScrollPane.isShowing()) {
+            libraryScrollPane.actionPerformed(e);
         } else if (encounterScrollPane.isShowing()) {
             encounterScrollPane.actionPerformed(e);
         } else if (groupDisplayPanel.isShowing()) {
             groupDisplayPanel.actionPerformed(e);
         } else if (characterDisplayPanel.isShowing()) {
-            //characterDisplayPanel.actionPerformed(e);
+            characterDisplayPanel.actionPerformed(e);
         }
     }
 }

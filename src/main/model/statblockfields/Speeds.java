@@ -25,8 +25,9 @@ public class Speeds implements Writable {
 
     // -----------------------------------------------------------------------------------------------------------------
     // getters
+    @Override
     // EFFECTS: gets string representation of Speeds depending on what fields exist
-    public String getString() {
+    public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(speed).append("ft");
         if (burrow != 0) {

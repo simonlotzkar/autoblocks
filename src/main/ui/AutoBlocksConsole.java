@@ -388,9 +388,9 @@ public class AutoBlocksConsole {
     // EFFECTS: prints the selected StatBlock or Character combat related stats
     private void displayIndividualCombat(StatBlock selected) {
         System.out.println("\t" + "Hit Points: (" + selected.getHPString() + ").");
-        System.out.println("\tArmour Class: " + selected.getArmour().getString() + ".");
-        System.out.println("\tSpeeds: " + selected.getSpeeds().getString() + ".");
-        System.out.println("\tSenses: " + selected.getSenses().getString() + ".");
+        System.out.println("\tArmour Class: " + selected.getArmour().toString() + ".");
+        System.out.println("\tSpeeds: " + selected.getSpeeds().toString() + ".");
+        System.out.println("\tSenses: " + selected.getSenses().toString() + ".");
         System.out.println("\tProficiency Bonus: " + selected.getProficiency() + ".");
         System.out.println("\tChallenge Rating: " + selected.getChallengeRating()
                 + " (" + NumberFormat.getIntegerInstance().format(selected.getXP()) + "xp).");

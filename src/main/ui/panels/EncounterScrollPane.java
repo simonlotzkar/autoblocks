@@ -1,15 +1,10 @@
 package ui.panels;
 
-import model.Character;
 import ui.panels.menus.MainMenuPanel;
-
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.List;
 
 // Represents...
 public class EncounterScrollPane extends JScrollPane implements ListSelectionListener {
@@ -18,7 +13,6 @@ public class EncounterScrollPane extends JScrollPane implements ListSelectionLis
     private final MainMenuPanel mainMenuPanel;
 
     // buttons
-    private JButton backButton;
     private JButton openCharacterButton;
     private JButton openGroupButton;
     private JButton changeHPButton;
@@ -38,7 +32,7 @@ public class EncounterScrollPane extends JScrollPane implements ListSelectionLis
 
         encounterListModel = mainMenuPanel.getMenuManagerPanel().getEncounterListModel();
         this.encounterJList = new JList<>(encounterListModel);
-
+        //encounterJList.setBackground(new Color(0, 0, 0, 0));
         this.setViewportView(encounterJList);
 
         importButtons();
@@ -47,7 +41,6 @@ public class EncounterScrollPane extends JScrollPane implements ListSelectionLis
 
     // EFFECTS: ...
     private void importButtons() {
-        backButton = mainMenuPanel.getBackButton();
         openCharacterButton = mainMenuPanel.getOpenCharacterButton();
         openGroupButton = mainMenuPanel.getOpenGroupButton();
         changeHPButton = mainMenuPanel.getChangeHPButton();
@@ -64,6 +57,7 @@ public class EncounterScrollPane extends JScrollPane implements ListSelectionLis
         encounterJList.setLayoutOrientation(JList.VERTICAL);
         encounterJList.setVisibleRowCount(-1);
         encounterJList.addListSelectionListener(this);
+        //encounterJList.setOpaque(false);
     }
 
     // EFFECTS: prompts user for a group name, sets selected characters to the given group name
@@ -169,9 +163,7 @@ public class EncounterScrollPane extends JScrollPane implements ListSelectionLis
 
     // EFFECTS: processes button presses from user
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == backButton) {
-            mainMenuPanel.getMenuManagerPanel().setMenu("title");
-        } else if (e.getSource() == openCharacterButton) {
+        if (e.getSource() == openCharacterButton) {
             mainMenuPanel.setSelectedCharacter(encounterListModel.getElementAt(encounterJList.getSelectedIndex()));
             mainMenuPanel.getMainDisplayPanel().setMainDisplay("character");
         } else if (e.getSource() == openGroupButton) {

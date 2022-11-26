@@ -10,7 +10,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.List;
 
 // Represents...
 public class MainMenuPanel extends MenuPanel implements ActionListener {
@@ -21,12 +20,16 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
 
     // images
     private static final ImageIcon RETURN_ICON = new ImageIcon(ICON_DIRECTORY + "return.png");
+    private static final ImageIcon CHECK_ICON = new ImageIcon(ICON_DIRECTORY + "check.png");
+    private static final ImageIcon PLUS_ICON = new ImageIcon(ICON_DIRECTORY + "plus.png");
+    private static final ImageIcon TRASH_ICON = new ImageIcon(ICON_DIRECTORY + "trash.png");
+    private static final ImageIcon JUMP_ICON = new ImageIcon(ICON_DIRECTORY + "jumpingGuy.png");
+    private static final ImageIcon CLOCK_ICON = new ImageIcon(ICON_DIRECTORY + "clock.png");
+    private static final ImageIcon HEART_ICON = new ImageIcon(ICON_DIRECTORY + "heart.png");
 
     // labels
     private final JLabel encounterTitleLabel = new JLabel("Main Menu: Encounter Loaded");
     private final JLabel libraryTitleLabel = new JLabel("Main Menu: Library Loaded");
-    private final JLabel encounterBanner = new JLabel(new ImageIcon("./data/images/banner1"));
-    private final JLabel libraryBanner = new JLabel(new ImageIcon("./data/images/banner2"));
 
     // layouts
     private final CardLayout titleCardLayout = new CardLayout();
@@ -37,7 +40,7 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
     private final SideDisplayPanel sideDisplayPanel;
 
     //private final JPanel titlePanel = new JPanel(titleCardLayout);
-    private final JPanel titlePanel = new JPanel();
+    private final JPanel titlePanel = new JPanel(titleCardLayout);
     private final JPanel buttonPanel = new JPanel(buttonCardLayout);
 
     private final JPanel encounterButtonPanel = new JPanel(new GridLayout(3, 1));
@@ -46,6 +49,9 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
     private final JPanel encounterButtonSubPanel2 = new JPanel(new GridLayout(1, 3));
 
     private final JPanel libraryButtonPanel = new JPanel(new GridLayout(2, 1));
+    private final JPanel libraryButtonSubPanel0 = new JPanel(new GridLayout(1, 2));
+    private final JPanel libraryButtonSubPanel1 = new JPanel(new GridLayout(1, 3));
+
     private final JPanel characterButtonPanel = new JPanel(new GridLayout(2, 1));
     private final JPanel groupButtonPanel = new JPanel(new GridLayout(3, 1));
 
@@ -75,10 +81,13 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
         this.mainDisplayPanel = new MainDisplayPanel(this);
         this.sideDisplayPanel = new SideDisplayPanel(this);
 
-//        titlePanel.add(libraryBanner, "library");
-//        titlePanel.add(encounterBanner, "encounter");
-        titlePanel.setBackground(Color.BLUE);
-        titlePanel.setPreferredSize(new Dimension(1080, 144));
+        JLabel libraryBanner = new JLabel(new ImageIcon((new ImageIcon("./data/images/banner2.jpg"))
+                .getImage().getScaledInstance(1080, 144, Image.SCALE_SMOOTH)));
+        titlePanel.add(libraryBanner, "library");
+
+        JLabel encounterBanner = new JLabel(new ImageIcon((new ImageIcon("./data/images/banner1.jpg"))
+                .getImage().getScaledInstance(1080, 144, Image.SCALE_SMOOTH)));
+        titlePanel.add(encounterBanner, "encounter");
 
         JPanel displaysPanel = new JPanel(new GridLayout(1, 2));
         displaysPanel.add(mainDisplayPanel);
@@ -112,33 +121,39 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
         for (JButton jb : buttonList) {
             jb.addActionListener(this);
         }
-//        initializeButtonIcons();
+        initializeButtonIcons();
     }
 
-//    // EFFECTS: ...
-//    private void initializeButtonIcons() {
-//        backButton.setIcon();
-//        addStatBlocksToEncounterButton.setIcon();
-//        openStatBlockButton.setIcon();
-//        createNewStatBlockButton.setIcon();
-//        deleteStatBlocksButton.setIcon();
-//        openCharacterButton.setIcon();
-//        openGroupButton.setIcon();
-//        rollCheckButton.setIcon();
-//        rollInitiativeButton.setIcon();
-//        changeHPButton.setIcon();
-//        editCharacterGroupButton.setIcon();
-//        deleteCharacterButton.setIcon();
-//    }
+    // EFFECTS: ...
+    private void initializeButtonIcons() {
+        backButton.setIcon(scaleIcon(RETURN_ICON));
+        addStatBlocksToEncounterButton.setIcon(scaleIcon(PLUS_ICON));
+        openStatBlockButton.setIcon(scaleIcon(CHECK_ICON));
+        createNewStatBlockButton.setIcon(scaleIcon(PLUS_ICON));
+        deleteStatBlocksButton.setIcon(scaleIcon(TRASH_ICON));
+        openCharacterButton.setIcon(scaleIcon(CHECK_ICON));
+        openGroupButton.setIcon(scaleIcon(CHECK_ICON));
+        rollCheckButton.setIcon(scaleIcon(JUMP_ICON));
+        rollInitiativeButton.setIcon(scaleIcon(CLOCK_ICON));
+        changeHPButton.setIcon(scaleIcon(HEART_ICON));
+        setCharacterGroupButton.setIcon(scaleIcon(CHECK_ICON));
+        deleteCharacterButton.setIcon(scaleIcon(TRASH_ICON));
+    }
+
+    // EFFECTS: ...
+    private ImageIcon scaleIcon(ImageIcon imageIcon) {
+        return new ImageIcon(imageIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
+    }
 
     // EFFECTS: ...
     protected void setState(String s) {
-        buttonCardLayout.show(buttonPanel, s);
         mainDisplayPanel.setMainDisplay(s);
+        buttonCardLayout.show(buttonPanel, s);
+
         switch (s) {
             case "library":
-                //titleCardLayout.show(titlePanel, "library");
                 initializeLibraryButtonPanel();
+                titleCardLayout.show(titlePanel, "library");
                 sideDisplayPanel.setSideDisplay("library");
                 break;
             case "group":
@@ -148,8 +163,8 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
                 initializeCharacterButtonPanel();
                 break;
             default:
-                //titleCardLayout.show(titlePanel, "encounter");
                 initializeEncounterButtonPanel();
+                titleCardLayout.show(titlePanel, "encounter");
                 sideDisplayPanel.setSideDisplay("encounter");
                 break;
         }
@@ -161,15 +176,14 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
         buttonPanel.add(encounterButtonPanel, "encounter");
         buttonPanel.add(characterButtonPanel, "character");
         buttonPanel.add(groupButtonPanel, "group");
+        buttonPanel.setPreferredSize(new Dimension(1080, 144));
     }
 
     // EFFECTS: ...
     private void initializeLibraryButtonPanel() {
-        JPanel libraryButtonSubPanel0 = new JPanel(new GridLayout(1, 2));
         libraryButtonSubPanel0.add(addStatBlocksToEncounterButton);
         libraryButtonSubPanel0.add(openStatBlockButton);
 
-        JPanel libraryButtonSubPanel1 = new JPanel(new GridLayout(1, 3));
         libraryButtonSubPanel1.add(createNewStatBlockButton);
         libraryButtonSubPanel1.add(deleteStatBlocksButton);
         libraryButtonSubPanel1.add(backButton);
@@ -319,6 +333,6 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
     // EFFECTS: processes button presses from user
     public void actionPerformed(ActionEvent e) {
         mainDisplayPanel.passAction(e);
-        sideDisplayPanel.passAction(e);
+        sideDisplayPanel.actionPerformed(e);
     }
 }

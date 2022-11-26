@@ -1,7 +1,6 @@
 package model.statblockfields;
 
 import model.RollFormula;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -30,7 +29,7 @@ public class Action extends Ability {
         StringBuilder damageStringBuilder = new StringBuilder();
         damageMap.forEach((s, rollFormula) -> damageStringBuilder
                 .append(" and (")
-                .append(rollFormula.getString())
+                .append(rollFormula.toString())
                 .append(") ")
                 .append(s)
                 .append(" damage"));
@@ -110,7 +109,7 @@ public class Action extends Ability {
                 + " ("
                 + reach
                 + "ft), ("
-                + hitFormula.getString()
+                + hitFormula.toString()
                 + ") to hit"
                 + getDamageString()
                 + ".";

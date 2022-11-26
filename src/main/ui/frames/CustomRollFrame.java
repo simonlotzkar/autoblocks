@@ -106,7 +106,7 @@ public class CustomRollFrame extends JFrame implements ActionListener {
             int modifier = Integer.parseInt(modifierTextField.getText());
 
             RollFormula customRoll = new RollFormula(amountOfDice, dieSides, modifier);
-            outputLogTextArea.append("\n" + customRoll.roll() + " (" + customRoll.getString() + ")");
+            outputLogTextArea.append("\n" + customRoll.roll() + " (" + customRoll + ")");
         } catch (NumberFormatException exception) {
             JOptionPane.showMessageDialog(this, "NumberFormatException caught. Message: "
                     + exception.getMessage() + ".", "Failure!", JOptionPane.WARNING_MESSAGE);

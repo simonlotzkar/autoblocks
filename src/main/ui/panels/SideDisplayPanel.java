@@ -10,7 +10,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.List;
 
 // Represents...
 public class SideDisplayPanel extends DisplayPanel implements ActionListener, ListSelectionListener {
@@ -18,10 +17,15 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener, Li
     private final CardLayout sideDisplayCardLayout = new CardLayout();
     private final CardLayout librarySidePanelCardLayout = new CardLayout();
 
+    // images
+    private static final ImageIcon D20_ICON = new ImageIcon(ICON_DIRECTORY + "d20.png");
+    private static final ImageIcon DICE_ICON = new ImageIcon(ICON_DIRECTORY + "dice.png");
+    private static final ImageIcon SWORD_ICON = new ImageIcon(ICON_DIRECTORY + "sword.png");
+
     // panels
-    private final JPanel encounterSidePanel = new JPanel(new GridLayout(2, 1));
+    private final JPanel encounterSideDisplayPanel = new JPanel(new GridLayout(2, 1));
     private final JPanel librarySidePanel = new JPanel(new BorderLayout());
-    private final JPanel librarySidePanelScrollPanePanel = new JPanel(librarySidePanelCardLayout);
+    private final JPanel libraryCardManagerPanel = new JPanel(librarySidePanelCardLayout);
     private final JPanel outputLogPanel = new JPanel(new BorderLayout());
     private final JPanel actionsPanel = new JPanel(new BorderLayout());
     private final JPanel outputLogTitlePanel = new JPanel(new GridLayout(1, 2));
@@ -31,6 +35,7 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener, Li
     private final StatBlockCreationDisplayPanel statBlockCreationDisplayPanel;
 
     // scrollpanes
+    private final JScrollPane librarySideDisplayScrollPane = new JScrollPane();
     private final JScrollPane outputLogScrollPane = new JScrollPane();
     private final JScrollPane actionsScrollPane = new JScrollPane();
 
@@ -58,19 +63,38 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener, Li
         initializeActionsListModel();
         actionsJList = new JList<>(actionsListModel);
 
-        initializeEncounterSidePanel();
-        initializeLibrarySidePanel();
+        initializeEncounterSideDisplayPanel();
+        initializeLibrarySideDisplayScrollPane();
 
         this.setLayout(sideDisplayCardLayout);
-        this.add(encounterSidePanel, "encounter");
-        this.add(librarySidePanel, "library");
+        this.add(encounterSideDisplayPanel, "encounter");
+        this.add(librarySideDisplayScrollPane, "library");
     }
 
     // EFFECTS: ...
     public void setSideDisplay(String s) {
-        sideDisplayCardLayout.show(this, s);
-        actionsJList.removeAll();
-        initializeActionsListModel();
+        switch (s) {
+            case "encounter":
+                sideDisplayCardLayout.show(this, s);
+                actionsJList.removeAll();
+                initializeActionsListModel();
+                break;
+            case "library":
+                mainMenuPanel.setSelectedStatBlock(null);
+                sideDisplayCardLayout.show(this, s);
+                librarySidePanelCardLayout.show(libraryCardManagerPanel, "statBlock");
+                statBlockDisplayPanel.reinitialize();
+                break;
+            case "statBlock":
+                sideDisplayCardLayout.show(this, "library");
+                librarySidePanelCardLayout.show(libraryCardManagerPanel, s);
+                statBlockDisplayPanel.reinitialize();
+                break;
+            case "statBlockCreation":
+                sideDisplayCardLayout.show(this, "library");
+                librarySidePanelCardLayout.show(libraryCardManagerPanel, s);
+                break;
+        }
     }
 
     // EFFECTS: ...
@@ -84,21 +108,28 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener, Li
         for (JButton jb : buttonList) {
             jb.addActionListener(this);
         }
-//        initializeButtonIcons();
+        initializeButtonIcons();
     }
 
-//    // EFFECTS: ...
-//    private void initializeButtonIcons() {
-//        backButton.setIcon();
-//    }
+    // EFFECTS: ...
+    private void initializeButtonIcons() {
+        customActionButton.setIcon(scaleIcon(SWORD_ICON));
+        customRollButton.setIcon(scaleIcon(D20_ICON));
+        rollActionsButton.setIcon(scaleIcon(DICE_ICON));
+    }
 
     // EFFECTS: ...
-    private void initializeEncounterSidePanel() {
+    private ImageIcon scaleIcon(ImageIcon imageIcon) {
+        return new ImageIcon(imageIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+    }
+
+    // EFFECTS: ...
+    private void initializeEncounterSideDisplayPanel() {
         initializeOutputLogPanel();
         initializeActionsPanel();
 
-        encounterSidePanel.add(outputLogPanel);
-        encounterSidePanel.add(actionsPanel);
+        encounterSideDisplayPanel.add(outputLogPanel);
+        encounterSideDisplayPanel.add(actionsPanel);
     }
 
     // EFFECTS: ...
@@ -178,25 +209,17 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener, Li
     }
 
     // EFFECTS: ...
-    private void initializeLibrarySidePanel() {
-        librarySidePanelScrollPanePanel.add(statBlockDisplayPanel, "statBlock");
-        librarySidePanelScrollPanePanel.add(statBlockCreationDisplayPanel, "statBlockCreation");
-
-        ScrollPane librarySidePanelScrollPane = new ScrollPane();
-        librarySidePanelScrollPane.add(librarySidePanelScrollPanePanel);
+    private void initializeLibrarySideDisplayScrollPane() {
+        libraryCardManagerPanel.add(statBlockDisplayPanel, "statBlock");
+        libraryCardManagerPanel.add(statBlockCreationDisplayPanel, "statBlockCreation");
 
         librarySidePanel.add(new JLabel("Selected:"), BorderLayout.NORTH);
-        librarySidePanel.add(librarySidePanelScrollPane, BorderLayout.CENTER);
-    }
+        librarySidePanel.add(libraryCardManagerPanel, BorderLayout.CENTER);
 
-    // EFFECTS: depending on what display is showing, sends the given action event to the corresponding display panel
-    public void passAction(ActionEvent e) {
-        if (statBlockDisplayPanel.isShowing()) {
-            statBlockDisplayPanel.actionPerformed(e);
-        }
-        if (statBlockCreationDisplayPanel.isShowing()) {
-            statBlockCreationDisplayPanel.actionPerformed(e);
-        }
+        librarySideDisplayScrollPane.setViewportView(librarySidePanel);
+        librarySideDisplayScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        librarySideDisplayScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
     }
 
     // EFFECTS: ...
@@ -218,7 +241,19 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener, Li
     @Override
     // EFFECTS: ...
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == rollActionsButton) {
+        if (e.getSource() == mainMenuPanel.getBackButton()) {
+            if (encounterSideDisplayPanel.isShowing()) {
+                mainMenuPanel.getMenuManagerPanel().setMenu("title");
+            } else {
+                if (statBlockDisplayPanel.isShowing() && mainMenuPanel.getSelectedStatBlock() != null) {
+                    setSideDisplay("library");
+                } else if (statBlockCreationDisplayPanel.isShowing()) {
+                    librarySidePanelCardLayout.show(libraryCardManagerPanel, "library");
+                } else {
+                    mainMenuPanel.getMenuManagerPanel().setMenu("title");
+                }
+            }
+        } else if (e.getSource() == rollActionsButton) {
             rollActions();
         } else if (e.getSource() == customRollButton) {
             new CustomRollFrame();

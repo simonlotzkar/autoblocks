@@ -41,8 +41,8 @@ public class ArmourTest {
         String testString0 = "10 (hide armour) or 15 (with Magic Armour)";
         String testString1 = "19";
 
-        assertEquals(testString0, testArmour0.getString());
-        assertEquals(testString1, testArmour1.getString());
+        assertEquals(testString0, testArmour0.toString());
+        assertEquals(testString1, testArmour1.toString());
     }
 
     @Test

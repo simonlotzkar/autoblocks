@@ -73,10 +73,10 @@ public class RollFormulaTest {
 
     @Test
     public void testGetString() {
-        assertEquals("0d0", testRollFormula0.getString());
-        assertEquals("1d1", testRollFormula1.getString());
-        assertEquals("1d4+2", testRollFormula2.getString());
-        assertEquals("3d30-3", testRollFormula4.getString());
+        assertEquals("0d0", testRollFormula0.toString());
+        assertEquals("1d1", testRollFormula1.toString());
+        assertEquals("1d4+2", testRollFormula2.toString());
+        assertEquals("3d30-3", testRollFormula4.toString());
     }
 
     @Test

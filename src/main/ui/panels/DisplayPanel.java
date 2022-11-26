@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class DisplayPanel extends JPanel {
+    protected static final String ICON_DIRECTORY = "./data/images/icons/";
     protected MainMenuPanel mainMenuPanel;
 
     // EFFECTS: sets the layout manager, mainmenu panel, size, and visibility

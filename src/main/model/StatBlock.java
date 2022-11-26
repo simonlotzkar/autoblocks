@@ -162,7 +162,7 @@ public class StatBlock implements Writable {
 
     // EFFECTS: returns hp formula as a string
     public String getHPString() {
-        return hpFormula.getString();
+        return hpFormula.toString();
     }
 
     // EFFECTS: gets proficiency

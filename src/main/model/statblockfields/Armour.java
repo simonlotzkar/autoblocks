@@ -21,8 +21,9 @@ public class Armour implements Writable {
 
     // -----------------------------------------------------------------------------------------------------------------
     // getters
+    @Override
     // EFFECTS: gets string representation of Armour depending on what fields exist
-    public String getString() {
+    public String toString() {
         StringBuilder armourStringBuilder = new StringBuilder();
         armourStringBuilder.append(ac);
         if (armourName != null) {
