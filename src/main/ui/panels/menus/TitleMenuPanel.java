@@ -102,11 +102,11 @@ public class TitleMenuPanel extends MenuPanel implements ActionListener {
         if (e.getSource() == customRollButton) {
             new CustomRollFrame();
         } else if (e.getSource() == encounterButton) {
-            menuManagerPanel.setMenu("main");
             menuManagerPanel.getMainMenuPanel().setState("encounter");
-        } else if (e.getSource() == libraryButton) {
             menuManagerPanel.setMenu("main");
+        } else if (e.getSource() == libraryButton) {
             menuManagerPanel.getMainMenuPanel().setState("library");
+            menuManagerPanel.setMenu("main");
         } else if (e.getSource() == loadButton) {
             menuManagerPanel.tryLoad();
         } else if (e.getSource() == saveButton) {

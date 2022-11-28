@@ -22,6 +22,7 @@ public class LibraryScrollPane extends JScrollPane implements ListSelectionListe
     private JButton openStatBlockButton;
     private JButton createNewStatBlockButton;
     private JButton deleteStatBlocksButton;
+    private JButton backButton;
 
     // EFFECTS: constructs this display panel
     public LibraryScrollPane(MainMenuPanel mainMenuPanel) {
@@ -38,6 +39,10 @@ public class LibraryScrollPane extends JScrollPane implements ListSelectionListe
         this.setViewportView(libraryJList);
 
         importButtons();
+        addStatBlocksToEncounterButton.setEnabled(false);
+        deleteStatBlocksButton.setEnabled(false);
+        openStatBlockButton.setEnabled(false);
+
         initializeJList();
     }
 
@@ -47,6 +52,7 @@ public class LibraryScrollPane extends JScrollPane implements ListSelectionListe
         openStatBlockButton = mainMenuPanel.getOpenStatBlockButton();
         createNewStatBlockButton = mainMenuPanel.getCreateNewStatBlockButton();
         deleteStatBlocksButton = mainMenuPanel.getDeleteStatBlocksButton();
+        backButton = mainMenuPanel.getBackButton();
     }
 
     // MODIFIES: this
@@ -124,13 +130,18 @@ public class LibraryScrollPane extends JScrollPane implements ListSelectionListe
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == addStatBlocksToEncounterButton) {
             tryAddSelectedToEncounter();
+            libraryJList.clearSelection();
         } else if (e.getSource() == openStatBlockButton) {
             mainMenuPanel.setSelectedStatBlock(libraryListModel.getElementAt(libraryJList.getSelectedIndex()));
             mainMenuPanel.getSideDisplayPanel().setSideDisplay("statBlock");
+            libraryJList.clearSelection();
         } else if (e.getSource() == createNewStatBlockButton) {
             mainMenuPanel.getSideDisplayPanel().setSideDisplay("statBlockCreation");
+            libraryJList.clearSelection();
         } else if (e.getSource() == deleteStatBlocksButton) {
             deleteStatBlocks();
+        } else if (e.getSource() == backButton) {
+            libraryJList.clearSelection();
         }
     }
 
@@ -139,6 +150,9 @@ public class LibraryScrollPane extends JScrollPane implements ListSelectionListe
     //          or if just one item is selected enables or disables single selection buttons
     public void valueChanged(ListSelectionEvent e) {
         addStatBlocksToEncounterButton.setEnabled(!e.getValueIsAdjusting());
+        if (libraryJList.getSelectedIndices().length < 1) {
+            addStatBlocksToEncounterButton.setEnabled(false);
+        }
         deleteStatBlocksButton.setEnabled(!e.getValueIsAdjusting());
 
         mainMenuPanel.getSideDisplayPanel().valueChanged(e);

@@ -21,8 +21,9 @@ public class Languages implements Writable {
 
     // -----------------------------------------------------------------------------------------------------------------
     // getters
+    @Override
     // EFFECTS: returns a string comprised of all languages that exist and telepathy if it exists
-    public String getString() {
+    public String toString() {
         return "" + getListString() + getTelepathyString();
     }
 

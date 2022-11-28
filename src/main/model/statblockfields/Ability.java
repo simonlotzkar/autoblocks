@@ -36,4 +36,10 @@ public class Ability implements Writable {
         json.put("description", description);
         return json;
     }
+
+    @Override
+    // EFFECTS: ...
+    public String toString() {
+        return getName() + ". " + getDescription();
+    }
 }

@@ -20,6 +20,7 @@ public class EncounterScrollPane extends JScrollPane implements ListSelectionLis
     private JButton deleteCharacterButton;
     private JButton rollCheckButton;
     private JButton rollInitiativeButton;
+    private JButton backButton;
 
     // EFFECTS: constructs this display panel
     public EncounterScrollPane(MainMenuPanel mainMenuPanel) {
@@ -48,6 +49,7 @@ public class EncounterScrollPane extends JScrollPane implements ListSelectionLis
         deleteCharacterButton = mainMenuPanel.getDeleteCharacterButton();
         rollCheckButton = mainMenuPanel.getRollCheckButton();
         rollInitiativeButton = mainMenuPanel.getRollInitiativeButton();
+        backButton = mainMenuPanel.getBackButton();
     }
 
     // MODIFIES: this
@@ -180,6 +182,8 @@ public class EncounterScrollPane extends JScrollPane implements ListSelectionLis
             rollCheck();
         } else if (e.getSource() == rollInitiativeButton) {
             rollInitiative();
+        } else if (e.getSource() == backButton) {
+            encounterJList.clearSelection();
         }
     }
 

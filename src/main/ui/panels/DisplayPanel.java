@@ -12,7 +12,7 @@ public class DisplayPanel extends JPanel {
     public DisplayPanel(LayoutManager layoutManager, MainMenuPanel mainMenuPanel) {
         super(layoutManager);
         this.mainMenuPanel = mainMenuPanel;
-        this.setSize(mainMenuPanel.getSize());
+        this.setPreferredSize(mainMenuPanel.getPreferredSize());
         this.setVisible(true);
     }
 }

@@ -25,14 +25,14 @@ public class CustomRollFrame extends JFrame implements ActionListener {
     JTextArea outputLogTextArea;
 
     // textfields
+    ArrayList<JTextField> textFieldList = new ArrayList<>();
     JTextField amountOfDiceTextField = new JTextField();
     JTextField dieSidesTextField = new JTextField();
     JTextField modifierTextField = new JTextField();
-    ArrayList<JTextField> textFieldList = new ArrayList<>();
 
     // images
-    private static final ImageIcon D20_BLUE_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "d20.png");
-    private static final ImageIcon DICE_IMAGE_ICON = new ImageIcon((new ImageIcon(ICON_DIRECTORY + "dice.png"))
+    private static final ImageIcon D20_ICON = new ImageIcon(ICON_DIRECTORY + "d20.png");
+    private static final ImageIcon DICE_ICON = new ImageIcon((new ImageIcon(ICON_DIRECTORY + "dice.png"))
             .getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
 
     // EFFECTS: constructs a custom roll frame
@@ -40,13 +40,13 @@ public class CustomRollFrame extends JFrame implements ActionListener {
         super("Custom Dice Roller");
         this.setSize(WIDTH, HEIGHT);
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        this.setIconImage(D20_BLUE_IMAGE_ICON.getImage());
+        this.setIconImage(D20_ICON.getImage());
 
         initializeParameterPanel();
         initializeOutputLogScrollPane();
 
         rollButton.addActionListener(this);
-        rollButton.setIcon(DICE_IMAGE_ICON);
+        rollButton.setIcon(DICE_ICON);
         rollButton.setPreferredSize(new Dimension(WIDTH, 50));
 
         JPanel customRollPanel = new JPanel();

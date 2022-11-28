@@ -48,8 +48,8 @@ public class LanguagesTest {
         String testString0 = "elvish, telepathy " + testTelepathy0 + "ft";
         String testString1 = "Dwarvish, Common, ";
 
-        assertEquals(testString0, testLanguages0.getString());
-        assertEquals(testString1, testLanguages1.getString());
+        assertEquals(testString0, testLanguages0.toString());
+        assertEquals(testString1, testLanguages1.toString());
     }
 
     @Test

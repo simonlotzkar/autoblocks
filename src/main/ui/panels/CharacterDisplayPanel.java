@@ -9,10 +9,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 
 // Represents...
-public class CharacterDisplayPanel extends DisplayPanel {
+public class CharacterDisplayPanel extends StatBlockDisplayTextArea {
     // EFFECTS: constructs this display panel
     public CharacterDisplayPanel(MainMenuPanel mainMenuPanel) {
-        super(new CardLayout(), mainMenuPanel); // sets the layout manager, mainmenu panel, size, and visibility
+        super(mainMenuPanel); // sets the layout manager, mainmenu panel, size, and visibility
     }
 
     // EFFECTS: ...

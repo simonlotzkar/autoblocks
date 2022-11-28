@@ -27,7 +27,7 @@ public class MenuManagerPanel extends JPanel {
     // EFFECTS: constructs this panel
     public MenuManagerPanel(MainFrame mainFrame) {
         super();
-        this.setSize(mainFrame.getSize());
+        this.setPreferredSize(mainFrame.getPreferredSize());
         this.setLayout(cardLayout);
         this.add(titleMenuPanel, "title");
         this.add(mainMenuPanel, "main");
