@@ -172,11 +172,11 @@ public class EncounterScrollPane extends JScrollPane implements ListSelectionLis
     public void passAction(ActionEvent e) {
         if (e.getSource() == openCharacterButton) {
             mainMenuPanel.setSelectedCharacter(encounterListModel.getElementAt(encounterJList.getSelectedIndex()));
-            mainMenuPanel.getMainDisplayPanel().setMainDisplay("character");
+            mainMenuPanel.setDisplays("character");
         } else if (e.getSource() == openGroupButton) {
             mainMenuPanel.setSelectedGroup(encounterListModel
                     .getElementAt(encounterJList.getSelectedIndex()).getTitle().getGroup());
-            mainMenuPanel.getMainDisplayPanel().setMainDisplay("group");
+            mainMenuPanel.setDisplays("group");
         } else if (e.getSource() == changeHPButton) {
             changeCharactersHP();
         } else if (e.getSource() == setCharacterGroupButton) {

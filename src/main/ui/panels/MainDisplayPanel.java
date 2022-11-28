@@ -4,7 +4,6 @@ import ui.panels.menus.MainMenuPanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 
 // Represents a main display that displays one of four panels: encounter, group, character, or library
 public class MainDisplayPanel extends DisplayPanel {
@@ -20,7 +19,7 @@ public class MainDisplayPanel extends DisplayPanel {
     private final LibraryScrollPane libraryScrollPane = new LibraryScrollPane(mainMenuPanel);
     private final EncounterScrollPane encounterScrollPane = new EncounterScrollPane(mainMenuPanel);
     private final GroupDisplayPanel groupDisplayPanel = new GroupDisplayPanel(mainMenuPanel);
-    private final CharacterDisplayPanel characterDisplayPanel = new CharacterDisplayPanel(mainMenuPanel);
+    private final CharacterDisplayTextArea characterDisplayTextArea = new CharacterDisplayTextArea(mainMenuPanel);
 
     // EFFECTS: constructs this panel
     public MainDisplayPanel(MainMenuPanel mainMenuPanel) {
@@ -29,7 +28,7 @@ public class MainDisplayPanel extends DisplayPanel {
         mainDisplayManagerPanel.add(libraryScrollPane, "library");
         mainDisplayManagerPanel.add(encounterScrollPane, "encounter");
         mainDisplayManagerPanel.add(groupDisplayPanel, "group");
-        mainDisplayManagerPanel.add(characterDisplayPanel, "character");
+        mainDisplayManagerPanel.add(characterDisplayTextArea, "character");
 
         this.add(mainDisplayTitleLabel, BorderLayout.NORTH);
         this.add(mainDisplayManagerPanel, BorderLayout.CENTER);
@@ -37,13 +36,15 @@ public class MainDisplayPanel extends DisplayPanel {
 
     // EFFECTS: ...
     public void setMainDisplay(String s) {
+        encounterScrollPane.clearSelection();
+        libraryScrollPane.clearSelection();
+
+        if (s.equals("character")) {
+            characterDisplayTextArea.initializeAll();
+        }
+
         cardLayout.show(mainDisplayManagerPanel, s);
         mainDisplayTitleLabel.setText(s + " display.");
-        if (s.equals("library")) {
-            libraryScrollPane.clearSelection();
-        } else {
-            encounterScrollPane.clearSelection();
-        }
     }
 
     // EFFECTS: ...
@@ -62,7 +63,7 @@ public class MainDisplayPanel extends DisplayPanel {
     }
 
     // EFFECTS: ...
-    public CharacterDisplayPanel getCharacterDisplayPanel() {
-        return characterDisplayPanel;
+    public CharacterDisplayTextArea getCharacterDisplayPanel() {
+        return characterDisplayTextArea;
     }
 }

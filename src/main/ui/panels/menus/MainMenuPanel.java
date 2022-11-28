@@ -296,6 +296,7 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
         titleCardLayout.show(titlePanel, "library");
         mainDisplayPanel.setMainDisplay("encounter");
         sideDisplayPanel.setSideDisplay("encounter");
+        sideDisplayPanel.initializeActionsListModel();
     }
 
     // EFFECTS: ...
@@ -304,6 +305,7 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
         initializeGroupButtonPanel();
         mainDisplayPanel.setMainDisplay("group");
         sideDisplayPanel.setSideDisplay("encounter");
+        sideDisplayPanel.initializeActionsListModel();
     }
 
     // EFFECTS: ...
@@ -312,6 +314,7 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
         initializeCharacterButtonPanel();
         mainDisplayPanel.setMainDisplay("character");
         sideDisplayPanel.setSideDisplay("encounter");
+        sideDisplayPanel.initializeActionsListModel();
     }
 
     // -----------------------------------------------------------------------

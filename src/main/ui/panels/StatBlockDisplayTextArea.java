@@ -8,8 +8,8 @@ import javax.swing.*;
 
 // Represents...
 public class StatBlockDisplayTextArea extends JTextArea {
-    protected MainMenuPanel mainMenuPanel;
-    protected model.StatBlock selectedStatBlock;
+    private final MainMenuPanel mainMenuPanel;
+    private model.StatBlock selectedStatBlock;
 
     private static final String NONE_SELECTED = "No StatBlock Selected";
 

@@ -150,8 +150,9 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener, Li
     }
 
     // EFFECTS: ...
-    private void initializeActionsListModel() {
+    public void initializeActionsListModel() {
         String selectedGroupName = mainMenuPanel.getSelectedGroup();
+        actionsListModel.removeAllElements();
 
         if (selectedGroupName != null) {
             for (int i = 0; i < encounterListModel.getSize(); i++) {
@@ -218,7 +219,6 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener, Li
         } else if (s.equals("encounter")) {
             sideDisplayCardLayout.show(this, s);
             actionsJList.removeAll();
-            initializeActionsListModel();
         } else {
             sideDisplayCardLayout.show(this, "library");
             librarySidePanelCardLayout.show(librarySideDisplayCardManagerPanel, "statBlock");
