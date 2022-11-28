@@ -1,15 +1,23 @@
 package ui.panels;
 
+import model.RollFormula;
+import model.StatBlock;
+import model.statblockfields.*;
+import ui.exceptions.IncompleteFieldException;
 import ui.panels.menus.MainMenuPanel;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 // Represents...
-public class StatBlockCreationDisplayPanel extends DisplayPanel implements ActionListener {
+public class StatBlockCreationDisplayPanel extends DisplayPanel implements ActionListener, ListSelectionListener {
     // textfields
     private final ArrayList<JTextField> requiredTextFieldsList = new ArrayList<>();
     private final ArrayList<JTextField> numberTextFieldList = new ArrayList<>();
@@ -31,6 +39,12 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
     private final JTextField flyTextField = new JTextField();
     private final JTextField climbTextField = new JTextField();
 
+    private final JTextField passivePerceptionTextField = new JTextField();
+    private final JTextField blindSightTextField = new JTextField();
+    private final JTextField tremorSenseTextField = new JTextField();
+    private final JTextField trueSightTextField = new JTextField();
+    private final JTextField darkVisionTextField = new JTextField();
+
     private final JTextField strengthTextField = new JTextField();
     private final JTextField dexterityTextField = new JTextField();
     private final JTextField constitutionTextField = new JTextField();
@@ -47,8 +61,6 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
 
     private final JTextField actionNameTextField = new JTextField();
     private final JTextField actionRangeTextField = new JTextField();
-    private final JTextField actionHitAmountOfDiceTextField = new JTextField();
-    private final JTextField actionHitDieSidesTextField = new JTextField();
     private final JTextField actionHitModifierTextField = new JTextField();
     private final JTextField actionDamageAmountOfDiceTextField = new JTextField();
     private final JTextField actionDamageDieSidesTextField = new JTextField();
@@ -81,47 +93,50 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
     private final JComboBox<String> actionDamageTypeComboBox = new JComboBox<>(DAMAGE_TYPES);
 
     // check boxes
-    private final JCheckBox strengthSavingThrowProficiencyCheckBox = new JCheckBox();
-    private final JCheckBox dexteritySavingThrowProficiencyCheckBox = new JCheckBox();
-    private final JCheckBox constitutionSavingThrowProficiencyCheckBox = new JCheckBox();
-    private final JCheckBox intelligenceSavingThrowProficiencyCheckBox = new JCheckBox();
-    private final JCheckBox wisdomSavingThrowProficiencyCheckBox = new JCheckBox();
-    private final JCheckBox charismaSavingThrowProficiencyCheckBox = new JCheckBox();
+    private final ArrayList<JCheckBox> savingThrowCheckBoxList = new ArrayList<>();
+    private final JCheckBox strengthSavingThrowProficiencyCheckBox = new JCheckBox("strength");
+    private final JCheckBox dexteritySavingThrowProficiencyCheckBox = new JCheckBox("dexterity");
+    private final JCheckBox constitutionSavingThrowProficiencyCheckBox = new JCheckBox("constitution");
+    private final JCheckBox intelligenceSavingThrowProficiencyCheckBox = new JCheckBox("intelligence");
+    private final JCheckBox wisdomSavingThrowProficiencyCheckBox = new JCheckBox("wisdom");
+    private final JCheckBox charismaSavingThrowProficiencyCheckBox = new JCheckBox("charisma");
 
-    private final JCheckBox acrobaticsProficiencyCheckBox = new JCheckBox();
-    private final JCheckBox animalHandlingProficiencyCheckBox = new JCheckBox();
-    private final JCheckBox arcanaProficiencyCheckBox = new JCheckBox();
-    private final JCheckBox athleticsProficiencyCheckBox = new JCheckBox();
-    private final JCheckBox deceptionProficiencyCheckBox = new JCheckBox();
-    private final JCheckBox historyProficiencyCheckBox = new JCheckBox();
-    private final JCheckBox insightProficiencyCheckBox = new JCheckBox();
-    private final JCheckBox intimidationProficiencyCheckBox = new JCheckBox();
-    private final JCheckBox investigationProficiencyCheckBox = new JCheckBox();
-    private final JCheckBox medicineProficiencyCheckBox = new JCheckBox();
-    private final JCheckBox natureProficiencyCheckBox = new JCheckBox();
-    private final JCheckBox perceptionProficiencyCheckBox = new JCheckBox();
-    private final JCheckBox performanceProficiencyCheckBox = new JCheckBox();
-    private final JCheckBox persuasionProficiencyCheckBox = new JCheckBox();
-    private final JCheckBox religionProficiencyCheckBox = new JCheckBox();
-    private final JCheckBox sleightOfHandProficiencyCheckBox = new JCheckBox();
-    private final JCheckBox stealthProficiencyCheckBox = new JCheckBox();
-    private final JCheckBox survivalProficiencyCheckBox = new JCheckBox();
+    private final ArrayList<JCheckBox> skillCheckBoxList = new ArrayList<>();
+    private final JCheckBox acrobaticsProficiencyCheckBox = new JCheckBox("acrobatics");
+    private final JCheckBox animalHandlingProficiencyCheckBox = new JCheckBox("animalHandling");
+    private final JCheckBox arcanaProficiencyCheckBox = new JCheckBox("arcana");
+    private final JCheckBox athleticsProficiencyCheckBox = new JCheckBox("athletics");
+    private final JCheckBox deceptionProficiencyCheckBox = new JCheckBox("deception");
+    private final JCheckBox historyProficiencyCheckBox = new JCheckBox("history");
+    private final JCheckBox insightProficiencyCheckBox = new JCheckBox("insight");
+    private final JCheckBox intimidationProficiencyCheckBox = new JCheckBox("intimidation");
+    private final JCheckBox investigationProficiencyCheckBox = new JCheckBox("investigation");
+    private final JCheckBox medicineProficiencyCheckBox = new JCheckBox("medicine");
+    private final JCheckBox natureProficiencyCheckBox = new JCheckBox("nature");
+    private final JCheckBox perceptionProficiencyCheckBox = new JCheckBox("perception");
+    private final JCheckBox performanceProficiencyCheckBox = new JCheckBox("performance");
+    private final JCheckBox persuasionProficiencyCheckBox = new JCheckBox("persuasion");
+    private final JCheckBox religionProficiencyCheckBox = new JCheckBox("religion");
+    private final JCheckBox sleightOfHandProficiencyCheckBox = new JCheckBox("sleightOfHand");
+    private final JCheckBox stealthProficiencyCheckBox = new JCheckBox("stealth");
+    private final JCheckBox survivalProficiencyCheckBox = new JCheckBox("survival");
 
-    private final JCheckBox blindedImmunityCheckBox = new JCheckBox();
-    private final JCheckBox charmedImmunityCheckBox = new JCheckBox();
-    private final JCheckBox deafenedImmunityCheckBox = new JCheckBox();
-    private final JCheckBox frightenedImmunityCheckBox = new JCheckBox();
-    private final JCheckBox grappledImmunityCheckBox = new JCheckBox();
-    private final JCheckBox incapacitatedImmunityCheckBox = new JCheckBox();
-    private final JCheckBox invisibleImmunityCheckBox = new JCheckBox();
-    private final JCheckBox paralyzedImmunityCheckBox = new JCheckBox();
-    private final JCheckBox petrifiedImmunityCheckBox = new JCheckBox();
-    private final JCheckBox poisonedImmunityCheckBox = new JCheckBox();
-    private final JCheckBox proneImmunityCheckBox = new JCheckBox();
-    private final JCheckBox restrainedImmunityCheckBox = new JCheckBox();
-    private final JCheckBox stunnedImmunityCheckBox = new JCheckBox();
-    private final JCheckBox unconsciousImmunityCheckBox = new JCheckBox();
-    private final JCheckBox exhaustionImmunityCheckBox = new JCheckBox();
+    private final ArrayList<JCheckBox> immunityCheckBoxList = new ArrayList<>();
+    private final JCheckBox blindedImmunityCheckBox = new JCheckBox("blinded");
+    private final JCheckBox charmedImmunityCheckBox = new JCheckBox("charmed");
+    private final JCheckBox deafenedImmunityCheckBox = new JCheckBox("deafened");
+    private final JCheckBox frightenedImmunityCheckBox = new JCheckBox("frightened");
+    private final JCheckBox grappledImmunityCheckBox = new JCheckBox("grappled");
+    private final JCheckBox incapacitatedImmunityCheckBox = new JCheckBox("incapacitated");
+    private final JCheckBox invisibleImmunityCheckBox = new JCheckBox("invisible");
+    private final JCheckBox paralyzedImmunityCheckBox = new JCheckBox("paralyzed");
+    private final JCheckBox petrifiedImmunityCheckBox = new JCheckBox("petrified");
+    private final JCheckBox poisonedImmunityCheckBox = new JCheckBox("poisoned");
+    private final JCheckBox proneImmunityCheckBox = new JCheckBox("prone");
+    private final JCheckBox restrainedImmunityCheckBox = new JCheckBox("restrained");
+    private final JCheckBox stunnedImmunityCheckBox = new JCheckBox("stunned");
+    private final JCheckBox unconsciousImmunityCheckBox = new JCheckBox("unconscious");
+    private final JCheckBox exhaustionImmunityCheckBox = new JCheckBox("exhaustion");
 
     // panels
     private final JPanel titlePanel = new JPanel();
@@ -132,6 +147,7 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
     private final JPanel hpPanel = new JPanel();
     private final JPanel armourPanel = new JPanel();
     private final JPanel speedsPanel = new JPanel();
+    private final JPanel sensesPanel = new JPanel();
 
     private final JPanel abilityScoresPanel = new JPanel();
     private final JPanel strengthPanel = new JPanel();
@@ -156,6 +172,10 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
     private final JPanel legendaryCreationPanel = new JPanel();
 
     // buttons
+    private JButton backButton;
+    private JButton openStatBlockButton;
+    private JButton deleteStatBlocksButton;
+
     private final JButton addLanguageButton = new JButton("Add");
     private final JButton addAbilityButton = new JButton("Add");
     private final JButton addActionDamageButton = new JButton("Add Damage");
@@ -163,25 +183,34 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
     private final JButton addLegendaryActionButton = new JButton("Add");
 
     // lists
-    private JList<String> languagesList = new JList<>();
-    private JList<String> abilitiesList = new JList<>();
-    private JList<String> actionsList = new JList<>();
-    private JList<String> actionDamageList = new JList<>();
-    private JList<String> legendaryActionsList = new JList<>();
+    private final DefaultListModel<String> languagesListModel = new DefaultListModel<>();
+    private final JList<String> languageList = new JList<>(languagesListModel);
+
+    private final DefaultListModel<Ability> abilitiesListModel = new DefaultListModel<>();
+    private final JList<Ability> abilitiesList = new JList<>(abilitiesListModel);
+
+    private final DefaultListModel<model.statblockfields.Action> actionsListModel = new DefaultListModel<>();
+    private final JList<model.statblockfields.Action> actionsList = new JList<>(actionsListModel);
+
+    private final DefaultListModel<HashMap<String, RollFormula>> actionDamageMapListModel = new DefaultListModel<>();
+    private final JList<HashMap<String, RollFormula>> actionDamageMapList = new JList<>(actionDamageMapListModel);
+
+    private final DefaultListModel<Ability> legendaryActionsListModel = new DefaultListModel<>();
+    private final JList<Ability> legendaryActionsList = new JList<>(legendaryActionsListModel);
 
     // scroll panes
-    private final JScrollPane languagesScrollPane = new JScrollPane(languagesList);
+    private final JScrollPane languagesScrollPane = new JScrollPane(languageList);
     private final JScrollPane abilityDescriptionScrollPane = new JScrollPane(abilityDescriptionTextField);
     private final JScrollPane abilitiesScrollPane = new JScrollPane(abilitiesList);
     private final JScrollPane actionsScrollPane = new JScrollPane(actionsList);
-    private final JScrollPane actionDamageScrollPane = new JScrollPane(actionDamageList);
+    private final JScrollPane actionDamageScrollPane = new JScrollPane(actionDamageMapList);
     private final JScrollPane legendaryDescriptionScrollPane = new JScrollPane(legendaryDescriptionTextField);
     private final JScrollPane legendaryActionDescriptionScrollPane
             = new JScrollPane(legendaryActionDescriptionTextField);
     private final JScrollPane legendaryActionsScrollPane = new JScrollPane(legendaryActionsList);
 
     // constants
-    private static final String SEPARATOR = "=====================================";
+    private static final String SEPARATOR = "===========================================================";
     private static final String TAB = "    ";
     private static final int FLOW_H_GAP = 5;
     private static final int FLOW_V_GAP = 5;
@@ -191,11 +220,11 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
             "Elemental", "Fey", "Fiend", "Giant", "Humanoid", "Monstrosity", "Ooze", "Plant", "Undead"};
     private static final String[] ALIGNMENTS = {"unaligned", "lawful good", "neutral good", "chaotic good",
             "neutral good", "neutral", "neutral evil", "chaotic good", "chaotic neutral", "chaotic evil"};
-    private static final String[] RESISTANCE_TYPES = {"---", "resistant", "vulnerable", "immune"};
+    private static final String[] RESISTANCE_TYPES = {"---", "Resistance", "Vulnerability", "Immunity"};
     private static final String[] ACTION_DESCRIPTIONS = {"Melee Weapon Attack", "Melee Spell Attack",
             "Ranged Weapon Attack", "Ranged Spell Attack", "Melee or Ranged Weapon Attack", "Action"};
-    private static final String[] DAMAGE_TYPES = {"acid", "bludgeoning", "cold", "fire", "force", "lightning",
-            "necrotic", "piercing", "poison", "psychic", "radiant", "slashing", "thunder"};
+    private static final String[] DAMAGE_TYPES = {"Acid", "Bludgeoning", "Cold", "Fire", "Force", "Lightning",
+            "Necrotic", "Piercing", "Poison", "Psychic", "Radiant", "Slashing", "Thunder"};
 
     // EFFECTS: constructs this display panel
     public StatBlockCreationDisplayPanel(MainMenuPanel mainMenuPanel) {
@@ -234,8 +263,125 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
         initializeLegendaryCreationPanel();
         formatTextFields();
         formatScrollPanes();
+        initializeButtons();
+        initializeLists();
+        initializeCheckBoxLists();
         this.revalidate();
         this.repaint();
+    }
+
+    // EFFECTS: ...
+    private void initializeCheckBoxLists() {
+        initializeSavingThrowCheckBoxList();
+        initializeSkillCheckBoxList();
+        initializeImmunityCheckBoxList();
+    }
+
+    // EFFECTS: ...
+    private void initializeSavingThrowCheckBoxList() {
+        savingThrowCheckBoxList.add(strengthSavingThrowProficiencyCheckBox);
+        savingThrowCheckBoxList.add(dexteritySavingThrowProficiencyCheckBox);
+        savingThrowCheckBoxList.add(constitutionSavingThrowProficiencyCheckBox);
+        savingThrowCheckBoxList.add(intelligenceSavingThrowProficiencyCheckBox);
+        savingThrowCheckBoxList.add(wisdomSavingThrowProficiencyCheckBox);
+        savingThrowCheckBoxList.add(charismaSavingThrowProficiencyCheckBox);
+    }
+
+    // EFFECTS: ...
+    private void initializeSkillCheckBoxList() {
+        skillCheckBoxList.add(acrobaticsProficiencyCheckBox);
+        skillCheckBoxList.add(animalHandlingProficiencyCheckBox);
+        skillCheckBoxList.add(arcanaProficiencyCheckBox);
+        skillCheckBoxList.add(athleticsProficiencyCheckBox);
+        skillCheckBoxList.add(deceptionProficiencyCheckBox);
+        skillCheckBoxList.add(historyProficiencyCheckBox);
+        skillCheckBoxList.add(insightProficiencyCheckBox);
+        skillCheckBoxList.add(intimidationProficiencyCheckBox);
+        skillCheckBoxList.add(investigationProficiencyCheckBox);
+        skillCheckBoxList.add(medicineProficiencyCheckBox);
+        skillCheckBoxList.add(natureProficiencyCheckBox);
+        skillCheckBoxList.add(perceptionProficiencyCheckBox);
+        skillCheckBoxList.add(performanceProficiencyCheckBox);
+        skillCheckBoxList.add(persuasionProficiencyCheckBox);
+        skillCheckBoxList.add(religionProficiencyCheckBox);
+        skillCheckBoxList.add(sleightOfHandProficiencyCheckBox);
+        skillCheckBoxList.add(stealthProficiencyCheckBox);
+        skillCheckBoxList.add(survivalProficiencyCheckBox);
+    }
+
+    // EFFECTS: ...
+    private void initializeImmunityCheckBoxList() {
+        immunityCheckBoxList.add(blindedImmunityCheckBox);
+        immunityCheckBoxList.add(charmedImmunityCheckBox);
+        immunityCheckBoxList.add(deafenedImmunityCheckBox);
+        immunityCheckBoxList.add(frightenedImmunityCheckBox);
+        immunityCheckBoxList.add(grappledImmunityCheckBox);
+        immunityCheckBoxList.add(incapacitatedImmunityCheckBox);
+        immunityCheckBoxList.add(invisibleImmunityCheckBox);
+        immunityCheckBoxList.add(paralyzedImmunityCheckBox);
+        immunityCheckBoxList.add(petrifiedImmunityCheckBox);
+        immunityCheckBoxList.add(poisonedImmunityCheckBox);
+        immunityCheckBoxList.add(proneImmunityCheckBox);
+        immunityCheckBoxList.add(restrainedImmunityCheckBox);
+        immunityCheckBoxList.add(stunnedImmunityCheckBox);
+        immunityCheckBoxList.add(unconsciousImmunityCheckBox);
+        immunityCheckBoxList.add(exhaustionImmunityCheckBox);
+    }
+
+    // EFFECTS: ...
+    private void initializeButtons() {
+        importButtons();
+
+        ArrayList<JButton> buttonList = new ArrayList<>();
+
+        buttonList.add(backButton);
+        buttonList.add(openStatBlockButton);
+        buttonList.add(deleteStatBlocksButton);
+        buttonList.add(addLanguageButton);
+        buttonList.add(addAbilityButton);
+        buttonList.add(addActionDamageButton);
+        buttonList.add(addActionButton);
+        buttonList.add(addLegendaryActionButton);
+
+        for (JButton jb : buttonList) {
+            jb.addActionListener(this);
+        }
+        //initializeButtonIcons();
+    }
+
+    // EFFECTS: ...
+    private void importButtons() {
+        backButton = mainMenuPanel.getBackButton();
+        openStatBlockButton = mainMenuPanel.getOpenStatBlockButton();
+        deleteStatBlocksButton = mainMenuPanel.getDeleteStatBlocksButton();
+    }
+
+    // EFFECTS: ...
+    private void initializeLists() {
+        languageList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        languageList.setLayoutOrientation(JList.VERTICAL);
+        languageList.setVisibleRowCount(-1);
+        languageList.addListSelectionListener(this);
+
+        abilitiesList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        abilitiesList.setLayoutOrientation(JList.VERTICAL);
+        abilitiesList.setVisibleRowCount(-1);
+        abilitiesList.addListSelectionListener(this);
+
+        actionsList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        actionsList.setLayoutOrientation(JList.VERTICAL);
+        actionsList.setVisibleRowCount(-1);
+        actionsList.addListSelectionListener(this);
+
+        actionDamageMapList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        actionDamageMapList.setLayoutOrientation(JList.VERTICAL);
+        actionDamageMapList.setVisibleRowCount(-1);
+        actionDamageMapList.addListSelectionListener(this);
+
+        legendaryActionsList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        legendaryActionsList.setLayoutOrientation(JList.VERTICAL);
+        legendaryActionsList.setVisibleRowCount(-1);
+        legendaryActionsList.addListSelectionListener(this);
     }
 
     // EFFECTS: ...
@@ -266,7 +412,7 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
         for (JScrollPane sp : scrollPanesList) {
             sp.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
             sp.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-            //sp.setPreferredSize(new Dimension(this.getPreferredSize().width, 50));
+            sp.setPreferredSize(new Dimension(this.getPreferredSize().width, 100));
         }
     }
 
@@ -332,11 +478,13 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
         initializeHPPanel();
         initializeArmourPanel();
         initializeSpeedsPanel();
+        initializeSensesPanel();
 
         combatStatsPanel.setLayout(new BoxLayout(combatStatsPanel, BoxLayout.Y_AXIS));
         combatStatsPanel.add(hpPanel);
         combatStatsPanel.add(armourPanel);
         combatStatsPanel.add(speedsPanel);
+        combatStatsPanel.add(sensesPanel);
     }
 
     // EFFECTS: ...
@@ -401,10 +549,32 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
         speedsPanel.add(flyTextField);
         speedsPanel.add(new JLabel("Swim:"));
         speedsPanel.add(swimTextField);
-        speedsPanel.add(new JLabel("Burrow:"));
-        speedsPanel.add(burrowTextField);
         speedsPanel.add(new JLabel("Climb:"));
         speedsPanel.add(climbTextField);
+        speedsPanel.add(new JLabel("Burrow:"));
+        speedsPanel.add(burrowTextField);
+    }
+
+    // EFFECTS: ...
+    private void initializeSensesPanel() {
+        requiredTextFieldsList.add(passivePerceptionTextField);
+        numberTextFieldList.add(passivePerceptionTextField);
+        numberTextFieldList.add(tremorSenseTextField);
+        numberTextFieldList.add(blindSightTextField);
+        numberTextFieldList.add(trueSightTextField);
+        numberTextFieldList.add(darkVisionTextField);
+
+        sensesPanel.setLayout(new FlowLayout(FlowLayout.LEFT, FLOW_H_GAP, FLOW_V_GAP));
+        sensesPanel.add(new JLabel("PassivePerception:"));
+        sensesPanel.add(passivePerceptionTextField);
+        sensesPanel.add(new JLabel("DarkVision:"));
+        sensesPanel.add(darkVisionTextField);
+        sensesPanel.add(new JLabel("TrueSight:"));
+        sensesPanel.add(trueSightTextField);
+        sensesPanel.add(new JLabel("BlindSight:"));
+        sensesPanel.add(blindSightTextField);
+        sensesPanel.add(new JLabel("TremorSense:"));
+        sensesPanel.add(tremorSenseTextField);
     }
 
     // EFFECTS: ...
@@ -495,142 +665,93 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
     private void initializeSavingThrowsPanel() {
         savingThrowsPanel.setLayout(new FlowLayout(FlowLayout.LEFT, FLOW_H_GAP, FLOW_V_GAP));
         savingThrowsPanel.add(new JLabel("Saving Throw Proficiencies:" + TAB));
-        savingThrowsPanel.add(new JLabel("STR:"));
         savingThrowsPanel.add(strengthSavingThrowProficiencyCheckBox);
-        savingThrowsPanel.add(new JLabel("DEX:"));
         savingThrowsPanel.add(dexteritySavingThrowProficiencyCheckBox);
-        savingThrowsPanel.add(new JLabel("CON:"));
         savingThrowsPanel.add(constitutionSavingThrowProficiencyCheckBox);
-        savingThrowsPanel.add(new JLabel("INT:"));
         savingThrowsPanel.add(intelligenceSavingThrowProficiencyCheckBox);
-        savingThrowsPanel.add(new JLabel("WIS:"));
         savingThrowsPanel.add(wisdomSavingThrowProficiencyCheckBox);
-        savingThrowsPanel.add(new JLabel("CHA:"));
         savingThrowsPanel.add(charismaSavingThrowProficiencyCheckBox);
     }
 
     // EFFECTS: ...
     private void initializeSkillsPanel() {
         skillsPanel.setLayout(new FlowLayout(FlowLayout.LEFT, FLOW_H_GAP, FLOW_V_GAP));
-        skillsPanel.add(new JLabel("Skill Proficiencies:" + TAB));
-        skillsPanel.add(new JLabel("Acrobatics (Dex):"));
+        skillsPanel.add(new JLabel("Skill Proficiencies:"));
         skillsPanel.add(acrobaticsProficiencyCheckBox);
-        skillsPanel.add(new JLabel("Animal Handling (Wis):"));
         skillsPanel.add(animalHandlingProficiencyCheckBox);
-        skillsPanel.add(new JLabel("Arcana (Int):"));
         skillsPanel.add(arcanaProficiencyCheckBox);
-        skillsPanel.add(new JLabel("Athletics (Str):"));
         skillsPanel.add(athleticsProficiencyCheckBox);
-        skillsPanel.add(new JLabel("Deception (Cha):"));
         skillsPanel.add(deceptionProficiencyCheckBox);
-        skillsPanel.add(new JLabel("History (Int):"));
         skillsPanel.add(historyProficiencyCheckBox);
-        skillsPanel.add(new JLabel("Insight (Dex):"));
         skillsPanel.add(insightProficiencyCheckBox);
-        skillsPanel.add(new JLabel("Intimidation (Cha):"));
         skillsPanel.add(intimidationProficiencyCheckBox);
-        skillsPanel.add(new JLabel("Investigation (Int):"));
         skillsPanel.add(investigationProficiencyCheckBox);
-        initializeSkillsPanelPartTwo();
-    }
-
-    // EFFECTS: ...
-    private void initializeSkillsPanelPartTwo() {
-        skillsPanel.add(new JLabel("Medicine (Wis):"));
         skillsPanel.add(medicineProficiencyCheckBox);
-        skillsPanel.add(new JLabel("Nature (Int):"));
         skillsPanel.add(natureProficiencyCheckBox);
-        skillsPanel.add(new JLabel("Perception (Wis):"));
         skillsPanel.add(perceptionProficiencyCheckBox);
-        skillsPanel.add(new JLabel("Performance (Cha):"));
         skillsPanel.add(performanceProficiencyCheckBox);
-        skillsPanel.add(new JLabel("Persuasion (Cha):"));
         skillsPanel.add(persuasionProficiencyCheckBox);
-        skillsPanel.add(new JLabel("Religion (Int):"));
         skillsPanel.add(religionProficiencyCheckBox);
-        skillsPanel.add(new JLabel("Sleight of Hand (Dex):"));
         skillsPanel.add(sleightOfHandProficiencyCheckBox);
-        skillsPanel.add(new JLabel("Stealth (Dex):"));
         skillsPanel.add(stealthProficiencyCheckBox);
-        skillsPanel.add(new JLabel("Survival (Wis):"));
         skillsPanel.add(survivalProficiencyCheckBox);
     }
 
     // EFFECTS: ...
     private void initializeResistancesPanel() {
         resistancesPanel.setLayout(new FlowLayout(FlowLayout.LEFT, FLOW_H_GAP, FLOW_V_GAP));
-        resistancesPanel.add(new JLabel("Resistances:" + TAB));
-        resistancesPanel.add(new JLabel("Acid:"));
+        resistancesPanel.add(new JLabel("Resistances:"));
+        resistancesPanel.add(new JLabel("Acid"));
         resistancesPanel.add(acidResistanceComboBox);
-        resistancesPanel.add(new JLabel("Bludgeoning:"));
+        resistancesPanel.add(new JLabel("Bludgeoning"));
         resistancesPanel.add(bludgeoningResistanceComboBox);
-        resistancesPanel.add(new JLabel("Cold:"));
+        resistancesPanel.add(new JLabel("Cold"));
         resistancesPanel.add(coldResistanceComboBox);
-        resistancesPanel.add(new JLabel("Fire:"));
+        resistancesPanel.add(new JLabel("Fire"));
         resistancesPanel.add(fireResistanceComboBox);
-        resistancesPanel.add(new JLabel("Force:"));
+        resistancesPanel.add(new JLabel("Force"));
         resistancesPanel.add(forceResistanceComboBox);
-        resistancesPanel.add(new JLabel("Lightning:"));
+        resistancesPanel.add(new JLabel("Lightning"));
         resistancesPanel.add(lightningResistanceComboBox);
         initializeResistancesPanelPartTwo();
     }
 
     // EFFECTS: ...
     private void initializeResistancesPanelPartTwo() {
-        resistancesPanel.add(new JLabel("Necrotic:"));
+        resistancesPanel.add(new JLabel("Necrotic"));
         resistancesPanel.add(necroticResistanceComboBox);
-        resistancesPanel.add(new JLabel("Piercing:"));
+        resistancesPanel.add(new JLabel("Piercing"));
         resistancesPanel.add(piercingResistanceComboBox);
-        resistancesPanel.add(new JLabel("Poison:"));
+        resistancesPanel.add(new JLabel("Poison"));
         resistancesPanel.add(poisonResistanceComboBox);
-        resistancesPanel.add(new JLabel("Psychic:"));
+        resistancesPanel.add(new JLabel("Psychic"));
         resistancesPanel.add(psychicResistanceComboBox);
-        resistancesPanel.add(new JLabel("Radiant:"));
+        resistancesPanel.add(new JLabel("Radiant"));
         resistancesPanel.add(radiantResistanceComboBox);
-        resistancesPanel.add(new JLabel("Slashing:"));
+        resistancesPanel.add(new JLabel("Slashing"));
         resistancesPanel.add(slashingResistanceComboBox);
-        resistancesPanel.add(new JLabel("Thunder:"));
+        resistancesPanel.add(new JLabel("Thunder"));
         resistancesPanel.add(thunderResistanceComboBox);
     }
 
     // EFFECTS: ...
     private void initializeImmunitiesPanel() {
         immunitiesPanel.setLayout(new FlowLayout(FlowLayout.LEFT, FLOW_H_GAP, FLOW_V_GAP));
-        immunitiesPanel.add(new JLabel("Condition Immunities:" + TAB));
-        immunitiesPanel.add(new JLabel("Blinded:"));
+        immunitiesPanel.add(new JLabel("Condition Immunities:"));
         immunitiesPanel.add(blindedImmunityCheckBox);
-        immunitiesPanel.add(new JLabel("Charmed:"));
         immunitiesPanel.add(charmedImmunityCheckBox);
-        immunitiesPanel.add(new JLabel("Deafened:"));
         immunitiesPanel.add(deafenedImmunityCheckBox);
-        immunitiesPanel.add(new JLabel("Frightened:"));
         immunitiesPanel.add(frightenedImmunityCheckBox);
-        immunitiesPanel.add(new JLabel("Grappled:"));
         immunitiesPanel.add(grappledImmunityCheckBox);
-        immunitiesPanel.add(new JLabel("Incapacitated:"));
         immunitiesPanel.add(incapacitatedImmunityCheckBox);
-        immunitiesPanel.add(new JLabel("Invisible:"));
         immunitiesPanel.add(invisibleImmunityCheckBox);
-        initializeImmunitiesPanelPartTwo();
-    }
-
-    // EFFECTS: ...
-    private void initializeImmunitiesPanelPartTwo() {
-        immunitiesPanel.add(new JLabel("Paralyzed:"));
         immunitiesPanel.add(paralyzedImmunityCheckBox);
-        immunitiesPanel.add(new JLabel("Petrified:"));
         immunitiesPanel.add(petrifiedImmunityCheckBox);
-        immunitiesPanel.add(new JLabel("Poisoned:"));
         immunitiesPanel.add(poisonedImmunityCheckBox);
-        immunitiesPanel.add(new JLabel("Prone:"));
         immunitiesPanel.add(proneImmunityCheckBox);
-        immunitiesPanel.add(new JLabel("Restrained:"));
         immunitiesPanel.add(restrainedImmunityCheckBox);
-        immunitiesPanel.add(new JLabel("Stunned:"));
         immunitiesPanel.add(stunnedImmunityCheckBox);
-        immunitiesPanel.add(new JLabel("Unconscious:"));
         immunitiesPanel.add(unconsciousImmunityCheckBox);
-        immunitiesPanel.add(new JLabel("Exhaustion:"));
         immunitiesPanel.add(exhaustionImmunityCheckBox);
     }
 
@@ -690,16 +811,10 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
 
     // EFFECTS: ...
     private void initializeActionHitDescriptionPanel() {
-        numberTextFieldList.add(actionHitAmountOfDiceTextField);
-        numberTextFieldList.add(actionHitDieSidesTextField);
         numberTextFieldList.add(actionHitModifierTextField);
 
         hitDescriptionPanel.setLayout(new FlowLayout(FlowLayout.LEFT, FLOW_H_GAP, FLOW_V_GAP));
-        hitDescriptionPanel.add(new JLabel("Hit:"));
-        hitDescriptionPanel.add(actionHitAmountOfDiceTextField);
-        hitDescriptionPanel.add(new JLabel("d"));
-        hitDescriptionPanel.add(actionHitDieSidesTextField);
-        hitDescriptionPanel.add(new JLabel("+"));
+        hitDescriptionPanel.add(new JLabel("Hit Modifier:"));
         hitDescriptionPanel.add(actionHitModifierTextField);
         hitDescriptionPanel.add(new JLabel("Description:"));
         hitDescriptionPanel.add(actionDescriptionComboBox);
@@ -743,8 +858,404 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
         legendaryCreationPanel.add(legendaryActionsScrollPane);
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
+    // EFFECTS: ...
+    public void passAction(ActionEvent e) {
+        if (e.getSource() == backButton) {
+            mainMenuPanel.setDisplays("library");
+        } else if (e.getSource() == openStatBlockButton) {
+            tryCreatingStatBlock();
+        } else if (e.getSource() == deleteStatBlocksButton) {
+            deleteSelection();
+        }
+    }
 
+    @Override
+    // EFFECTS: ...
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == addLanguageButton) {
+            addLanguage();
+        } else if (e.getSource() == addAbilityButton) {
+            addAbility();
+        } else if (e.getSource() == addActionDamageButton) {
+            addActionDamage();
+        } else if (e.getSource() == addActionButton) {
+            addAction();
+        } else if (e.getSource() == addLegendaryActionButton) {
+            addLegendaryAction();
+        }
+    }
+
+    // EFFECTS: ...
+    private void tryCreatingStatBlock() {
+        try {
+            int amountOfDice = Integer.parseInt(actionDamageAmountOfDiceTextField.getText());
+            int dieSides = Integer.parseInt(actionDamageDieSidesTextField.getText());
+            int modifier = Integer.parseInt(actionDamageModifierTextField.getText());
+
+            StatBlock statBlock = new StatBlock.StatBlockBuilder(getTitle(),
+                    Integer.parseInt(xpTextField.getText()), new RollFormula(amountOfDice,
+                            dieSides, modifier), Integer.parseInt(proficiencyTextField.getText()),
+                            getArmour(), getSpeeds(), getSenses(), getAbilityScores(), getActions())
+                    .skillProficiencies(getSkillProficiencies())
+                    .savingThrowProficiencies(getSavingThrowProficiencies())
+                    .languages(getLanguages())
+                    .conditionImmunities(getConditionImmunities())
+                    .resistances(getResistances())
+                    .legendaryMechanics(getLegendaryMechanics())
+                    .build();
+
+            mainMenuPanel.getMenuManagerPanel().getLibraryListModel().addElement(statBlock);
+            mainMenuPanel.setDisplays("library");
+
+        } catch (NumberFormatException | IncompleteFieldException e) {
+            JOptionPane.showMessageDialog(this, "Could not build StatBlock: "
+                    + e.getMessage() + ".", "Failure!", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    // EFFECTS: ...
+    private Title getTitle() {
+        return new Title.TitleBuilder(nameTextField.getText(), typeComboBox.getSelectedItem().toString(),
+                sizeComboBox.getSelectedItem().toString(), alignmentComboBox.getSelectedItem().toString()).build();
+    }
+
+    // EFFECTS: ...
+    private Armour getArmour() throws NumberFormatException {
+        String armourName = armourNameTextField.getText();
+        int magicArmour = 0;
+
+        if (armourName.equals("")) {
+            armourName = null;
+        }
+
+        if (!magicArmourTextField.getText().isEmpty()) {
+            magicArmour = Integer.parseInt(magicArmourTextField.getText());
+        }
+
+        return new Armour.ArmourBuilder(Integer.parseInt(armourTextField.getText()))
+                .magicArmour(magicArmour)
+                .armourName(armourName)
+                .build();
+    }
+
+    // EFFECTS: ...
+    private Speeds getSpeeds() throws NumberFormatException {
+        int fly = 0;
+        int swim = 0;
+        int burrow = 0;
+        int climb = 0;
+
+        if (!flyTextField.getText().isEmpty()) {
+            fly = Integer.parseInt(flyTextField.getText());
+        }
+
+        if (!flyTextField.getText().isEmpty()) {
+            swim = Integer.parseInt(swimTextField.getText());
+        }
+
+        if (!flyTextField.getText().isEmpty()) {
+            burrow = Integer.parseInt(burrowTextField.getText());
+        }
+
+        if (!flyTextField.getText().isEmpty()) {
+            climb = Integer.parseInt(climbTextField.getText());
+        }
+
+        return new Speeds.SpeedsBuilder(Integer.parseInt(speedTextField.getText()))
+                .swim(swim)
+                .fly(fly)
+                .burrow(burrow)
+                .climb(climb)
+                .build();
+    }
+
+    // EFFECTS: ...
+    private Senses getSenses() throws NumberFormatException {
+        int tremorSense = 0;
+        int trueSight = 0;
+        int blindSight = 0;
+        int darkVision = 0;
+
+        if (!tremorSenseTextField.getText().isEmpty()) {
+            tremorSense = Integer.parseInt(tremorSenseTextField.getText());
+        }
+
+        if (!trueSightTextField.getText().isEmpty()) {
+            trueSight = Integer.parseInt(trueSightTextField.getText());
+        }
+
+        if (!blindSightTextField.getText().isEmpty()) {
+            blindSight = Integer.parseInt(blindSightTextField.getText());
+        }
+
+        if (!darkVisionTextField.getText().isEmpty()) {
+            darkVision = Integer.parseInt(darkVisionTextField.getText());
+        }
+
+        return new Senses.SensesBuilder(Integer.parseInt(passivePerceptionTextField.getText()))
+                .tremorSense(tremorSense)
+                .trueSight(trueSight)
+                .blindSight(blindSight)
+                .darkVision(darkVision)
+                .build();
+    }
+
+    // EFFECTS: ...
+    private AbilityScores getAbilityScores() throws NumberFormatException {
+        return new AbilityScores(Integer.parseInt(strengthTextField.getText()),
+                Integer.parseInt(dexterityTextField.getText()),
+                Integer.parseInt(constitutionTextField.getText()),
+                Integer.parseInt(intelligenceTextField.getText()),
+                Integer.parseInt(wisdomTextField.getText()),
+                Integer.parseInt(charismaTextField.getText()));
+    }
+
+    // EFFECTS: ...
+    private ArrayList<model.statblockfields.Action> getActions() throws IncompleteFieldException {
+        ArrayList<model.statblockfields.Action> actions = new ArrayList<>();
+
+        if (actionsListModel.isEmpty()) {
+            throw new IncompleteFieldException();
+        } else {
+            for (int i = 0; i < actionsListModel.getSize(); i++) {
+                actions.add(actionsListModel.getElementAt(i));
+            }
+        }
+
+        return actions;
+    }
+
+    // EFFECTS: ...
+    private ArrayList<String> getSavingThrowProficiencies() {
+        ArrayList<String> savingThrows = new ArrayList<>();
+
+        for (JCheckBox cb : savingThrowCheckBoxList) {
+            if (cb.isSelected()) {
+                savingThrows.add(cb.getText());
+            }
+        }
+
+        return savingThrows;
+    }
+
+    // EFFECTS: ...
+    private ArrayList<String> getSkillProficiencies() {
+        ArrayList<String> skills = new ArrayList<>();
+
+        for (JCheckBox cb : skillCheckBoxList) {
+            if (cb.isSelected()) {
+                skills.add(cb.getText());
+            }
+        }
+
+        return skills;
+    }
+
+    // EFFECTS: ...
+    private ArrayList<String> getConditionImmunities() {
+        ArrayList<String> immunities = new ArrayList<>();
+
+        for (JCheckBox cb : immunityCheckBoxList) {
+            if (cb.isSelected()) {
+                immunities.add(cb.getText());
+            }
+        }
+
+        return immunities;
+    }
+
+    // EFFECTS: ...
+    private Languages getLanguages() throws NumberFormatException {
+        ArrayList<String> newLanguageList = new ArrayList<>();
+        int telepathy = 0;
+
+        if (!telepathyTextField.getText().isEmpty()) {
+            telepathy = Integer.parseInt(telepathyTextField.getText());
+        }
+
+        for (int i = 0; i < languagesListModel.getSize(); i++) {
+            newLanguageList.add(languagesListModel.getElementAt(i));
+        }
+
+        return new Languages.LanguagesBuilder(newLanguageList)
+                .telepathy(telepathy)
+                .build();
+    }
+
+    // EFFECTS: ...
+    private HashMap<String, String> getResistances() {
+        HashMap<String, String> resistances = new HashMap<>();
+
+        if (!acidResistanceComboBox.getSelectedItem().toString().equals("---")) {
+            resistances.put("Acid", acidResistanceComboBox.getSelectedItem().toString());
+        }
+
+        if (!bludgeoningResistanceComboBox.getSelectedItem().toString().equals("---")) {
+            resistances.put("Bludgeoning", bludgeoningResistanceComboBox.getSelectedItem().toString());
+        }
+
+        if (!coldResistanceComboBox.getSelectedItem().toString().equals("---")) {
+            resistances.put("Cold", coldResistanceComboBox.getSelectedItem().toString());
+        }
+
+        if (!fireResistanceComboBox.getSelectedItem().toString().equals("---")) {
+            resistances.put("Fire", fireResistanceComboBox.getSelectedItem().toString());
+        }
+
+        if (!forceResistanceComboBox.getSelectedItem().toString().equals("---")) {
+            resistances.put("Force", forceResistanceComboBox.getSelectedItem().toString());
+        }
+
+        if (!lightningResistanceComboBox.getSelectedItem().toString().equals("---")) {
+            resistances.put("Lightning", lightningResistanceComboBox.getSelectedItem().toString());
+        }
+
+        return getResistancesHelper(resistances);
+    }
+
+    // EFFECTS: ...
+    private HashMap<String, String> getResistancesHelper(HashMap<String, String> resistances) {
+        if (!necroticResistanceComboBox.getSelectedItem().toString().equals("---")) {
+            resistances.put("Necrotic", necroticResistanceComboBox.getSelectedItem().toString());
+        }
+
+        if (!piercingResistanceComboBox.getSelectedItem().toString().equals("---")) {
+            resistances.put("Piercing", piercingResistanceComboBox.getSelectedItem().toString());
+        }
+
+        if (!poisonResistanceComboBox.getSelectedItem().toString().equals("---")) {
+            resistances.put("Poison", poisonResistanceComboBox.getSelectedItem().toString());
+        }
+
+        if (!psychicResistanceComboBox.getSelectedItem().toString().equals("---")) {
+            resistances.put("Acid", psychicResistanceComboBox.getSelectedItem().toString());
+        }
+
+        if (!radiantResistanceComboBox.getSelectedItem().toString().equals("---")) {
+            resistances.put("Radiant", radiantResistanceComboBox.getSelectedItem().toString());
+        }
+
+        if (!slashingResistanceComboBox.getSelectedItem().toString().equals("---")) {
+            resistances.put("Slashing", slashingResistanceComboBox.getSelectedItem().toString());
+        }
+
+        if (!thunderResistanceComboBox.getSelectedItem().toString().equals("---")) {
+            resistances.put("Thunder", thunderResistanceComboBox.getSelectedItem().toString());
+        }
+
+        return resistances;
+    }
+
+    // EFFECTS: ...
+    private LegendaryMechanics getLegendaryMechanics() throws IncompleteFieldException {
+        ArrayList<Ability> newLegendaryActions = new ArrayList<>();
+
+        for (int i = 0; i < legendaryActionsListModel.getSize(); i++) {
+            newLegendaryActions.add(legendaryActionsListModel.getElementAt(i));
+        }
+
+        if (!legendaryActionsListModel.isEmpty() && legendaryDescriptionTextField.getText().isEmpty()) {
+            throw new IncompleteFieldException();
+        } else if (legendaryActionsListModel.isEmpty() && legendaryDescriptionTextField.getText().isEmpty()) {
+            return null;
+        } else {
+            return new LegendaryMechanics(legendaryDescriptionTextField.getText(), newLegendaryActions);
+        }
+    }
+
+    // EFFECTS: ...
+    private void deleteSelection() {
+        for (Object o : languageList.getSelectedValuesList()) {
+            languagesListModel.removeElement(o);
+        }
+        for (Object o : abilitiesList.getSelectedValuesList()) {
+            abilitiesListModel.removeElement(o);
+        }
+        for (Object o : actionsList.getSelectedValuesList()) {
+            actionsListModel.removeElement(o);
+        }
+        for (Object o : actionDamageMapList.getSelectedValuesList()) {
+            actionDamageMapListModel.removeElement(o);
+        }
+        for (Object o : legendaryActionsList.getSelectedValuesList()) {
+            legendaryActionsListModel.removeElement(o);
+        }
+    }
+
+    // EFFECTS: ...
+    private void addLanguage() {
+        languagesListModel.addElement(languageTextField.getText());
+        languageList.setModel(languagesListModel);
+    }
+
+    // EFFECTS: ...
+    private void addAbility() {
+        Ability newAbility = new Ability(abilityNameTextField.getText(), abilityDescriptionTextField.getText());
+
+        abilitiesListModel.addElement(newAbility);
+        abilitiesList.setModel(abilitiesListModel);
+    }
+
+    // EFFECTS: ...
+    private void addActionDamage() {
+        try {
+            int amountOfDice = Integer.parseInt(actionDamageAmountOfDiceTextField.getText());
+            int dieSides = Integer.parseInt(actionDamageDieSidesTextField.getText());
+            int modifier = Integer.parseInt(actionDamageModifierTextField.getText());
+
+            RollFormula newRollFormula = new RollFormula(amountOfDice, dieSides, modifier);
+            HashMap<String, RollFormula> newDamageMap = new HashMap<>();
+
+            newDamageMap.put(actionDamageTypeComboBox.getSelectedItem().toString(), newRollFormula);
+
+            actionDamageMapListModel.addElement(newDamageMap);
+            actionDamageMapList.setModel(actionDamageMapListModel);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "NumberFormatException caught. Message: "
+                    + e.getMessage() + ".", "Failure!", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    // EFFECTS: ...
+    private void addAction() {
+        try {
+            int modifier = Integer.parseInt(actionHitModifierTextField.getText());
+
+            RollFormula newRollFormula = new RollFormula(1, 20, modifier);
+
+            HashMap<String, RollFormula> damageMap = new HashMap<>();
+
+            for (int i = 0; i < actionDamageMapListModel.getSize(); i++) {
+                damageMap.putAll(actionDamageMapListModel.getElementAt(i));
+            }
+
+            model.statblockfields.Action newAction = new model.statblockfields.Action(actionNameTextField.getText(),
+                    actionDescriptionComboBox.getSelectedItem().toString(), actionRangeTextField.getText(),
+                    newRollFormula, damageMap);
+
+            actionsListModel.addElement(newAction);
+            actionsList.setModel(actionsListModel);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "NumberFormatException caught. Message: "
+                    + e.getMessage() + ".", "Failure!", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    // EFFECTS: ...
+    private void addLegendaryAction() {
+        legendaryActionsListModel.addElement(new Ability(legendaryActionNameTextField.getText(),
+                legendaryActionDescriptionTextField.getText()));
+        legendaryActionsList.setModel(legendaryActionsListModel);
+    }
+
+    @Override
+    // EFFECTS: ...
+    public void valueChanged(ListSelectionEvent e) {
+        deleteStatBlocksButton.setEnabled(!e.getValueIsAdjusting());
+        addLanguageButton.setEnabled(!e.getValueIsAdjusting());
+        addAbilityButton.setEnabled(!e.getValueIsAdjusting());
+        addActionDamageButton.setEnabled(!e.getValueIsAdjusting());
+        addActionButton.setEnabled(!e.getValueIsAdjusting());
+        addLegendaryActionButton.setEnabled(!e.getValueIsAdjusting());
     }
 }

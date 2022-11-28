@@ -39,18 +39,30 @@ public class MainDisplayPanel extends DisplayPanel {
     public void setMainDisplay(String s) {
         cardLayout.show(mainDisplayManagerPanel, s);
         mainDisplayTitleLabel.setText(s + " display.");
+        if (s.equals("library")) {
+            libraryScrollPane.clearSelection();
+        } else {
+            encounterScrollPane.clearSelection();
+        }
     }
 
-    // EFFECTS: depending on what display is showing, sends the given action event to the corresponding display panel
-    public void passAction(ActionEvent e) {
-        if (libraryScrollPane.isShowing()) {
-            libraryScrollPane.actionPerformed(e);
-        } else if (encounterScrollPane.isShowing()) {
-            encounterScrollPane.actionPerformed(e);
-        } else if (groupDisplayPanel.isShowing()) {
-            groupDisplayPanel.actionPerformed(e);
-        } else if (characterDisplayPanel.isShowing()) {
-            characterDisplayPanel.actionPerformed(e);
-        }
+    // EFFECTS: ...
+    public LibraryScrollPane getLibraryScrollPane() {
+        return libraryScrollPane;
+    }
+
+    // EFFECTS: ...
+    public EncounterScrollPane getEncounterScrollPane() {
+        return encounterScrollPane;
+    }
+
+    // EFFECTS: ...
+    public GroupDisplayPanel getGroupDisplayPanel() {
+        return groupDisplayPanel;
+    }
+
+    // EFFECTS: ...
+    public CharacterDisplayPanel getCharacterDisplayPanel() {
+        return characterDisplayPanel;
     }
 }

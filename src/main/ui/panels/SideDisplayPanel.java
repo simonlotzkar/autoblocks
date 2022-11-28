@@ -25,7 +25,7 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener, Li
     // panels
     private final JPanel encounterSideDisplayPanel = new JPanel(new GridLayout(2, 1));
     private final JPanel librarySideDisplayPanel = new JPanel(new BorderLayout());
-    private final JPanel libraryCardManagerPanel = new JPanel(librarySidePanelCardLayout);
+    private final JPanel librarySideDisplayCardManagerPanel = new JPanel(librarySidePanelCardLayout);
     private final JPanel outputLogPanel = new JPanel(new BorderLayout());
     private final JPanel actionsPanel = new JPanel(new BorderLayout());
     private final JPanel outputLogTitlePanel = new JPanel(new GridLayout(1, 2));
@@ -54,6 +54,7 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener, Li
     public SideDisplayPanel(MainMenuPanel mainMenuPanel) {
         super(null, mainMenuPanel); // sets the layout manager, mainmenu panel, size, and visibility
         statBlockDisplayTextArea = new StatBlockDisplayTextArea(mainMenuPanel);
+        statBlockCreationDisplayPanel = new StatBlockCreationDisplayPanel(mainMenuPanel);
         encounterListModel = mainMenuPanel.getMenuManagerPanel().getEncounterListModel();
         actionsListModel = new DefaultListModel<>();
 
@@ -67,33 +68,6 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener, Li
         this.setLayout(sideDisplayCardLayout);
         this.add(encounterSideDisplayPanel, "encounter");
         this.add(librarySideDisplayPanel, "library");
-    }
-
-    // EFFECTS: ...
-    public void setSideDisplay(String s) {
-        switch (s) {
-            case "encounter":
-                sideDisplayCardLayout.show(this, s);
-                actionsJList.removeAll();
-                initializeActionsListModel();
-                break;
-            case "library":
-                mainMenuPanel.setSelectedStatBlock(null);
-                sideDisplayCardLayout.show(this, s);
-                librarySidePanelCardLayout.show(libraryCardManagerPanel, "statBlock");
-                statBlockDisplayTextArea.initializeAll();
-                break;
-            case "statBlock":
-                sideDisplayCardLayout.show(this, "library");
-                librarySidePanelCardLayout.show(libraryCardManagerPanel, s);
-                statBlockDisplayTextArea.initializeAll();
-                break;
-            case "statBlockCreation":
-                sideDisplayCardLayout.show(this, "library");
-                initializeLibrarySideDisplayPanel();
-                librarySidePanelCardLayout.show(libraryCardManagerPanel, s);
-                break;
-        }
     }
 
     // EFFECTS: ...
@@ -209,12 +183,10 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener, Li
 
     // EFFECTS: ...
     private void initializeLibrarySideDisplayPanel() {
-        statBlockCreationDisplayPanel = new StatBlockCreationDisplayPanel(mainMenuPanel);
+        librarySideDisplayCardManagerPanel.add(statBlockDisplayTextArea, "statBlock");
+        librarySideDisplayCardManagerPanel.add(statBlockCreationDisplayPanel, "statBlockCreation");
 
-        libraryCardManagerPanel.add(statBlockDisplayTextArea, "statBlock");
-        libraryCardManagerPanel.add(statBlockCreationDisplayPanel, "statBlockCreation");
-
-        librarySideDisplayScrollPane.setViewportView(libraryCardManagerPanel);
+        librarySideDisplayScrollPane.setViewportView(librarySideDisplayCardManagerPanel);
         librarySideDisplayScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         librarySideDisplayScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
@@ -238,22 +210,36 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener, Li
         }
     }
 
+    // EFFECTS: ...
+    public void setSideDisplay(String s) {
+        if (s.equals("statBlockCreation")) {
+            sideDisplayCardLayout.show(this, "library");
+            librarySidePanelCardLayout.show(librarySideDisplayCardManagerPanel, s);
+        } else if (s.equals("encounter")) {
+            sideDisplayCardLayout.show(this, s);
+            actionsJList.removeAll();
+            initializeActionsListModel();
+        } else {
+            sideDisplayCardLayout.show(this, "library");
+            librarySidePanelCardLayout.show(librarySideDisplayCardManagerPanel, "statBlock");
+            statBlockDisplayTextArea.initializeAll();
+        }
+    }
+
+    // EFFECTS: ...
+    public StatBlockCreationDisplayPanel getStatBlockCreationDisplayPanel() {
+        return statBlockCreationDisplayPanel;
+    }
+
+    // EFFECTS: ...
+    public StatBlockDisplayTextArea getStatBlockDisplayTextArea() {
+        return statBlockDisplayTextArea;
+    }
+
     @Override
     // EFFECTS: ...
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == mainMenuPanel.getBackButton()) {
-            if (encounterSideDisplayPanel.isShowing()) {
-                mainMenuPanel.getMenuManagerPanel().setMenu("title");
-            } else {
-                if (statBlockDisplayTextArea.isShowing() && mainMenuPanel.getSelectedStatBlock() != null) {
-                    setSideDisplay("library");
-                } else if (statBlockCreationDisplayPanel.isShowing()) {
-                    setSideDisplay("library");
-                } else {
-                    mainMenuPanel.getMenuManagerPanel().setMenu("title");
-                }
-            }
-        } else if (e.getSource() == rollActionsButton) {
+        if (e.getSource() == rollActionsButton) {
             rollActions();
         } else if (e.getSource() == customRollButton) {
             new CustomRollFrame();

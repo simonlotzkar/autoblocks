@@ -16,7 +16,7 @@ public class CharacterDisplayPanel extends StatBlockDisplayTextArea {
     }
 
     // EFFECTS: ...
-    public void actionPerformed(ActionEvent e) {
+    public void passAction(ActionEvent e) {
         //
     }
 }

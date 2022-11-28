@@ -65,6 +65,11 @@ public class LibraryScrollPane extends JScrollPane implements ListSelectionListe
         //libraryJList.setOpaque(false);
     }
 
+    // EFFECTS: ...
+    public void clearSelection() {
+        libraryJList.clearSelection();
+    }
+
     // EFFECTS: prompts user for the number of copies to add then adds them or cancels or catches exceptions
     private void tryAddSelectedToEncounter() {
         try {
@@ -127,21 +132,25 @@ public class LibraryScrollPane extends JScrollPane implements ListSelectionListe
     }
 
     // EFFECTS: processes button presses from user
-    public void actionPerformed(ActionEvent e) {
+    public void passAction(ActionEvent e) {
         if (e.getSource() == addStatBlocksToEncounterButton) {
             tryAddSelectedToEncounter();
             libraryJList.clearSelection();
         } else if (e.getSource() == openStatBlockButton) {
             mainMenuPanel.setSelectedStatBlock(libraryListModel.getElementAt(libraryJList.getSelectedIndex()));
-            mainMenuPanel.getSideDisplayPanel().setSideDisplay("statBlock");
+            mainMenuPanel.setDisplays("statBlock");
             libraryJList.clearSelection();
         } else if (e.getSource() == createNewStatBlockButton) {
-            mainMenuPanel.getSideDisplayPanel().setSideDisplay("statBlockCreation");
+            mainMenuPanel.setDisplays("statBlockCreation");
             libraryJList.clearSelection();
         } else if (e.getSource() == deleteStatBlocksButton) {
             deleteStatBlocks();
         } else if (e.getSource() == backButton) {
-            libraryJList.clearSelection();
+            if (mainMenuPanel.getSelectedStatBlock() != null) {
+                mainMenuPanel.setDisplays("library");
+            } else {
+                mainMenuPanel.getMenuManagerPanel().setMenu("title");
+            }
         }
     }
 

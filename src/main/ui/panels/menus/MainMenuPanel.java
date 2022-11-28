@@ -26,6 +26,8 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
     private static final ImageIcon JUMP_ICON = new ImageIcon(ICON_DIRECTORY + "jumpingGuy.png");
     private static final ImageIcon CLOCK_ICON = new ImageIcon(ICON_DIRECTORY + "clock.png");
     private static final ImageIcon HEART_ICON = new ImageIcon(ICON_DIRECTORY + "heart.png");
+    private static final ImageIcon X_ICON = new ImageIcon(ICON_DIRECTORY + "x.png");
+    private static final ImageIcon MINUS_ICON = new ImageIcon(ICON_DIRECTORY + "minus.png");
 
     // labels
     private final JLabel encounterTitleLabel = new JLabel("Main Menu: Encounter Loaded");
@@ -119,6 +121,7 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
         buttonList.add(deleteCharacterButton);
 
         for (JButton jb : buttonList) {
+            jb.removeActionListener(this);
             jb.addActionListener(this);
         }
         initializeButtonIcons();
@@ -146,32 +149,9 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
     }
 
     // EFFECTS: ...
-    protected void setState(String s) {
-        mainDisplayPanel.setMainDisplay(s);
-        buttonCardLayout.show(buttonPanel, s);
-
-        switch (s) {
-            case "library":
-                initializeLibraryButtonPanel();
-                titleCardLayout.show(titlePanel, "library");
-                sideDisplayPanel.setSideDisplay("library");
-                break;
-            case "group":
-                initializeGroupButtonPanel();
-                break;
-            case "character":
-                initializeCharacterButtonPanel();
-                break;
-            default:
-                initializeEncounterButtonPanel();
-                titleCardLayout.show(titlePanel, "encounter");
-                sideDisplayPanel.setSideDisplay("encounter");
-                break;
-        }
-    }
-
-    // EFFECTS: ...
     private void initializeButtonPanel() {
+        initializeButtons();
+
         buttonPanel.add(libraryButtonPanel, "library");
         buttonPanel.add(encounterButtonPanel, "encounter");
         buttonPanel.add(characterButtonPanel, "character");
@@ -181,6 +161,17 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
 
     // EFFECTS: ...
     private void initializeLibraryButtonPanel() {
+        buttonCardLayout.show(buttonPanel, "library");
+
+        backButton.setIcon(scaleIcon(RETURN_ICON));
+        openStatBlockButton.setIcon(scaleIcon(CHECK_ICON));
+        deleteStatBlocksButton.setIcon(scaleIcon(TRASH_ICON));
+
+        backButton.setText("Back");
+        deleteStatBlocksButton.setText("Delete");
+        openStatBlockButton.setText("Open");
+        openStatBlockButton.setEnabled(false);
+
         libraryButtonSubPanel0.add(addStatBlocksToEncounterButton);
         libraryButtonSubPanel0.add(openStatBlockButton);
 
@@ -193,7 +184,23 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
     }
 
     // EFFECTS: ...
+    private void initializeStatBlockCreationButtonPanel() {
+        initializeLibraryButtonPanel();
+
+        backButton.setIcon(scaleIcon(X_ICON));
+        openStatBlockButton.setIcon(scaleIcon(CHECK_ICON));
+        deleteStatBlocksButton.setIcon(scaleIcon(MINUS_ICON));
+
+        backButton.setText("Cancel");
+        deleteStatBlocksButton.setText("Remove");
+        openStatBlockButton.setText("Finish");
+        openStatBlockButton.setEnabled(true);
+    }
+
+    // EFFECTS: ...
     private void initializeEncounterButtonPanel() {
+        buttonCardLayout.show(buttonPanel, "encounter");
+
         encounterButtonSubPanel0.add(openGroupButton);
         encounterButtonSubPanel0.add(openCharacterButton);
 
@@ -212,15 +219,99 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
 
     // EFFECTS: ...
     private void initializeCharacterButtonPanel() {
+        buttonCardLayout.show(buttonPanel, "character");
+
         characterButtonPanel.add(encounterButtonSubPanel1);
         characterButtonPanel.add(encounterButtonSubPanel2);
     }
 
     // EFFECTS: ...
     private void initializeGroupButtonPanel() {
+        buttonCardLayout.show(buttonPanel, "group");
+
         groupButtonPanel.add(openCharacterButton);
         groupButtonPanel.add(encounterButtonSubPanel1);
         groupButtonPanel.add(encounterButtonSubPanel2);
+    }
+
+    // EFFECTS: ...
+    public void setDisplays(String s) {
+        switch (s) {
+            case "library":
+                setLibraryFullDisplay();
+                break;
+            case "statBlock":
+                setLibraryStatBlockDisplay();
+                break;
+            case "statBlockCreation":
+                setLibraryStatBlockCreationDisplay();
+                break;
+            case "group":
+                setEncounterGroupDisplay();
+                break;
+            case "character":
+                setEncounterCharacterDisplay();
+                break;
+            default:
+                setEncounterFullDisplay();
+                break;
+        }
+    }
+
+    // EFFECTS: ...
+    private void setLibraryFullDisplay() {
+        initializeLibraryButtonPanel();
+
+        selectedStatBlock = null;
+        titleCardLayout.show(titlePanel, "library");
+        mainDisplayPanel.setMainDisplay("library");
+        sideDisplayPanel.setSideDisplay("library");
+    }
+
+    // EFFECTS: ...
+    private void setLibraryStatBlockDisplay() {
+        initializeLibraryButtonPanel();
+
+        titleCardLayout.show(titlePanel, "library");
+        mainDisplayPanel.setMainDisplay("library");
+        sideDisplayPanel.setSideDisplay("statBlock");
+    }
+
+    // EFFECTS: ...
+    private void setLibraryStatBlockCreationDisplay() {
+        initializeStatBlockCreationButtonPanel();
+
+        selectedStatBlock = null;
+        titleCardLayout.show(titlePanel, "library");
+        mainDisplayPanel.setMainDisplay("library");
+        sideDisplayPanel.setSideDisplay("statBlockCreation");
+    }
+
+    // EFFECTS: ...
+    private void setEncounterFullDisplay() {
+        initializeEncounterButtonPanel();
+
+        selectedGroup = null;
+        selectedCharacter = null;
+        titleCardLayout.show(titlePanel, "library");
+        mainDisplayPanel.setMainDisplay("encounter");
+        sideDisplayPanel.setSideDisplay("encounter");
+    }
+
+    // EFFECTS: ...
+    private void setEncounterGroupDisplay() {
+        selectedCharacter = null;
+        initializeGroupButtonPanel();
+        mainDisplayPanel.setMainDisplay("group");
+        sideDisplayPanel.setSideDisplay("encounter");
+    }
+
+    // EFFECTS: ...
+    private void setEncounterCharacterDisplay() {
+        selectedGroup = null;
+        initializeCharacterButtonPanel();
+        mainDisplayPanel.setMainDisplay("character");
+        sideDisplayPanel.setSideDisplay("encounter");
     }
 
     // -----------------------------------------------------------------------
@@ -332,7 +423,18 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
     @Override
     // EFFECTS: processes button presses from user
     public void actionPerformed(ActionEvent e) {
-        mainDisplayPanel.passAction(e);
-        sideDisplayPanel.actionPerformed(e);
+        if (mainDisplayPanel.getLibraryScrollPane().isShowing()) {
+            if (sideDisplayPanel.getStatBlockCreationDisplayPanel().isShowing()) {
+                sideDisplayPanel.getStatBlockCreationDisplayPanel().passAction(e);
+            } else {
+                mainDisplayPanel.getLibraryScrollPane().passAction(e);
+            }
+        } else if (mainDisplayPanel.getEncounterScrollPane().isShowing()) {
+            mainDisplayPanel.getEncounterScrollPane().passAction(e);
+        } else if (mainDisplayPanel.getGroupDisplayPanel().isShowing()) {
+            mainDisplayPanel.getGroupDisplayPanel().passAction(e);
+        } else {
+            mainDisplayPanel.getCharacterDisplayPanel().passAction(e);
+        }
     }
 }

@@ -163,8 +163,13 @@ public class EncounterScrollPane extends JScrollPane implements ListSelectionLis
         }
     }
 
+    // EFFECTS: ...
+    public void clearSelection() {
+        encounterJList.clearSelection();
+    }
+
     // EFFECTS: processes button presses from user
-    public void actionPerformed(ActionEvent e) {
+    public void passAction(ActionEvent e) {
         if (e.getSource() == openCharacterButton) {
             mainMenuPanel.setSelectedCharacter(encounterListModel.getElementAt(encounterJList.getSelectedIndex()));
             mainMenuPanel.getMainDisplayPanel().setMainDisplay("character");
@@ -183,7 +188,7 @@ public class EncounterScrollPane extends JScrollPane implements ListSelectionLis
         } else if (e.getSource() == rollInitiativeButton) {
             rollInitiative();
         } else if (e.getSource() == backButton) {
-            encounterJList.clearSelection();
+            mainMenuPanel.getMenuManagerPanel().setMenu("title");
         }
     }
 

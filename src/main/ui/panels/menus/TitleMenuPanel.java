@@ -6,7 +6,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,10 +101,10 @@ public class TitleMenuPanel extends MenuPanel implements ActionListener {
         if (e.getSource() == customRollButton) {
             new CustomRollFrame();
         } else if (e.getSource() == encounterButton) {
-            menuManagerPanel.getMainMenuPanel().setState("encounter");
+            menuManagerPanel.getMainMenuPanel().setDisplays("encounter");
             menuManagerPanel.setMenu("main");
         } else if (e.getSource() == libraryButton) {
-            menuManagerPanel.getMainMenuPanel().setState("library");
+            menuManagerPanel.getMainMenuPanel().setDisplays("library");
             menuManagerPanel.setMenu("main");
         } else if (e.getSource() == loadButton) {
             menuManagerPanel.tryLoad();
