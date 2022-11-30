@@ -15,6 +15,7 @@ import java.util.List;
 public class LibraryScrollPane extends JScrollPane implements ListSelectionListener {
     private final JList<model.StatBlock> libraryJList;
     private final DefaultListModel<model.StatBlock> libraryListModel;
+    private DefaultListModel<Character> encounterListModel;
     private final MainMenuPanel mainMenuPanel;
 
     // buttons
@@ -89,7 +90,7 @@ public class LibraryScrollPane extends JScrollPane implements ListSelectionListe
     // EFFECTS: adds the selected statblocks to the menucard's encounter list model as new characters,
     //          repeating each for number equal to the given integer
     private DefaultListModel<Character> addSelectedToEncounter(int copies) {
-        DefaultListModel<Character> encounterListModel = mainMenuPanel.getMenuManagerPanel().getEncounterListModel();
+        encounterListModel = mainMenuPanel.getMenuManagerPanel().getEncounterListModel();
         ListModel<StatBlock> libraryListModel = libraryJList.getModel();
         List<Character> encounterList = new ArrayList<>();
 
@@ -106,8 +107,15 @@ public class LibraryScrollPane extends JScrollPane implements ListSelectionListe
             }
         }
         encounterListModel.removeAllElements();
-        encounterListModel.addAll(encounterList);
+        addAllToEncounter(encounterList);
         return encounterListModel;
+    }
+
+    // EFFECTS: adds all given characters to the encounterListModel
+    private void addAllToEncounter(java.util.List<model.Character> characterList) {
+        for (model.Character c : characterList) {
+            encounterListModel.addElement(c);
+        }
     }
 
     // EFFECTS: prompts user for confirmation and number of selected then deletes them from the encounter
