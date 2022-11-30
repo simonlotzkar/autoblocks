@@ -147,6 +147,11 @@ public class Character extends StatBlock {
         return hp;
     }
 
+    // EFFECTS: returns true if the character has a group and false otherwise
+    public boolean hasGroup() {
+        return this.title.getGroup() != null;
+    }
+
     @Override
     // converts the character to a json object
     public JSONObject toJson() {

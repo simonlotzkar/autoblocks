@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import persistence.JsonReader;
 import ui.frames.MainFrame;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;

@@ -39,10 +39,6 @@ public class LibraryScrollPane extends JScrollPane implements ListSelectionListe
         this.setViewportView(libraryJList);
 
         importButtons();
-        addStatBlocksToEncounterButton.setEnabled(false);
-        deleteStatBlocksButton.setEnabled(false);
-        openStatBlockButton.setEnabled(false);
-
         initializeJList();
     }
 
@@ -137,7 +133,8 @@ public class LibraryScrollPane extends JScrollPane implements ListSelectionListe
             tryAddSelectedToEncounter();
             libraryJList.clearSelection();
         } else if (e.getSource() == openStatBlockButton) {
-            mainMenuPanel.setSelectedStatBlock(libraryListModel.getElementAt(libraryJList.getSelectedIndex()));
+            mainMenuPanel.getSideDisplayPanel()
+                    .setSelectedStatBlock(libraryListModel.getElementAt(libraryJList.getSelectedIndex()));
             mainMenuPanel.setDisplays("statBlock");
             libraryJList.clearSelection();
         } else if (e.getSource() == createNewStatBlockButton) {
@@ -146,7 +143,7 @@ public class LibraryScrollPane extends JScrollPane implements ListSelectionListe
         } else if (e.getSource() == deleteStatBlocksButton) {
             deleteStatBlocks();
         } else if (e.getSource() == backButton) {
-            if (mainMenuPanel.getSelectedStatBlock() != null) {
+            if (mainMenuPanel.getSideDisplayPanel().getSelectedStatBlock() != null) {
                 mainMenuPanel.setDisplays("library");
             } else {
                 mainMenuPanel.getMenuManagerPanel().setMenu("title");

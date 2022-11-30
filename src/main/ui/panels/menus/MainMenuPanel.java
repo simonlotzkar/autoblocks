@@ -6,6 +6,7 @@ import ui.panels.MainDisplayPanel;
 import ui.panels.SideDisplayPanel;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,11 +14,6 @@ import java.util.ArrayList;
 
 // Represents...
 public class MainMenuPanel extends MenuPanel implements ActionListener {
-    // selections
-    private model.Character selectedCharacter;
-    private StatBlock selectedStatBlock;
-    private String selectedGroup;
-
     // images
     private static final ImageIcon RETURN_ICON = new ImageIcon(ICON_DIRECTORY + "return.png");
     private static final ImageIcon CHECK_ICON = new ImageIcon(ICON_DIRECTORY + "check.png");
@@ -83,11 +79,11 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
         this.mainDisplayPanel = new MainDisplayPanel(this);
         this.sideDisplayPanel = new SideDisplayPanel(this);
 
-        JLabel libraryBanner = new JLabel(new ImageIcon((new ImageIcon("./data/images/banner2.jpg"))
+        JLabel libraryBanner = new JLabel(new ImageIcon((new ImageIcon("./data/images/shortBanner1.jpg"))
                 .getImage().getScaledInstance(1080, 144, Image.SCALE_SMOOTH)));
         titlePanel.add(libraryBanner, "library");
 
-        JLabel encounterBanner = new JLabel(new ImageIcon((new ImageIcon("./data/images/banner1.jpg"))
+        JLabel encounterBanner = new JLabel(new ImageIcon((new ImageIcon("./data/images/shortBanner0.jpg"))
                 .getImage().getScaledInstance(1080, 144, Image.SCALE_SMOOTH)));
         titlePanel.add(encounterBanner, "encounter");
 
@@ -98,6 +94,7 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(displaysPanel, BorderLayout.CENTER);
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+        mainPanel.setBorder(new EmptyBorder(0, 10, 10, 10));
 
         this.add(titlePanel, BorderLayout.NORTH);
         this.add(mainPanel, BorderLayout.CENTER);
@@ -171,6 +168,8 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
         deleteStatBlocksButton.setText("Delete");
         openStatBlockButton.setText("Open");
         openStatBlockButton.setEnabled(false);
+        addStatBlocksToEncounterButton.setEnabled(false);
+        deleteStatBlocksButton.setEnabled(false);
 
         libraryButtonSubPanel0.add(addStatBlocksToEncounterButton);
         libraryButtonSubPanel0.add(openStatBlockButton);
@@ -199,6 +198,14 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
 
     // EFFECTS: ...
     private void initializeEncounterButtonPanel() {
+        openCharacterButton.setEnabled(false);
+        openGroupButton.setEnabled(false);
+        rollCheckButton.setEnabled(false);
+        rollInitiativeButton.setEnabled(false);
+        changeHPButton.setEnabled(false);
+        setCharacterGroupButton.setEnabled(false);
+        deleteCharacterButton.setEnabled(false);
+
         buttonCardLayout.show(buttonPanel, "encounter");
 
         encounterButtonSubPanel0.add(openGroupButton);
@@ -262,7 +269,6 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
     private void setLibraryFullDisplay() {
         initializeLibraryButtonPanel();
 
-        selectedStatBlock = null;
         titleCardLayout.show(titlePanel, "library");
         mainDisplayPanel.setMainDisplay("library");
         sideDisplayPanel.setSideDisplay("library");
@@ -281,7 +287,6 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
     private void setLibraryStatBlockCreationDisplay() {
         initializeStatBlockCreationButtonPanel();
 
-        selectedStatBlock = null;
         titleCardLayout.show(titlePanel, "library");
         mainDisplayPanel.setMainDisplay("library");
         sideDisplayPanel.setSideDisplay("statBlockCreation");
@@ -291,9 +296,7 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
     private void setEncounterFullDisplay() {
         initializeEncounterButtonPanel();
 
-        selectedGroup = null;
-        selectedCharacter = null;
-        titleCardLayout.show(titlePanel, "library");
+        titleCardLayout.show(titlePanel, "encounter");
         mainDisplayPanel.setMainDisplay("encounter");
         sideDisplayPanel.setSideDisplay("encounter");
         sideDisplayPanel.initializeActionsListModel();
@@ -301,7 +304,6 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
 
     // EFFECTS: ...
     private void setEncounterGroupDisplay() {
-        selectedCharacter = null;
         initializeGroupButtonPanel();
         mainDisplayPanel.setMainDisplay("group");
         sideDisplayPanel.setSideDisplay("encounter");
@@ -310,7 +312,6 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
 
     // EFFECTS: ...
     private void setEncounterCharacterDisplay() {
-        selectedGroup = null;
         initializeCharacterButtonPanel();
         mainDisplayPanel.setMainDisplay("character");
         sideDisplayPanel.setSideDisplay("encounter");
@@ -319,21 +320,6 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
 
     // -----------------------------------------------------------------------
     // getters
-    // EFFECTS: gets the selected character
-    public model.Character getSelectedCharacter() {
-        return selectedCharacter;
-    }
-
-    // EFFECTS: gets the selected statblock
-    public StatBlock getSelectedStatBlock() {
-        return selectedStatBlock;
-    }
-
-    // EFFECTS: gets the selected group name
-    public String getSelectedGroup() {
-        return selectedGroup;
-    }
-
     // EFFECTS: gets the main display panel
     public MainDisplayPanel getMainDisplayPanel() {
         return mainDisplayPanel;
@@ -405,23 +391,6 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
     }
 
     // -----------------------------------------------------------------------
-    // setters
-    // EFFECTS: sets the selected character
-    public void setSelectedCharacter(Character selectedCharacter) {
-        this.selectedCharacter = selectedCharacter;
-    }
-
-    // EFFECTS: sets the selected statblock
-    public void setSelectedStatBlock(StatBlock selectedStatBlock) {
-        this.selectedStatBlock = selectedStatBlock;
-    }
-
-    // EFFECTS: sets the selected group name
-    public void setSelectedGroup(String selectedGroup) {
-        this.selectedGroup = selectedGroup;
-    }
-
-    // -----------------------------------------------------------------------
     // overrides
     @Override
     // EFFECTS: processes button presses from user
@@ -432,12 +401,8 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
             } else {
                 mainDisplayPanel.getLibraryScrollPane().passAction(e);
             }
-        } else if (mainDisplayPanel.getEncounterScrollPane().isShowing()) {
-            mainDisplayPanel.getEncounterScrollPane().passAction(e);
-        } else if (mainDisplayPanel.getGroupDisplayPanel().isShowing()) {
-            mainDisplayPanel.getGroupDisplayPanel().passAction(e);
         } else {
-            mainDisplayPanel.getCharacterDisplayPanel().passAction(e);
+            mainDisplayPanel.passAction(e);
         }
     }
 }

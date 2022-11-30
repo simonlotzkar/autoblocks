@@ -1,6 +1,8 @@
 package ui.frames;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+
 import ui.panels.menus.MenuManagerPanel;
 
 import java.awt.*;

@@ -9,8 +9,8 @@ simulate any form of map, it's intended to be used with an external one.
   - **view and create statblocks**
   - **create characters from stablocks**
   - **autoroll for characters (initiative, actions, etc)**
-  - **edit character hitpoints**
-  - **group characters for multi rolls and multi hp edits**
+  - **track and edit character hitpoints**
+  - **group characters together**
 - this application holds data such as *default monster statblocks*, but also allows the user to *enter custom entries*.
 <p>
 I made this application because I'm a D&D DM and I think there is no other application like this one. While there are 
@@ -53,27 +53,19 @@ As a user, I want to be able to:
 - chose to save the current library and/or encounter to file (from main menu and when quitting the application), and 
 - chose to load the library and/or encounter from file (from main menu and when launching the application)
 
-### Currently added default statblocks:
-- Orc
-- Ancient Black Dragon
-
-### Current bugs/fixes to be done:
-- (terminal) group actions print "Actions:" along with actions for each character, replace with no duplicates and one heading
-- (terminal) when saving or loading, everything works as intended except when returning to the main menu, the invalid command
-warning triggers and the menu resets but then works as normal
-
-### Future additions:
-- automated rolls for skills and saving throws
+### Future Additions:
 - save system to allow for multiple save/load files for any amount of encounters and libraries
-- edit statblocks in a library
-- delete statblocks from a library
+- come with all default monsters in the 5th edition monsters manual (2/300)
+- automated rolls for skills and saving throws
 - turn order and automation of turns
 - inventory/loot generation
-- come with all default monsters in the 5th edition monsters manual (2/300)
+
+### Current Bugs:
+- character groups are not persistent (loading fails)
 
 # Instructions for grader
-- You can generate the first required event related to adding Xs to a Y by...
-- You can generate the second required event related to adding Xs to a Y by...
-- You can locate my visual component by...
-- You can save the state of my application by quitting and confirming the save prompt
-- You can reload the state of my application by selecting the load option from the mainmenu
+- You can generate multiple events related to adding StatBlocks to the Library by selecting "Create New" after
+navigating to the library menu from the title screen.
+- You can locate my visual component by opening the app!
+- You can save the state of my application by selecting the save option from the title screen.
+- You can reload the state of my application by selecting the load option from the title screen.

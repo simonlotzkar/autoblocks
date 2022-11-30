@@ -3,6 +3,7 @@ package ui.panels.menus;
 import ui.frames.CustomRollFrame;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,7 +16,7 @@ public class TitleMenuPanel extends MenuPanel implements ActionListener {
 
     // images
     private static final JLabel MAIN_BANNER_LABEL = new JLabel(new ImageIcon(
-            "./data/images/banner0.jpg"));
+            "./data/images/tallBanner0.jpg"));
     private static final ImageIcon D20_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "d20.png");
     private static final ImageIcon EXIT_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "exit.png");
     private static final ImageIcon LIBRARY_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "books.png");
@@ -93,6 +94,7 @@ public class TitleMenuPanel extends MenuPanel implements ActionListener {
 
         buttonsPanel.add(customRollButton);
         buttonsPanel.add(smallButtonsPanel);
+        buttonsPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
     }
 
     @Override

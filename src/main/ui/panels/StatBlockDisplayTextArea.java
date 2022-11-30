@@ -27,7 +27,11 @@ public class StatBlockDisplayTextArea extends JTextArea {
 
     // EFFECTS: ...
     public void initializeAll() {
-        this.selectedStatBlock = mainMenuPanel.getSelectedStatBlock();
+        if (mainMenuPanel.getSideDisplayPanel() == null) {
+            selectedStatBlock = null;
+        } else {
+            selectedStatBlock = mainMenuPanel.getSideDisplayPanel().getSelectedStatBlock();
+        }
 
         if (selectedStatBlock != null) {
             this.setText("");

@@ -1,5 +1,6 @@
 package ui.panels;
 
+import model.StatBlock;
 import ui.frames.CustomRollFrame;
 import ui.panels.menus.MainMenuPanel;
 
@@ -13,6 +14,9 @@ import java.util.ArrayList;
 
 // Represents...
 public class SideDisplayPanel extends DisplayPanel implements ActionListener, ListSelectionListener {
+    // selections
+    private StatBlock selectedStatBlock;
+
     // layouts
     private final CardLayout sideDisplayCardLayout = new CardLayout();
     private final CardLayout librarySidePanelCardLayout = new CardLayout();
@@ -31,7 +35,7 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener, Li
     private final JPanel outputLogTitlePanel = new JPanel(new GridLayout(1, 2));
     private final JPanel actionsTitlePanel = new JPanel(new GridLayout(1, 2));
 
-    private final StatBlockDisplayTextArea statBlockDisplayTextArea;
+    private StatBlockDisplayTextArea statBlockDisplayTextArea;
     private StatBlockCreationDisplayPanel statBlockCreationDisplayPanel;
 
     // scrollpanes
@@ -45,16 +49,14 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener, Li
     private final JButton customActionButton = new JButton("Custom Action Roller");
 
     // components
-    private final JList<model.statblockfields.Action> actionsJList;
     private JTextArea outputLogTextArea;
+    private final JList<model.statblockfields.Action> actionsJList;
     private final DefaultListModel<model.statblockfields.Action> actionsListModel;
     private final DefaultListModel<model.Character> encounterListModel;
 
     // EFFECTS: constructs this display panel
     public SideDisplayPanel(MainMenuPanel mainMenuPanel) {
         super(null, mainMenuPanel); // sets the layout manager, mainmenu panel, size, and visibility
-        statBlockDisplayTextArea = new StatBlockDisplayTextArea(mainMenuPanel);
-        statBlockCreationDisplayPanel = new StatBlockCreationDisplayPanel(mainMenuPanel);
         encounterListModel = mainMenuPanel.getMenuManagerPanel().getEncounterListModel();
         actionsListModel = new DefaultListModel<>();
 
@@ -151,17 +153,18 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener, Li
 
     // EFFECTS: ...
     public void initializeActionsListModel() {
-        String selectedGroupName = mainMenuPanel.getSelectedGroup();
+        String selectedGroupName = mainMenuPanel.getMainDisplayPanel().getSelectedGroupName();
         actionsListModel.removeAllElements();
 
         if (selectedGroupName != null) {
             for (int i = 0; i < encounterListModel.getSize(); i++) {
-                if (encounterListModel.getElementAt(i).getTitle().getGroup().equals(selectedGroupName)) {
+                if (encounterListModel.getElementAt(i).hasGroup() && encounterListModel.getElementAt(i).getTitle()
+                        .getGroup().equals(selectedGroupName)) {
                     actionsListModel.addAll(encounterListModel.getElementAt(i).getActions());
                 }
             }
-        } else if (mainMenuPanel.getSelectedCharacter() != null) {
-            actionsListModel.addAll(mainMenuPanel.getSelectedCharacter().getActions());
+        } else if (mainMenuPanel.getMainDisplayPanel().getSelectedCharacter() != null) {
+            actionsListModel.addAll(mainMenuPanel.getMainDisplayPanel().getSelectedCharacter().getActions());
         } else {
             for (int i = 0; i < encounterListModel.getSize(); i++) {
                 actionsListModel.addAll(encounterListModel.getElementAt(i).getActions());
@@ -184,6 +187,9 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener, Li
 
     // EFFECTS: ...
     private void initializeLibrarySideDisplayPanel() {
+        statBlockDisplayTextArea = new StatBlockDisplayTextArea(mainMenuPanel);
+        statBlockCreationDisplayPanel = new StatBlockCreationDisplayPanel(mainMenuPanel);
+
         librarySideDisplayCardManagerPanel.add(statBlockDisplayTextArea, "statBlock");
         librarySideDisplayCardManagerPanel.add(statBlockCreationDisplayPanel, "statBlockCreation");
 
@@ -213,16 +219,28 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener, Li
 
     // EFFECTS: ...
     public void setSideDisplay(String s) {
-        if (s.equals("statBlockCreation")) {
-            sideDisplayCardLayout.show(this, "library");
-            librarySidePanelCardLayout.show(librarySideDisplayCardManagerPanel, s);
-        } else if (s.equals("encounter")) {
-            sideDisplayCardLayout.show(this, s);
-            actionsJList.removeAll();
-        } else {
-            sideDisplayCardLayout.show(this, "library");
-            librarySidePanelCardLayout.show(librarySideDisplayCardManagerPanel, "statBlock");
-            statBlockDisplayTextArea.initializeAll();
+        switch (s) {
+            case "statBlockCreation":
+                selectedStatBlock = null;
+                sideDisplayCardLayout.show(this, "library");
+                librarySidePanelCardLayout.show(librarySideDisplayCardManagerPanel, s);
+                break;
+            case "encounter":
+                selectedStatBlock = null;
+                sideDisplayCardLayout.show(this, s);
+                actionsJList.removeAll();
+                break;
+            case "statBlock":
+                sideDisplayCardLayout.show(this, "library");
+                librarySidePanelCardLayout.show(librarySideDisplayCardManagerPanel, "statBlock");
+                statBlockDisplayTextArea.initializeAll();
+                break;
+            default:
+                sideDisplayCardLayout.show(this, "library");
+                librarySidePanelCardLayout.show(librarySideDisplayCardManagerPanel, "statBlock");
+                selectedStatBlock = null;
+                statBlockDisplayTextArea.initializeAll();
+                break;
         }
     }
 
@@ -244,7 +262,7 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener, Li
         } else if (e.getSource() == customRollButton) {
             new CustomRollFrame();
         } else if (e.getSource() == customActionButton) {
-//            new CustomActionFrame();
+//TODO            new CustomActionFrame();
         }
     }
 
@@ -253,5 +271,15 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener, Li
     public void valueChanged(ListSelectionEvent e) {
         rollActionsButton.setEnabled(!e.getValueIsAdjusting());
         rollActionsButton.setEnabled(actionsJList.getSelectedIndices().length >= 1);
+    }
+
+    // EFFECTS: ...
+    public StatBlock getSelectedStatBlock() {
+        return selectedStatBlock;
+    }
+
+    // EFFECTS: ...
+    public void setSelectedStatBlock(StatBlock selectedStatBlock) {
+        this.selectedStatBlock = selectedStatBlock;
     }
 }
