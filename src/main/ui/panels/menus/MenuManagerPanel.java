@@ -48,10 +48,24 @@ public class MenuManagerPanel extends JPanel {
         JsonReader jsonReader = new JsonReader(JSON_DIRECTORY);
 
         encounterListModel.removeAllElements();
-        encounterListModel.addAll(jsonReader.readEncounter());
+        addAllToEncounter(jsonReader.readEncounter());
 
         libraryListModel.removeAllElements();
-        libraryListModel.addAll(jsonReader.readLibrary());
+        addAllToLibrary(jsonReader.readLibrary());
+    }
+
+    // EFFECTS: adds all given statblocks to the libraryListModel
+    private void addAllToLibrary(java.util.List<StatBlock> statBlockList) {
+        for (StatBlock sb : statBlockList) {
+            libraryListModel.addElement(sb);
+        }
+    }
+
+    // EFFECTS: adds all given characters to the encounterListModel
+    private void addAllToEncounter(java.util.List<model.Character> characterList) {
+        for (model.Character c : characterList) {
+            encounterListModel.addElement(c);
+        }
     }
 
     // EFFECTS: saves the current library and encounter to file

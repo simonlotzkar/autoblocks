@@ -160,15 +160,22 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener, Li
             for (int i = 0; i < encounterListModel.getSize(); i++) {
                 if (encounterListModel.getElementAt(i).hasGroup() && encounterListModel.getElementAt(i).getTitle()
                         .getGroup().equals(selectedGroupName)) {
-                    actionsListModel.addAll(encounterListModel.getElementAt(i).getActions());
+                    addAllActionsToModel(encounterListModel.getElementAt(i).getActions());
                 }
             }
         } else if (mainMenuPanel.getMainDisplayPanel().getSelectedCharacter() != null) {
-            actionsListModel.addAll(mainMenuPanel.getMainDisplayPanel().getSelectedCharacter().getActions());
+            addAllActionsToModel(mainMenuPanel.getMainDisplayPanel().getSelectedCharacter().getActions());
         } else {
             for (int i = 0; i < encounterListModel.getSize(); i++) {
-                actionsListModel.addAll(encounterListModel.getElementAt(i).getActions());
+                addAllActionsToModel(encounterListModel.getElementAt(i).getActions());
             }
+        }
+    }
+
+    // EFFECTS: ...
+    private void addAllActionsToModel(java.util.List<model.statblockfields.Action> actionsList) {
+        for (model.statblockfields.Action a : actionsList) {
+            actionsListModel.addElement(a);
         }
     }
 

@@ -173,7 +173,7 @@ public class MainDisplayPanel extends DisplayPanel implements ListSelectionListe
                     null,
                     "").toString();
 
-            if (newGroupName.isBlank() || newGroupName.isEmpty()) {
+            if (newGroupName.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Invalid group name given.", "Failure!",
                         JOptionPane.WARNING_MESSAGE);
             } else {
