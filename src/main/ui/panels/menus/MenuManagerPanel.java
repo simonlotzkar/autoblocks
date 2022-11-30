@@ -1,21 +1,20 @@
 package ui.panels.menus;
 
-import model.Character;
+import model.NPC;
 import model.StatBlock;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.JsonReader;
 import ui.frames.MainFrame;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-// represents a panel that manages the menu panels by switching between them
+// Represents a panel that manages the menu panels by switching between them
 public class MenuManagerPanel extends JPanel {
-    private DefaultListModel<Character> encounterListModel = new DefaultListModel<>();
+    private DefaultListModel<NPC> encounterListModel = new DefaultListModel<>();
     private DefaultListModel<StatBlock> libraryListModel = new DefaultListModel<>();
 
     private final TitleMenuPanel titleMenuPanel = new TitleMenuPanel(this);
@@ -25,6 +24,7 @@ public class MenuManagerPanel extends JPanel {
 
     private static final String JSON_DIRECTORY = "./data/autoBlocksApp.json";
 
+    // MODIFIES: this
     // EFFECTS: constructs this panel
     public MenuManagerPanel(MainFrame mainFrame) {
         super();
@@ -54,6 +54,7 @@ public class MenuManagerPanel extends JPanel {
         addAllToLibrary(jsonReader.readLibrary());
     }
 
+    // MODIFIES: this
     // EFFECTS: adds all given statblocks to the libraryListModel
     private void addAllToLibrary(java.util.List<StatBlock> statBlockList) {
         for (StatBlock sb : statBlockList) {
@@ -61,13 +62,16 @@ public class MenuManagerPanel extends JPanel {
         }
     }
 
+    // MODIFIES: this
     // EFFECTS: adds all given characters to the encounterListModel
-    private void addAllToEncounter(java.util.List<model.Character> characterList) {
-        for (model.Character c : characterList) {
+    //          this is only here because the autograder didn't like using the native addAll()
+    private void addAllToEncounter(java.util.List<NPC> npcList) {
+        for (NPC c : npcList) {
             encounterListModel.addElement(c);
         }
     }
 
+    // MODIFIES: json file
     // EFFECTS: saves the current library and encounter to file
     private void save() throws FileNotFoundException {
         PrintWriter jsonWriter = new PrintWriter(JSON_DIRECTORY);
@@ -118,6 +122,7 @@ public class MenuManagerPanel extends JPanel {
         }
     }
 
+    // MODIFIES: this
     // EFFECTS: prompts user with confirmation dialog and terminates the application if they confirm
     public void confirmQuit() {
         int command = JOptionPane.showConfirmDialog(this,
@@ -132,7 +137,7 @@ public class MenuManagerPanel extends JPanel {
     // -----------------------------------------------------------------------
     // getters
     // EFFECTS: gets the encounter list model
-    public DefaultListModel<Character> getEncounterListModel() {
+    public DefaultListModel<NPC> getEncounterListModel() {
         return encounterListModel;
     }
 
@@ -141,12 +146,7 @@ public class MenuManagerPanel extends JPanel {
         return libraryListModel;
     }
 
-    // EFFECTS: gets the
-    public TitleMenuPanel getTitleMenuPanel() {
-        return titleMenuPanel;
-    }
-
-    // EFFECTS: gets the
+    // EFFECTS: gets the main menu panel
     public MainMenuPanel getMainMenuPanel() {
         return mainMenuPanel;
     }
@@ -154,12 +154,7 @@ public class MenuManagerPanel extends JPanel {
     // -----------------------------------------------------------------------
     // setters
     // EFFECTS: sets the encounter list model
-    public void setEncounterListModel(DefaultListModel<Character> encounterListModel) {
+    public void setEncounterListModel(DefaultListModel<NPC> encounterListModel) {
         this.encounterListModel = encounterListModel;
-    }
-
-    // EFFECTS: sets the library list model
-    public void setLibraryListModel(DefaultListModel<StatBlock> libraryListModel) {
-        this.libraryListModel = libraryListModel;
     }
 }

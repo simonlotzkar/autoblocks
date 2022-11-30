@@ -1,5 +1,7 @@
 package model;
 
+import enums.*;
+import exceptions.IncompleteFieldException;
 import model.statblockfields.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -7,26 +9,28 @@ import persistence.Writable;
 
 import java.util.*;
 
-// Represents all stats and details of an NPC
+// Represents a statblock with a title, hp formula, armour, speeds, senses, proficiency bonus, xp, ability score set,
+// rollable actions, and optionally a languages, abilities, saving throw proficiencies, skill proficiencies, condition
+// immunities, resistances, and/or legendary mechanics
 public class StatBlock implements Writable {
     // required fields
-    protected final Title title;
+    protected Title title;
     protected final RollFormula hpFormula;
     protected final Armour armour;
     protected final Speeds speeds;
     protected final Senses senses;
     protected final int proficiency;
     protected final int xp;
-    protected final AbilityScores abilityScores;
-    protected final List<Action> actions;
+    protected final AbilityScoreSet abilityScoreSet;
+    protected final List<RollableAction> rollableActions;
 
     // optional fields
     protected final Languages languages;
     protected final List<Ability> abilities;
-    protected final List<String> savingThrowProficiencies;
-    protected final List<String> skillProficiencies;
-    protected final List<String> conditionImmunities;
-    protected final HashMap<String, String> resistances;
+    protected final List<AbilityScore> savingThrowProficiencies;
+    protected final List<Skill> skillProficiencies;
+    protected final List<Condition> conditionImmunities;
+    protected final HashMap<DamageType, ResistanceType> resistances;
     protected final LegendaryMechanics legendaryMechanics;
 
     // EFFECTS: constructs a StatBlock using a builder
@@ -37,9 +41,9 @@ public class StatBlock implements Writable {
         this.proficiency = builder.proficiency;
         this.armour = builder.armour;
         this.speeds = builder.speeds;
-        this.abilityScores = builder.abilityScores;
+        this.abilityScoreSet = builder.abilityScoreSet;
         this.abilities = builder.abilities;
-        this.actions = builder.actions;
+        this.rollableActions = builder.rollableActions;
         this.savingThrowProficiencies = builder.savingThrowProficiencies;
         this.skillProficiencies = builder.skillProficiencies;
         this.conditionImmunities = builder.conditionImmunities;
@@ -49,9 +53,75 @@ public class StatBlock implements Writable {
         this.legendaryMechanics = builder.legendaryMechanics;
     }
 
+    @Override
+    // EFFECTS: converts the statblock to a json object
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("title", title.toJson());
+        json.put("xp", xp);
+        json.put("hpFormula", hpFormula.toJson());
+        json.put("proficiency", proficiency);
+        json.put("armour", armour.toJson());
+        json.put("speeds", speeds.toJson());
+        json.put("senses", senses.toJson());
+        json.put("abilityScores", abilityScoreSet.toJson());
+        json.put("rollableActions", actionsToJson());
+        return optionalFieldsToJson(json);
+    }
+
+    // EFFECTS: constructs a json array with the abilities
+    protected JSONArray abilitiesToJson() {
+        JSONArray jsonArray = new JSONArray();
+        for (Ability a : abilities) {
+            jsonArray.put(a.toJson());
+        }
+        return jsonArray;
+    }
+
+    // EFFECTS: constructs a json array with the actions
+    protected JSONArray actionsToJson() {
+        JSONArray jsonArray = new JSONArray();
+        for (RollableAction a : rollableActions) {
+            jsonArray.put(a.toJson());
+        }
+        return jsonArray;
+    }
+
+    // EFFECTS: adds optional fields that exist to the given json object and returns it
+    protected JSONObject optionalFieldsToJson(JSONObject json) {
+        if (languages != null) {
+            json.put("languages", languages.toJson());
+        }
+        if (abilities != null) {
+            json.put("abilities", abilitiesToJson());
+        }
+        if (savingThrowProficiencies != null) {
+            json.put("savingThrowProficiencies", savingThrowProficiencies);
+        }
+        if (skillProficiencies != null) {
+            json.put("skillProficiencies", skillProficiencies);
+        }
+        if (conditionImmunities != null) {
+            json.put("conditionImmunities", conditionImmunities);
+        }
+        if (resistances != null) {
+            json.put("resistances", resistances);
+        }
+        if (legendaryMechanics != null) {
+            json.put("legendaryMechanics", legendaryMechanics.toJson());
+        }
+        return json;
+    }
+
+    @Override
+    // EFFECTS: returns a string representation of the character
+    public String toString() {
+        return this.title.getName() + ". CR: " + this.getChallengeRating();
+    }
+
     // -----------------------------------------------------------------------------------------------------------------
     // getters:
-    // EFFECTS: calculates and returns the challenge ratings from xp
+    // EFFECTS: calculates and returns the challenge ratings from this statblock's xp
     public String getChallengeRating() {
         if (xp < 24) {
             return "0";
@@ -186,8 +256,8 @@ public class StatBlock implements Writable {
     }
 
     // EFFECTS: gets ability scores
-    public AbilityScores getAbilityScores() {
-        return abilityScores;
+    public AbilityScoreSet getAbilityScores() {
+        return abilityScoreSet;
     }
 
     // EFFECTS: gets abilities
@@ -196,12 +266,12 @@ public class StatBlock implements Writable {
     }
 
     // EFFECTS: gets actions
-    public List<Action> getActions() {
-        return actions;
+    public List<RollableAction> getRollableActions() {
+        return rollableActions;
     }
 
     // EFFECTS: gets saving throw proficiencies
-    public List<String> getSavingThrowProficiencies() {
+    public List<AbilityScore> getSavingThrowProficiencies() {
         return savingThrowProficiencies;
     }
 
@@ -211,67 +281,44 @@ public class StatBlock implements Writable {
             return "";
         }
         StringBuilder savingThrowProficienciesString = new StringBuilder();
-        for (String savingThrow : savingThrowProficiencies) {
-            savingThrowProficienciesString.append(getSavingThrowProficiencyString(savingThrow)).append(", ");
+        for (AbilityScore as : AbilityScore.values()) {
+            if (savingThrowProficiencies.contains(as)) {
+                savingThrowProficienciesString.append(as.toString().toLowerCase())
+                        .append(" ")
+                        .append(abilityScoreSet.toModifier(as))
+                        .append(proficiency)
+                        .append(", ");
+            }
         }
         return savingThrowProficienciesString.toString();
     }
 
-    // REQUIRES: skill is in skill proficiencies
-    // EFFECTS: returns a statement of the given skill including the bonus;
-    protected String getSavingThrowProficiencyString(String savingThrow) {
-        return savingThrow + " " + (abilityScores.getModifier(savingThrow.toLowerCase()) + proficiency);
-    }
-
     // EFFECTS: gets skill proficiencies
-    public List<String> getSkillProficiencies() {
+    public List<Skill> getSkillProficiencies() {
         return skillProficiencies;
     }
 
+    // REQUIRES: skill is in skill proficiencies TODO throw IndexOutOfBoundsException
     // EFFECTS: returns all skill proficiencies as a string, or "" if none
     public String getSkillProficienciesString() {
         if (skillProficiencies == null) {
             return "";
         }
         StringBuilder skillProficienciesString = new StringBuilder();
-        for (String skill : skillProficiencies) {
-            skillProficienciesString.append(getSkillProficiencyString(skill)).append(", ");
+        for (Skill s : Skill.values()) {
+            if (skillProficiencies.contains(s)) {
+                skillProficienciesString.append(s.toString().toLowerCase())
+                        .append(" ")
+                        .append(abilityScoreSet.toModifier(s.getAbilityScore()))
+                        .append(proficiency)
+                        .append(", ");
+            }
         }
         return skillProficienciesString.toString();
     }
 
-    // REQUIRES: skill is in skill proficiencies
-    // EFFECTS: returns a statement of the given skill including the bonus;
-    protected String getSkillProficiencyString(String skill) {
-        return skill + " " + (abilityScores.getModifier(getSkillAbilityScore(skill)) + proficiency);
-    }
-
-    // EFFECTS: returns the ability score for the given skill
-    protected String getSkillAbilityScore(String skill) {
-        if ("acrobatics".equalsIgnoreCase(skill)
-                || "sleightOfHand".equalsIgnoreCase(skill)
-                || "stealth".equalsIgnoreCase(skill)) {
-            return "dexterity";
-        } else if ("arcana".equalsIgnoreCase(skill)
-                || "history".equalsIgnoreCase(skill)
-                || "religion".equalsIgnoreCase(skill)
-                || "investigation".equalsIgnoreCase(skill)
-                || "nature".equalsIgnoreCase(skill)) {
-            return "intelligence";
-        } else if ("athletics".equalsIgnoreCase(skill)) {
-            return "strength";
-        } else if ("deception".equalsIgnoreCase(skill)
-                || "intimidation".equalsIgnoreCase(skill)
-                || "performance".equalsIgnoreCase(skill)
-                || "persuasion".equalsIgnoreCase(skill)) {
-            return "charisma";
-        } else {
-            return "wisdom";
-        }
-    }
-
     // EFFECTS: gets condition immunities
-    public List<String> getConditionImmunities() {
+    public List<Condition> getConditionImmunities() {
         return conditionImmunities;
     }
 
@@ -281,14 +328,16 @@ public class StatBlock implements Writable {
             return "";
         }
         StringBuilder conditionImmunitiesString = new StringBuilder();
-        for (String conditionImmunity : conditionImmunities) {
-            conditionImmunitiesString.append(conditionImmunity).append(", ");
+        for (Condition c : Condition.values()) {
+            if (conditionImmunities.contains(c)) {
+                conditionImmunitiesString.append(c).append(", ");
+            }
         }
         return conditionImmunitiesString.toString();
     }
 
     // EFFECTS: gets resistances
-    public HashMap<String, String> getResistances() {
+    public HashMap<DamageType, ResistanceType> getResistances() {
         return resistances;
     }
 
@@ -298,15 +347,16 @@ public class StatBlock implements Writable {
             return "";
         }
         StringBuilder resistancesString = new StringBuilder();
-        resistances.forEach((String damageType, String resistanceType) -> resistancesString
-                .append(getResistanceString(damageType)).append(", "));
-        return resistancesString.toString();
-    }
 
-    // REQUIRES: damage type and resistance type are in resistances
-    // EFFECTS: returns a statement of the damage type and resistance type
-    public String getResistanceString(String damageType) {
-        return damageType + " " + resistances.get(damageType);
+        for (DamageType dt : DamageType.values()) {
+            if (resistances.containsKey(dt)) {
+                resistancesString.append(dt.toString().toLowerCase())
+                        .append(" ")
+                        .append(resistances.get(dt).toString().toLowerCase())
+                        .append(", ");
+            }
+        }
+        return resistancesString.toString();
     }
 
     // EFFECTS: gets languages
@@ -330,30 +380,39 @@ public class StatBlock implements Writable {
         protected final Senses senses;
         protected final int proficiency;
         protected final int xp;
-        protected final AbilityScores abilityScores;
-        protected List<Action> actions;
+        protected final AbilityScoreSet abilityScoreSet;
+        protected final List<RollableAction> rollableActions;
 
         // optional fields
         protected Languages languages;
         protected List<Ability> abilities;
-        protected List<String> savingThrowProficiencies;
-        protected List<String> skillProficiencies;
-        protected List<String> conditionImmunities;
-        protected HashMap<String, String> resistances;
+        protected List<AbilityScore> savingThrowProficiencies;
+        protected List<Skill> skillProficiencies;
+        protected List<Condition> conditionImmunities;
+        protected HashMap<DamageType, ResistanceType> resistances;
         protected LegendaryMechanics legendaryMechanics;
 
+        // MODIFIES: this
         // EFFECTS: constructs a builder with required fields
         public StatBlockBuilder(Title title, int xp, RollFormula hpFormula, int proficiency, Armour armour,
-                                Speeds speeds, Senses senses, AbilityScores abilityScores, List<Action> actions) {
-            this.title = title;
-            this.hpFormula = hpFormula;
-            this.armour = armour;
-            this.speeds = speeds;
-            this.senses = senses;
-            this.proficiency = proficiency;
-            this.xp = xp;
-            this.abilityScores = abilityScores;
-            this.actions = actions;
+                                Speeds speeds, Senses senses, AbilityScoreSet abilityScoreSet,
+                                List<RollableAction> rollableActions) throws IncompleteFieldException,
+                IndexOutOfBoundsException {
+            if (xp < 0) {
+                throw new IndexOutOfBoundsException("given xp is negative");
+            } else if (proficiency < 0) {
+                throw new IndexOutOfBoundsException("given proficiency bonus is negative");
+            } else {
+                this.title = title;
+                this.hpFormula = hpFormula;
+                this.armour = armour;
+                this.speeds = speeds;
+                this.senses = senses;
+                this.proficiency = proficiency;
+                this.xp = xp;
+                this.abilityScoreSet = abilityScoreSet;
+                this.rollableActions = rollableActions;
+            }
         }
 
         // EFFECTS: returns a new StatBlock with required fields,
@@ -375,25 +434,25 @@ public class StatBlock implements Writable {
         }
 
         // EFFECTS: returns a builder that assigns the given saving throw proficiencies to the StatBlock
-        public StatBlockBuilder savingThrowProficiencies(List<String> savingThrowProficiencies) {
+        public StatBlockBuilder savingThrowProficiencies(List<AbilityScore> savingThrowProficiencies) {
             this.savingThrowProficiencies = savingThrowProficiencies;
             return this;
         }
 
         // EFFECTS: returns a builder that assigns the given skill proficiencies to the StatBlock
-        public StatBlockBuilder skillProficiencies(List<String> skillProficiencies) {
+        public StatBlockBuilder skillProficiencies(List<Skill> skillProficiencies) {
             this.skillProficiencies = skillProficiencies;
             return this;
         }
 
         // EFFECTS: returns a builder that assigns the given condition immunities to the StatBlock
-        public StatBlockBuilder conditionImmunities(List<String> conditionImmunities) {
+        public StatBlockBuilder conditionImmunities(List<Condition> conditionImmunities) {
             this.conditionImmunities = conditionImmunities;
             return this;
         }
 
         // EFFECTS: returns a builder that assigns the given resistances to the StatBlock
-        public StatBlockBuilder resistances(HashMap<String, String> resistances) {
+        public StatBlockBuilder resistances(HashMap<DamageType, ResistanceType> resistances) {
             this.resistances = resistances;
             return this;
         }
@@ -403,71 +462,5 @@ public class StatBlock implements Writable {
             this.legendaryMechanics = legendaryMechanics;
             return this;
         }
-    }
-
-    // converts the statblock to a json object
-    @Override
-    public JSONObject toJson() {
-        JSONObject json = new JSONObject();
-        json.put("title", title.toJson());
-        json.put("xp", xp);
-        json.put("hpFormula", hpFormula.toJson());
-        json.put("proficiency", proficiency);
-        json.put("armour", armour.toJson());
-        json.put("speeds", speeds.toJson());
-        json.put("senses", senses.toJson());
-        json.put("abilityScores", abilityScores.toJson());
-        json.put("actions", actionsToJson());
-        return optionalFieldsToJson(json);
-    }
-
-    // constructs a json array with the abilities
-    protected JSONArray abilitiesToJson() {
-        JSONArray jsonArray = new JSONArray();
-        for (Ability a : abilities) {
-            jsonArray.put(a.toJson());
-        }
-        return jsonArray;
-    }
-
-    // constructs a json array with the actions
-    protected JSONArray actionsToJson() {
-        JSONArray jsonArray = new JSONArray();
-        for (Action a : actions) {
-            jsonArray.put(a.toJson());
-        }
-        return jsonArray;
-    }
-
-    // adds optional fields that exist to the given json object and returns it
-    protected JSONObject optionalFieldsToJson(JSONObject json) {
-        if (languages != null) {
-            json.put("languages", languages.toJson());
-        }
-        if (abilities != null) {
-            json.put("abilities", abilitiesToJson());
-        }
-        if (savingThrowProficiencies != null) {
-            json.put("savingThrowProficiencies", savingThrowProficiencies);
-        }
-        if (skillProficiencies != null) {
-            json.put("skillProficiencies", skillProficiencies);
-        }
-        if (conditionImmunities != null) {
-            json.put("conditionImmunities", conditionImmunities);
-        }
-        if (resistances != null) {
-            json.put("resistances", resistances);
-        }
-        if (legendaryMechanics != null) {
-            json.put("legendaryMechanics", legendaryMechanics.toJson());
-        }
-        return json;
-    }
-
-    @Override
-    // returns a string representation of the character
-    public String toString() {
-        return this.title.getName() + ". CR: " + this.getChallengeRating();
     }
 }

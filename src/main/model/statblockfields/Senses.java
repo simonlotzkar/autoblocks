@@ -14,6 +14,7 @@ public class Senses implements Writable {
     private final int tremorSense;
     private final int trueSight;
 
+    // MODIFIES: this
     // EFFECTS: constructs a Senses using a builder
     public Senses(SensesBuilder builder) {
         this.passivePerception = builder.passivePerception;
@@ -23,8 +24,6 @@ public class Senses implements Writable {
         this.trueSight = builder.trueSight;
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
-    // getters
     @Override
     // EFFECTS: gets all senses as a string, excluding those that are 0
     public String toString() {
@@ -48,6 +47,20 @@ public class Senses implements Writable {
         return stringBuilder.toString();
     }
 
+    @Override
+    // EFFECTS: constructs a json object with the fields of the senses
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("passivePerception", passivePerception);
+        json.put("blindSight", blindSight);
+        json.put("darkVision", darkVision);
+        json.put("tremorSense", tremorSense);
+        json.put("trueSight", trueSight);
+        return json;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // getters
     // EFFECTS: gets passive perception score
     public int getPassivePerception() {
         return passivePerception;
@@ -85,9 +98,13 @@ public class Senses implements Writable {
         private int tremorSense;
         private int trueSight;
 
-        // constructs a builder with required fields
-        public SensesBuilder(int passivePerception) {
-            this.passivePerception = passivePerception;
+        // constructs a builder with required fields and throws exception if given sense is negative
+        public SensesBuilder(int passivePerception) throws IndexOutOfBoundsException {
+            if (passivePerception < 0) {
+                throw new IndexOutOfBoundsException("given passive perception is negative");
+            } else {
+                this.passivePerception = passivePerception;
+            }
         }
 
         // EFFECTS: returns a new Senses with required fields,
@@ -97,39 +114,47 @@ public class Senses implements Writable {
         }
 
         // EFFECTS: returns a builder that assigns given distance to blindsight for Senses
-        public SensesBuilder blindSight(int blindSight) {
-            this.blindSight = blindSight;
-            return this;
+        //          and throws exception if given sense is negative
+        public SensesBuilder blindSight(int blindSight) throws IndexOutOfBoundsException {
+            if (blindSight < 0) {
+                throw new IndexOutOfBoundsException("given blindSight is negative");
+            } else {
+                this.blindSight = blindSight;
+                return this;
+            }
         }
 
         // EFFECTS: returns a builder that assigns given distance to darkvision for Senses
-        public SensesBuilder darkVision(int darkVision) {
-            this.darkVision = darkVision;
-            return this;
+        //          and throws exception if given sense is negative
+        public SensesBuilder darkVision(int darkVision) throws IndexOutOfBoundsException {
+            if (darkVision < 0) {
+                throw new IndexOutOfBoundsException("given darkVision is negative");
+            } else {
+                this.darkVision = darkVision;
+                return this;
+            }
         }
 
         // EFFECTS: returns a builder that assigns given distance to tremorsense for Senses
-        public SensesBuilder tremorSense(int tremorSense) {
-            this.tremorSense = tremorSense;
-            return this;
+        //          and throws exception if given sense is negative
+        public SensesBuilder tremorSense(int tremorSense) throws IndexOutOfBoundsException {
+            if (tremorSense < 0) {
+                throw new IndexOutOfBoundsException("given tremorSense is negative");
+            } else {
+                this.tremorSense = tremorSense;
+                return this;
+            }
         }
 
         // EFFECTS: returns a builder that assigns given distance to truesight for Senses
-        public SensesBuilder trueSight(int trueSight) {
-            this.trueSight = trueSight;
-            return this;
+        //          and throws exception if given sense is negative
+        public SensesBuilder trueSight(int trueSight) throws IndexOutOfBoundsException {
+            if (trueSight < 0) {
+                throw new IndexOutOfBoundsException("given trueSight is negative");
+            } else {
+                this.trueSight = trueSight;
+                return this;
+            }
         }
-    }
-
-    // constructs a json object with the fields of the senses
-    @Override
-    public JSONObject toJson() {
-        JSONObject json = new JSONObject();
-        json.put("passivePerception", passivePerception);
-        json.put("blindSight", blindSight);
-        json.put("darkVision", darkVision);
-        json.put("tremorSense", tremorSense);
-        json.put("trueSight", trueSight);
-        return json;
     }
 }

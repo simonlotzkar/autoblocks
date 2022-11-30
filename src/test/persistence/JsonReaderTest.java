@@ -1,6 +1,6 @@
 package persistence;
 
-import model.Character;
+import model.NPC;
 import model.StatBlock;
 import org.junit.jupiter.api.Test;
 import java.io.IOException;
@@ -27,7 +27,7 @@ public class JsonReaderTest {
         JsonReader reader = new JsonReader("./data/testAutoBlocksAppEmptyCase.json");
         try {
             List<StatBlock> library = reader.readLibrary();
-            List<Character> encounter = reader.readEncounter();
+            List<NPC> encounter = reader.readEncounter();
             assertEquals(0, library.size());
             assertEquals(0, encounter.size());
         } catch (IOException e) {
@@ -40,7 +40,7 @@ public class JsonReaderTest {
         JsonReader reader = new JsonReader("./data/testAutoBlocksAppBaseCase.json");
         try {
             List<StatBlock> library = reader.readLibrary();
-            List<Character> encounter = reader.readEncounter();
+            List<NPC> encounter = reader.readEncounter();
             assertEquals(2, library.size());
             assertEquals(3, encounter.size());
         } catch (IOException e) {

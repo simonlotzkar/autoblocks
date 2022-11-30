@@ -1,12 +1,10 @@
 package ui.panels;
 
-import model.Character;
-import model.StatBlock;
+import enums.AbilityScore;
+import model.NPC;
 import ui.panels.menus.MainMenuPanel;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
@@ -15,7 +13,7 @@ import java.awt.event.ActionEvent;
 // Represents a main display that displays one of four panels: encounter, group, character, or library
 public class MainDisplayPanel extends DisplayPanel implements ListSelectionListener {
     // selections
-    private model.Character selectedCharacter;
+    private NPC selectedNPC;
     private String selectedGroupName;
 
     // labels
@@ -30,26 +28,27 @@ public class MainDisplayPanel extends DisplayPanel implements ListSelectionListe
     private final JPanel encounterMainDisplayManagerPanel = new JPanel(encounterMainDisplayCardLayout);
 
     // lists
-    private DefaultListModel<model.Character> encounterListModel
+    private DefaultListModel<NPC> encounterListModel
             = mainMenuPanel.getMenuManagerPanel().getEncounterListModel();
-    private final JList<model.Character> encounterList = new JList<>(encounterListModel);
+    private final JList<NPC> encounterList = new JList<>(encounterListModel);
 
-    private final DefaultListModel<model.Character> groupListModel = new DefaultListModel<>();
-    private final JList<model.Character> groupList = new JList<>(groupListModel);
+    private final DefaultListModel<NPC> groupListModel = new DefaultListModel<>();
+    private final JList<NPC> groupList = new JList<>(groupListModel);
 
     // scroll panes
     private final JScrollPane encounterScrollPane = new JScrollPane();
     private final LibraryScrollPane libraryScrollPane = new LibraryScrollPane(mainMenuPanel);
 
     // text areas
-    private final CharacterDisplayTextArea characterDisplayTextArea = new CharacterDisplayTextArea(mainMenuPanel);
+    private final NonPlayerCharacterDisplayTextArea npcDisplayTextArea
+            = new NonPlayerCharacterDisplayTextArea(mainMenuPanel);
 
     // buttons
-    private JButton openCharacterButton;
+    private JButton openNonPlayerCharacterButton;
     private JButton openGroupButton;
     private JButton changeHPButton;
-    private JButton setCharacterGroupButton;
-    private JButton deleteCharacterButton;
+    private JButton setNonPlayerCharacterGroupButton;
+    private JButton deleteNonPlayerCharacterButton;
     private JButton rollCheckButton;
     private JButton rollInitiativeButton;
     private JButton backButton;
@@ -68,7 +67,7 @@ public class MainDisplayPanel extends DisplayPanel implements ListSelectionListe
         encounterScrollPane.setViewportView(encounterMainDisplayManagerPanel);
         encounterMainDisplayManagerPanel.add(encounterList, "encounter");
         encounterMainDisplayManagerPanel.add(groupList, "group");
-        encounterMainDisplayManagerPanel.add(characterDisplayTextArea, "character");
+        encounterMainDisplayManagerPanel.add(npcDisplayTextArea, "npc");
 
         this.add(mainDisplayTitleLabel, BorderLayout.NORTH);
         this.add(mainDisplaysManagerPanel, BorderLayout.CENTER);
@@ -76,11 +75,11 @@ public class MainDisplayPanel extends DisplayPanel implements ListSelectionListe
 
     // EFFECTS: ...
     private void importButtons() {
-        openCharacterButton = mainMenuPanel.getOpenCharacterButton();
+        openNonPlayerCharacterButton = mainMenuPanel.getOpenNonPlayerCharacterButton();
         openGroupButton = mainMenuPanel.getOpenGroupButton();
         changeHPButton = mainMenuPanel.getChangeHPButton();
-        setCharacterGroupButton = mainMenuPanel.getSetCharacterGroupButton();
-        deleteCharacterButton = mainMenuPanel.getDeleteCharacterButton();
+        setNonPlayerCharacterGroupButton = mainMenuPanel.getSetNonPlayerCharacterGroupButton();
+        deleteNonPlayerCharacterButton = mainMenuPanel.getDeleteNonPlayerCharacterButton();
         rollCheckButton = mainMenuPanel.getRollCheckButton();
         rollInitiativeButton = mainMenuPanel.getRollInitiativeButton();
         backButton = mainMenuPanel.getBackButton();
@@ -146,9 +145,9 @@ public class MainDisplayPanel extends DisplayPanel implements ListSelectionListe
         if (s.equals("library")) {
             mainDisplaysCardLayout.show(mainDisplaysManagerPanel, s);
         } else {
-            if (s.equals("character")) {
+            if (s.equals("npc")) {
                 encounterMainDisplayCardLayout.show(encounterMainDisplayManagerPanel, s);
-                characterDisplayTextArea.initializeAll();
+                npcDisplayTextArea.initializeAll();
                 refreshEncounterScrollPane();
             } else if (s.equals("group")) {
                 encounterMainDisplayCardLayout.show(encounterMainDisplayManagerPanel, s);
@@ -156,14 +155,14 @@ public class MainDisplayPanel extends DisplayPanel implements ListSelectionListe
             } else {
                 mainDisplaysCardLayout.show(mainDisplaysManagerPanel, "encounter");
                 encounterMainDisplayCardLayout.show(encounterMainDisplayManagerPanel, s);
-                selectedCharacter = null;
+                selectedNPC = null;
                 selectedGroupName = null;
             }
         }
     }
 
     // EFFECTS: ...
-    private void trySetCharactersGroup() {
+    private void trySetNonPlayerCharacterGroup() {
         try {
             String newGroupName = JOptionPane.showInputDialog(this,
                     "Group Name",
@@ -177,7 +176,7 @@ public class MainDisplayPanel extends DisplayPanel implements ListSelectionListe
                 JOptionPane.showMessageDialog(this, "Invalid group name given.", "Failure!",
                         JOptionPane.WARNING_MESSAGE);
             } else {
-                setCharactersGroup(newGroupName);
+                setNonPlayerCharacterGroup(newGroupName);
             }
         } catch (NullPointerException exception) {
             // user cancelled so do nothing
@@ -185,9 +184,9 @@ public class MainDisplayPanel extends DisplayPanel implements ListSelectionListe
     }
 
     // EFFECTS: ...
-    private void setCharactersGroup(String newGroupName) {
-        if (selectedCharacter != null) {
-            selectedCharacter.getTitle().setGroup(newGroupName);
+    private void setNonPlayerCharacterGroup(String newGroupName) {
+        if (selectedNPC != null) {
+            selectedNPC.getTitle().setGroup(newGroupName);
             refreshEncounterScrollPane();
         } else if (selectedGroupName != null) {
             for (int i : groupList.getSelectedIndices()) {
@@ -206,7 +205,7 @@ public class MainDisplayPanel extends DisplayPanel implements ListSelectionListe
     }
 
     // EFFECTS: ...
-    private void tryChangeCharactersHP() {
+    private void tryChangeNonPlayerCharacterHP() {
         try {
             int hpChange = Integer.parseInt((JOptionPane.showInputDialog(this,
                     "HitPoints",
@@ -216,7 +215,7 @@ public class MainDisplayPanel extends DisplayPanel implements ListSelectionListe
                     null,
                     "")).toString());
 
-            changeCharactersHP(hpChange);
+            changeNonPlayerCharacterHP(hpChange);
 
         } catch (NumberFormatException exception) {
             JOptionPane.showMessageDialog(this, "NumberFormatException caught. Message: "
@@ -227,9 +226,9 @@ public class MainDisplayPanel extends DisplayPanel implements ListSelectionListe
     }
 
     // EFFECTS: ...
-    private void changeCharactersHP(int hpChange) {
-        if (selectedCharacter != null) {
-            selectedCharacter.changeHP(hpChange);
+    private void changeNonPlayerCharacterHP(int hpChange) {
+        if (selectedNPC != null) {
+            selectedNPC.changeHP(hpChange);
             refreshEncounterScrollPane();
         } else if (selectedGroupName != null) {
             for (int i : groupList.getSelectedIndices()) {
@@ -248,15 +247,15 @@ public class MainDisplayPanel extends DisplayPanel implements ListSelectionListe
     }
 
     // EFFECTS: ...
-    private void deleteCharacters() {
+    private void deleteNonPlayerCharacter() {
         String warningMessage = generateDeletionWarning();
 
         int confirmDelete = JOptionPane.showConfirmDialog(this, warningMessage, "Confirm Deletion",
                 JOptionPane.YES_NO_OPTION);
 
         if (confirmDelete == JOptionPane.YES_OPTION) {
-            if (selectedCharacter != null) {
-                encounterListModel.removeElement(selectedCharacter);
+            if (selectedNPC != null) {
+                encounterListModel.removeElement(selectedNPC);
                 refreshEncounterScrollPane();
             } else if (selectedGroupName != null) {
                 for (Object o : groupList.getSelectedValuesList()) {
@@ -277,12 +276,12 @@ public class MainDisplayPanel extends DisplayPanel implements ListSelectionListe
 
     // EFFECTS: ...
     private String generateDeletionWarning() {
-        String warningMessage = "Do you want to delete this character?";
+        String warningMessage = "Do you want to delete this NPC?";
 
         if (selectedGroupName != null) {
-            warningMessage = "Do you want to delete " + groupList.getSelectedIndices().length + " characters?";
-        } else if (selectedCharacter == null) {
-            warningMessage = "Do you want to delete " + encounterList.getSelectedIndices().length + " characters?";
+            warningMessage = "Do you want to delete " + groupList.getSelectedIndices().length + " NPCs?";
+        } else if (selectedNPC == null) {
+            warningMessage = "Do you want to delete " + encounterList.getSelectedIndices().length + " NPCs?";
         }
 
         return warningMessage;
@@ -290,8 +289,8 @@ public class MainDisplayPanel extends DisplayPanel implements ListSelectionListe
 
     // EFFECTS: ...
     private void rollInitiative() {
-        if (selectedCharacter != null) {
-            mainMenuPanel.getSideDisplayPanel().printToOutputLog(selectedCharacter.rollInitiative());
+        if (selectedNPC != null) {
+            mainMenuPanel.getSideDisplayPanel().printToOutputLog(selectedNPC.rollInitiative());
             refreshEncounterScrollPane();
         } else if (selectedGroupName != null) {
             for (int i : groupList.getSelectedIndices()) {
@@ -314,29 +313,27 @@ public class MainDisplayPanel extends DisplayPanel implements ListSelectionListe
     // EFFECTS: ...
     private void tryRollCheck() {
         try {
-            String abilityScore = JOptionPane.showInputDialog(this,
+            AbilityScore[] abilityScores = {AbilityScore.STRENGTH, AbilityScore.DEXTERITY, AbilityScore.CONSTITUTION,
+                    AbilityScore.INTELLIGENCE, AbilityScore.WISDOM, AbilityScore.CHARISMA};
+            int index = JOptionPane.showOptionDialog(this,
                     "Ability for Check",
                     "User Input Needed",
-                    JOptionPane.INFORMATION_MESSAGE,
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
                     null,
-                    null,
-                    "").toString();
+                    abilityScores,
+                    "");
 
-            if (!("strengthconstitutiondexterityintelligencewisdomcharisma").contains(abilityScore.toLowerCase())) {
-                JOptionPane.showMessageDialog(this, "Invalid check given.", "Failure!",
-                        JOptionPane.WARNING_MESSAGE);
-            } else {
-                rollCheck(abilityScore);
-            }
+            rollCheck(abilityScores[index]);
         } catch (NullPointerException exception) {
             // user cancelled so do nothing
         }
     }
 
     // EFFECTS: ...
-    private void rollCheck(String abilityScore) {
-        if (selectedCharacter != null) {
-            mainMenuPanel.getSideDisplayPanel().printToOutputLog(selectedCharacter.rollCheckAsString(abilityScore));
+    private void rollCheck(AbilityScore abilityScore) {
+        if (selectedNPC != null) {
+            mainMenuPanel.getSideDisplayPanel().printToOutputLog(selectedNPC.rollCheckAsString(abilityScore));
             refreshEncounterScrollPane();
         } else if (selectedGroupName != null) {
             for (int i : groupList.getSelectedIndices()) {
@@ -358,21 +355,21 @@ public class MainDisplayPanel extends DisplayPanel implements ListSelectionListe
 
     // EFFECTS: processes button presses from user
     public void passAction(ActionEvent e) {
-        if (e.getSource() == openCharacterButton) {
+        if (e.getSource() == openNonPlayerCharacterButton) {
             if (selectedGroupName == null) {
-                selectedCharacter = (encounterListModel.getElementAt(encounterList.getSelectedIndex()));
+                selectedNPC = (encounterListModel.getElementAt(encounterList.getSelectedIndex()));
             } else {
-                selectedCharacter = (groupListModel.getElementAt(groupList.getSelectedIndex()));
+                selectedNPC = (groupListModel.getElementAt(groupList.getSelectedIndex()));
             }
-            mainMenuPanel.setDisplays("character");
+            mainMenuPanel.setDisplays("npc");
         } else if (e.getSource() == openGroupButton) {
             trySelectGroup();
         } else if (e.getSource() == changeHPButton) {
-            tryChangeCharactersHP();
-        } else if (e.getSource() == setCharacterGroupButton) {
-            trySetCharactersGroup();
-        } else if (e.getSource() == deleteCharacterButton) {
-            deleteCharacters();
+            tryChangeNonPlayerCharacterHP();
+        } else if (e.getSource() == setNonPlayerCharacterGroupButton) {
+            trySetNonPlayerCharacterGroup();
+        } else if (e.getSource() == deleteNonPlayerCharacterButton) {
+            deleteNonPlayerCharacter();
         } else if (e.getSource() == rollCheckButton) {
             tryRollCheck();
         } else if (e.getSource() == rollInitiativeButton) {
@@ -388,14 +385,14 @@ public class MainDisplayPanel extends DisplayPanel implements ListSelectionListe
             selectedGroupName = encounterListModel.getElementAt(encounterList.getSelectedIndex()).getTitle().getGroup();
             mainMenuPanel.setDisplays("group");
         } else {
-            JOptionPane.showMessageDialog(this, "Selected character has no group.",
+            JOptionPane.showMessageDialog(this, "Selected NPC has no group.",
                     "Failure!", JOptionPane.WARNING_MESSAGE);
         }
     }
 
     // EFFECTS: ...
     private void processBackButton() {
-        if (characterDisplayTextArea.isShowing()) {
+        if (npcDisplayTextArea.isShowing()) {
             mainMenuPanel.setDisplays("encounter");
         } else if (groupList.isShowing()) {
             mainMenuPanel.setDisplays("encounter");
@@ -408,12 +405,12 @@ public class MainDisplayPanel extends DisplayPanel implements ListSelectionListe
     //          or if just one item is selected enables or disables single selection buttons
     public void valueChanged(ListSelectionEvent e) {
         changeHPButton.setEnabled(!e.getValueIsAdjusting());
-        setCharacterGroupButton.setEnabled(!e.getValueIsAdjusting());
-        deleteCharacterButton.setEnabled(!e.getValueIsAdjusting());
+        setNonPlayerCharacterGroupButton.setEnabled(!e.getValueIsAdjusting());
+        deleteNonPlayerCharacterButton.setEnabled(!e.getValueIsAdjusting());
         rollCheckButton.setEnabled(!e.getValueIsAdjusting());
         rollInitiativeButton.setEnabled(!e.getValueIsAdjusting());
 
-        openCharacterButton.setEnabled(encounterList.getSelectedIndices().length == 1
+        openNonPlayerCharacterButton.setEnabled(encounterList.getSelectedIndices().length == 1
                 || groupList.getSelectedIndices().length == 1);
         openGroupButton.setEnabled(encounterList.getSelectedIndices().length == 1
                 && encounterList.getSelectedValue().hasGroup());
@@ -427,23 +424,8 @@ public class MainDisplayPanel extends DisplayPanel implements ListSelectionListe
     }
 
     // EFFECTS: ...
-    public JList<model.Character> getEncounterScrollPane() {
-        return encounterList;
-    }
-
-    // EFFECTS: ...
-    public JList<model.Character> getGroupDisplayPanel() {
-        return groupList;
-    }
-
-    // EFFECTS: ...
-    public CharacterDisplayTextArea getCharacterDisplayPanel() {
-        return characterDisplayTextArea;
-    }
-
-    // EFFECTS: ...
-    public Character getSelectedCharacter() {
-        return selectedCharacter;
+    public NPC getSelectedNonPlayerCharacter() {
+        return selectedNPC;
     }
 
     // EFFECTS: ...

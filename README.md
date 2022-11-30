@@ -8,8 +8,8 @@ simulate any form of map, it's intended to be used with an external one.
 - with this application you can do the following for non-player-characters (NPCs):
   - **view and create statblocks**
   - **create characters from stablocks**
-  - **autoroll for characters (initiative, actions, etc)**
-  - **track and edit character hitpoints**
+  - **autoroll for characters (initiative, RollableActions, etc)**
+  - **track and edit NPC hitpoints**
   - **group characters together**
 - this application holds data such as *default monster statblocks*, but also allows the user to *enter custom entries*.
 <p>
@@ -32,15 +32,15 @@ As a user, I want to be able to:
         - add any number of statblock to encounter as new characters
     - add new, custom statblock to a library.
 - view a list of characters (aka an 'encounter') by their names, groups, and hp; and do the following:
-  - select character in encounter and do the following:
-      - display all character stats and actions
-      - enter roll menu for character and do the following:
-          - roll character action
-          - roll character ability check
-          - roll character initiative
-      - edit character hitpoints
-      - change character group
-      - delete character from encounter
+  - select NPC in encounter and do the following:
+      - display all NPC stats and RollableActions
+      - enter roll menu for NPC and do the following:
+          - roll NPC action
+          - roll NPC ability check
+          - roll NPC initiative
+      - edit NPC hitpoints
+      - change NPC group
+      - delete NPC from encounter
   - select group in encounter and do the following:
     - display characters in group by all stats
     - enter roll menu for group and do the following: 
@@ -61,7 +61,7 @@ As a user, I want to be able to:
 - inventory/loot generation
 
 ### Current Bugs:
-- character groups are not persistent (loading fails)
+- NPC groups are not persistent (loading fails)
 
 # Instructions for grader
 - You can generate multiple events related to adding StatBlocks to the Library by selecting "Create New" after

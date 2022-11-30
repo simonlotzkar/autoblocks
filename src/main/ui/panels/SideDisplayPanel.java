@@ -1,6 +1,9 @@
 package ui.panels;
 
+import model.NPC;
 import model.StatBlock;
+import model.statblockfields.RollableAction;
+import ui.frames.CustomActionFrame;
 import ui.frames.CustomRollFrame;
 import ui.panels.menus.MainMenuPanel;
 
@@ -31,9 +34,9 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener, Li
     private final JPanel librarySideDisplayPanel = new JPanel(new BorderLayout());
     private final JPanel librarySideDisplayCardManagerPanel = new JPanel(librarySidePanelCardLayout);
     private final JPanel outputLogPanel = new JPanel(new BorderLayout());
-    private final JPanel actionsPanel = new JPanel(new BorderLayout());
+    private final JPanel rollableActionsPanel = new JPanel(new BorderLayout());
     private final JPanel outputLogTitlePanel = new JPanel(new GridLayout(1, 2));
-    private final JPanel actionsTitlePanel = new JPanel(new GridLayout(1, 2));
+    private final JPanel rollableActionsTitlePanel = new JPanel(new GridLayout(1, 2));
 
     private StatBlockDisplayTextArea statBlockDisplayTextArea;
     private StatBlockCreationDisplayPanel statBlockCreationDisplayPanel;
@@ -41,28 +44,28 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener, Li
     // scrollpanes
     private final JScrollPane librarySideDisplayScrollPane = new JScrollPane();
     private final JScrollPane outputLogScrollPane = new JScrollPane();
-    private final JScrollPane actionsScrollPane = new JScrollPane();
+    private final JScrollPane rollableActionsScrollPane = new JScrollPane();
 
     // buttons
-    private final JButton rollActionsButton = new JButton("Roll Selected");
+    private final JButton rollRollableActionsButton = new JButton("Roll Selected");
     private final JButton customRollButton = new JButton("Custom Dice Roller");
-    private final JButton customActionButton = new JButton("Custom Action Roller");
+    private final JButton customRollableActionButton = new JButton("Custom Action Roller");
 
     // components
     private JTextArea outputLogTextArea;
-    private final JList<model.statblockfields.Action> actionsJList;
-    private final DefaultListModel<model.statblockfields.Action> actionsListModel;
-    private final DefaultListModel<model.Character> encounterListModel;
+    private final JList<RollableAction> rollableActionsList;
+    private final DefaultListModel<RollableAction> rollableActionsListModel;
+    private final DefaultListModel<NPC> encounterListModel;
 
     // EFFECTS: constructs this display panel
     public SideDisplayPanel(MainMenuPanel mainMenuPanel) {
         super(null, mainMenuPanel); // sets the layout manager, mainmenu panel, size, and visibility
         encounterListModel = mainMenuPanel.getMenuManagerPanel().getEncounterListModel();
-        actionsListModel = new DefaultListModel<>();
+        rollableActionsListModel = new DefaultListModel<>();
 
         initializeButtons();
-        initializeActionsListModel();
-        actionsJList = new JList<>(actionsListModel);
+        initializeRollableActionsListModel();
+        rollableActionsList = new JList<>(rollableActionsListModel);
 
         initializeEncounterSideDisplayPanel();
         initializeLibrarySideDisplayPanel();
@@ -76,9 +79,9 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener, Li
     private void initializeButtons() {
         ArrayList<JButton> buttonList = new ArrayList<>();
 
-        buttonList.add(customActionButton);
+        buttonList.add(customRollableActionButton);
         buttonList.add(customRollButton);
-        buttonList.add(rollActionsButton);
+        buttonList.add(rollRollableActionsButton);
 
         for (JButton jb : buttonList) {
             jb.addActionListener(this);
@@ -88,9 +91,9 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener, Li
 
     // EFFECTS: ...
     private void initializeButtonIcons() {
-        customActionButton.setIcon(scaleIcon(SWORD_ICON));
+        customRollableActionButton.setIcon(scaleIcon(SWORD_ICON));
         customRollButton.setIcon(scaleIcon(D20_ICON));
-        rollActionsButton.setIcon(scaleIcon(DICE_ICON));
+        rollRollableActionsButton.setIcon(scaleIcon(DICE_ICON));
     }
 
     // EFFECTS: ...
@@ -101,10 +104,10 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener, Li
     // EFFECTS: ...
     private void initializeEncounterSideDisplayPanel() {
         initializeOutputLogPanel();
-        initializeActionsPanel();
+        initializeRollableActionsPanel();
 
         encounterSideDisplayPanel.add(outputLogPanel);
-        encounterSideDisplayPanel.add(actionsPanel);
+        encounterSideDisplayPanel.add(rollableActionsPanel);
     }
 
     // EFFECTS: ...
@@ -133,63 +136,65 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener, Li
     }
 
     // EFFECTS: ...
-    private void initializeActionsPanel() {
-        initializeActionsJList();
-        initializeActionsTitlePanel();
-        initializeActionsScrollPane();
+    private void initializeRollableActionsPanel() {
+        initializeRollableActionsList();
+        initializeRollableActionsTitlePanel();
+        initializeRollableActionsScrollPane();
 
-        actionsPanel.add(actionsTitlePanel, BorderLayout.NORTH);
-        actionsPanel.add(actionsScrollPane, BorderLayout.CENTER);
-        actionsPanel.add(rollActionsButton, BorderLayout.SOUTH);
+        rollableActionsPanel.add(rollableActionsTitlePanel, BorderLayout.NORTH);
+        rollableActionsPanel.add(rollableActionsScrollPane, BorderLayout.CENTER);
+        rollableActionsPanel.add(rollRollableActionsButton, BorderLayout.SOUTH);
     }
 
     // EFFECTS: ...
-    private void initializeActionsJList() {
-        actionsJList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-        actionsJList.setLayoutOrientation(JList.VERTICAL);
-        actionsJList.setVisibleRowCount(-1);
-        actionsJList.addListSelectionListener(this);
+    private void initializeRollableActionsList() {
+        rollableActionsList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        rollableActionsList.setLayoutOrientation(JList.VERTICAL);
+        rollableActionsList.setVisibleRowCount(-1);
+        rollableActionsList.addListSelectionListener(this);
     }
 
     // EFFECTS: ...
-    public void initializeActionsListModel() {
+    public void initializeRollableActionsListModel() {
         String selectedGroupName = mainMenuPanel.getMainDisplayPanel().getSelectedGroupName();
-        actionsListModel.removeAllElements();
+        rollableActionsListModel.removeAllElements();
 
         if (selectedGroupName != null) {
             for (int i = 0; i < encounterListModel.getSize(); i++) {
                 if (encounterListModel.getElementAt(i).hasGroup() && encounterListModel.getElementAt(i).getTitle()
                         .getGroup().equals(selectedGroupName)) {
-                    addAllActionsToModel(encounterListModel.getElementAt(i).getActions());
+                    addAllRollableActionsToModel(encounterListModel.getElementAt(i).getRollableActions());
                 }
             }
-        } else if (mainMenuPanel.getMainDisplayPanel().getSelectedCharacter() != null) {
-            addAllActionsToModel(mainMenuPanel.getMainDisplayPanel().getSelectedCharacter().getActions());
+        } else if (mainMenuPanel.getMainDisplayPanel().getSelectedNonPlayerCharacter() != null) {
+            addAllRollableActionsToModel(mainMenuPanel.getMainDisplayPanel()
+                    .getSelectedNonPlayerCharacter().getRollableActions());
         } else {
             for (int i = 0; i < encounterListModel.getSize(); i++) {
-                addAllActionsToModel(encounterListModel.getElementAt(i).getActions());
+                addAllRollableActionsToModel(encounterListModel.getElementAt(i).getRollableActions());
             }
         }
     }
 
     // EFFECTS: ...
-    private void addAllActionsToModel(java.util.List<model.statblockfields.Action> actionsList) {
-        for (model.statblockfields.Action a : actionsList) {
-            actionsListModel.addElement(a);
+    //          this is only here because the autograder didn't like using the native addAll()
+    private void addAllRollableActionsToModel(java.util.List<RollableAction> rollableActionsList) {
+        for (RollableAction a : rollableActionsList) {
+            rollableActionsListModel.addElement(a);
         }
     }
 
     // EFFECTS: ...
-    private void initializeActionsTitlePanel() {
-        actionsTitlePanel.add(new JLabel("Actions in Current Context:"));
-        actionsTitlePanel.add(customActionButton);
+    private void initializeRollableActionsTitlePanel() {
+        rollableActionsTitlePanel.add(new JLabel("Actions in Current Context:"));
+        rollableActionsTitlePanel.add(customRollableActionButton);
     }
 
     // EFFECTS: ...
-    private void initializeActionsScrollPane() {
-        actionsScrollPane.setViewportView(actionsJList);
-        actionsScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        actionsScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+    private void initializeRollableActionsScrollPane() {
+        rollableActionsScrollPane.setViewportView(rollableActionsList);
+        rollableActionsScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        rollableActionsScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
     }
 
     // EFFECTS: ...
@@ -209,9 +214,9 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener, Li
     }
 
     // EFFECTS: ...
-    private void rollActions() {
-        for (int i : actionsJList.getSelectedIndices()) {
-            printToOutputLog(actionsJList.getModel().getElementAt(i).rollAsString());
+    private void rollRollableActions() {
+        for (int i : rollableActionsList.getSelectedIndices()) {
+            printToOutputLog(rollableActionsList.getModel().getElementAt(i).generateFullRollString());
         }
     }
 
@@ -228,14 +233,14 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener, Li
     public void setSideDisplay(String s) {
         switch (s) {
             case "statBlockCreation":
-                selectedStatBlock = null;
+                initializeLibrarySideDisplayPanel();
                 sideDisplayCardLayout.show(this, "library");
                 librarySidePanelCardLayout.show(librarySideDisplayCardManagerPanel, s);
                 break;
             case "encounter":
                 selectedStatBlock = null;
                 sideDisplayCardLayout.show(this, s);
-                actionsJList.removeAll();
+                rollableActionsList.removeAll();
                 break;
             case "statBlock":
                 sideDisplayCardLayout.show(this, "library");
@@ -264,20 +269,20 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener, Li
     @Override
     // EFFECTS: ...
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == rollActionsButton) {
-            rollActions();
+        if (e.getSource() == rollRollableActionsButton) {
+            rollRollableActions();
         } else if (e.getSource() == customRollButton) {
             new CustomRollFrame();
-        } else if (e.getSource() == customActionButton) {
-//TODO            new CustomActionFrame();
+        } else if (e.getSource() == customRollableActionButton) {
+            new CustomActionFrame();
         }
     }
 
     @Override
     // EFFECTS: ...
     public void valueChanged(ListSelectionEvent e) {
-        rollActionsButton.setEnabled(!e.getValueIsAdjusting());
-        rollActionsButton.setEnabled(actionsJList.getSelectedIndices().length >= 1);
+        rollRollableActionsButton.setEnabled(!e.getValueIsAdjusting());
+        rollRollableActionsButton.setEnabled(rollableActionsList.getSelectedIndices().length >= 1);
     }
 
     // EFFECTS: ...

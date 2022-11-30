@@ -1,31 +1,51 @@
 package model.statblockfields;
 
-import model.Character;
+import exceptions.IncompleteFieldException;
 import org.json.JSONObject;
 import persistence.Writable;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-
-// Represents...
+// Represents a title with a name, size, type, alignment, and group which can be null or empty
 public class Title implements Writable {
     // required fields
     private final String name;
-    private final String type;
     private final String size;
+    private final String type;
     private final String alignment;
-
-    // optional fields
     private String group;
 
-    // EFFECTS: constructs Title using a builder
-    public Title(TitleBuilder builder) {
-        this.name = builder.name;
-        this.type = builder.type;
-        this.size = builder.size;
-        this.alignment = builder.alignment;
-        this.group = builder.group;
+    // MODIFIES: this
+    // EFFECTS: constructs Title using the given fields and throws an exception if any of the required fields are empty
+    public Title(String name, String size, String type, String alignment, String group)
+            throws IncompleteFieldException {
+        if (name == null || name.isEmpty()) {
+            throw new IncompleteFieldException("given name is empty or null");
+        } else if (size == null || size.isEmpty()) {
+            throw new IncompleteFieldException("given size is empty or null");
+        } else if (type == null || type.isEmpty()) {
+            throw new IncompleteFieldException("given type is empty or null");
+        } else if (alignment == null || alignment.isEmpty()) {
+            throw new IncompleteFieldException("given alignment is empty or null");
+        } else {
+            this.name = name;
+            this.type = type;
+            this.size = size;
+            this.alignment = alignment;
+            this.group = group;
+        }
+    }
+
+    @Override
+    // EFFECTS: constructs a json object with the fields of the title
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("type", type);
+        json.put("size", size);
+        json.put("alignment", alignment);
+        if (group != null && !group.isEmpty()) {
+            json.put("group", group);
+        }
+        return json;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -60,52 +80,5 @@ public class Title implements Writable {
     // EFFECTS: get group
     public String getGroup() {
         return group;
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
-    // builder class
-    public static class TitleBuilder {
-        // required fields
-        private final String name;
-        private final String type;
-        private final String size;
-        private final String alignment;
-
-        // optional fields
-        private String group;
-
-        // constructs a builder with required fields
-        public TitleBuilder(String name, String type, String size, String alignment) {
-            this.name = name;
-            this.type = type;
-            this.size = size;
-            this.alignment = alignment;
-        }
-
-        // EFFECTS: returns a new Title with required fields,
-        //          and any optional fields that had their builder called.
-        public Title build() {
-            return new Title(this);
-        }
-
-        // EFFECTS: returns a builder that assigns given group to Title
-        public TitleBuilder group(String group) {
-            this.group = group;
-            return this;
-        }
-    }
-
-    // constructs a json object with the fields of the title
-    @Override
-    public JSONObject toJson() {
-        JSONObject json = new JSONObject();
-        json.put("name", name);
-        json.put("type", type);
-        json.put("size", size);
-        json.put("alignment", alignment);
-        if (group != null) {
-            json.put("group", group);
-        }
-        return json;
     }
 }

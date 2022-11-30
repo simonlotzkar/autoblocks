@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
+// Represents the title menu where the application launches to and terminates from as well as other options
 public class TitleMenuPanel extends MenuPanel implements ActionListener {
     // panels
     private final JPanel buttonsPanel = new JPanel(new GridLayout(2, 1));
@@ -32,6 +33,7 @@ public class TitleMenuPanel extends MenuPanel implements ActionListener {
     private final JButton loadButton = new JButton("Load");
     private final JButton saveButton = new JButton("Save");
 
+    // MODIFIES: this
     // EFFECTS: constructs this panel
     public TitleMenuPanel(MenuManagerPanel menuManagerPanel) {
         super(new BorderLayout(), menuManagerPanel); // sets layout and menu managers, visibility, and size
@@ -61,7 +63,7 @@ public class TitleMenuPanel extends MenuPanel implements ActionListener {
         initializeButtonIcons();
     }
 
-    // EFFECTS: ...
+    // EFFECTS: sets buttons icon parameter
     private void initializeButtonIcons() {
         customRollButton.setIcon(scaleIcon(D20_IMAGE_ICON));
         quitButton.setIcon(scaleIcon(EXIT_IMAGE_ICON));
@@ -71,7 +73,7 @@ public class TitleMenuPanel extends MenuPanel implements ActionListener {
         saveButton.setIcon(scaleIcon(SAVE_IMAGE_ICON));
     }
 
-    // EFFECTS: ...
+    // EFFECTS: returns scaled given image icon
     private ImageIcon scaleIcon(ImageIcon imageIcon) {
         return new ImageIcon(imageIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
     }
@@ -98,6 +100,7 @@ public class TitleMenuPanel extends MenuPanel implements ActionListener {
     }
 
     @Override
+    // MODIFIES: menuManagerPanel
     // EFFECTS: processes button presses from user
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == customRollButton) {

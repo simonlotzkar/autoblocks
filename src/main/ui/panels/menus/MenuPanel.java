@@ -8,6 +8,7 @@ public class MenuPanel extends JPanel {
     protected static final String ICON_DIRECTORY = "./data/images/icons/";
     protected final MenuManagerPanel menuManagerPanel;
 
+    // MODIFIES: this
     // EFFECTS: sets the manager, size, and visibility
     public MenuPanel(LayoutManager layoutManager, MenuManagerPanel menuManagerPanel) {
         super(layoutManager);
@@ -16,7 +17,7 @@ public class MenuPanel extends JPanel {
         this.setVisible(true);
     }
 
-    // EFFECTS: ...
+    // EFFECTS: gets the menu manager panel
     public MenuManagerPanel getMenuManagerPanel() {
         return menuManagerPanel;
     }

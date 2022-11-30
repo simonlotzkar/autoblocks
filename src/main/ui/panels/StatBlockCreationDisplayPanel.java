@@ -1,9 +1,10 @@
 package ui.panels;
 
+import enums.*;
 import model.RollFormula;
 import model.StatBlock;
 import model.statblockfields.*;
-import ui.exceptions.IncompleteFieldException;
+import exceptions.IncompleteFieldException;
 import ui.panels.menus.MainMenuPanel;
 
 import javax.swing.*;
@@ -12,9 +13,9 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 // Represents...
 public class StatBlockCreationDisplayPanel extends DisplayPanel implements ActionListener, ListSelectionListener {
@@ -61,6 +62,7 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
 
     private final JTextField actionNameTextField = new JTextField();
     private final JTextField actionRangeTextField = new JTextField();
+    private final JTextField actionLongRangeTextField = new JTextField();
     private final JTextField actionHitModifierTextField = new JTextField();
     private final JTextField actionDamageAmountOfDiceTextField = new JTextField();
     private final JTextField actionDamageDieSidesTextField = new JTextField();
@@ -75,22 +77,24 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
     private final JComboBox<String> typeComboBox = new JComboBox<>(TYPES);
     private final JComboBox<String> alignmentComboBox = new JComboBox<>(ALIGNMENTS);
 
-    private final JComboBox<String> acidResistanceComboBox = new JComboBox<>(RESISTANCE_TYPES);
-    private final JComboBox<String> bludgeoningResistanceComboBox = new JComboBox<>(RESISTANCE_TYPES);
-    private final JComboBox<String> coldResistanceComboBox = new JComboBox<>(RESISTANCE_TYPES);
-    private final JComboBox<String> fireResistanceComboBox = new JComboBox<>(RESISTANCE_TYPES);
-    private final JComboBox<String> forceResistanceComboBox = new JComboBox<>(RESISTANCE_TYPES);
-    private final JComboBox<String> lightningResistanceComboBox = new JComboBox<>(RESISTANCE_TYPES);
-    private final JComboBox<String> necroticResistanceComboBox = new JComboBox<>(RESISTANCE_TYPES);
-    private final JComboBox<String> piercingResistanceComboBox = new JComboBox<>(RESISTANCE_TYPES);
-    private final JComboBox<String> poisonResistanceComboBox = new JComboBox<>(RESISTANCE_TYPES);
-    private final JComboBox<String> psychicResistanceComboBox = new JComboBox<>(RESISTANCE_TYPES);
-    private final JComboBox<String> radiantResistanceComboBox = new JComboBox<>(RESISTANCE_TYPES);
-    private final JComboBox<String> slashingResistanceComboBox = new JComboBox<>(RESISTANCE_TYPES);
-    private final JComboBox<String> thunderResistanceComboBox = new JComboBox<>(RESISTANCE_TYPES);
+    private final ArrayList<JComboBox<String>> resistanceComboBoxList = new ArrayList<>();
+    private final JComboBox<String> acidResistanceComboBox = new JComboBox<>(RESISTANCE_OPTIONS);
+    private final JComboBox<String> bludgeoningResistanceComboBox = new JComboBox<>(RESISTANCE_OPTIONS);
+    private final JComboBox<String> coldResistanceComboBox = new JComboBox<>(RESISTANCE_OPTIONS);
+    private final JComboBox<String> fireResistanceComboBox = new JComboBox<>(RESISTANCE_OPTIONS);
+    private final JComboBox<String> forceResistanceComboBox = new JComboBox<>(RESISTANCE_OPTIONS);
+    private final JComboBox<String> lightningResistanceComboBox = new JComboBox<>(RESISTANCE_OPTIONS);
+    private final JComboBox<String> necroticResistanceComboBox = new JComboBox<>(RESISTANCE_OPTIONS);
+    private final JComboBox<String> piercingResistanceComboBox = new JComboBox<>(RESISTANCE_OPTIONS);
+    private final JComboBox<String> poisonResistanceComboBox = new JComboBox<>(RESISTANCE_OPTIONS);
+    private final JComboBox<String> psychicResistanceComboBox = new JComboBox<>(RESISTANCE_OPTIONS);
+    private final JComboBox<String> radiantResistanceComboBox = new JComboBox<>(RESISTANCE_OPTIONS);
+    private final JComboBox<String> slashingResistanceComboBox = new JComboBox<>(RESISTANCE_OPTIONS);
+    private final JComboBox<String> thunderResistanceComboBox = new JComboBox<>(RESISTANCE_OPTIONS);
 
     private final JComboBox<String> actionDescriptionComboBox = new JComboBox<>(ACTION_DESCRIPTIONS);
-    private final JComboBox<String> actionDamageTypeComboBox = new JComboBox<>(DAMAGE_TYPES);
+    private final JComboBox<String> actionDamageTypeComboBox = new JComboBox<>(DamageType
+            .getStringArrayList().toArray(new String[0]));
 
     // check boxes
     private final ArrayList<JCheckBox> savingThrowCheckBoxList = new ArrayList<>();
@@ -189,11 +193,12 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
     private final DefaultListModel<Ability> abilitiesListModel = new DefaultListModel<>();
     private final JList<Ability> abilitiesList = new JList<>(abilitiesListModel);
 
-    private final DefaultListModel<model.statblockfields.Action> actionsListModel = new DefaultListModel<>();
-    private final JList<model.statblockfields.Action> actionsList = new JList<>(actionsListModel);
+    private final DefaultListModel<RollableAction> rollableActionsListModel = new DefaultListModel<>();
+    private final JList<RollableAction> actionsList = new JList<>(rollableActionsListModel);
 
-    private final DefaultListModel<HashMap<String, RollFormula>> actionDamageMapListModel = new DefaultListModel<>();
-    private final JList<HashMap<String, RollFormula>> actionDamageMapList = new JList<>(actionDamageMapListModel);
+    private final DefaultListModel<HashMap<DamageType, RollFormula>> actionDamageMapListModel
+            = new DefaultListModel<>();
+    private final JList<HashMap<DamageType, RollFormula>> actionDamageMapList = new JList<>(actionDamageMapListModel);
 
     private final DefaultListModel<Ability> legendaryActionsListModel = new DefaultListModel<>();
     private final JList<Ability> legendaryActionsList = new JList<>(legendaryActionsListModel);
@@ -210,7 +215,6 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
     private final JScrollPane legendaryActionsScrollPane = new JScrollPane(legendaryActionsList);
 
     // constants
-    private static final String SEPARATOR = "===========================================================";
     private static final String TAB = "    ";
     private static final int FLOW_H_GAP = 5;
     private static final int FLOW_V_GAP = 5;
@@ -220,11 +224,9 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
             "Elemental", "Fey", "Fiend", "Giant", "Humanoid", "Monstrosity", "Ooze", "Plant", "Undead"};
     private static final String[] ALIGNMENTS = {"unaligned", "lawful good", "neutral good", "chaotic good",
             "neutral good", "neutral", "neutral evil", "chaotic good", "chaotic neutral", "chaotic evil"};
-    private static final String[] RESISTANCE_TYPES = {"---", "Resistance", "Vulnerability", "Immunity"};
+    private static final String[] RESISTANCE_OPTIONS = {"---", "Resistance", "Vulnerability", "Immunity"};
     private static final String[] ACTION_DESCRIPTIONS = {"Melee Weapon Attack", "Melee Spell Attack",
             "Ranged Weapon Attack", "Ranged Spell Attack", "Melee or Ranged Weapon Attack", "Action"};
-    private static final String[] DAMAGE_TYPES = {"Acid", "Bludgeoning", "Cold", "Fire", "Force", "Lightning",
-            "Necrotic", "Piercing", "Poison", "Psychic", "Radiant", "Slashing", "Thunder"};
 
     // EFFECTS: constructs this display panel
     public StatBlockCreationDisplayPanel(MainMenuPanel mainMenuPanel) {
@@ -235,19 +237,19 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
         initializeAll();
 
         this.add(titlePanel);
-        this.add(new JLabel(SEPARATOR));
+        this.add(new JSeparator());
         this.add(combatStatsPanel);
-        this.add(new JLabel(SEPARATOR));
+        this.add(new JSeparator());
         this.add(abilityScoresPanel);
-        this.add(new JLabel(SEPARATOR));
+        this.add(new JSeparator());
         this.add(peripheralFieldsPanel);
-        this.add(new JLabel(SEPARATOR));
+        this.add(new JSeparator());
         this.add(abilityCreationPanel);
         this.add(abilitiesScrollPane);
-        this.add(new JLabel(SEPARATOR));
+        this.add(new JSeparator());
         this.add(actionCreationPanel);
         this.add(actionsScrollPane);
-        this.add(new JLabel(SEPARATOR));
+        this.add(new JSeparator());
         this.add(legendaryCreationPanel);
         this.add(legendaryActionsScrollPane);
     }
@@ -266,6 +268,7 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
         initializeButtons();
         initializeLists();
         initializeCheckBoxLists();
+        initializeResistanceComboBoxList();
         this.revalidate();
         this.repaint();
     }
@@ -326,6 +329,23 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
         immunityCheckBoxList.add(stunnedImmunityCheckBox);
         immunityCheckBoxList.add(unconsciousImmunityCheckBox);
         immunityCheckBoxList.add(exhaustionImmunityCheckBox);
+    }
+
+    // EFFECTS: ...
+    private void initializeResistanceComboBoxList() {
+        resistanceComboBoxList.add(acidResistanceComboBox);
+        resistanceComboBoxList.add(bludgeoningResistanceComboBox);
+        resistanceComboBoxList.add(coldResistanceComboBox);
+        resistanceComboBoxList.add(fireResistanceComboBox);
+        resistanceComboBoxList.add(forceResistanceComboBox);
+        resistanceComboBoxList.add(lightningResistanceComboBox);
+        resistanceComboBoxList.add(necroticResistanceComboBox);
+        resistanceComboBoxList.add(piercingResistanceComboBox);
+        resistanceComboBoxList.add(poisonResistanceComboBox);
+        resistanceComboBoxList.add(psychicResistanceComboBox);
+        resistanceComboBoxList.add(radiantResistanceComboBox);
+        resistanceComboBoxList.add(slashingResistanceComboBox);
+        resistanceComboBoxList.add(thunderResistanceComboBox);
     }
 
     // EFFECTS: ...
@@ -788,13 +808,16 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
     // EFFECTS: ...
     private void initializeActionCreationPanel() {
         wordTextFieldList.add(actionNameTextField);
-        wordTextFieldList.add(actionRangeTextField);
+        numberTextFieldList.add(actionRangeTextField);
+        numberTextFieldList.add(actionLongRangeTextField);
 
         JPanel nameRangePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, FLOW_H_GAP, FLOW_V_GAP));
         nameRangePanel.add(new JLabel("Name:"));
         nameRangePanel.add(actionNameTextField);
         nameRangePanel.add(new JLabel("Range:"));
         nameRangePanel.add(actionRangeTextField);
+        nameRangePanel.add(new JLabel("Long Range (Optional):"));
+        nameRangePanel.add(actionLongRangeTextField);
         nameRangePanel.add(addActionButton);
 
         initializeActionHitDescriptionPanel();
@@ -873,15 +896,15 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
     // EFFECTS: ...
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == addLanguageButton) {
-            addLanguage();
+            tryAddLanguage();
         } else if (e.getSource() == addAbilityButton) {
-            addAbility();
+            tryAddAbility();
         } else if (e.getSource() == addActionDamageButton) {
-            addActionDamage();
+            tryAddActionDamage();
         } else if (e.getSource() == addActionButton) {
-            addAction();
+            tryAddRollableAction();
         } else if (e.getSource() == addLegendaryActionButton) {
-            addLegendaryAction();
+            tryAddLegendaryAction();
         }
     }
 
@@ -895,7 +918,7 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
             StatBlock statBlock = new StatBlock.StatBlockBuilder(getTitle(),
                     Integer.parseInt(xpTextField.getText()), new RollFormula(amountOfDice,
                             dieSides, modifier), Integer.parseInt(proficiencyTextField.getText()),
-                            getArmour(), getSpeeds(), getSenses(), getAbilityScores(), getActions())
+                            getArmour(), getSpeeds(), getSenses(), getAbilityScores(), getRollableActions())
                     .skillProficiencies(getSkillProficiencies())
                     .savingThrowProficiencies(getSavingThrowProficiencies())
                     .languages(getLanguages())
@@ -907,20 +930,23 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
             mainMenuPanel.getMenuManagerPanel().getLibraryListModel().addElement(statBlock);
             mainMenuPanel.setDisplays("library");
 
-        } catch (NumberFormatException | IncompleteFieldException e) {
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Could not build StatBlock: "
                     + e.getMessage() + ".", "Failure!", JOptionPane.WARNING_MESSAGE);
         }
     }
 
     // EFFECTS: ...
-    private Title getTitle() {
-        return new Title.TitleBuilder(nameTextField.getText(), typeComboBox.getSelectedItem().toString(),
-                sizeComboBox.getSelectedItem().toString(), alignmentComboBox.getSelectedItem().toString()).build();
+    private Title getTitle() throws IncompleteFieldException {
+        if (nameTextField.getText().matches(".*\\d+.*")) {
+            throw new IndexOutOfBoundsException("title cannot have numbers in it");
+        }
+        return new Title(nameTextField.getText(), typeComboBox.getSelectedItem().toString(),
+                sizeComboBox.getSelectedItem().toString(), alignmentComboBox.getSelectedItem().toString(), null);
     }
 
     // EFFECTS: ...
-    private Armour getArmour() throws NumberFormatException {
+    private Armour getArmour() throws NumberFormatException, IncompleteFieldException {
         String armourName = armourNameTextField.getText();
         int magicArmour = 0;
 
@@ -939,7 +965,7 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
     }
 
     // EFFECTS: ...
-    private Speeds getSpeeds() throws NumberFormatException {
+    private Speeds getSpeeds() throws NumberFormatException, IndexOutOfBoundsException {
         int fly = 0;
         int swim = 0;
         int burrow = 0;
@@ -970,7 +996,7 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
     }
 
     // EFFECTS: ...
-    private Senses getSenses() throws NumberFormatException {
+    private Senses getSenses() throws NumberFormatException, IndexOutOfBoundsException {
         int tremorSense = 0;
         int trueSight = 0;
         int blindSight = 0;
@@ -1001,8 +1027,8 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
     }
 
     // EFFECTS: ...
-    private AbilityScores getAbilityScores() throws NumberFormatException {
-        return new AbilityScores(Integer.parseInt(strengthTextField.getText()),
+    private AbilityScoreSet getAbilityScores() throws NumberFormatException, IndexOutOfBoundsException {
+        return new AbilityScoreSet(Integer.parseInt(strengthTextField.getText()),
                 Integer.parseInt(dexterityTextField.getText()),
                 Integer.parseInt(constitutionTextField.getText()),
                 Integer.parseInt(intelligenceTextField.getText()),
@@ -1011,40 +1037,47 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
     }
 
     // EFFECTS: ...
-    private ArrayList<model.statblockfields.Action> getActions() throws IncompleteFieldException {
-        ArrayList<model.statblockfields.Action> actions = new ArrayList<>();
+    private ArrayList<RollableAction> getRollableActions() throws IncompleteFieldException {
+        ArrayList<RollableAction> rollableActions = new ArrayList<>();
 
-        if (actionsListModel.isEmpty()) {
-            throw new IncompleteFieldException();
+        if (rollableActionsListModel.isEmpty()) {
+            throw new IncompleteFieldException("given rollable actions is empty");
         } else {
-            for (int i = 0; i < actionsListModel.getSize(); i++) {
-                actions.add(actionsListModel.getElementAt(i));
+            for (int i = 0; i < rollableActionsListModel.getSize(); i++) {
+                rollableActions.add(rollableActionsListModel.getElementAt(i));
             }
         }
 
-        return actions;
+        return rollableActions;
     }
 
     // EFFECTS: ...
-    private ArrayList<String> getSavingThrowProficiencies() {
-        ArrayList<String> savingThrows = new ArrayList<>();
+    private ArrayList<AbilityScore> getSavingThrowProficiencies() {
+        ArrayList<AbilityScore> savingThrows = new ArrayList<>();
 
         for (JCheckBox cb : savingThrowCheckBoxList) {
             if (cb.isSelected()) {
-                savingThrows.add(cb.getText());
+                for (AbilityScore as : AbilityScore.values()) {
+                    if (cb.getText().equalsIgnoreCase(as.toString())) {
+                        savingThrows.add(as);
+                    }
+                }
             }
         }
-
         return savingThrows;
     }
 
     // EFFECTS: ...
-    private ArrayList<String> getSkillProficiencies() {
-        ArrayList<String> skills = new ArrayList<>();
+    private ArrayList<Skill> getSkillProficiencies() {
+        ArrayList<Skill> skills = new ArrayList<>();
 
         for (JCheckBox cb : skillCheckBoxList) {
             if (cb.isSelected()) {
-                skills.add(cb.getText());
+                for (Skill s : Skill.values()) {
+                    if (cb.getText().equalsIgnoreCase(s.toString())) {
+                        skills.add(s);
+                    }
+                }
             }
         }
 
@@ -1052,12 +1085,16 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
     }
 
     // EFFECTS: ...
-    private ArrayList<String> getConditionImmunities() {
-        ArrayList<String> immunities = new ArrayList<>();
+    private ArrayList<Condition> getConditionImmunities() {
+        ArrayList<Condition> immunities = new ArrayList<>();
 
         for (JCheckBox cb : immunityCheckBoxList) {
             if (cb.isSelected()) {
-                immunities.add(cb.getText());
+                for (Condition c : Condition.values()) {
+                    if (cb.getText().equalsIgnoreCase(c.toString())) {
+                        immunities.add(c);
+                    }
+                }
             }
         }
 
@@ -1065,85 +1102,145 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
     }
 
     // EFFECTS: ...
-    private Languages getLanguages() throws NumberFormatException {
-        ArrayList<String> newLanguageList = new ArrayList<>();
-        int telepathy = 0;
+    private HashMap<DamageType, ResistanceType> getResistances() {
+        HashMap<DamageType, ResistanceType> resistances = new HashMap<>();
 
-        if (!telepathyTextField.getText().isEmpty()) {
-            telepathy = Integer.parseInt(telepathyTextField.getText());
+        for (ResistanceType rt : ResistanceType.values()) {
+            if (Objects.requireNonNull(acidResistanceComboBox.getSelectedItem()).toString()
+                    .equalsIgnoreCase(rt.toString())) {
+                resistances.put(DamageType.ACID, rt);
+            }
         }
 
-        for (int i = 0; i < languagesListModel.getSize(); i++) {
-            newLanguageList.add(languagesListModel.getElementAt(i));
+        for (ResistanceType rt : ResistanceType.values()) {
+            if (Objects.requireNonNull(bludgeoningResistanceComboBox.getSelectedItem()).toString()
+                    .equalsIgnoreCase(rt.toString())) {
+                resistances.put(DamageType.BLUDGEONING, rt);
+            }
         }
 
-        return new Languages.LanguagesBuilder(newLanguageList)
-                .telepathy(telepathy)
-                .build();
+        for (ResistanceType rt : ResistanceType.values()) {
+            if (Objects.requireNonNull(coldResistanceComboBox.getSelectedItem()).toString()
+                    .equalsIgnoreCase(rt.toString())) {
+                resistances.put(DamageType.COLD, rt);
+            }
+        }
+        return getResistancesHelperOne(resistances);
     }
 
     // EFFECTS: ...
-    private HashMap<String, String> getResistances() {
-        HashMap<String, String> resistances = new HashMap<>();
-
-        if (!acidResistanceComboBox.getSelectedItem().toString().equals("---")) {
-            resistances.put("Acid", acidResistanceComboBox.getSelectedItem().toString());
+    private HashMap<DamageType, ResistanceType> getResistancesHelperOne(
+            HashMap<DamageType, ResistanceType> resistances) {
+        for (ResistanceType rt : ResistanceType.values()) {
+            if (Objects.requireNonNull(fireResistanceComboBox.getSelectedItem()).toString()
+                    .equalsIgnoreCase(rt.toString())) {
+                resistances.put(DamageType.FIRE, rt);
+            }
         }
 
-        if (!bludgeoningResistanceComboBox.getSelectedItem().toString().equals("---")) {
-            resistances.put("Bludgeoning", bludgeoningResistanceComboBox.getSelectedItem().toString());
+        for (ResistanceType rt : ResistanceType.values()) {
+            if (Objects.requireNonNull(forceResistanceComboBox.getSelectedItem()).toString()
+                    .equalsIgnoreCase(rt.toString())) {
+                resistances.put(DamageType.FORCE, rt);
+            }
         }
 
-        if (!coldResistanceComboBox.getSelectedItem().toString().equals("---")) {
-            resistances.put("Cold", coldResistanceComboBox.getSelectedItem().toString());
+        for (ResistanceType rt : ResistanceType.values()) {
+            if (Objects.requireNonNull(lightningResistanceComboBox.getSelectedItem()).toString()
+                    .equalsIgnoreCase(rt.toString())) {
+                resistances.put(DamageType.LIGHTNING, rt);
+            }
         }
 
-        if (!fireResistanceComboBox.getSelectedItem().toString().equals("---")) {
-            resistances.put("Fire", fireResistanceComboBox.getSelectedItem().toString());
-        }
-
-        if (!forceResistanceComboBox.getSelectedItem().toString().equals("---")) {
-            resistances.put("Force", forceResistanceComboBox.getSelectedItem().toString());
-        }
-
-        if (!lightningResistanceComboBox.getSelectedItem().toString().equals("---")) {
-            resistances.put("Lightning", lightningResistanceComboBox.getSelectedItem().toString());
-        }
-
-        return getResistancesHelper(resistances);
+        return getResistancesHelperTwo(resistances);
     }
 
     // EFFECTS: ...
-    private HashMap<String, String> getResistancesHelper(HashMap<String, String> resistances) {
-        if (!necroticResistanceComboBox.getSelectedItem().toString().equals("---")) {
-            resistances.put("Necrotic", necroticResistanceComboBox.getSelectedItem().toString());
+    private HashMap<DamageType, ResistanceType> getResistancesHelperTwo(
+            HashMap<DamageType, ResistanceType> resistances) {
+        for (ResistanceType rt : ResistanceType.values()) {
+            if (Objects.requireNonNull(necroticResistanceComboBox.getSelectedItem()).toString()
+                    .equalsIgnoreCase(rt.toString())) {
+                resistances.put(DamageType.NECROTIC, rt);
+            }
         }
 
-        if (!piercingResistanceComboBox.getSelectedItem().toString().equals("---")) {
-            resistances.put("Piercing", piercingResistanceComboBox.getSelectedItem().toString());
+        for (ResistanceType rt : ResistanceType.values()) {
+            if (Objects.requireNonNull(piercingResistanceComboBox.getSelectedItem()).toString()
+                    .equalsIgnoreCase(rt.toString())) {
+                resistances.put(DamageType.PIERCING, rt);
+            }
         }
 
-        if (!poisonResistanceComboBox.getSelectedItem().toString().equals("---")) {
-            resistances.put("Poison", poisonResistanceComboBox.getSelectedItem().toString());
+        for (ResistanceType rt : ResistanceType.values()) {
+            if (Objects.requireNonNull(poisonResistanceComboBox.getSelectedItem()).toString()
+                    .equalsIgnoreCase(rt.toString())) {
+                resistances.put(DamageType.POISON, rt);
+            }
         }
 
-        if (!psychicResistanceComboBox.getSelectedItem().toString().equals("---")) {
-            resistances.put("Acid", psychicResistanceComboBox.getSelectedItem().toString());
+        return getResistancesHelperThree(resistances);
+    }
+
+    // EFFECTS: ...
+    private HashMap<DamageType, ResistanceType> getResistancesHelperThree(
+            HashMap<DamageType, ResistanceType> resistances) {
+        for (ResistanceType rt : ResistanceType.values()) {
+            if (Objects.requireNonNull(psychicResistanceComboBox.getSelectedItem()).toString()
+                    .equalsIgnoreCase(rt.toString())) {
+                resistances.put(DamageType.PSYCHIC, rt);
+            }
         }
 
-        if (!radiantResistanceComboBox.getSelectedItem().toString().equals("---")) {
-            resistances.put("Radiant", radiantResistanceComboBox.getSelectedItem().toString());
+        for (ResistanceType rt : ResistanceType.values()) {
+            if (Objects.requireNonNull(radiantResistanceComboBox.getSelectedItem()).toString()
+                    .equalsIgnoreCase(rt.toString())) {
+                resistances.put(DamageType.RADIANT, rt);
+            }
         }
 
-        if (!slashingResistanceComboBox.getSelectedItem().toString().equals("---")) {
-            resistances.put("Slashing", slashingResistanceComboBox.getSelectedItem().toString());
+        for (ResistanceType rt : ResistanceType.values()) {
+            if (Objects.requireNonNull(slashingResistanceComboBox.getSelectedItem()).toString()
+                    .equalsIgnoreCase(rt.toString())) {
+                resistances.put(DamageType.SLASHING, rt);
+            }
         }
 
-        if (!thunderResistanceComboBox.getSelectedItem().toString().equals("---")) {
-            resistances.put("Thunder", thunderResistanceComboBox.getSelectedItem().toString());
+        return getResistancesHelperFour(resistances);
+    }
+
+    // EFFECTS: ...
+    private HashMap<DamageType, ResistanceType> getResistancesHelperFour(
+            HashMap<DamageType, ResistanceType> resistances) {
+        for (ResistanceType rt : ResistanceType.values()) {
+            if (Objects.requireNonNull(thunderResistanceComboBox.getSelectedItem()).toString()
+                    .equalsIgnoreCase(rt.toString())) {
+                resistances.put(DamageType.THUNDER, rt);
+            }
         }
 
         return resistances;
+    }
+
+    // EFFECTS: ...
+    private Languages getLanguages() throws NumberFormatException, IncompleteFieldException {
+        ArrayList<String> newLanguageList = new ArrayList<>();
+        int telepathy = 0;
+
+        if (!languagesListModel.isEmpty()) {
+            if (!telepathyTextField.getText().isEmpty()) {
+                telepathy = Integer.parseInt(telepathyTextField.getText());
+            }
+            for (int i = 0; i < languagesListModel.getSize(); i++) {
+                newLanguageList.add(languagesListModel.getElementAt(i));
+            }
+
+            return new Languages.LanguagesBuilder(newLanguageList)
+                    .telepathy(telepathy)
+                    .build();
+        } else {
+            return null;
+        }
     }
 
     // EFFECTS: ...
@@ -1172,7 +1269,7 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
             abilitiesListModel.removeElement(o);
         }
         for (Object o : actionsList.getSelectedValuesList()) {
-            actionsListModel.removeElement(o);
+            rollableActionsListModel.removeElement(o);
         }
         for (Object o : actionDamageMapList.getSelectedValuesList()) {
             actionDamageMapListModel.removeElement(o);
@@ -1183,69 +1280,91 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
     }
 
     // EFFECTS: ...
-    private void addLanguage() {
-        languagesListModel.addElement(languageTextField.getText());
-        languageList.setModel(languagesListModel);
+    private void tryAddLanguage() {
+        try {
+            languagesListModel.addElement(languageTextField.getText());
+            languageList.setModel(languagesListModel);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Could not add language. Message: "
+                    + e.getMessage() + ".", "Failure!", JOptionPane.WARNING_MESSAGE);
+        }
     }
 
     // EFFECTS: ...
-    private void addAbility() {
-        Ability newAbility = new Ability(abilityNameTextField.getText(), abilityDescriptionTextField.getText());
-
-        abilitiesListModel.addElement(newAbility);
-        abilitiesList.setModel(abilitiesListModel);
+    private void tryAddAbility() {
+        try {
+            Ability newAbility = new Ability(abilityNameTextField.getText(), abilityDescriptionTextField.getText());
+            abilitiesListModel.addElement(newAbility);
+            abilitiesList.setModel(abilitiesListModel);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Could not add ability. Message: "
+                    + e.getMessage() + ".", "Failure!", JOptionPane.WARNING_MESSAGE);
+        }
     }
 
     // EFFECTS: ...
-    private void addActionDamage() {
+    private void tryAddActionDamage() {
         try {
             int amountOfDice = Integer.parseInt(actionDamageAmountOfDiceTextField.getText());
             int dieSides = Integer.parseInt(actionDamageDieSidesTextField.getText());
             int modifier = Integer.parseInt(actionDamageModifierTextField.getText());
 
             RollFormula newRollFormula = new RollFormula(amountOfDice, dieSides, modifier);
-            HashMap<String, RollFormula> newDamageMap = new HashMap<>();
+            HashMap<DamageType, RollFormula> newDamageMap = new HashMap<>();
 
-            newDamageMap.put(actionDamageTypeComboBox.getSelectedItem().toString(), newRollFormula);
+            for (DamageType dt : DamageType.values()) {
+                if (Objects.requireNonNull(actionDamageTypeComboBox.getSelectedItem()).toString()
+                        .equalsIgnoreCase(dt.toString())) {
+                    newDamageMap.put(dt, newRollFormula);
+                }
+            }
 
             actionDamageMapListModel.addElement(newDamageMap);
             actionDamageMapList.setModel(actionDamageMapListModel);
-        } catch (NumberFormatException e) {
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "NumberFormatException caught. Message: "
                     + e.getMessage() + ".", "Failure!", JOptionPane.WARNING_MESSAGE);
         }
     }
 
     // EFFECTS: ...
-    private void addAction() {
+    private void tryAddRollableAction() {
         try {
             int modifier = Integer.parseInt(actionHitModifierTextField.getText());
+            int range = Integer.parseInt(actionRangeTextField.getText());
+            int longRange = 0;
+            if (!actionLongRangeTextField.getText().isEmpty()) {
+                longRange = Integer.parseInt(actionLongRangeTextField.getText());
+            }
 
-            RollFormula newRollFormula = new RollFormula(1, 20, modifier);
-
-            HashMap<String, RollFormula> damageMap = new HashMap<>();
+            HashMap<DamageType, RollFormula> damageMap = new HashMap<>();
 
             for (int i = 0; i < actionDamageMapListModel.getSize(); i++) {
                 damageMap.putAll(actionDamageMapListModel.getElementAt(i));
             }
 
-            model.statblockfields.Action newAction = new model.statblockfields.Action(actionNameTextField.getText(),
-                    actionDescriptionComboBox.getSelectedItem().toString(), actionRangeTextField.getText(),
-                    newRollFormula, damageMap);
+            RollableAction newRollableAction = new RollableAction(actionNameTextField.getText(),
+                    Objects.requireNonNull(actionDescriptionComboBox.getSelectedItem()).toString(),
+                    range, longRange, modifier, damageMap);
 
-            actionsListModel.addElement(newAction);
-            actionsList.setModel(actionsListModel);
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "NumberFormatException caught. Message: "
+            rollableActionsListModel.addElement(newRollableAction);
+            actionsList.setModel(rollableActionsListModel);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Could not add action. Message: "
                     + e.getMessage() + ".", "Failure!", JOptionPane.WARNING_MESSAGE);
         }
     }
 
     // EFFECTS: ...
-    private void addLegendaryAction() {
-        legendaryActionsListModel.addElement(new Ability(legendaryActionNameTextField.getText(),
-                legendaryActionDescriptionTextField.getText()));
-        legendaryActionsList.setModel(legendaryActionsListModel);
+    private void tryAddLegendaryAction() {
+        try {
+            legendaryActionsListModel.addElement(new Ability(legendaryActionNameTextField.getText(),
+                    legendaryActionDescriptionTextField.getText()));
+            legendaryActionsList.setModel(legendaryActionsListModel);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Could not add legendary action. Message: "
+                    + e.getMessage() + ".", "Failure!", JOptionPane.WARNING_MESSAGE);
+        }
     }
 
     @Override

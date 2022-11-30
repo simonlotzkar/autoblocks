@@ -1,9 +1,11 @@
 package persistence;
 
+import enums.*;
+import exceptions.IncompleteFieldException;
 import model.*;
-import model.Character;
+import model.NPC;
 import model.statblockfields.*;
-import model.statblockfields.Action;
+import model.statblockfields.RollableAction;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -24,6 +26,7 @@ public class JsonReader {
     }
 
     // EFFECTS: reads source file as string and returns it
+    //          throws an exception if there is any errors when reading
     // CITATION: from JsonReader.java in JsonSerializationDemo
     private String readFile(String source) throws IOException {
         StringBuilder contentBuilder = new StringBuilder();
@@ -34,7 +37,7 @@ public class JsonReader {
     }
 
     // EFFECTS: reads the library from file and returns it;
-    // throws IOException if an error occurs reading data from file
+    //          throws an exception if there is any errors when reading
     public List<StatBlock> readLibrary() throws IOException {
         String jsonData = readFile(source);
         JSONObject jsonObject = new JSONObject(jsonData);
@@ -42,15 +45,16 @@ public class JsonReader {
     }
 
     // EFFECTS: reads the encounter from file and returns it;
-    // throws IOException if an error occurs reading data from file
-    public List<Character> readEncounter() throws IOException {
+    //          throws an exception if there is any errors when reading
+    public List<NPC> readEncounter() throws IOException {
         String jsonData = readFile(source);
         JSONObject jsonObject = new JSONObject(jsonData);
         return parseEncounter(jsonObject.getJSONArray("encounter"));
     }
 
     // EFFECTS: parses the library from JSON array and returns it
-    private List<StatBlock> parseLibrary(JSONArray jsonArray) {
+    //          throws an exception if there is any errors when reading
+    private List<StatBlock> parseLibrary(JSONArray jsonArray) throws IOException {
         List<StatBlock> library = new ArrayList<>();
         for (Object json : jsonArray) {
             library.add(parseStatBlock((JSONObject) json));
@@ -59,50 +63,56 @@ public class JsonReader {
     }
 
     // EFFECTS: converts to statblock from JSON object
-    private StatBlock parseStatBlock(JSONObject jsonObject) {
-        return new StatBlock.StatBlockBuilder(
-                parseTitle(jsonObject.getJSONObject("title")),
-                jsonObject.getInt("xp"),
-                parseRollFormula(jsonObject.getJSONObject("hpFormula")),
-                jsonObject.getInt("proficiency"),
-                parseArmour(jsonObject.getJSONObject("armour")),
-                parseSpeeds(jsonObject.getJSONObject("speeds")),
-                parseSenses(jsonObject.getJSONObject("senses")),
-                parseAbilityScores(jsonObject.getJSONObject("abilityScores")),
-                parseActions(jsonObject.getJSONArray("actions")))
-                .languages(parseLanguages(jsonObject.getJSONObject("languages")))
-                .abilities(parseAbilities(jsonObject.getJSONArray("abilities")))
-                .savingThrowProficiencies(
-                        parseSavingThrowProficiencies(jsonObject.optJSONArray("savingThrowProficiencies")))
-                .skillProficiencies(parseSkillProficiencies(jsonObject.optJSONArray("skillProficiencies")))
-                .conditionImmunities(parseConditionImmunities(jsonObject.optJSONArray("conditionImmunities")))
-                .resistances(parseResistances(jsonObject.optJSONObject("resistances")))
-                .legendaryMechanics(parseLegendaryMechanics(jsonObject.optJSONObject("legendaryMechanics")))
-                .build();
+    //          throws an exception if there is any errors when reading
+    private StatBlock parseStatBlock(JSONObject jsonObject) throws IOException {
+        try {
+            return new StatBlock.StatBlockBuilder(
+                    parseTitle(jsonObject.getJSONObject("title")),
+                    jsonObject.getInt("xp"),
+                    parseRollFormula(jsonObject.getJSONObject("hpFormula")),
+                    jsonObject.getInt("proficiency"),
+                    parseArmour(jsonObject.getJSONObject("armour")),
+                    parseSpeeds(jsonObject.getJSONObject("speeds")),
+                    parseSenses(jsonObject.getJSONObject("senses")),
+                    parseAbilityScores(jsonObject.getJSONObject("abilityScores")),
+                    parseRollableActions(jsonObject.getJSONArray("rollableActions")))
+                    .languages(parseLanguages(jsonObject.optJSONObject("languages")))
+                    .abilities(parseAbilities(jsonObject.optJSONArray("abilities")))
+                    .savingThrowProficiencies(
+                            parseSavingThrowProficiencies(jsonObject.optJSONArray("savingThrowProficiencies")))
+                    .skillProficiencies(parseSkillProficiencies(jsonObject.optJSONArray("skillProficiencies")))
+                    .conditionImmunities(parseConditionImmunities(jsonObject.optJSONArray("conditionImmunities")))
+                    .resistances(parseResistances(jsonObject.optJSONObject("resistances")))
+                    .legendaryMechanics(parseLegendaryMechanics(jsonObject.optJSONObject("legendaryMechanics")))
+                    .build();
+        } catch (IncompleteFieldException e) {
+            throw new IOException("incomplete field found reading a statblock");
+        }
     }
 
     // EFFECTS: parses title from JSON object and returns it
-    private Title parseTitle(JSONObject jsonObject) {
+    //          throws an exception if there is any errors when reading
+    private Title parseTitle(JSONObject jsonObject) throws IncompleteFieldException {
         if (jsonObject.optString("group").equals("")) {
-            return new Title.TitleBuilder(
+            return new Title(
                     jsonObject.getString("name"),
                     jsonObject.getString("type"),
                     jsonObject.getString("size"),
-                    jsonObject.getString("alignment"))
-                    .build();
+                    jsonObject.getString("alignment"),
+                    null);
         } else {
-            return new Title.TitleBuilder(
+            return new Title(
                     jsonObject.getString("name"),
                     jsonObject.getString("type"),
                     jsonObject.getString("size"),
-                    jsonObject.getString("alignment"))
-                    .group(jsonObject.getString("group"))
-                    .build();
+                    jsonObject.getString("alignment"),
+                    jsonObject.getString("group"));
         }
     }
 
     // EFFECTS: parses hp formula from JSON object and returns it
-    private RollFormula parseRollFormula(JSONObject jsonObject) {
+    //          throws an exception if there is any errors when reading
+    private RollFormula parseRollFormula(JSONObject jsonObject) throws IncompleteFieldException {
         return new RollFormula(
                 jsonObject.getInt("amountOfDice"),
                 jsonObject.getInt("dieSides"),
@@ -110,16 +120,25 @@ public class JsonReader {
     }
 
     // EFFECTS: parses armour from JSON object and returns it
-    private Armour parseArmour(JSONObject jsonObject) {
-        return new Armour.ArmourBuilder(
-                jsonObject.getInt("ac"))
-                .armourName(jsonObject.getString("armourName"))
-                .magicArmour(jsonObject.getInt("magicArmour"))
-                .build();
+    //          throws an exception if there is any errors when reading
+    private Armour parseArmour(JSONObject jsonObject) throws IncompleteFieldException {
+        if (jsonObject.optString("armourName").equalsIgnoreCase("")) {
+            return new Armour.ArmourBuilder(
+                    jsonObject.getInt("ac"))
+                    .magicArmour(jsonObject.getInt("magicArmour"))
+                    .build();
+        } else {
+            return new Armour.ArmourBuilder(
+                    jsonObject.getInt("ac"))
+                    .armourName(jsonObject.optString("armourName"))
+                    .magicArmour(jsonObject.getInt("magicArmour"))
+                    .build();
+        }
     }
 
     // EFFECTS: parses speeds from JSON object and returns it
-    private Speeds parseSpeeds(JSONObject jsonObject) {
+    //          throws an exception if there is any errors when reading
+    private Speeds parseSpeeds(JSONObject jsonObject) throws IncompleteFieldException {
         return new Speeds.SpeedsBuilder(
                 jsonObject.getInt("speed"))
                 .burrow(jsonObject.getInt("burrow"))
@@ -130,7 +149,8 @@ public class JsonReader {
     }
 
     // EFFECTS: parses senses from JSON object and returns it
-    private Senses parseSenses(JSONObject jsonObject) {
+    //          throws an exception if there is any errors when reading
+    private Senses parseSenses(JSONObject jsonObject) throws IncompleteFieldException {
         return new Senses.SensesBuilder(
                 jsonObject.getInt("passivePerception"))
                 .darkVision(jsonObject.getInt("darkVision"))
@@ -141,8 +161,9 @@ public class JsonReader {
     }
 
     // EFFECTS: parses ability scores from JSON object and returns it
-    private AbilityScores parseAbilityScores(JSONObject jsonObject) {
-        return new AbilityScores(
+    //          throws an exception if there is any errors when reading
+    private AbilityScoreSet parseAbilityScores(JSONObject jsonObject) throws IncompleteFieldException {
+        return new AbilityScoreSet(
                 jsonObject.getInt("strength"),
                 jsonObject.getInt("dexterity"),
                 jsonObject.getInt("constitution"),
@@ -152,7 +173,12 @@ public class JsonReader {
     }
 
     // EFFECTS: parses abilities from JSON array and returns them as a list
-    private List<Ability> parseAbilities(JSONArray jsonArray) {
+    //          throws an exception if there is any errors when reading
+    private List<Ability> parseAbilities(JSONArray jsonArray) throws IncompleteFieldException {
+        if (jsonArray == null) {
+            return null;
+        }
+
         List<Ability> abilities = new ArrayList<>();
         for (Object json : jsonArray) {
             abilities.add(parseAbility((JSONObject) json));
@@ -161,40 +187,49 @@ public class JsonReader {
     }
 
     // EFFECTS: parses ability from JSON object and returns it
-    private Ability parseAbility(JSONObject jsonObject) {
+    //          throws an exception if there is any errors when reading
+    private Ability parseAbility(JSONObject jsonObject) throws IncompleteFieldException {
         return new Ability(
                 jsonObject.getString("name"),
                 jsonObject.getString("description"));
     }
 
     // EFFECTS: parses actions from JSON array and returns them as a list
-    private List<Action> parseActions(JSONArray jsonArray) {
-        List<Action> actions = new ArrayList<>();
+    //          throws an exception if there is any errors when reading
+    private List<RollableAction> parseRollableActions(JSONArray jsonArray) throws IncompleteFieldException {
+        List<RollableAction> rollableActions = new ArrayList<>();
         for (Object json : jsonArray) {
-            actions.add(parseAction((JSONObject) json));
+            rollableActions.add(parseRollableAction((JSONObject) json));
         }
-        return actions;
+        return rollableActions;
     }
 
-    // EFFECTS: parses action from JSON object and returns it
-    private Action parseAction(JSONObject jsonObject) {
-        return new Action(
+    // EFFECTS: parses rollable action from JSON object and returns it
+    //          throws an exception if there is any errors when reading
+    private RollableAction parseRollableAction(JSONObject jsonObject) throws IncompleteFieldException {
+        return new RollableAction(
                 jsonObject.getString("name"),
                 jsonObject.getString("description"),
-                jsonObject.getString("reach"),
-                parseRollFormula(jsonObject.getJSONObject("hitFormula")),
+                jsonObject.getInt("range"),
+                jsonObject.getInt("longRange"),
+                jsonObject.getInt("hitModifier"),
                 parseDamageMap(jsonObject.getJSONObject("damageMap")));
     }
 
     // EFFECTS: parses damage rolls from JSON object and returns it
-    private HashMap<String, RollFormula> parseDamageMap(JSONObject jsonObject) {
-        HashMap<String, RollFormula> damageMap = new HashMap<>();
+    //          throws an exception if there is any errors when reading
+    private HashMap<DamageType, RollFormula> parseDamageMap(JSONObject jsonObject) throws IncompleteFieldException {
+        HashMap<DamageType, RollFormula> damageMap = new HashMap<>();
         Iterator<String> keys = jsonObject.keys();
 
         while (keys.hasNext()) {
             String key = keys.next();
             if (jsonObject.get(key) instanceof JSONObject) {
-                damageMap.put(key, parseRollFormula((JSONObject) jsonObject.get(key)));
+                for (DamageType dt : DamageType.values()) {
+                    if (key.equalsIgnoreCase(dt.toString())) {
+                        damageMap.put(dt, parseRollFormula((JSONObject) jsonObject.get(key)));
+                    }
+                }
             }
         }
 
@@ -202,7 +237,12 @@ public class JsonReader {
     }
 
     // EFFECTS: parses languages from JSON object and returns it
-    private Languages parseLanguages(JSONObject jsonObject) {
+    //          throws an exception if there is any errors when reading
+    private Languages parseLanguages(JSONObject jsonObject) throws IncompleteFieldException {
+        if (jsonObject == null) {
+            return null;
+        }
+
         List<String> languageList = new ArrayList<>();
         JSONArray languageListJsonArray = jsonObject.getJSONArray("languagesList");
         for (Object json : languageListJsonArray) {
@@ -215,13 +255,18 @@ public class JsonReader {
     }
 
     // EFFECTS: parses saving throw proficiencies from JSON object and returns it
-    private List<String> parseSavingThrowProficiencies(JSONArray jsonArray) {
+    //          throws an exception if there is any errors when reading
+    private List<AbilityScore> parseSavingThrowProficiencies(JSONArray jsonArray) throws IncompleteFieldException {
         if (jsonArray == null) {
             return null;
         }
-        List<String> savingThrows = new ArrayList<>();
+        List<AbilityScore> savingThrows = new ArrayList<>();
         for (Object json : jsonArray) {
-            savingThrows.add(json.toString());
+            for (AbilityScore as : AbilityScore.values()) {
+                if (json.toString().equalsIgnoreCase(as.toString())) {
+                    savingThrows.add(as);
+                }
+            }
         }
         if (savingThrows.isEmpty()) {
             return null;
@@ -231,13 +276,18 @@ public class JsonReader {
     }
 
     // EFFECTS: parses condition immunities from JSON object and returns it
-    private List<String> parseConditionImmunities(JSONArray jsonArray) {
+    //          throws an exception if there is any errors when reading
+    private List<Condition> parseConditionImmunities(JSONArray jsonArray) throws IncompleteFieldException {
         if (jsonArray == null) {
             return null;
         }
-        List<String> conditionImmunities = new ArrayList<>();
+        List<Condition> conditionImmunities = new ArrayList<>();
         for (Object json : jsonArray) {
-            conditionImmunities.add(json.toString());
+            for (Condition c : Condition.values()) {
+                if (json.toString().equalsIgnoreCase(c.toString())) {
+                    conditionImmunities.add(c);
+                }
+            }
         }
         if (conditionImmunities.isEmpty()) {
             return null;
@@ -247,13 +297,18 @@ public class JsonReader {
     }
 
     // EFFECTS: parses skill proficiencies from JSON object and returns it
-    private List<String> parseSkillProficiencies(JSONArray jsonArray) {
+    //          throws an exception if there is any errors when reading
+    private List<Skill> parseSkillProficiencies(JSONArray jsonArray) throws IncompleteFieldException {
         if (jsonArray == null) {
             return null;
         }
-        List<String> skillProficiencies = new ArrayList<>();
+        List<Skill> skillProficiencies = new ArrayList<>();
         for (Object json : jsonArray) {
-            skillProficiencies.add(json.toString());
+            for (Skill s : Skill.values()) {
+                if (json.toString().equalsIgnoreCase(s.toString())) {
+                    skillProficiencies.add(s);
+                }
+            }
         }
         if (skillProficiencies.isEmpty()) {
             return null;
@@ -262,20 +317,49 @@ public class JsonReader {
         }
     }
 
-    // EFFECTS: parses resistances from JSON object and returns it
-    private HashMap<String, String> parseResistances(JSONObject jsonObject) {
+    // EFFECTS: parses resistances map from JSON object and returns it
+    //          throws an exception if there is any errors when reading
+    private HashMap<DamageType, ResistanceType> parseResistances(JSONObject jsonObject)
+            throws IncompleteFieldException {
         if (jsonObject == null) {
             return null;
         }
         Map<String, Object> jsonMap = jsonObject.toMap();
-        HashMap<String, String> resistances = new HashMap<>();
+        HashMap<DamageType, ResistanceType> resistances = new HashMap<>();
 
-        jsonMap.putAll(resistances);
+        try {
+            jsonMap.forEach((s, o) -> resistances.put(parseDamageType(s), parseResistanceType(o)));
+        } catch (IllegalArgumentException e) {
+            throw new IncompleteFieldException("damage or resistance type read invalid string(s)");
+        }
         return resistances;
     }
 
+    // EFFECTS: returns the corresponding damage type for the given string, throws an exception if the given string is
+    //          not a string representation of a damage type
+    private DamageType parseDamageType(String s) throws IllegalArgumentException {
+        for (DamageType dt : DamageType.values()) {
+            if (s.equalsIgnoreCase(dt.toString())) {
+                return dt;
+            }
+        }
+        throw new IllegalArgumentException("given damage type string is not valid");
+    }
+
+    // EFFECTS: returns the corresponding resistance type for the given string, throws an exception if the given string
+    //          is not a string representation of a resistance type
+    private ResistanceType parseResistanceType(Object o) throws IllegalArgumentException {
+        for (ResistanceType rt : ResistanceType.values()) {
+            if (o.toString().equalsIgnoreCase(rt.toString())) {
+                return rt;
+            }
+        }
+        throw new IllegalArgumentException("given resistance type string is not valid");
+    }
+
     // EFFECTS: parses legendary mechanics from JSON object and returns it
-    private LegendaryMechanics parseLegendaryMechanics(JSONObject jsonObject) {
+    //          throws an exception if there is any errors when reading
+    private LegendaryMechanics parseLegendaryMechanics(JSONObject jsonObject) throws IncompleteFieldException {
         if (jsonObject == null) {
             return null;
         }
@@ -285,23 +369,36 @@ public class JsonReader {
     }
 
     // EFFECTS: parses the encounter from JSON array and returns it
-    // CITATION: from JsonReader.java in JsonSerializationDemo
-    private List<Character> parseEncounter(JSONArray jsonArray) {
-        List<Character> encounter = new ArrayList<>();
+    //          throws an exception if there is any errors when reading
+    private List<NPC> parseEncounter(JSONArray jsonArray) throws IOException {
+        List<NPC> encounter = new ArrayList<>();
         for (Object json : jsonArray) {
-            encounter.add(parseCharacter((JSONObject) json));
+            encounter.add(parseNPC((JSONObject) json));
         }
         return encounter;
     }
 
-    // EFFECTS: takes a json object representing a character and returns it as a character object
-    private Character parseCharacter(JSONObject jsonObject) {
-        Character character = new Character(parseStatBlock(jsonObject.getJSONObject("parentStatBlock")),
-                jsonObject.getJSONObject("title").getString("name"));
+    // EFFECTS: takes a json object representing an NPC and returns it as an NPC object,
+    //          throws an exception if there is any errors when reading
+    private NPC parseNPC(JSONObject jsonObject) throws IOException {
+        try {
+            StatBlock parentStatBlock = parseStatBlock(jsonObject.getJSONObject("parentStatBlock"));
+            Title parentTitle = parentStatBlock.getTitle();
+            NPC npc = new NPC(parentStatBlock);
 
-        character.setMaxHP(jsonObject.getInt("maxHP"));
-        character.setHP(jsonObject.getInt("hp"));
+            String groupName = jsonObject.getJSONObject("title").optString("group");
+            if (groupName.equalsIgnoreCase("")) {
+                groupName = null;
+            }
 
-        return character;
+            npc.setTitle(new Title(jsonObject.getJSONObject("title").getString("name"), parentTitle.getSize(),
+                    parentTitle.getType(), parentTitle.getAlignment(), groupName));
+            npc.setMaxHP(jsonObject.getInt("maxHP"));
+            npc.setHP(jsonObject.getInt("hp"));
+
+            return npc;
+        } catch (IncompleteFieldException e) {
+            throw new IOException("incomplete field found reading an NPC");
+        }
     }
 }

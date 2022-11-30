@@ -1,5 +1,7 @@
 package model;
 
+import enums.AbilityScore;
+import exceptions.IncompleteFieldException;
 import model.statblockfields.*;
 import org.json.JSONObject;
 
@@ -7,27 +9,27 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-// Represents a statblock with mutable hp and parent statblock stats apart from name
-public class Character extends StatBlock {
+// Represents a non player character (NPC) that has all the fields of its given parent statblock but has a different
+// name, and additionally a max hp and a current hp.
+public class NPC extends StatBlock {
     // required fields
     private int maxHP;
     private int hp;
     private final StatBlock parentStatBlock;
 
-    // EFFECTS: constructs a character with fields from given parent statblock,
-    //          but makes a new unique name for the given encounter context
-    public Character(StatBlock parentStatBlock, String name) {
+    // MODIFIES: this
+    // EFFECTS: constructs a character with fields from given parent statblock
+    public NPC(StatBlock parentStatBlock) throws IncompleteFieldException {
         super(new StatBlockBuilder(
-                new Title.TitleBuilder(name, parentStatBlock.title.getType(), parentStatBlock.title.getSize(),
-                        parentStatBlock.title.getAlignment()).build(),
+                parentStatBlock.title,
                 parentStatBlock.xp,
                 parentStatBlock.hpFormula,
                 parentStatBlock.proficiency,
                 parentStatBlock.armour,
                 parentStatBlock.speeds,
                 parentStatBlock.senses,
-                parentStatBlock.abilityScores,
-                parentStatBlock.actions)
+                parentStatBlock.abilityScoreSet,
+                parentStatBlock.rollableActions)
                 .languages(parentStatBlock.languages)
                 .abilities(parentStatBlock.abilities)
                 .savingThrowProficiencies(parentStatBlock.savingThrowProficiencies)
@@ -44,7 +46,7 @@ public class Character extends StatBlock {
     // EFFECTS: searches encounter for characters named after the parent statblock: if there's none, returns the parent
     //          statblock name with 1 as suffix, otherwise arrays the character suffixes and returns the parent
     //          statblock name with the lowest number not in the array as a suffix
-    public static String generateNameForEncounter(StatBlock parentStatBlock, List<Character> encounter) {
+    public static String generateNameForEncounter(StatBlock parentStatBlock, List<NPC> encounter) {
         Title title = parentStatBlock.getTitle();
         int lowestNumber = 1;
         List<Integer> suffixes;
@@ -57,8 +59,8 @@ public class Character extends StatBlock {
 
     // EFFECTS: searches encounter for any characters with a parent statblock of the current character's parent
     //          and returns true if yes or no if not
-    private static boolean checkEncounterForSameParentTitle(Title parentTitle, List<Character> encounter) {
-        for (Character c : encounter) {
+    private static boolean checkEncounterForSameParentTitle(Title parentTitle, List<NPC> encounter) {
+        for (NPC c : encounter) {
             if (c.getParentStatBlock().getTitle().getName().equals(parentTitle.getName())) {
                 return true;
             }
@@ -67,9 +69,9 @@ public class Character extends StatBlock {
     }
 
     // EFFECTS: returns list of suffixes for characters in encounter with selected statblock name
-    private static List<Integer> generateSuffixes(Title parentTitle, List<Character> encounter) {
+    private static List<Integer> generateSuffixes(Title parentTitle, List<NPC> encounter) {
         List<Integer> suffixes = new ArrayList<>();
-        for (Character c : encounter) {
+        for (NPC c : encounter) {
             if (c.getTitle().getName().toLowerCase().contains(parentTitle.getName().toLowerCase())) {
                 suffixes.add(Integer.parseInt(c.getTitle().getName().toLowerCase().replaceAll("[^\\d]", "")));
             }
@@ -92,14 +94,46 @@ public class Character extends StatBlock {
         return firstLowest;
     }
 
-    // EFFECTS: //TODO
-    public String rollCheckAsString(String abilityScore) {
-        return title.getName() + "'s " + abilityScore + " check: " + abilityScores.rollCheckAsInt(abilityScore);
+    // EFFECTS: returns a descriptive string of an ability check roll for this character
+    public String rollCheckAsString(AbilityScore abilityScore) {
+        return title.getName() + "'s " + abilityScore.toString().toLowerCase() + " check: "
+                + abilityScoreSet.rollCheckAsInt(abilityScore);
     }
 
-    // EFFECTS: //TODO
+    // EFFECTS: returns a descriptive string of an initiative roll for this character
     public String rollInitiative() {
-        return title.getName() + "'s initiative: " + abilityScores.rollCheckAsInt("dexterity");
+        return title.getName() + "'s initiative: " + abilityScoreSet.rollCheckAsInt(AbilityScore.DEXTERITY);
+    }
+
+    @Override
+    // EFFECTS: converts the character to a json object
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("parentStatBlock", parentStatBlock.toJson());
+        json.put("title", title.toJson());
+        json.put("xp", xp);
+        json.put("hpFormula", hpFormula.toJson());
+        json.put("maxHP", maxHP);
+        json.put("hp", hp);
+        json.put("proficiency", proficiency);
+        json.put("armour", armour.toJson());
+        json.put("speeds", speeds.toJson());
+        json.put("senses", senses.toJson());
+        json.put("abilityScores", abilityScoreSet.toJson());
+        json.put("rollableActions", actionsToJson());
+        return optionalFieldsToJson(json);
+    }
+
+    @Override
+    // EFFECTS: returns a string representation of the character
+    public String toString() {
+        Title title = getTitle();
+        String name = title.getName();
+        if (title.getGroup() != null) {
+            return (name + " (Group: " + title.getGroup() + "), HP: " + getHPString());
+        } else {
+            return (name + ", HP: " + getHPString());
+        }
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -112,16 +146,19 @@ public class Character extends StatBlock {
         }
     }
 
-    // REQUIRES: given hp cannot be greater than maxHP
     // EFFECTS: sets current hp to given hp
     public void setHP(int hp) {
         this.hp = hp;
     }
 
-    // REQUIRES: given max HP cannot be greater than maxHP
     // EFFECTS: sets current max HP to given max HP
     public void setMaxHP(int maxHP) {
         this.maxHP = maxHP;
+    }
+
+    // EFFECTS: sets title to given title
+    public void setTitle(Title title) {
+        this.title = title;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -150,36 +187,5 @@ public class Character extends StatBlock {
     // EFFECTS: returns true if the character has a group and false otherwise
     public boolean hasGroup() {
         return this.title.getGroup() != null;
-    }
-
-    @Override
-    // converts the character to a json object
-    public JSONObject toJson() {
-        JSONObject json = new JSONObject();
-        json.put("parentStatBlock", parentStatBlock.toJson());
-        json.put("title", title.toJson());
-        json.put("xp", xp);
-        json.put("hpFormula", hpFormula.toJson());
-        json.put("maxHP", maxHP);
-        json.put("hp", hp);
-        json.put("proficiency", proficiency);
-        json.put("armour", armour.toJson());
-        json.put("speeds", speeds.toJson());
-        json.put("senses", senses.toJson());
-        json.put("abilityScores", abilityScores.toJson());
-        json.put("actions", actionsToJson());
-        return optionalFieldsToJson(json);
-    }
-
-    @Override
-    // returns a string representation of the character
-    public String toString() {
-        Title title = getTitle();
-        String name = title.getName();
-        if (title.getGroup() != null) {
-            return (name + " (Group: " + title.getGroup() + "), HP: " + getHPString());
-        } else {
-            return (name + ", HP: " + getHPString());
-        }
     }
 }

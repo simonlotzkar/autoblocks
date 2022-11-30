@@ -1,7 +1,5 @@
 package ui.panels.menus;
 
-import model.Character;
-import model.StatBlock;
 import ui.panels.MainDisplayPanel;
 import ui.panels.SideDisplayPanel;
 
@@ -12,7 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-// Represents...
+// Represents a main menu panel that manages switching between the title menu and main menu
 public class MainMenuPanel extends MenuPanel implements ActionListener {
     // images
     private static final ImageIcon RETURN_ICON = new ImageIcon(ICON_DIRECTORY + "return.png");
@@ -50,7 +48,7 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
     private final JPanel libraryButtonSubPanel0 = new JPanel(new GridLayout(1, 2));
     private final JPanel libraryButtonSubPanel1 = new JPanel(new GridLayout(1, 3));
 
-    private final JPanel characterButtonPanel = new JPanel(new GridLayout(2, 1));
+    private final JPanel npcButtonPanel = new JPanel(new GridLayout(2, 1));
     private final JPanel groupButtonPanel = new JPanel(new GridLayout(3, 1));
 
     // buttons
@@ -61,14 +59,15 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
     private final JButton createNewStatBlockButton = new JButton("Create New");
     private final JButton deleteStatBlocksButton = new JButton("Delete");
 
-    private final JButton openCharacterButton = new JButton("Open");
-    private final JButton openGroupButton = new JButton("Open Character's Group");
+    private final JButton openNonPlayerCharacterButton = new JButton("Open");
+    private final JButton openGroupButton = new JButton("Open NPC's Group");
     private final JButton rollCheckButton = new JButton("Roll Ability Check");
     private final JButton rollInitiativeButton = new JButton("Roll Initiative");
     private final JButton changeHPButton = new JButton("Change HP");
-    private final JButton setCharacterGroupButton = new JButton("Change Group");
-    private final JButton deleteCharacterButton = new JButton("Delete");
+    private final JButton setNonPlayerCharacterGroupButton = new JButton("Change Group");
+    private final JButton deleteNonPlayerCharacterButton = new JButton("Delete");
 
+    // MODIFIES: this
     // EFFECTS: constructs this panel
     public MainMenuPanel(MenuManagerPanel menuManagerPanel) {
         super(new BorderLayout(), menuManagerPanel); // sets layout and menu managers, visibility, and size
@@ -76,8 +75,8 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
         initializeButtons();
         initializeButtonPanel();
 
-        this.mainDisplayPanel = new MainDisplayPanel(this);
-        this.sideDisplayPanel = new SideDisplayPanel(this);
+        mainDisplayPanel = new MainDisplayPanel(this);
+        sideDisplayPanel = new SideDisplayPanel(this);
 
         JLabel libraryBanner = new JLabel(new ImageIcon((new ImageIcon("./data/images/shortBanner1.jpg"))
                 .getImage().getScaledInstance(1080, 144, Image.SCALE_SMOOTH)));
@@ -95,12 +94,14 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
         mainPanel.add(displaysPanel, BorderLayout.CENTER);
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
         mainPanel.setBorder(new EmptyBorder(0, 10, 10, 10));
+        mainPanel.setBorder(new EmptyBorder(0, 10, 10, 10));
 
-        this.add(titlePanel, BorderLayout.NORTH);
-        this.add(mainPanel, BorderLayout.CENTER);
+        add(titlePanel, BorderLayout.NORTH);
+        add(mainPanel, BorderLayout.CENTER);
     }
 
-    // EFFECTS: ...
+    // MODIFIES: this
+    // EFFECTS: adds fields to buttons
     private void initializeButtons() {
         ArrayList<JButton> buttonList = new ArrayList<>();
 
@@ -109,13 +110,13 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
         buttonList.add(openStatBlockButton);
         buttonList.add(createNewStatBlockButton);
         buttonList.add(deleteStatBlocksButton);
-        buttonList.add(openCharacterButton);
+        buttonList.add(openNonPlayerCharacterButton);
         buttonList.add(openGroupButton);
         buttonList.add(rollCheckButton);
         buttonList.add(rollInitiativeButton);
         buttonList.add(changeHPButton);
-        buttonList.add(setCharacterGroupButton);
-        buttonList.add(deleteCharacterButton);
+        buttonList.add(setNonPlayerCharacterGroupButton);
+        buttonList.add(deleteNonPlayerCharacterButton);
 
         for (JButton jb : buttonList) {
             jb.removeActionListener(this);
@@ -124,39 +125,42 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
         initializeButtonIcons();
     }
 
-    // EFFECTS: ...
+    // MODIFIES: this
+    // EFFECTS: adds icon to buttons
     private void initializeButtonIcons() {
         backButton.setIcon(scaleIcon(RETURN_ICON));
         addStatBlocksToEncounterButton.setIcon(scaleIcon(PLUS_ICON));
         openStatBlockButton.setIcon(scaleIcon(CHECK_ICON));
         createNewStatBlockButton.setIcon(scaleIcon(PLUS_ICON));
         deleteStatBlocksButton.setIcon(scaleIcon(TRASH_ICON));
-        openCharacterButton.setIcon(scaleIcon(CHECK_ICON));
+        openNonPlayerCharacterButton.setIcon(scaleIcon(CHECK_ICON));
         openGroupButton.setIcon(scaleIcon(CHECK_ICON));
         rollCheckButton.setIcon(scaleIcon(JUMP_ICON));
         rollInitiativeButton.setIcon(scaleIcon(CLOCK_ICON));
         changeHPButton.setIcon(scaleIcon(HEART_ICON));
-        setCharacterGroupButton.setIcon(scaleIcon(CHECK_ICON));
-        deleteCharacterButton.setIcon(scaleIcon(TRASH_ICON));
+        setNonPlayerCharacterGroupButton.setIcon(scaleIcon(CHECK_ICON));
+        deleteNonPlayerCharacterButton.setIcon(scaleIcon(TRASH_ICON));
     }
 
-    // EFFECTS: ...
+    // EFFECTS: returns a scaled image icon of the given image icon
     private ImageIcon scaleIcon(ImageIcon imageIcon) {
         return new ImageIcon(imageIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
     }
 
-    // EFFECTS: ...
+    // MODIFIES: this
+    // EFFECTS: adds button sub panels to the main button panel and adds fields to buttons
     private void initializeButtonPanel() {
         initializeButtons();
 
         buttonPanel.add(libraryButtonPanel, "library");
         buttonPanel.add(encounterButtonPanel, "encounter");
-        buttonPanel.add(characterButtonPanel, "character");
+        buttonPanel.add(npcButtonPanel, "npc");
         buttonPanel.add(groupButtonPanel, "group");
         buttonPanel.setPreferredSize(new Dimension(1080, 144));
     }
 
-    // EFFECTS: ...
+    // MODIFIES: this
+    // EFFECTS: adds button sub panels to library button panel and sets button fields to the library context
     private void initializeLibraryButtonPanel() {
         buttonCardLayout.show(buttonPanel, "library");
 
@@ -182,7 +186,8 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
         libraryButtonPanel.add(libraryButtonSubPanel1);
     }
 
-    // EFFECTS: ...
+    // MODIFIES: this
+    // EFFECTS: adds button sub panels to library button panel and sets button fields to the statblock creation context
     private void initializeStatBlockCreationButtonPanel() {
         initializeLibraryButtonPanel();
 
@@ -196,27 +201,28 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
         openStatBlockButton.setEnabled(true);
     }
 
-    // EFFECTS: ...
+    // MODIFIES: this
+    // EFFECTS: adds button sub panels to encounter button panel and sets button fields to the encounter context
     private void initializeEncounterButtonPanel() {
-        openCharacterButton.setEnabled(false);
+        openNonPlayerCharacterButton.setEnabled(false);
         openGroupButton.setEnabled(false);
         rollCheckButton.setEnabled(false);
         rollInitiativeButton.setEnabled(false);
         changeHPButton.setEnabled(false);
-        setCharacterGroupButton.setEnabled(false);
-        deleteCharacterButton.setEnabled(false);
+        setNonPlayerCharacterGroupButton.setEnabled(false);
+        deleteNonPlayerCharacterButton.setEnabled(false);
 
         buttonCardLayout.show(buttonPanel, "encounter");
 
         encounterButtonSubPanel0.add(openGroupButton);
-        encounterButtonSubPanel0.add(openCharacterButton);
+        encounterButtonSubPanel0.add(openNonPlayerCharacterButton);
 
         encounterButtonSubPanel1.add(rollCheckButton);
         encounterButtonSubPanel1.add(rollInitiativeButton);
         encounterButtonSubPanel1.add(changeHPButton);
 
-        encounterButtonSubPanel2.add(setCharacterGroupButton);
-        encounterButtonSubPanel2.add(deleteCharacterButton);
+        encounterButtonSubPanel2.add(setNonPlayerCharacterGroupButton);
+        encounterButtonSubPanel2.add(deleteNonPlayerCharacterButton);
         encounterButtonSubPanel2.add(backButton);
 
         encounterButtonPanel.add(encounterButtonSubPanel0);
@@ -224,24 +230,27 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
         encounterButtonPanel.add(encounterButtonSubPanel2);
     }
 
-    // EFFECTS: ...
-    private void initializeCharacterButtonPanel() {
-        buttonCardLayout.show(buttonPanel, "character");
+    // MODIFIES: this
+    // EFFECTS: adds button sub panels to npc button panel and sets button fields to the npc context
+    private void initializeNonPlayerCharacterButtonPanel() {
+        buttonCardLayout.show(buttonPanel, "npc");
 
-        characterButtonPanel.add(encounterButtonSubPanel1);
-        characterButtonPanel.add(encounterButtonSubPanel2);
+        npcButtonPanel.add(encounterButtonSubPanel1);
+        npcButtonPanel.add(encounterButtonSubPanel2);
     }
 
-    // EFFECTS: ...
+    // MODIFIES: this
+    // EFFECTS: adds button sub panels to group button panel and sets button fields to the group context
     private void initializeGroupButtonPanel() {
         buttonCardLayout.show(buttonPanel, "group");
 
-        groupButtonPanel.add(openCharacterButton);
+        groupButtonPanel.add(openNonPlayerCharacterButton);
         groupButtonPanel.add(encounterButtonSubPanel1);
         groupButtonPanel.add(encounterButtonSubPanel2);
     }
 
-    // EFFECTS: ...
+    // MODIFIES: this
+    // EFFECTS: sets the main and side displays to the given context
     public void setDisplays(String s) {
         switch (s) {
             case "library":
@@ -256,8 +265,8 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
             case "group":
                 setEncounterGroupDisplay();
                 break;
-            case "character":
-                setEncounterCharacterDisplay();
+            case "npc":
+                setEncounterNonPlayerCharacterDisplay();
                 break;
             default:
                 setEncounterFullDisplay();
@@ -265,7 +274,8 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
         }
     }
 
-    // EFFECTS: ...
+    // MODIFIES: this
+    // EFFECTS: sets the main and side displays to the library context
     private void setLibraryFullDisplay() {
         initializeLibraryButtonPanel();
 
@@ -274,7 +284,8 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
         sideDisplayPanel.setSideDisplay("library");
     }
 
-    // EFFECTS: ...
+    // MODIFIES: this
+    // EFFECTS: sets the main display to the library context and the side display to the statblock context
     private void setLibraryStatBlockDisplay() {
         initializeLibraryButtonPanel();
 
@@ -283,7 +294,8 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
         sideDisplayPanel.setSideDisplay("statBlock");
     }
 
-    // EFFECTS: ...
+    // MODIFIES: this
+    // EFFECTS: sets the main display to the library context and the side display to the statblock creation context
     private void setLibraryStatBlockCreationDisplay() {
         initializeStatBlockCreationButtonPanel();
 
@@ -292,30 +304,47 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
         sideDisplayPanel.setSideDisplay("statBlockCreation");
     }
 
-    // EFFECTS: ...
+    // MODIFIES: this
+    // EFFECTS: sets the main and side displays to the encounter context
     private void setEncounterFullDisplay() {
         initializeEncounterButtonPanel();
 
         titleCardLayout.show(titlePanel, "encounter");
         mainDisplayPanel.setMainDisplay("encounter");
         sideDisplayPanel.setSideDisplay("encounter");
-        sideDisplayPanel.initializeActionsListModel();
+        sideDisplayPanel.initializeRollableActionsListModel();
     }
 
-    // EFFECTS: ...
+    // MODIFIES: this
+    // EFFECTS: sets the main display to the group context and the side display to the encounter context
     private void setEncounterGroupDisplay() {
         initializeGroupButtonPanel();
         mainDisplayPanel.setMainDisplay("group");
         sideDisplayPanel.setSideDisplay("encounter");
-        sideDisplayPanel.initializeActionsListModel();
+        sideDisplayPanel.initializeRollableActionsListModel();
     }
 
-    // EFFECTS: ...
-    private void setEncounterCharacterDisplay() {
-        initializeCharacterButtonPanel();
-        mainDisplayPanel.setMainDisplay("character");
+    // MODIFIES: this
+    // EFFECTS: sets the main display to the npc context and the side display to the encounter context
+    private void setEncounterNonPlayerCharacterDisplay() {
+        initializeNonPlayerCharacterButtonPanel();
+        mainDisplayPanel.setMainDisplay("npc");
         sideDisplayPanel.setSideDisplay("encounter");
-        sideDisplayPanel.initializeActionsListModel();
+        sideDisplayPanel.initializeRollableActionsListModel();
+    }
+
+    @Override
+    // EFFECTS: processes button presses from user
+    public void actionPerformed(ActionEvent e) {
+        if (mainDisplayPanel.getLibraryScrollPane().isShowing()) {
+            if (sideDisplayPanel.getStatBlockCreationDisplayPanel().isShowing()) {
+                sideDisplayPanel.getStatBlockCreationDisplayPanel().passAction(e);
+            } else {
+                mainDisplayPanel.getLibraryScrollPane().passAction(e);
+            }
+        } else {
+            mainDisplayPanel.passAction(e);
+        }
     }
 
     // -----------------------------------------------------------------------
@@ -330,79 +359,63 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
         return sideDisplayPanel;
     }
 
-    // EFFECTS: gets...
+    // EFFECTS: gets the back button
     public JButton getBackButton() {
         return backButton;
     }
 
-    // EFFECTS: gets...
+    // EFFECTS: gets the add statblocks to encounter button
     public JButton getAddStatBlocksToEncounterButton() {
         return addStatBlocksToEncounterButton;
     }
 
-    // EFFECTS: gets...
+    // EFFECTS: gets the open statblock button
     public JButton getOpenStatBlockButton() {
         return openStatBlockButton;
     }
 
-    // EFFECTS: gets...
+    // EFFECTS: gets the create new statblock button
     public JButton getCreateNewStatBlockButton() {
         return createNewStatBlockButton;
     }
 
-    // EFFECTS: gets...
+    // EFFECTS: gets the delete statblocks button
     public JButton getDeleteStatBlocksButton() {
         return deleteStatBlocksButton;
     }
 
-    // EFFECTS: gets...
-    public JButton getOpenCharacterButton() {
-        return openCharacterButton;
+    // EFFECTS: gets the open npc button
+    public JButton getOpenNonPlayerCharacterButton() {
+        return openNonPlayerCharacterButton;
     }
 
-    // EFFECTS: gets...
+    // EFFECTS: gets the open group button
     public JButton getOpenGroupButton() {
         return openGroupButton;
     }
 
-    // EFFECTS: gets...
+    // EFFECTS: gets the roll check button
     public JButton getRollCheckButton() {
         return rollCheckButton;
     }
 
-    // EFFECTS: gets...
+    // EFFECTS: gets the roll initiative button
     public JButton getRollInitiativeButton() {
         return rollInitiativeButton;
     }
 
-    // EFFECTS: gets...
+    // EFFECTS: gets the change hp button
     public JButton getChangeHPButton() {
         return changeHPButton;
     }
 
-    // EFFECTS: gets...
-    public JButton getSetCharacterGroupButton() {
-        return setCharacterGroupButton;
+    // EFFECTS: gets the set npc group button
+    public JButton getSetNonPlayerCharacterGroupButton() {
+        return setNonPlayerCharacterGroupButton;
     }
 
-    // EFFECTS: gets...
-    public JButton getDeleteCharacterButton() {
-        return deleteCharacterButton;
-    }
-
-    // -----------------------------------------------------------------------
-    // overrides
-    @Override
-    // EFFECTS: processes button presses from user
-    public void actionPerformed(ActionEvent e) {
-        if (mainDisplayPanel.getLibraryScrollPane().isShowing()) {
-            if (sideDisplayPanel.getStatBlockCreationDisplayPanel().isShowing()) {
-                sideDisplayPanel.getStatBlockCreationDisplayPanel().passAction(e);
-            } else {
-                mainDisplayPanel.getLibraryScrollPane().passAction(e);
-            }
-        } else {
-            mainDisplayPanel.passAction(e);
-        }
+    // EFFECTS: gets the delete npc button
+    public JButton getDeleteNonPlayerCharacterButton() {
+        return deleteNonPlayerCharacterButton;
     }
 }
