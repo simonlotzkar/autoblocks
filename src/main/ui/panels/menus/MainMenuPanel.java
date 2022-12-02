@@ -35,7 +35,6 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
     private final MainDisplayPanel mainDisplayPanel;
     private final SideDisplayPanel sideDisplayPanel;
 
-    //private final JPanel titlePanel = new JPanel(titleCardLayout);
     private final JPanel titlePanel = new JPanel(titleCardLayout);
     private final JPanel buttonPanel = new JPanel(buttonCardLayout);
 
@@ -379,7 +378,7 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
         return createNewStatBlockButton;
     }
 
-    // EFFECTS: gets the delete statblocks button
+    // EFFECTS: gets delete statblocks button
     public JButton getDeleteStatBlocksButton() {
         return deleteStatBlocksButton;
     }

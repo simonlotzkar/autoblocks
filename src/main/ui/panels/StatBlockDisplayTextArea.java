@@ -45,8 +45,8 @@ public class StatBlockDisplayTextArea extends JTextArea {
             initializeAbilitiesPanel();
             initializeRollableActionsPanel();
             initializeLegendaryPanel();
-            this.revalidate();
-            this.repaint();
+            revalidate();
+            repaint();
         } else {
             this.setText(NONE_SELECTED);
         }

@@ -114,13 +114,21 @@ public class RollableAction extends Ability {
             rangeString = range + "/" + longRange;
         }
 
+        String hitModifier;
+
+        if (hitFormula.getModifier() < 0) {
+            hitModifier = String.valueOf(hitFormula.getModifier());
+        } else {
+            hitModifier = "+" + hitFormula.getModifier();
+        }
+
         return getDescription()
                 + ", "
                 + getName()
                 + " ("
                 + rangeString
                 + "ft), ("
-                + hitFormula.toString()
+                + hitModifier
                 + ") to hit"
                 + generateDamageFormulaString()
                 + ".";

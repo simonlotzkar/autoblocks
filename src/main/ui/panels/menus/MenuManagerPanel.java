@@ -1,7 +1,7 @@
 package ui.panels.menus;
 
-import model.NPC;
-import model.StatBlock;
+import model.*;
+import model.Event;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.JsonReader;
@@ -11,11 +11,12 @@ import java.awt.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Iterator;
 
 // Represents a panel that manages the menu panels by switching between them
 public class MenuManagerPanel extends JPanel {
-    private DefaultListModel<NPC> encounterListModel = new DefaultListModel<>();
-    private DefaultListModel<StatBlock> libraryListModel = new DefaultListModel<>();
+    private final Encounter encounter = new Encounter();
+    private final StatBlockLibrary statBlockLibrary = new StatBlockLibrary();
 
     private final TitleMenuPanel titleMenuPanel = new TitleMenuPanel(this);
     private final MainMenuPanel mainMenuPanel = new MainMenuPanel(this);
@@ -47,18 +48,19 @@ public class MenuManagerPanel extends JPanel {
     private void load() throws IOException {
         JsonReader jsonReader = new JsonReader(JSON_DIRECTORY);
 
-        encounterListModel.removeAllElements();
+        encounter.removeAllElements();
         addAllToEncounter(jsonReader.readEncounter());
 
-        libraryListModel.removeAllElements();
+        statBlockLibrary.removeAllElements();
         addAllToLibrary(jsonReader.readLibrary());
     }
 
     // MODIFIES: this
     // EFFECTS: adds all given statblocks to the libraryListModel
+    //          this is only here because the autograder didn't like using the native addAll()
     private void addAllToLibrary(java.util.List<StatBlock> statBlockList) {
         for (StatBlock sb : statBlockList) {
-            libraryListModel.addElement(sb);
+            statBlockLibrary.addElement(sb);
         }
     }
 
@@ -67,7 +69,7 @@ public class MenuManagerPanel extends JPanel {
     //          this is only here because the autograder didn't like using the native addAll()
     private void addAllToEncounter(java.util.List<NPC> npcList) {
         for (NPC c : npcList) {
-            encounterListModel.addElement(c);
+            encounter.addElement(c);
         }
     }
 
@@ -79,11 +81,11 @@ public class MenuManagerPanel extends JPanel {
         JSONArray jsonEncounter = new JSONArray();
         JSONObject json = new JSONObject();
 
-        for (int i = 0; i < encounterListModel.getSize(); i++) {
-            jsonEncounter.put((encounterListModel.getElementAt(i)).toJson());
+        for (int i = 0; i < encounter.getSize(); i++) {
+            jsonEncounter.put((encounter.getElementAt(i)).toJson());
         }
-        for (int i = 0; i < libraryListModel.getSize(); i++) {
-            jsonLibrary.put((libraryListModel.getElementAt(i)).toJson());
+        for (int i = 0; i < statBlockLibrary.getSize(); i++) {
+            jsonLibrary.put((statBlockLibrary.getElementAt(i)).toJson());
         }
 
         json.put("library", jsonLibrary);
@@ -99,8 +101,8 @@ public class MenuManagerPanel extends JPanel {
         try {
             load();
             JOptionPane.showMessageDialog(this, "Successfully loaded from " + JSON_DIRECTORY + ":"
-                            + "\n" + libraryListModel.getSize() + " statblocks and "
-                            + encounterListModel.getSize() + " characters.",
+                            + "\n" + statBlockLibrary.getSize() + " statblocks and "
+                            + encounter.getSize() + " characters.",
                     "Success!", JOptionPane.PLAIN_MESSAGE);
         } catch (IOException exception) {
             JOptionPane.showMessageDialog(this, "IOException Caught. Message: "
@@ -130,31 +132,32 @@ public class MenuManagerPanel extends JPanel {
                 "Confirmation Needed",
                 JOptionPane.YES_NO_OPTION);
         if (command == JOptionPane.YES_OPTION) {
+            Iterator<Event> i = EventLog.getInstance().iterator();
+            System.out.println("Start of EventLog:");
+
+            while (i.hasNext()) {
+                System.out.println("\t" + i.next().toString());
+            }
+
+            System.out.println("End of EventLog.");
             System.exit(0);
         }
     }
 
     // -----------------------------------------------------------------------
     // getters
-    // EFFECTS: gets the encounter list model
-    public DefaultListModel<NPC> getEncounterListModel() {
-        return encounterListModel;
+    // EFFECTS: gets the encounter
+    public Encounter getEncounter() {
+        return encounter;
     }
 
-    // EFFECTS: gets the library list model
-    public DefaultListModel<StatBlock> getLibraryListModel() {
-        return libraryListModel;
+    // EFFECTS: gets the library
+    public StatBlockLibrary getStatBlockLibrary() {
+        return statBlockLibrary;
     }
 
     // EFFECTS: gets the main menu panel
     public MainMenuPanel getMainMenuPanel() {
         return mainMenuPanel;
-    }
-
-    // -----------------------------------------------------------------------
-    // setters
-    // EFFECTS: sets the encounter list model
-    public void setEncounterListModel(DefaultListModel<NPC> encounterListModel) {
-        this.encounterListModel = encounterListModel;
     }
 }

@@ -23,7 +23,7 @@ public enum DamageType {
     public static ArrayList<String> getStringArrayList() {
         ArrayList<String> stringArray = new ArrayList<>();
         for (DamageType dt : DamageType.values()) {
-            stringArray.add(dt.toString().substring(0, 1).toUpperCase() + dt.toString().substring(1));
+            stringArray.add(dt.toString());
         }
         return stringArray;
     }

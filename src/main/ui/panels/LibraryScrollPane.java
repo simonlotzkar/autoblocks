@@ -1,8 +1,10 @@
 package ui.panels;
 
 import exceptions.IncompleteFieldException;
+import model.Encounter;
 import model.NPC;
 import model.StatBlock;
+import model.StatBlockLibrary;
 import model.statblockfields.Title;
 import ui.panels.menus.MainMenuPanel;
 
@@ -13,11 +15,11 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-// Represents...
+// Represents a scrollpane containing a list of statblocks that can be selected
 public class LibraryScrollPane extends JScrollPane implements ListSelectionListener {
     private final JList<model.StatBlock> libraryList;
-    private final DefaultListModel<model.StatBlock> libraryListModel;
-    private DefaultListModel<NPC> encounterListModel;
+    private final StatBlockLibrary libraryListModel;
+    private Encounter encounterListModel;
     private final MainMenuPanel mainMenuPanel;
 
     // buttons
@@ -27,6 +29,7 @@ public class LibraryScrollPane extends JScrollPane implements ListSelectionListe
     private JButton deleteStatBlocksButton;
     private JButton backButton;
 
+    // MODIFIES: this
     // EFFECTS: constructs this display panel
     public LibraryScrollPane(MainMenuPanel mainMenuPanel) {
         super(null);
@@ -36,16 +39,16 @@ public class LibraryScrollPane extends JScrollPane implements ListSelectionListe
         this.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         this.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-        libraryListModel = mainMenuPanel.getMenuManagerPanel().getLibraryListModel();
-        this.libraryList = new JList<>(libraryListModel);
-        //libraryJList.setBackground(new Color(0, 0, 0, 0));
-        this.setViewportView(libraryList);
+        libraryListModel = mainMenuPanel.getMenuManagerPanel().getStatBlockLibrary();
+        libraryList = new JList<>(libraryListModel);
+        setViewportView(libraryList);
 
         importButtons();
-        initializeList();
+        initializeLibraryList();
     }
 
-    // EFFECTS: ...
+    // MODIFIES: this
+    // EFFECTS: creates references to the main menu panel's buttons
     private void importButtons() {
         addStatBlocksToEncounterButton = mainMenuPanel.getAddStatBlocksToEncounterButton();
         openStatBlockButton = mainMenuPanel.getOpenStatBlockButton();
@@ -55,20 +58,18 @@ public class LibraryScrollPane extends JScrollPane implements ListSelectionListe
     }
 
     // MODIFIES: this
-    // EFFECTS: ...
-    protected void initializeList() {
+    // EFFECTS: formats the library list
+    public void initializeLibraryList() {
         libraryList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         libraryList.setLayoutOrientation(JList.VERTICAL);
         libraryList.setVisibleRowCount(-1);
         libraryList.addListSelectionListener(this);
-        libraryList.setOpaque(false);
-    }
-
-    // EFFECTS: ...
-    public void clearSelection() {
         libraryList.clearSelection();
+        revalidate();
+        repaint();
     }
 
+    // MODIFIES: mainMenuPanel
     // EFFECTS: prompts user for the number of copies to add then adds them or cancels or catches exceptions
     private void tryAddSelectedToEncounter() {
         try {
@@ -79,20 +80,20 @@ public class LibraryScrollPane extends JScrollPane implements ListSelectionListe
                     null,
                     null,
                     "")).toString());
-            DefaultListModel<NPC> newEncounterListModel = addSelectedToEncounter(command);
-            mainMenuPanel.getMenuManagerPanel().setEncounterListModel(newEncounterListModel);
+            addSelectedToEncounter(command);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Could not add the statblock. Message: "
                     + e.getMessage() + ".", "Failure!", JOptionPane.WARNING_MESSAGE);
         }
     }
 
+    // MODIFIES: this
     // EFFECTS: adds the selected statblocks to the menucard's encounter list model as new characters,
     //          repeating each for number equal to the given integer
-    private DefaultListModel<NPC> addSelectedToEncounter(int copies) throws IncompleteFieldException {
-        encounterListModel = mainMenuPanel.getMenuManagerPanel().getEncounterListModel();
+    private void addSelectedToEncounter(int copies) throws IncompleteFieldException {
+        encounterListModel = mainMenuPanel.getMenuManagerPanel().getEncounter();
         ListModel<StatBlock> libraryListModel = libraryList.getModel();
-        List<NPC> encounterList = new ArrayList<>();
+        ArrayList<NPC> encounterList = new ArrayList<>();
 
         // converts menucard's encounter list model to an array list
         for (int i = 0; i < encounterListModel.getSize(); i++) {
@@ -111,9 +112,9 @@ public class LibraryScrollPane extends JScrollPane implements ListSelectionListe
         }
         encounterListModel.removeAllElements();
         addAllToEncounter(encounterList);
-        return encounterListModel;
     }
 
+    // MODIFIES: this
     // EFFECTS: adds all given characters to the encounterListModel
     //          this is only here because the autograder didn't like using the native addAll()
     private void addAllToEncounter(java.util.List<NPC> npcList) {
@@ -122,6 +123,7 @@ public class LibraryScrollPane extends JScrollPane implements ListSelectionListe
         }
     }
 
+    // MODIFIES: this
     // EFFECTS: prompts user for confirmation and number of selected then deletes them from the encounter
     private void deleteStatBlocks() {
         int command = JOptionPane.showConfirmDialog(this,
@@ -139,6 +141,7 @@ public class LibraryScrollPane extends JScrollPane implements ListSelectionListe
         this.repaint();
     }
 
+    // MODIFIES: mainMenuPanel
     // EFFECTS: processes button presses from user
     public void passAction(ActionEvent e) {
         if (e.getSource() == addStatBlocksToEncounterButton) {
@@ -164,6 +167,7 @@ public class LibraryScrollPane extends JScrollPane implements ListSelectionListe
     }
 
     @Override
+    // MODIFIES: this
     // EFFECTS: disables and enables multi selection buttons when user is changing list selection
     //          or if just one item is selected enables or disables single selection buttons
     public void valueChanged(ListSelectionEvent e) {

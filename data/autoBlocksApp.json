@@ -1,1574 +1,942 @@
 {
     "library": [
         {
-            "skillProficiencies": [
-                "ACROBATICS",
-                "ARCANA",
-                "ATHLETICS",
-                "DECEPTION",
-                "HISTORY",
-                "INSIGHT"
-            ],
-            "conditionImmunities": [
-                "BLINDED",
-                "CHARMED",
-                "DEAFENED",
-                "FRIGHTENED"
-            ],
+            "skillProficiencies": ["INTIMIDATION"],
             "languages": {
-                "telepathy": 45,
-                "languagesList": ["ffefefe"]
+                "telepathy": 0,
+                "languagesList": [
+                    "Common",
+                    "Orc"
+                ]
             },
-            "senses": {
-                "trueSight": 3,
-                "passivePerception": 3,
-                "darkVision": 3,
-                "blindSight": 3,
-                "tremorSense": 3
-            },
-            "resistances": {
-                "ACID": "IMMUNITY",
-                "COLD": "VULNERABILITY",
-                "FIRE": "RESISTANCE",
-                "BLUDGEONING": "VULNERABILITY"
-            },
-            "title": {
-                "size": "Aberration",
-                "name": "4",
-                "type": "Small",
-                "alignment": "unaligned"
-            },
-            "savingThrowProficiencies": [
-                "STRENGTH",
-                "DEXTERITY",
-                "CONSTITUTION",
-                "INTELLIGENCE",
-                "WISDOM",
-                "CHARISMA"
-            ],
-            "rollableActions": [{
-                "longRange": 44,
-                "name": "ffeswf",
-                "damageMap": {
-                    "ACID": {
-                        "modifier": 4,
-                        "amountOfDice": 4,
-                        "dieSides": 4
-                    },
-                    "COLD": {
-                        "modifier": 4,
-                        "amountOfDice": 4,
-                        "dieSides": 4
-                    }
-                },
-                "description": "Melee Weapon Attack",
-                "range": 4,
-                "hitModifier": 4
-            }],
-            "proficiency": 3,
-            "abilityScores": {
-                "dexterity": 3,
-                "constitution": 3,
-                "strength": 3,
-                "charisma": 3,
-                "intelligence": 3,
-                "wisdom": 3
-            },
-            "armour": {
-                "ac": 3,
-                "armourName": "3",
-                "magicArmour": 3
-            },
-            "legendaryMechanics": {
-                "legendaryDescription": "sgwgwgwrg",
-                "legendaryActions": [{
-                    "name": "wgwqegwg",
-                    "description": "wgeegewg"
-                }]
-            },
-            "hpFormula": {
-                "modifier": 4,
-                "amountOfDice": 4,
-                "dieSides": 4
-            },
-            "xp": 3,
-            "speeds": {
-                "climb": 3,
-                "fly": 3,
-                "burrow": 3,
-                "speed": 3,
-                "swim": 3
-            }
-        },
-        {
             "senses": {
                 "trueSight": 0,
-                "passivePerception": 4,
-                "darkVision": 0,
+                "passivePerception": 10,
+                "darkVision": 60,
                 "blindSight": 0,
                 "tremorSense": 0
             },
             "hpFormula": {
                 "modifier": 3,
-                "amountOfDice": 3,
-                "dieSides": 3
+                "amountOfDice": 1,
+                "dieSides": 6
             },
-            "xp": 4,
+            "xp": 100,
             "resistances": {},
             "speeds": {
                 "climb": 0,
                 "fly": 0,
                 "burrow": 0,
-                "speed": 4,
+                "speed": 30,
+                "swim": 0
+            },
+            "title": {
+                "size": "Humanoid",
+                "name": "Orc",
+                "type": "Medium",
+                "alignment": "chaotic evil"
+            },
+            "rollableActions": [
+                {
+                    "longRange": 0,
+                    "name": "Greataxe",
+                    "damageMap": {"SLASHING": {
+                        "modifier": 3,
+                        "amountOfDice": 1,
+                        "dieSides": 12
+                    }},
+                    "description": "Melee Weapon Attack",
+                    "range": 5,
+                    "hitModifier": 5
+                },
+                {
+                    "longRange": 120,
+                    "name": "Javelin",
+                    "damageMap": {"PIERCING": {
+                        "modifier": 3,
+                        "amountOfDice": 1,
+                        "dieSides": 6
+                    }},
+                    "description": "Melee or Ranged Weapon Attack",
+                    "range": 30,
+                    "hitModifier": 5
+                }
+            ],
+            "proficiency": 2,
+            "abilityScores": {
+                "dexterity": 12,
+                "constitution": 16,
+                "strength": 16,
+                "charisma": 10,
+                "intelligence": 7,
+                "wisdom": 11
+            },
+            "armour": {
+                "ac": 13,
+                "armourName": "hide armour",
+                "magicArmour": 0
+            }
+        },
+        {
+            "skillProficiencies": ["STEALTH"],
+            "languages": {
+                "telepathy": 0,
+                "languagesList": [
+                    "Common",
+                    "Goblin"
+                ]
+            },
+            "senses": {
+                "trueSight": 0,
+                "passivePerception": 9,
+                "darkVision": 60,
+                "blindSight": 0,
+                "tremorSense": 0
+            },
+            "hpFormula": {
+                "modifier": 2,
+                "amountOfDice": 1,
+                "dieSides": 6
+            },
+            "xp": 50,
+            "resistances": {},
+            "speeds": {
+                "climb": 0,
+                "fly": 0,
+                "burrow": 0,
+                "speed": 30,
                 "swim": 0
             },
             "title": {
                 "size": "Small",
-                "name": "ef",
-                "type": "Aberration",
-                "alignment": "unaligned"
+                "name": "Goblin",
+                "type": "Humanoid",
+                "alignment": "chaotic evil"
             },
-            "rollableActions": [{
-                "longRange": 0,
-                "name": "3",
-                "damageMap": {"ACID": {
-                    "modifier": 3,
-                    "amountOfDice": 3,
-                    "dieSides": 3
-                }},
-                "description": "Melee Weapon Attack",
-                "range": 3,
-                "hitModifier": 3
-            }],
-            "proficiency": 4,
+            "rollableActions": [
+                {
+                    "longRange": 0,
+                    "name": "Scimitar",
+                    "damageMap": {"SLASHING": {
+                        "modifier": 2,
+                        "amountOfDice": 1,
+                        "dieSides": 6
+                    }},
+                    "description": "Melee Weapon Attack",
+                    "range": 5,
+                    "hitModifier": 4
+                },
+                {
+                    "longRange": 320,
+                    "name": "Shortbow",
+                    "damageMap": {"PIERCING": {
+                        "modifier": 2,
+                        "amountOfDice": 1,
+                        "dieSides": 6
+                    }},
+                    "description": "Ranged Weapon Attack",
+                    "range": 80,
+                    "hitModifier": 2
+                }
+            ],
+            "proficiency": 2,
             "abilityScores": {
-                "dexterity": 4,
-                "constitution": 4,
-                "strength": 4,
-                "charisma": 4,
-                "intelligence": 4,
-                "wisdom": 4
+                "dexterity": 14,
+                "constitution": 10,
+                "strength": 8,
+                "charisma": 8,
+                "intelligence": 10,
+                "wisdom": 8
             },
             "armour": {
-                "ac": 4,
+                "ac": 15,
+                "armourName": "leather armour, shield",
                 "magicArmour": 0
             }
         }
     ],
     "encounter": [
         {
-            "skillProficiencies": [
-                "ACROBATICS",
-                "ARCANA",
-                "ATHLETICS",
-                "DECEPTION",
-                "HISTORY",
-                "INSIGHT"
-            ],
-            "maxHP": 16,
-            "conditionImmunities": [
-                "BLINDED",
-                "CHARMED",
-                "DEAFENED",
-                "FRIGHTENED"
-            ],
+            "skillProficiencies": ["INTIMIDATION"],
+            "maxHP": 9,
             "languages": {
-                "telepathy": 45,
-                "languagesList": ["ffefefe"]
+                "telepathy": 0,
+                "languagesList": [
+                    "Common",
+                    "Orc"
+                ]
             },
             "senses": {
-                "trueSight": 3,
-                "passivePerception": 3,
-                "darkVision": 3,
-                "blindSight": 3,
-                "tremorSense": 3
+                "trueSight": 0,
+                "passivePerception": 10,
+                "darkVision": 60,
+                "blindSight": 0,
+                "tremorSense": 0
             },
-            "hp": 16,
-            "resistances": {
-                "ACID": "IMMUNITY",
-                "COLD": "VULNERABILITY",
-                "FIRE": "RESISTANCE",
-                "BLUDGEONING": "VULNERABILITY"
-            },
+            "hp": 9,
+            "resistances": {},
             "title": {
-                "size": "Aberration",
-                "name": "4 1",
-                "type": "Small",
-                "alignment": "unaligned"
+                "size": "Humanoid",
+                "name": "Orc 1",
+                "type": "Medium",
+                "alignment": "chaotic evil",
+                "group": "Orcs"
             },
-            "savingThrowProficiencies": [
-                "STRENGTH",
-                "DEXTERITY",
-                "CONSTITUTION",
-                "INTELLIGENCE",
-                "WISDOM",
-                "CHARISMA"
-            ],
-            "rollableActions": [{
-                "longRange": 44,
-                "name": "ffeswf",
-                "damageMap": {
-                    "ACID": {
-                        "modifier": 4,
-                        "amountOfDice": 4,
-                        "dieSides": 4
-                    },
-                    "COLD": {
-                        "modifier": 4,
-                        "amountOfDice": 4,
-                        "dieSides": 4
-                    }
+            "rollableActions": [
+                {
+                    "longRange": 0,
+                    "name": "Greataxe",
+                    "damageMap": {"SLASHING": {
+                        "modifier": 3,
+                        "amountOfDice": 1,
+                        "dieSides": 12
+                    }},
+                    "description": "Melee Weapon Attack",
+                    "range": 5,
+                    "hitModifier": 5
                 },
-                "description": "Melee Weapon Attack",
-                "range": 4,
-                "hitModifier": 4
-            }],
-            "proficiency": 3,
+                {
+                    "longRange": 120,
+                    "name": "Javelin",
+                    "damageMap": {"PIERCING": {
+                        "modifier": 3,
+                        "amountOfDice": 1,
+                        "dieSides": 6
+                    }},
+                    "description": "Melee or Ranged Weapon Attack",
+                    "range": 30,
+                    "hitModifier": 5
+                }
+            ],
+            "proficiency": 2,
             "abilityScores": {
-                "dexterity": 3,
-                "constitution": 3,
-                "strength": 3,
-                "charisma": 3,
-                "intelligence": 3,
-                "wisdom": 3
+                "dexterity": 12,
+                "constitution": 16,
+                "strength": 16,
+                "charisma": 10,
+                "intelligence": 7,
+                "wisdom": 11
             },
             "armour": {
-                "ac": 3,
-                "armourName": "3",
-                "magicArmour": 3
+                "ac": 13,
+                "armourName": "hide armour",
+                "magicArmour": 0
             },
             "parentStatBlock": {
-                "skillProficiencies": [
-                    "ACROBATICS",
-                    "ARCANA",
-                    "ATHLETICS",
-                    "DECEPTION",
-                    "HISTORY",
-                    "INSIGHT"
-                ],
-                "conditionImmunities": [
-                    "BLINDED",
-                    "CHARMED",
-                    "DEAFENED",
-                    "FRIGHTENED"
-                ],
+                "skillProficiencies": ["INTIMIDATION"],
                 "languages": {
-                    "telepathy": 45,
-                    "languagesList": ["ffefefe"]
+                    "telepathy": 0,
+                    "languagesList": [
+                        "Common",
+                        "Orc"
+                    ]
                 },
                 "senses": {
-                    "trueSight": 3,
-                    "passivePerception": 3,
-                    "darkVision": 3,
-                    "blindSight": 3,
-                    "tremorSense": 3
-                },
-                "resistances": {
-                    "ACID": "IMMUNITY",
-                    "COLD": "VULNERABILITY",
-                    "FIRE": "RESISTANCE",
-                    "BLUDGEONING": "VULNERABILITY"
-                },
-                "title": {
-                    "size": "Aberration",
-                    "name": "4",
-                    "type": "Small",
-                    "alignment": "unaligned"
-                },
-                "savingThrowProficiencies": [
-                    "STRENGTH",
-                    "DEXTERITY",
-                    "CONSTITUTION",
-                    "INTELLIGENCE",
-                    "WISDOM",
-                    "CHARISMA"
-                ],
-                "rollableActions": [{
-                    "longRange": 44,
-                    "name": "ffeswf",
-                    "damageMap": {
-                        "ACID": {
-                            "modifier": 4,
-                            "amountOfDice": 4,
-                            "dieSides": 4
-                        },
-                        "COLD": {
-                            "modifier": 4,
-                            "amountOfDice": 4,
-                            "dieSides": 4
-                        }
-                    },
-                    "description": "Melee Weapon Attack",
-                    "range": 4,
-                    "hitModifier": 4
-                }],
-                "proficiency": 3,
-                "abilityScores": {
-                    "dexterity": 3,
-                    "constitution": 3,
-                    "strength": 3,
-                    "charisma": 3,
-                    "intelligence": 3,
-                    "wisdom": 3
-                },
-                "armour": {
-                    "ac": 3,
-                    "armourName": "3",
-                    "magicArmour": 3
-                },
-                "legendaryMechanics": {
-                    "legendaryDescription": "sgwgwgwrg",
-                    "legendaryActions": [{
-                        "name": "wgwqegwg",
-                        "description": "wgeegewg"
-                    }]
+                    "trueSight": 0,
+                    "passivePerception": 10,
+                    "darkVision": 60,
+                    "blindSight": 0,
+                    "tremorSense": 0
                 },
                 "hpFormula": {
-                    "modifier": 4,
-                    "amountOfDice": 4,
-                    "dieSides": 4
+                    "modifier": 3,
+                    "amountOfDice": 1,
+                    "dieSides": 6
                 },
-                "xp": 3,
+                "xp": 100,
+                "resistances": {},
                 "speeds": {
-                    "climb": 3,
-                    "fly": 3,
-                    "burrow": 3,
-                    "speed": 3,
-                    "swim": 3
+                    "climb": 0,
+                    "fly": 0,
+                    "burrow": 0,
+                    "speed": 30,
+                    "swim": 0
+                },
+                "title": {
+                    "size": "Humanoid",
+                    "name": "Orc",
+                    "type": "Medium",
+                    "alignment": "chaotic evil"
+                },
+                "rollableActions": [
+                    {
+                        "longRange": 0,
+                        "name": "Greataxe",
+                        "damageMap": {"SLASHING": {
+                            "modifier": 3,
+                            "amountOfDice": 1,
+                            "dieSides": 12
+                        }},
+                        "description": "Melee Weapon Attack",
+                        "range": 5,
+                        "hitModifier": 5
+                    },
+                    {
+                        "longRange": 120,
+                        "name": "Javelin",
+                        "damageMap": {"PIERCING": {
+                            "modifier": 3,
+                            "amountOfDice": 1,
+                            "dieSides": 6
+                        }},
+                        "description": "Melee or Ranged Weapon Attack",
+                        "range": 30,
+                        "hitModifier": 5
+                    }
+                ],
+                "proficiency": 2,
+                "abilityScores": {
+                    "dexterity": 12,
+                    "constitution": 16,
+                    "strength": 16,
+                    "charisma": 10,
+                    "intelligence": 7,
+                    "wisdom": 11
+                },
+                "armour": {
+                    "ac": 13,
+                    "armourName": "hide armour",
+                    "magicArmour": 0
                 }
             },
-            "legendaryMechanics": {
-                "legendaryDescription": "sgwgwgwrg",
-                "legendaryActions": [{
-                    "name": "wgwqegwg",
-                    "description": "wgeegewg"
-                }]
-            },
             "hpFormula": {
-                "modifier": 4,
-                "amountOfDice": 4,
-                "dieSides": 4
+                "modifier": 3,
+                "amountOfDice": 1,
+                "dieSides": 6
             },
-            "xp": 3,
+            "xp": 100,
             "speeds": {
-                "climb": 3,
-                "fly": 3,
-                "burrow": 3,
-                "speed": 3,
-                "swim": 3
+                "climb": 0,
+                "fly": 0,
+                "burrow": 0,
+                "speed": 30,
+                "swim": 0
             }
         },
         {
-            "skillProficiencies": [
-                "ACROBATICS",
-                "ARCANA",
-                "ATHLETICS",
-                "DECEPTION",
-                "HISTORY",
-                "INSIGHT"
-            ],
-            "maxHP": 15,
-            "conditionImmunities": [
-                "BLINDED",
-                "CHARMED",
-                "DEAFENED",
-                "FRIGHTENED"
-            ],
+            "skillProficiencies": ["INTIMIDATION"],
+            "maxHP": 4,
             "languages": {
-                "telepathy": 45,
-                "languagesList": ["ffefefe"]
+                "telepathy": 0,
+                "languagesList": [
+                    "Common",
+                    "Orc"
+                ]
             },
             "senses": {
-                "trueSight": 3,
-                "passivePerception": 3,
-                "darkVision": 3,
-                "blindSight": 3,
-                "tremorSense": 3
+                "trueSight": 0,
+                "passivePerception": 10,
+                "darkVision": 60,
+                "blindSight": 0,
+                "tremorSense": 0
             },
-            "hp": 15,
-            "resistances": {
-                "ACID": "IMMUNITY",
-                "COLD": "VULNERABILITY",
-                "FIRE": "RESISTANCE",
-                "BLUDGEONING": "VULNERABILITY"
-            },
+            "hp": 4,
+            "resistances": {},
             "title": {
-                "size": "Aberration",
-                "name": "4 1",
-                "type": "Small",
-                "alignment": "unaligned"
+                "size": "Humanoid",
+                "name": "Orc 2",
+                "type": "Medium",
+                "alignment": "chaotic evil",
+                "group": "Orcs"
             },
-            "savingThrowProficiencies": [
-                "STRENGTH",
-                "DEXTERITY",
-                "CONSTITUTION",
-                "INTELLIGENCE",
-                "WISDOM",
-                "CHARISMA"
-            ],
-            "rollableActions": [{
-                "longRange": 44,
-                "name": "ffeswf",
-                "damageMap": {
-                    "ACID": {
-                        "modifier": 4,
-                        "amountOfDice": 4,
-                        "dieSides": 4
-                    },
-                    "COLD": {
-                        "modifier": 4,
-                        "amountOfDice": 4,
-                        "dieSides": 4
-                    }
+            "rollableActions": [
+                {
+                    "longRange": 0,
+                    "name": "Greataxe",
+                    "damageMap": {"SLASHING": {
+                        "modifier": 3,
+                        "amountOfDice": 1,
+                        "dieSides": 12
+                    }},
+                    "description": "Melee Weapon Attack",
+                    "range": 5,
+                    "hitModifier": 5
                 },
-                "description": "Melee Weapon Attack",
-                "range": 4,
-                "hitModifier": 4
-            }],
-            "proficiency": 3,
+                {
+                    "longRange": 120,
+                    "name": "Javelin",
+                    "damageMap": {"PIERCING": {
+                        "modifier": 3,
+                        "amountOfDice": 1,
+                        "dieSides": 6
+                    }},
+                    "description": "Melee or Ranged Weapon Attack",
+                    "range": 30,
+                    "hitModifier": 5
+                }
+            ],
+            "proficiency": 2,
             "abilityScores": {
-                "dexterity": 3,
-                "constitution": 3,
-                "strength": 3,
-                "charisma": 3,
-                "intelligence": 3,
-                "wisdom": 3
+                "dexterity": 12,
+                "constitution": 16,
+                "strength": 16,
+                "charisma": 10,
+                "intelligence": 7,
+                "wisdom": 11
             },
             "armour": {
-                "ac": 3,
-                "armourName": "3",
-                "magicArmour": 3
+                "ac": 13,
+                "armourName": "hide armour",
+                "magicArmour": 0
             },
             "parentStatBlock": {
-                "skillProficiencies": [
-                    "ACROBATICS",
-                    "ARCANA",
-                    "ATHLETICS",
-                    "DECEPTION",
-                    "HISTORY",
-                    "INSIGHT"
-                ],
-                "conditionImmunities": [
-                    "BLINDED",
-                    "CHARMED",
-                    "DEAFENED",
-                    "FRIGHTENED"
-                ],
+                "skillProficiencies": ["INTIMIDATION"],
                 "languages": {
-                    "telepathy": 45,
-                    "languagesList": ["ffefefe"]
+                    "telepathy": 0,
+                    "languagesList": [
+                        "Common",
+                        "Orc"
+                    ]
                 },
                 "senses": {
-                    "trueSight": 3,
-                    "passivePerception": 3,
-                    "darkVision": 3,
-                    "blindSight": 3,
-                    "tremorSense": 3
-                },
-                "resistances": {
-                    "ACID": "IMMUNITY",
-                    "COLD": "VULNERABILITY",
-                    "FIRE": "RESISTANCE",
-                    "BLUDGEONING": "VULNERABILITY"
-                },
-                "title": {
-                    "size": "Aberration",
-                    "name": "4",
-                    "type": "Small",
-                    "alignment": "unaligned"
-                },
-                "savingThrowProficiencies": [
-                    "STRENGTH",
-                    "DEXTERITY",
-                    "CONSTITUTION",
-                    "INTELLIGENCE",
-                    "WISDOM",
-                    "CHARISMA"
-                ],
-                "rollableActions": [{
-                    "longRange": 44,
-                    "name": "ffeswf",
-                    "damageMap": {
-                        "ACID": {
-                            "modifier": 4,
-                            "amountOfDice": 4,
-                            "dieSides": 4
-                        },
-                        "COLD": {
-                            "modifier": 4,
-                            "amountOfDice": 4,
-                            "dieSides": 4
-                        }
-                    },
-                    "description": "Melee Weapon Attack",
-                    "range": 4,
-                    "hitModifier": 4
-                }],
-                "proficiency": 3,
-                "abilityScores": {
-                    "dexterity": 3,
-                    "constitution": 3,
-                    "strength": 3,
-                    "charisma": 3,
-                    "intelligence": 3,
-                    "wisdom": 3
-                },
-                "armour": {
-                    "ac": 3,
-                    "armourName": "3",
-                    "magicArmour": 3
-                },
-                "legendaryMechanics": {
-                    "legendaryDescription": "sgwgwgwrg",
-                    "legendaryActions": [{
-                        "name": "wgwqegwg",
-                        "description": "wgeegewg"
-                    }]
+                    "trueSight": 0,
+                    "passivePerception": 10,
+                    "darkVision": 60,
+                    "blindSight": 0,
+                    "tremorSense": 0
                 },
                 "hpFormula": {
-                    "modifier": 4,
-                    "amountOfDice": 4,
-                    "dieSides": 4
+                    "modifier": 3,
+                    "amountOfDice": 1,
+                    "dieSides": 6
                 },
-                "xp": 3,
+                "xp": 100,
+                "resistances": {},
                 "speeds": {
-                    "climb": 3,
-                    "fly": 3,
-                    "burrow": 3,
-                    "speed": 3,
-                    "swim": 3
+                    "climb": 0,
+                    "fly": 0,
+                    "burrow": 0,
+                    "speed": 30,
+                    "swim": 0
+                },
+                "title": {
+                    "size": "Humanoid",
+                    "name": "Orc",
+                    "type": "Medium",
+                    "alignment": "chaotic evil"
+                },
+                "rollableActions": [
+                    {
+                        "longRange": 0,
+                        "name": "Greataxe",
+                        "damageMap": {"SLASHING": {
+                            "modifier": 3,
+                            "amountOfDice": 1,
+                            "dieSides": 12
+                        }},
+                        "description": "Melee Weapon Attack",
+                        "range": 5,
+                        "hitModifier": 5
+                    },
+                    {
+                        "longRange": 120,
+                        "name": "Javelin",
+                        "damageMap": {"PIERCING": {
+                            "modifier": 3,
+                            "amountOfDice": 1,
+                            "dieSides": 6
+                        }},
+                        "description": "Melee or Ranged Weapon Attack",
+                        "range": 30,
+                        "hitModifier": 5
+                    }
+                ],
+                "proficiency": 2,
+                "abilityScores": {
+                    "dexterity": 12,
+                    "constitution": 16,
+                    "strength": 16,
+                    "charisma": 10,
+                    "intelligence": 7,
+                    "wisdom": 11
+                },
+                "armour": {
+                    "ac": 13,
+                    "armourName": "hide armour",
+                    "magicArmour": 0
                 }
             },
-            "legendaryMechanics": {
-                "legendaryDescription": "sgwgwgwrg",
-                "legendaryActions": [{
-                    "name": "wgwqegwg",
-                    "description": "wgeegewg"
-                }]
-            },
             "hpFormula": {
-                "modifier": 4,
-                "amountOfDice": 4,
-                "dieSides": 4
+                "modifier": 3,
+                "amountOfDice": 1,
+                "dieSides": 6
             },
-            "xp": 3,
+            "xp": 100,
             "speeds": {
-                "climb": 3,
-                "fly": 3,
-                "burrow": 3,
-                "speed": 3,
-                "swim": 3
+                "climb": 0,
+                "fly": 0,
+                "burrow": 0,
+                "speed": 30,
+                "swim": 0
             }
         },
         {
-            "skillProficiencies": [
-                "ACROBATICS",
-                "ARCANA",
-                "ATHLETICS",
-                "DECEPTION",
-                "HISTORY",
-                "INSIGHT"
-            ],
-            "maxHP": 14,
-            "conditionImmunities": [
-                "BLINDED",
-                "CHARMED",
-                "DEAFENED",
-                "FRIGHTENED"
-            ],
+            "skillProficiencies": ["INTIMIDATION"],
+            "maxHP": 6,
             "languages": {
-                "telepathy": 45,
-                "languagesList": ["ffefefe"]
+                "telepathy": 0,
+                "languagesList": [
+                    "Common",
+                    "Orc"
+                ]
             },
             "senses": {
-                "trueSight": 3,
-                "passivePerception": 3,
-                "darkVision": 3,
-                "blindSight": 3,
-                "tremorSense": 3
+                "trueSight": 0,
+                "passivePerception": 10,
+                "darkVision": 60,
+                "blindSight": 0,
+                "tremorSense": 0
             },
-            "hp": 14,
-            "resistances": {
-                "ACID": "IMMUNITY",
-                "COLD": "VULNERABILITY",
-                "FIRE": "RESISTANCE",
-                "BLUDGEONING": "VULNERABILITY"
-            },
+            "hp": 6,
+            "resistances": {},
             "title": {
-                "size": "Aberration",
-                "name": "4 1",
-                "type": "Small",
-                "alignment": "unaligned"
+                "size": "Humanoid",
+                "name": "Orc 3",
+                "type": "Medium",
+                "alignment": "chaotic evil",
+                "group": "Orcs"
             },
-            "savingThrowProficiencies": [
-                "STRENGTH",
-                "DEXTERITY",
-                "CONSTITUTION",
-                "INTELLIGENCE",
-                "WISDOM",
-                "CHARISMA"
-            ],
-            "rollableActions": [{
-                "longRange": 44,
-                "name": "ffeswf",
-                "damageMap": {
-                    "ACID": {
-                        "modifier": 4,
-                        "amountOfDice": 4,
-                        "dieSides": 4
-                    },
-                    "COLD": {
-                        "modifier": 4,
-                        "amountOfDice": 4,
-                        "dieSides": 4
-                    }
+            "rollableActions": [
+                {
+                    "longRange": 0,
+                    "name": "Greataxe",
+                    "damageMap": {"SLASHING": {
+                        "modifier": 3,
+                        "amountOfDice": 1,
+                        "dieSides": 12
+                    }},
+                    "description": "Melee Weapon Attack",
+                    "range": 5,
+                    "hitModifier": 5
                 },
-                "description": "Melee Weapon Attack",
-                "range": 4,
-                "hitModifier": 4
-            }],
-            "proficiency": 3,
+                {
+                    "longRange": 120,
+                    "name": "Javelin",
+                    "damageMap": {"PIERCING": {
+                        "modifier": 3,
+                        "amountOfDice": 1,
+                        "dieSides": 6
+                    }},
+                    "description": "Melee or Ranged Weapon Attack",
+                    "range": 30,
+                    "hitModifier": 5
+                }
+            ],
+            "proficiency": 2,
             "abilityScores": {
-                "dexterity": 3,
-                "constitution": 3,
-                "strength": 3,
-                "charisma": 3,
-                "intelligence": 3,
-                "wisdom": 3
+                "dexterity": 12,
+                "constitution": 16,
+                "strength": 16,
+                "charisma": 10,
+                "intelligence": 7,
+                "wisdom": 11
             },
             "armour": {
-                "ac": 3,
-                "armourName": "3",
-                "magicArmour": 3
+                "ac": 13,
+                "armourName": "hide armour",
+                "magicArmour": 0
             },
             "parentStatBlock": {
-                "skillProficiencies": [
-                    "ACROBATICS",
-                    "ARCANA",
-                    "ATHLETICS",
-                    "DECEPTION",
-                    "HISTORY",
-                    "INSIGHT"
-                ],
-                "conditionImmunities": [
-                    "BLINDED",
-                    "CHARMED",
-                    "DEAFENED",
-                    "FRIGHTENED"
-                ],
+                "skillProficiencies": ["INTIMIDATION"],
                 "languages": {
-                    "telepathy": 45,
-                    "languagesList": ["ffefefe"]
+                    "telepathy": 0,
+                    "languagesList": [
+                        "Common",
+                        "Orc"
+                    ]
                 },
                 "senses": {
-                    "trueSight": 3,
-                    "passivePerception": 3,
-                    "darkVision": 3,
-                    "blindSight": 3,
-                    "tremorSense": 3
-                },
-                "resistances": {
-                    "ACID": "IMMUNITY",
-                    "COLD": "VULNERABILITY",
-                    "FIRE": "RESISTANCE",
-                    "BLUDGEONING": "VULNERABILITY"
-                },
-                "title": {
-                    "size": "Aberration",
-                    "name": "4",
-                    "type": "Small",
-                    "alignment": "unaligned"
-                },
-                "savingThrowProficiencies": [
-                    "STRENGTH",
-                    "DEXTERITY",
-                    "CONSTITUTION",
-                    "INTELLIGENCE",
-                    "WISDOM",
-                    "CHARISMA"
-                ],
-                "rollableActions": [{
-                    "longRange": 44,
-                    "name": "ffeswf",
-                    "damageMap": {
-                        "ACID": {
-                            "modifier": 4,
-                            "amountOfDice": 4,
-                            "dieSides": 4
-                        },
-                        "COLD": {
-                            "modifier": 4,
-                            "amountOfDice": 4,
-                            "dieSides": 4
-                        }
-                    },
-                    "description": "Melee Weapon Attack",
-                    "range": 4,
-                    "hitModifier": 4
-                }],
-                "proficiency": 3,
-                "abilityScores": {
-                    "dexterity": 3,
-                    "constitution": 3,
-                    "strength": 3,
-                    "charisma": 3,
-                    "intelligence": 3,
-                    "wisdom": 3
-                },
-                "armour": {
-                    "ac": 3,
-                    "armourName": "3",
-                    "magicArmour": 3
-                },
-                "legendaryMechanics": {
-                    "legendaryDescription": "sgwgwgwrg",
-                    "legendaryActions": [{
-                        "name": "wgwqegwg",
-                        "description": "wgeegewg"
-                    }]
+                    "trueSight": 0,
+                    "passivePerception": 10,
+                    "darkVision": 60,
+                    "blindSight": 0,
+                    "tremorSense": 0
                 },
                 "hpFormula": {
-                    "modifier": 4,
-                    "amountOfDice": 4,
-                    "dieSides": 4
+                    "modifier": 3,
+                    "amountOfDice": 1,
+                    "dieSides": 6
                 },
-                "xp": 3,
+                "xp": 100,
+                "resistances": {},
                 "speeds": {
-                    "climb": 3,
-                    "fly": 3,
-                    "burrow": 3,
-                    "speed": 3,
-                    "swim": 3
+                    "climb": 0,
+                    "fly": 0,
+                    "burrow": 0,
+                    "speed": 30,
+                    "swim": 0
+                },
+                "title": {
+                    "size": "Humanoid",
+                    "name": "Orc",
+                    "type": "Medium",
+                    "alignment": "chaotic evil"
+                },
+                "rollableActions": [
+                    {
+                        "longRange": 0,
+                        "name": "Greataxe",
+                        "damageMap": {"SLASHING": {
+                            "modifier": 3,
+                            "amountOfDice": 1,
+                            "dieSides": 12
+                        }},
+                        "description": "Melee Weapon Attack",
+                        "range": 5,
+                        "hitModifier": 5
+                    },
+                    {
+                        "longRange": 120,
+                        "name": "Javelin",
+                        "damageMap": {"PIERCING": {
+                            "modifier": 3,
+                            "amountOfDice": 1,
+                            "dieSides": 6
+                        }},
+                        "description": "Melee or Ranged Weapon Attack",
+                        "range": 30,
+                        "hitModifier": 5
+                    }
+                ],
+                "proficiency": 2,
+                "abilityScores": {
+                    "dexterity": 12,
+                    "constitution": 16,
+                    "strength": 16,
+                    "charisma": 10,
+                    "intelligence": 7,
+                    "wisdom": 11
+                },
+                "armour": {
+                    "ac": 13,
+                    "armourName": "hide armour",
+                    "magicArmour": 0
                 }
             },
-            "legendaryMechanics": {
-                "legendaryDescription": "sgwgwgwrg",
-                "legendaryActions": [{
-                    "name": "wgwqegwg",
-                    "description": "wgeegewg"
-                }]
-            },
             "hpFormula": {
-                "modifier": 4,
-                "amountOfDice": 4,
-                "dieSides": 4
+                "modifier": 3,
+                "amountOfDice": 1,
+                "dieSides": 6
             },
-            "xp": 3,
+            "xp": 100,
             "speeds": {
-                "climb": 3,
-                "fly": 3,
-                "burrow": 3,
-                "speed": 3,
-                "swim": 3
+                "climb": 0,
+                "fly": 0,
+                "burrow": 0,
+                "speed": 30,
+                "swim": 0
             }
         },
         {
-            "skillProficiencies": [
-                "ACROBATICS",
-                "ARCANA",
-                "ATHLETICS",
-                "DECEPTION",
-                "HISTORY",
-                "INSIGHT"
-            ],
-            "maxHP": 11,
-            "conditionImmunities": [
-                "BLINDED",
-                "CHARMED",
-                "DEAFENED",
-                "FRIGHTENED"
-            ],
+            "skillProficiencies": ["STEALTH"],
+            "maxHP": 4,
             "languages": {
-                "telepathy": 45,
-                "languagesList": ["ffefefe"]
+                "telepathy": 0,
+                "languagesList": [
+                    "Common",
+                    "Goblin"
+                ]
             },
             "senses": {
-                "trueSight": 3,
-                "passivePerception": 3,
-                "darkVision": 3,
-                "blindSight": 3,
-                "tremorSense": 3
+                "trueSight": 0,
+                "passivePerception": 9,
+                "darkVision": 60,
+                "blindSight": 0,
+                "tremorSense": 0
             },
-            "hp": 11,
-            "resistances": {
-                "ACID": "IMMUNITY",
-                "COLD": "VULNERABILITY",
-                "FIRE": "RESISTANCE",
-                "BLUDGEONING": "VULNERABILITY"
-            },
+            "hp": 4,
+            "resistances": {},
             "title": {
-                "size": "Aberration",
-                "name": "4 1",
-                "type": "Small",
-                "alignment": "unaligned",
-                "group": "hjv"
+                "size": "Small",
+                "name": "Goblin 3",
+                "type": "Humanoid",
+                "alignment": "chaotic evil"
             },
-            "savingThrowProficiencies": [
-                "STRENGTH",
-                "DEXTERITY",
-                "CONSTITUTION",
-                "INTELLIGENCE",
-                "WISDOM",
-                "CHARISMA"
-            ],
-            "rollableActions": [{
-                "longRange": 44,
-                "name": "ffeswf",
-                "damageMap": {
-                    "ACID": {
-                        "modifier": 4,
-                        "amountOfDice": 4,
-                        "dieSides": 4
-                    },
-                    "COLD": {
-                        "modifier": 4,
-                        "amountOfDice": 4,
-                        "dieSides": 4
-                    }
+            "rollableActions": [
+                {
+                    "longRange": 0,
+                    "name": "Scimitar",
+                    "damageMap": {"SLASHING": {
+                        "modifier": 2,
+                        "amountOfDice": 1,
+                        "dieSides": 6
+                    }},
+                    "description": "Melee Weapon Attack",
+                    "range": 5,
+                    "hitModifier": 4
                 },
-                "description": "Melee Weapon Attack",
-                "range": 4,
-                "hitModifier": 4
-            }],
-            "proficiency": 3,
+                {
+                    "longRange": 320,
+                    "name": "Shortbow",
+                    "damageMap": {"PIERCING": {
+                        "modifier": 2,
+                        "amountOfDice": 1,
+                        "dieSides": 6
+                    }},
+                    "description": "Ranged Weapon Attack",
+                    "range": 80,
+                    "hitModifier": 2
+                }
+            ],
+            "proficiency": 2,
             "abilityScores": {
-                "dexterity": 3,
-                "constitution": 3,
-                "strength": 3,
-                "charisma": 3,
-                "intelligence": 3,
-                "wisdom": 3
+                "dexterity": 14,
+                "constitution": 10,
+                "strength": 8,
+                "charisma": 8,
+                "intelligence": 10,
+                "wisdom": 8
             },
             "armour": {
-                "ac": 3,
-                "armourName": "3",
-                "magicArmour": 3
+                "ac": 15,
+                "armourName": "leather armour, shield",
+                "magicArmour": 0
             },
             "parentStatBlock": {
-                "skillProficiencies": [
-                    "ACROBATICS",
-                    "ARCANA",
-                    "ATHLETICS",
-                    "DECEPTION",
-                    "HISTORY",
-                    "INSIGHT"
-                ],
-                "conditionImmunities": [
-                    "BLINDED",
-                    "CHARMED",
-                    "DEAFENED",
-                    "FRIGHTENED"
-                ],
+                "skillProficiencies": ["STEALTH"],
                 "languages": {
-                    "telepathy": 45,
-                    "languagesList": ["ffefefe"]
+                    "telepathy": 0,
+                    "languagesList": [
+                        "Common",
+                        "Goblin"
+                    ]
                 },
                 "senses": {
-                    "trueSight": 3,
-                    "passivePerception": 3,
-                    "darkVision": 3,
-                    "blindSight": 3,
-                    "tremorSense": 3
-                },
-                "resistances": {
-                    "ACID": "IMMUNITY",
-                    "COLD": "VULNERABILITY",
-                    "FIRE": "RESISTANCE",
-                    "BLUDGEONING": "VULNERABILITY"
-                },
-                "title": {
-                    "size": "Aberration",
-                    "name": "4",
-                    "type": "Small",
-                    "alignment": "unaligned"
-                },
-                "savingThrowProficiencies": [
-                    "STRENGTH",
-                    "DEXTERITY",
-                    "CONSTITUTION",
-                    "INTELLIGENCE",
-                    "WISDOM",
-                    "CHARISMA"
-                ],
-                "rollableActions": [{
-                    "longRange": 44,
-                    "name": "ffeswf",
-                    "damageMap": {
-                        "ACID": {
-                            "modifier": 4,
-                            "amountOfDice": 4,
-                            "dieSides": 4
-                        },
-                        "COLD": {
-                            "modifier": 4,
-                            "amountOfDice": 4,
-                            "dieSides": 4
-                        }
-                    },
-                    "description": "Melee Weapon Attack",
-                    "range": 4,
-                    "hitModifier": 4
-                }],
-                "proficiency": 3,
-                "abilityScores": {
-                    "dexterity": 3,
-                    "constitution": 3,
-                    "strength": 3,
-                    "charisma": 3,
-                    "intelligence": 3,
-                    "wisdom": 3
-                },
-                "armour": {
-                    "ac": 3,
-                    "armourName": "3",
-                    "magicArmour": 3
-                },
-                "legendaryMechanics": {
-                    "legendaryDescription": "sgwgwgwrg",
-                    "legendaryActions": [{
-                        "name": "wgwqegwg",
-                        "description": "wgeegewg"
-                    }]
+                    "trueSight": 0,
+                    "passivePerception": 9,
+                    "darkVision": 60,
+                    "blindSight": 0,
+                    "tremorSense": 0
                 },
                 "hpFormula": {
-                    "modifier": 4,
-                    "amountOfDice": 4,
-                    "dieSides": 4
+                    "modifier": 2,
+                    "amountOfDice": 1,
+                    "dieSides": 6
                 },
-                "xp": 3,
+                "xp": 50,
+                "resistances": {},
                 "speeds": {
-                    "climb": 3,
-                    "fly": 3,
-                    "burrow": 3,
-                    "speed": 3,
-                    "swim": 3
+                    "climb": 0,
+                    "fly": 0,
+                    "burrow": 0,
+                    "speed": 30,
+                    "swim": 0
+                },
+                "title": {
+                    "size": "Small",
+                    "name": "Goblin",
+                    "type": "Humanoid",
+                    "alignment": "chaotic evil"
+                },
+                "rollableActions": [
+                    {
+                        "longRange": 0,
+                        "name": "Scimitar",
+                        "damageMap": {"SLASHING": {
+                            "modifier": 2,
+                            "amountOfDice": 1,
+                            "dieSides": 6
+                        }},
+                        "description": "Melee Weapon Attack",
+                        "range": 5,
+                        "hitModifier": 4
+                    },
+                    {
+                        "longRange": 320,
+                        "name": "Shortbow",
+                        "damageMap": {"PIERCING": {
+                            "modifier": 2,
+                            "amountOfDice": 1,
+                            "dieSides": 6
+                        }},
+                        "description": "Ranged Weapon Attack",
+                        "range": 80,
+                        "hitModifier": 2
+                    }
+                ],
+                "proficiency": 2,
+                "abilityScores": {
+                    "dexterity": 14,
+                    "constitution": 10,
+                    "strength": 8,
+                    "charisma": 8,
+                    "intelligence": 10,
+                    "wisdom": 8
+                },
+                "armour": {
+                    "ac": 15,
+                    "armourName": "leather armour, shield",
+                    "magicArmour": 0
                 }
             },
-            "legendaryMechanics": {
-                "legendaryDescription": "sgwgwgwrg",
-                "legendaryActions": [{
-                    "name": "wgwqegwg",
-                    "description": "wgeegewg"
-                }]
-            },
             "hpFormula": {
-                "modifier": 4,
-                "amountOfDice": 4,
-                "dieSides": 4
+                "modifier": 2,
+                "amountOfDice": 1,
+                "dieSides": 6
             },
-            "xp": 3,
+            "xp": 50,
             "speeds": {
-                "climb": 3,
-                "fly": 3,
-                "burrow": 3,
-                "speed": 3,
-                "swim": 3
+                "climb": 0,
+                "fly": 0,
+                "burrow": 0,
+                "speed": 30,
+                "swim": 0
             }
         },
         {
-            "skillProficiencies": [
-                "ACROBATICS",
-                "ARCANA",
-                "ATHLETICS",
-                "DECEPTION",
-                "HISTORY",
-                "INSIGHT"
-            ],
-            "maxHP": 18,
-            "conditionImmunities": [
-                "BLINDED",
-                "CHARMED",
-                "DEAFENED",
-                "FRIGHTENED"
-            ],
+            "skillProficiencies": ["STEALTH"],
+            "maxHP": 3,
             "languages": {
-                "telepathy": 45,
-                "languagesList": ["ffefefe"]
+                "telepathy": 0,
+                "languagesList": [
+                    "Common",
+                    "Goblin"
+                ]
             },
             "senses": {
-                "trueSight": 3,
-                "passivePerception": 3,
-                "darkVision": 3,
-                "blindSight": 3,
-                "tremorSense": 3
+                "trueSight": 0,
+                "passivePerception": 9,
+                "darkVision": 60,
+                "blindSight": 0,
+                "tremorSense": 0
             },
-            "hp": 18,
-            "resistances": {
-                "ACID": "IMMUNITY",
-                "COLD": "VULNERABILITY",
-                "FIRE": "RESISTANCE",
-                "BLUDGEONING": "VULNERABILITY"
-            },
+            "hp": 3,
+            "resistances": {},
             "title": {
-                "size": "Aberration",
-                "name": "4 1",
-                "type": "Small",
-                "alignment": "unaligned"
+                "size": "Small",
+                "name": "Goblin 4",
+                "type": "Humanoid",
+                "alignment": "chaotic evil"
             },
-            "savingThrowProficiencies": [
-                "STRENGTH",
-                "DEXTERITY",
-                "CONSTITUTION",
-                "INTELLIGENCE",
-                "WISDOM",
-                "CHARISMA"
-            ],
-            "rollableActions": [{
-                "longRange": 44,
-                "name": "ffeswf",
-                "damageMap": {
-                    "ACID": {
-                        "modifier": 4,
-                        "amountOfDice": 4,
-                        "dieSides": 4
-                    },
-                    "COLD": {
-                        "modifier": 4,
-                        "amountOfDice": 4,
-                        "dieSides": 4
-                    }
+            "rollableActions": [
+                {
+                    "longRange": 0,
+                    "name": "Scimitar",
+                    "damageMap": {"SLASHING": {
+                        "modifier": 2,
+                        "amountOfDice": 1,
+                        "dieSides": 6
+                    }},
+                    "description": "Melee Weapon Attack",
+                    "range": 5,
+                    "hitModifier": 4
                 },
-                "description": "Melee Weapon Attack",
-                "range": 4,
-                "hitModifier": 4
-            }],
-            "proficiency": 3,
+                {
+                    "longRange": 320,
+                    "name": "Shortbow",
+                    "damageMap": {"PIERCING": {
+                        "modifier": 2,
+                        "amountOfDice": 1,
+                        "dieSides": 6
+                    }},
+                    "description": "Ranged Weapon Attack",
+                    "range": 80,
+                    "hitModifier": 2
+                }
+            ],
+            "proficiency": 2,
             "abilityScores": {
-                "dexterity": 3,
-                "constitution": 3,
-                "strength": 3,
-                "charisma": 3,
-                "intelligence": 3,
-                "wisdom": 3
+                "dexterity": 14,
+                "constitution": 10,
+                "strength": 8,
+                "charisma": 8,
+                "intelligence": 10,
+                "wisdom": 8
             },
             "armour": {
-                "ac": 3,
-                "armourName": "3",
-                "magicArmour": 3
+                "ac": 15,
+                "armourName": "leather armour, shield",
+                "magicArmour": 0
             },
             "parentStatBlock": {
-                "skillProficiencies": [
-                    "ACROBATICS",
-                    "ARCANA",
-                    "ATHLETICS",
-                    "DECEPTION",
-                    "HISTORY",
-                    "INSIGHT"
-                ],
-                "conditionImmunities": [
-                    "BLINDED",
-                    "CHARMED",
-                    "DEAFENED",
-                    "FRIGHTENED"
-                ],
+                "skillProficiencies": ["STEALTH"],
                 "languages": {
-                    "telepathy": 45,
-                    "languagesList": ["ffefefe"]
+                    "telepathy": 0,
+                    "languagesList": [
+                        "Common",
+                        "Goblin"
+                    ]
                 },
                 "senses": {
-                    "trueSight": 3,
-                    "passivePerception": 3,
-                    "darkVision": 3,
-                    "blindSight": 3,
-                    "tremorSense": 3
-                },
-                "resistances": {
-                    "ACID": "IMMUNITY",
-                    "COLD": "VULNERABILITY",
-                    "FIRE": "RESISTANCE",
-                    "BLUDGEONING": "VULNERABILITY"
-                },
-                "title": {
-                    "size": "Aberration",
-                    "name": "4",
-                    "type": "Small",
-                    "alignment": "unaligned"
-                },
-                "savingThrowProficiencies": [
-                    "STRENGTH",
-                    "DEXTERITY",
-                    "CONSTITUTION",
-                    "INTELLIGENCE",
-                    "WISDOM",
-                    "CHARISMA"
-                ],
-                "rollableActions": [{
-                    "longRange": 44,
-                    "name": "ffeswf",
-                    "damageMap": {
-                        "ACID": {
-                            "modifier": 4,
-                            "amountOfDice": 4,
-                            "dieSides": 4
-                        },
-                        "COLD": {
-                            "modifier": 4,
-                            "amountOfDice": 4,
-                            "dieSides": 4
-                        }
-                    },
-                    "description": "Melee Weapon Attack",
-                    "range": 4,
-                    "hitModifier": 4
-                }],
-                "proficiency": 3,
-                "abilityScores": {
-                    "dexterity": 3,
-                    "constitution": 3,
-                    "strength": 3,
-                    "charisma": 3,
-                    "intelligence": 3,
-                    "wisdom": 3
-                },
-                "armour": {
-                    "ac": 3,
-                    "armourName": "3",
-                    "magicArmour": 3
-                },
-                "legendaryMechanics": {
-                    "legendaryDescription": "sgwgwgwrg",
-                    "legendaryActions": [{
-                        "name": "wgwqegwg",
-                        "description": "wgeegewg"
-                    }]
+                    "trueSight": 0,
+                    "passivePerception": 9,
+                    "darkVision": 60,
+                    "blindSight": 0,
+                    "tremorSense": 0
                 },
                 "hpFormula": {
-                    "modifier": 4,
-                    "amountOfDice": 4,
-                    "dieSides": 4
+                    "modifier": 2,
+                    "amountOfDice": 1,
+                    "dieSides": 6
                 },
-                "xp": 3,
+                "xp": 50,
+                "resistances": {},
                 "speeds": {
-                    "climb": 3,
-                    "fly": 3,
-                    "burrow": 3,
-                    "speed": 3,
-                    "swim": 3
-                }
-            },
-            "legendaryMechanics": {
-                "legendaryDescription": "sgwgwgwrg",
-                "legendaryActions": [{
-                    "name": "wgwqegwg",
-                    "description": "wgeegewg"
-                }]
-            },
-            "hpFormula": {
-                "modifier": 4,
-                "amountOfDice": 4,
-                "dieSides": 4
-            },
-            "xp": 3,
-            "speeds": {
-                "climb": 3,
-                "fly": 3,
-                "burrow": 3,
-                "speed": 3,
-                "swim": 3
-            }
-        },
-        {
-            "skillProficiencies": [
-                "ACROBATICS",
-                "ARCANA",
-                "ATHLETICS",
-                "DECEPTION",
-                "HISTORY",
-                "INSIGHT"
-            ],
-            "maxHP": 13,
-            "conditionImmunities": [
-                "BLINDED",
-                "CHARMED",
-                "DEAFENED",
-                "FRIGHTENED"
-            ],
-            "languages": {
-                "telepathy": 45,
-                "languagesList": ["ffefefe"]
-            },
-            "senses": {
-                "trueSight": 3,
-                "passivePerception": 3,
-                "darkVision": 3,
-                "blindSight": 3,
-                "tremorSense": 3
-            },
-            "hp": 13,
-            "resistances": {
-                "ACID": "IMMUNITY",
-                "COLD": "VULNERABILITY",
-                "FIRE": "RESISTANCE",
-                "BLUDGEONING": "VULNERABILITY"
-            },
-            "title": {
-                "size": "Aberration",
-                "name": "4 1",
-                "type": "Small",
-                "alignment": "unaligned"
-            },
-            "savingThrowProficiencies": [
-                "STRENGTH",
-                "DEXTERITY",
-                "CONSTITUTION",
-                "INTELLIGENCE",
-                "WISDOM",
-                "CHARISMA"
-            ],
-            "rollableActions": [{
-                "longRange": 44,
-                "name": "ffeswf",
-                "damageMap": {
-                    "ACID": {
-                        "modifier": 4,
-                        "amountOfDice": 4,
-                        "dieSides": 4
+                    "climb": 0,
+                    "fly": 0,
+                    "burrow": 0,
+                    "speed": 30,
+                    "swim": 0
+                },
+                "title": {
+                    "size": "Small",
+                    "name": "Goblin",
+                    "type": "Humanoid",
+                    "alignment": "chaotic evil"
+                },
+                "rollableActions": [
+                    {
+                        "longRange": 0,
+                        "name": "Scimitar",
+                        "damageMap": {"SLASHING": {
+                            "modifier": 2,
+                            "amountOfDice": 1,
+                            "dieSides": 6
+                        }},
+                        "description": "Melee Weapon Attack",
+                        "range": 5,
+                        "hitModifier": 4
                     },
-                    "COLD": {
-                        "modifier": 4,
-                        "amountOfDice": 4,
-                        "dieSides": 4
+                    {
+                        "longRange": 320,
+                        "name": "Shortbow",
+                        "damageMap": {"PIERCING": {
+                            "modifier": 2,
+                            "amountOfDice": 1,
+                            "dieSides": 6
+                        }},
+                        "description": "Ranged Weapon Attack",
+                        "range": 80,
+                        "hitModifier": 2
                     }
-                },
-                "description": "Melee Weapon Attack",
-                "range": 4,
-                "hitModifier": 4
-            }],
-            "proficiency": 3,
-            "abilityScores": {
-                "dexterity": 3,
-                "constitution": 3,
-                "strength": 3,
-                "charisma": 3,
-                "intelligence": 3,
-                "wisdom": 3
-            },
-            "armour": {
-                "ac": 3,
-                "armourName": "3",
-                "magicArmour": 3
-            },
-            "parentStatBlock": {
-                "skillProficiencies": [
-                    "ACROBATICS",
-                    "ARCANA",
-                    "ATHLETICS",
-                    "DECEPTION",
-                    "HISTORY",
-                    "INSIGHT"
                 ],
-                "conditionImmunities": [
-                    "BLINDED",
-                    "CHARMED",
-                    "DEAFENED",
-                    "FRIGHTENED"
-                ],
-                "languages": {
-                    "telepathy": 45,
-                    "languagesList": ["ffefefe"]
-                },
-                "senses": {
-                    "trueSight": 3,
-                    "passivePerception": 3,
-                    "darkVision": 3,
-                    "blindSight": 3,
-                    "tremorSense": 3
-                },
-                "resistances": {
-                    "ACID": "IMMUNITY",
-                    "COLD": "VULNERABILITY",
-                    "FIRE": "RESISTANCE",
-                    "BLUDGEONING": "VULNERABILITY"
-                },
-                "title": {
-                    "size": "Aberration",
-                    "name": "4",
-                    "type": "Small",
-                    "alignment": "unaligned"
-                },
-                "savingThrowProficiencies": [
-                    "STRENGTH",
-                    "DEXTERITY",
-                    "CONSTITUTION",
-                    "INTELLIGENCE",
-                    "WISDOM",
-                    "CHARISMA"
-                ],
-                "rollableActions": [{
-                    "longRange": 44,
-                    "name": "ffeswf",
-                    "damageMap": {
-                        "ACID": {
-                            "modifier": 4,
-                            "amountOfDice": 4,
-                            "dieSides": 4
-                        },
-                        "COLD": {
-                            "modifier": 4,
-                            "amountOfDice": 4,
-                            "dieSides": 4
-                        }
-                    },
-                    "description": "Melee Weapon Attack",
-                    "range": 4,
-                    "hitModifier": 4
-                }],
-                "proficiency": 3,
+                "proficiency": 2,
                 "abilityScores": {
-                    "dexterity": 3,
-                    "constitution": 3,
-                    "strength": 3,
-                    "charisma": 3,
-                    "intelligence": 3,
-                    "wisdom": 3
+                    "dexterity": 14,
+                    "constitution": 10,
+                    "strength": 8,
+                    "charisma": 8,
+                    "intelligence": 10,
+                    "wisdom": 8
                 },
                 "armour": {
-                    "ac": 3,
-                    "armourName": "3",
-                    "magicArmour": 3
-                },
-                "legendaryMechanics": {
-                    "legendaryDescription": "sgwgwgwrg",
-                    "legendaryActions": [{
-                        "name": "wgwqegwg",
-                        "description": "wgeegewg"
-                    }]
-                },
-                "hpFormula": {
-                    "modifier": 4,
-                    "amountOfDice": 4,
-                    "dieSides": 4
-                },
-                "xp": 3,
-                "speeds": {
-                    "climb": 3,
-                    "fly": 3,
-                    "burrow": 3,
-                    "speed": 3,
-                    "swim": 3
+                    "ac": 15,
+                    "armourName": "leather armour, shield",
+                    "magicArmour": 0
                 }
             },
-            "legendaryMechanics": {
-                "legendaryDescription": "sgwgwgwrg",
-                "legendaryActions": [{
-                    "name": "wgwqegwg",
-                    "description": "wgeegewg"
-                }]
-            },
             "hpFormula": {
-                "modifier": 4,
-                "amountOfDice": 4,
-                "dieSides": 4
+                "modifier": 2,
+                "amountOfDice": 1,
+                "dieSides": 6
             },
-            "xp": 3,
+            "xp": 50,
             "speeds": {
-                "climb": 3,
-                "fly": 3,
-                "burrow": 3,
-                "speed": 3,
-                "swim": 3
-            }
-        },
-        {
-            "skillProficiencies": [
-                "ACROBATICS",
-                "ARCANA",
-                "ATHLETICS",
-                "DECEPTION",
-                "HISTORY",
-                "INSIGHT"
-            ],
-            "maxHP": 15,
-            "conditionImmunities": [
-                "BLINDED",
-                "CHARMED",
-                "DEAFENED",
-                "FRIGHTENED"
-            ],
-            "languages": {
-                "telepathy": 45,
-                "languagesList": ["ffefefe"]
-            },
-            "senses": {
-                "trueSight": 3,
-                "passivePerception": 3,
-                "darkVision": 3,
-                "blindSight": 3,
-                "tremorSense": 3
-            },
-            "hp": 15,
-            "resistances": {
-                "ACID": "IMMUNITY",
-                "COLD": "VULNERABILITY",
-                "FIRE": "RESISTANCE",
-                "BLUDGEONING": "VULNERABILITY"
-            },
-            "title": {
-                "size": "Aberration",
-                "name": "4 1",
-                "type": "Small",
-                "alignment": "unaligned"
-            },
-            "savingThrowProficiencies": [
-                "STRENGTH",
-                "DEXTERITY",
-                "CONSTITUTION",
-                "INTELLIGENCE",
-                "WISDOM",
-                "CHARISMA"
-            ],
-            "rollableActions": [{
-                "longRange": 44,
-                "name": "ffeswf",
-                "damageMap": {
-                    "ACID": {
-                        "modifier": 4,
-                        "amountOfDice": 4,
-                        "dieSides": 4
-                    },
-                    "COLD": {
-                        "modifier": 4,
-                        "amountOfDice": 4,
-                        "dieSides": 4
-                    }
-                },
-                "description": "Melee Weapon Attack",
-                "range": 4,
-                "hitModifier": 4
-            }],
-            "proficiency": 3,
-            "abilityScores": {
-                "dexterity": 3,
-                "constitution": 3,
-                "strength": 3,
-                "charisma": 3,
-                "intelligence": 3,
-                "wisdom": 3
-            },
-            "armour": {
-                "ac": 3,
-                "armourName": "3",
-                "magicArmour": 3
-            },
-            "parentStatBlock": {
-                "skillProficiencies": [
-                    "ACROBATICS",
-                    "ARCANA",
-                    "ATHLETICS",
-                    "DECEPTION",
-                    "HISTORY",
-                    "INSIGHT"
-                ],
-                "conditionImmunities": [
-                    "BLINDED",
-                    "CHARMED",
-                    "DEAFENED",
-                    "FRIGHTENED"
-                ],
-                "languages": {
-                    "telepathy": 45,
-                    "languagesList": ["ffefefe"]
-                },
-                "senses": {
-                    "trueSight": 3,
-                    "passivePerception": 3,
-                    "darkVision": 3,
-                    "blindSight": 3,
-                    "tremorSense": 3
-                },
-                "resistances": {
-                    "ACID": "IMMUNITY",
-                    "COLD": "VULNERABILITY",
-                    "FIRE": "RESISTANCE",
-                    "BLUDGEONING": "VULNERABILITY"
-                },
-                "title": {
-                    "size": "Aberration",
-                    "name": "4",
-                    "type": "Small",
-                    "alignment": "unaligned"
-                },
-                "savingThrowProficiencies": [
-                    "STRENGTH",
-                    "DEXTERITY",
-                    "CONSTITUTION",
-                    "INTELLIGENCE",
-                    "WISDOM",
-                    "CHARISMA"
-                ],
-                "rollableActions": [{
-                    "longRange": 44,
-                    "name": "ffeswf",
-                    "damageMap": {
-                        "ACID": {
-                            "modifier": 4,
-                            "amountOfDice": 4,
-                            "dieSides": 4
-                        },
-                        "COLD": {
-                            "modifier": 4,
-                            "amountOfDice": 4,
-                            "dieSides": 4
-                        }
-                    },
-                    "description": "Melee Weapon Attack",
-                    "range": 4,
-                    "hitModifier": 4
-                }],
-                "proficiency": 3,
-                "abilityScores": {
-                    "dexterity": 3,
-                    "constitution": 3,
-                    "strength": 3,
-                    "charisma": 3,
-                    "intelligence": 3,
-                    "wisdom": 3
-                },
-                "armour": {
-                    "ac": 3,
-                    "armourName": "3",
-                    "magicArmour": 3
-                },
-                "legendaryMechanics": {
-                    "legendaryDescription": "sgwgwgwrg",
-                    "legendaryActions": [{
-                        "name": "wgwqegwg",
-                        "description": "wgeegewg"
-                    }]
-                },
-                "hpFormula": {
-                    "modifier": 4,
-                    "amountOfDice": 4,
-                    "dieSides": 4
-                },
-                "xp": 3,
-                "speeds": {
-                    "climb": 3,
-                    "fly": 3,
-                    "burrow": 3,
-                    "speed": 3,
-                    "swim": 3
-                }
-            },
-            "legendaryMechanics": {
-                "legendaryDescription": "sgwgwgwrg",
-                "legendaryActions": [{
-                    "name": "wgwqegwg",
-                    "description": "wgeegewg"
-                }]
-            },
-            "hpFormula": {
-                "modifier": 4,
-                "amountOfDice": 4,
-                "dieSides": 4
-            },
-            "xp": 3,
-            "speeds": {
-                "climb": 3,
-                "fly": 3,
-                "burrow": 3,
-                "speed": 3,
-                "swim": 3
+                "climb": 0,
+                "fly": 0,
+                "burrow": 0,
+                "speed": 30,
+                "swim": 0
             }
         }
     ]

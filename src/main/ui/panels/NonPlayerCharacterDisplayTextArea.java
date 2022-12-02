@@ -23,8 +23,6 @@ public class NonPlayerCharacterDisplayTextArea extends JTextArea {
         setEditable(false);
         setLineWrap(true);
         setWrapStyleWord(true);
-
-        setOpaque(false);
         repaint();
     }
 
@@ -43,7 +41,6 @@ public class NonPlayerCharacterDisplayTextArea extends JTextArea {
 
         revalidate();
         repaint();
-        setOpaque(false);
     }
 
     // MODIFIES: this

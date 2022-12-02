@@ -1,17 +1,16 @@
 # AutoBlocks
 ## for Dungeons and Dragons 5th Edition by Wizards of the Coast.
 <p>
-This is a tool for dungeon and dragons (D&D) dungeon masters (DMs) to automate mechanics for NPCs. This does not 
-simulate any form of map, it's intended to be used with an external one.
+This is a tool for dungeon and dragons (D&D) dungeon masters (DMs) to automate mechanics for non player characters (NPCs).
+This does not simulate any form of map, it's intended to be used with an external one.
 </p>
 
-- with this application you can do the following for non-player-characters (NPCs):
+- with this application you can do the following:
   - **view and create statblocks**
-  - **create characters from stablocks**
-  - **autoroll for characters (initiative, RollableActions, etc)**
-  - **track and edit NPC hitpoints**
+  - **create NPCs from statblocks**
+  - **make single or multi-rolls for NPCs (initiative, actions, etc)**
+  - **track and edit NPC hit points**
   - **group characters together**
-- this application holds data such as *default monster statblocks*, but also allows the user to *enter custom entries*.
 <p>
 I made this application because I'm a D&D DM and I think there is no other application like this one. While there are 
 some other applications for automating rolls, most try to do automation and map simulation at the same time. I think 
@@ -26,46 +25,84 @@ As a user, I want to be able to:
 </p>
 
 - simulate rolling any number of dice, with any number of sides, and with any modifier
-- view a list of statblocks by their names, (aka a 'library') and do the following:
-    - select statblock in a library and do the following:
+- view a list of statblocks by their names, (aka the 'library') and do the following:
+    - select statblock in the library and do the following:
         - display all statblock information
-        - add any number of statblock to encounter as new characters
-    - add new, custom statblock to a library.
-- view a list of characters (aka an 'encounter') by their names, groups, and hp; and do the following:
-  - select NPC in encounter and do the following:
-      - display all NPC stats and RollableActions
-      - enter roll menu for NPC and do the following:
-          - roll NPC action
-          - roll NPC ability check
-          - roll NPC initiative
-      - edit NPC hitpoints
-      - change NPC group
-      - delete NPC from encounter
-  - select group in encounter and do the following:
-    - display characters in group by all stats
-    - enter roll menu for group and do the following: 
-      - roll group action
-      - roll group ability check
-      - roll group initiative
-    - edit group hp
-    - remove group from characters
-    - delete group and its characters from encounter
-- chose to save the current library and/or encounter to file (from main menu and when quitting the application), and 
-- chose to load the library and/or encounter from file (from main menu and when launching the application)
+        - add any number of statblock to encounter as new NPCs
+    - add new, custom statblock to the library
+    - remove statblocks from the library
+- view a list of NPCs (aka the 'encounter') by their names, groups, and hp; and view all rollable actions. functions:
+- select any number of NPCs in the encounter and do the following:
+- roll ability check
+- roll initiative
+- change hitpoints by custom amount
+- change group
+- delete from the encounter
+- select a single NPC in the encounter and do the following:
+- open NPC's stats sheet and take all the normal functions; updates rollable actions
+- open NPC's group and take all the normal functions; updates rollable actions;
+- chose to save the current library and/or encounter to file (from title menu), and 
+- chose to load the library and/or encounter from file (from title menu)
 
 ### Future Additions:
-- save system to allow for multiple save/load files for any amount of encounters and libraries
-- come with all default monsters in the 5th edition monsters manual (2/300)
+- come with all default monsters in the 5th edition monsters manual
+- add NPC name tags to the actions display and roll outputs
+- save system to allow for multiple save/load files
 - automated rolls for skills and saving throws
 - turn order and automation of turns
 - inventory/loot generation
-
-### Current Bugs:
-- NPC groups are not persistent (loading fails)
+- custom action window
 
 # Instructions for grader
-- You can generate multiple events related to adding StatBlocks to the Library by selecting "Create New" after
-navigating to the library menu from the title screen.
+- You can generate multiple events related to adding StatBlocks (Xs) to the Library (Y) by selecting "Create New" after
+navigating to the library menu from the title screen. You can also generate multiple events relating to adding NPCs 
+(additional Xs) to the Encounter (additional Y) by selecting a statblock from the library and clicking "Add to Encounter".
 - You can locate my visual component by opening the app!
 - You can save the state of my application by selecting the save option from the title screen.
 - You can reload the state of my application by selecting the load option from the title screen.
+
+## Phase 4: Task 2
+- Start of EventLog:
+- Fri Dec 02 11:47:38 PST 2022:
+- Encounter constructed.
+- Fri Dec 02 11:47:38 PST 2022:
+- Library constructed.
+- Fri Dec 02 11:47:41 PST 2022:
+- Removed all encounter elements.
+- Fri Dec 02 11:47:41 PST 2022:
+- Added "Orc 1 (Group: Orcs), HP: 9/9" to the encounter.
+- Fri Dec 02 11:47:41 PST 2022:
+- Added "Orc 2 (Group: Orcs), HP: 4/4" to the encounter.
+- Fri Dec 02 11:47:41 PST 2022:
+- Added "Orc 3 (Group: Orcs), HP: 6/6" to the encounter.
+- Fri Dec 02 11:47:41 PST 2022:
+- Added "Goblin 1 (Group: Goblins), HP: 5/5" to the encounter.
+- Fri Dec 02 11:47:41 PST 2022:
+- Added "Goblin 2 (Group: Goblins), HP: 3/3" to the encounter.
+- Fri Dec 02 11:47:41 PST 2022:
+- Removed all library elements.
+- Fri Dec 02 11:47:41 PST 2022:
+- Added "Orc. CR: 1/2" to the library.
+- Fri Dec 02 11:47:41 PST 2022:
+- Added "Goblin. CR: 1/4" to the library.
+- Fri Dec 02 11:47:46 PST 2022:
+- Removed all encounter elements.
+- Fri Dec 02 11:47:46 PST 2022:
+- Added "Orc 1 (Group: Orcs), HP: 9/9" to the encounter.
+- Fri Dec 02 11:47:46 PST 2022:
+- Added "Orc 2 (Group: Orcs), HP: 4/4" to the encounter.
+- Fri Dec 02 11:47:46 PST 2022:
+- Added "Orc 3 (Group: Orcs), HP: 6/6" to the encounter.
+- Fri Dec 02 11:47:46 PST 2022:
+- Added "Goblin 1 (Group: Goblins), HP: 5/5" to the encounter.
+- Fri Dec 02 11:47:46 PST 2022:
+- Added "Goblin 2 (Group: Goblins), HP: 3/3" to the encounter.
+- Fri Dec 02 11:47:46 PST 2022:
+- Added "Goblin 3, HP: 4/4" to the encounter.
+- Fri Dec 02 11:47:46 PST 2022:
+- Added "Goblin 4, HP: 3/3" to the encounter.
+- Fri Dec 02 11:47:53 PST 2022:
+- Removed "Goblin 1 (Group: Goblins), HP: 5/5" from the encounter.
+- Fri Dec 02 11:47:53 PST 2022:
+- Removed "Goblin 2 (Group: Goblins), HP: 3/3" from the encounter.
+- End of EventLog.
