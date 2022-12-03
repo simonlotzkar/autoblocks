@@ -1,5 +1,6 @@
 package model.statblockfields;
 
+import enums.AbilityScore;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,15 +36,15 @@ public class AbilityScoreSetTest {
 
     @Test
     public void testConvertToModifier() {
-        assertEquals(-5, testAbilityScoreSet0.toModifier("strength"));
+        assertEquals(-5, testAbilityScoreSet0.toModifier(AbilityScore.STRENGTH));
 
-        assertEquals(0, testAbilityScoreSet1.toModifier("dexterity"));
+        assertEquals(0, testAbilityScoreSet1.toModifier(AbilityScore.DEXTERITY));
 
-        assertEquals(3, testAbilityScoreSet2.toModifier("constitution"));
-        assertEquals(4, testAbilityScoreSet2.toModifier("intelligence"));
+        assertEquals(3, testAbilityScoreSet2.toModifier(AbilityScore.CONSTITUTION));
+        assertEquals(4, testAbilityScoreSet2.toModifier(AbilityScore.INTELLIGENCE));
 
-        assertEquals(-2, testAbilityScoreSet3.toModifier("wisdom"));
-        assertEquals(-1, testAbilityScoreSet3.toModifier("charisma"));
+        assertEquals(-2, testAbilityScoreSet3.toModifier(AbilityScore.WISDOM));
+        assertEquals(-1, testAbilityScoreSet3.toModifier(AbilityScore.CHARISMA));
     }
 
     @Test

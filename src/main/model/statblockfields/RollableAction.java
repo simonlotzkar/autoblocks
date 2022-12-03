@@ -4,11 +4,12 @@ import enums.DamageType;
 import exceptions.IncompleteFieldException;
 import model.RollFormula;
 import org.json.JSONObject;
+import persistence.Writable;
 
 import java.util.HashMap;
 
 // REPRESENTS: an action with a name, description, reach, hit roll formula, and a set of damage types with rolls
-public class RollableAction extends Ability {
+public class RollableAction extends Ability implements Writable {
     // required fields
     private final int range;
     private final int longRange;

@@ -1,6 +1,7 @@
 package ui.panels;
 
 import enums.AbilityScore;
+import model.Encounter;
 import model.NPC;
 import ui.panels.menus.MainMenuPanel;
 
@@ -28,12 +29,12 @@ public class MainDisplayPanel extends DisplayPanel implements ListSelectionListe
     private final JPanel encounterMainDisplayManagerPanel = new JPanel(encounterMainDisplayCardLayout);
 
     // lists
-    private DefaultListModel<NPC> encounterListModel
+    private Encounter encounter
             = mainMenuPanel.getMenuManagerPanel().getEncounter();
-    private final JList<NPC> encounterList = new JList<>(encounterListModel);
+    private final JList<NPC> encounterList = new JList<>(encounter);
 
-    private final DefaultListModel<NPC> groupListModel = new DefaultListModel<>();
-    private final JList<NPC> groupList = new JList<>(groupListModel);
+    private final Encounter groupEncounter = new Encounter();
+    private final JList<NPC> groupList = new JList<>(groupEncounter);
 
     // scroll panes
     private final JScrollPane encounterScrollPane = new JScrollPane();
@@ -97,7 +98,7 @@ public class MainDisplayPanel extends DisplayPanel implements ListSelectionListe
     // MODIFIES: this
     // EFFECTS: creates the encounter list
     private void initializeEncounterList() {
-        encounterListModel = mainMenuPanel.getMenuManagerPanel().getEncounter();
+        encounter = mainMenuPanel.getMenuManagerPanel().getEncounter();
 
         encounterList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         encounterList.setLayoutOrientation(JList.VERTICAL);
@@ -120,7 +121,7 @@ public class MainDisplayPanel extends DisplayPanel implements ListSelectionListe
         refreshGroupList();
 
         encounterList.removeAll();
-        encounterList.setModel(encounterListModel);
+        encounterList.setModel(encounter);
 
         encounterScrollPane.revalidate();
         encounterScrollPane.repaint();
@@ -129,12 +130,12 @@ public class MainDisplayPanel extends DisplayPanel implements ListSelectionListe
     // MODIFIES: this
     // EFFECTS: repopulates the group list
     private void refreshGroupList() {
-        groupListModel.removeAllElements();
+        groupEncounter.removeAllElements();
         if (selectedGroupName != null) {
-            for (int i = 0; i < encounterListModel.size(); i++) {
-                if (encounterListModel.getElementAt(i).hasGroup() && encounterListModel.getElementAt(i).getTitle()
+            for (int i = 0; i < encounter.size(); i++) {
+                if (encounter.getElementAt(i).hasGroup() && encounter.getElementAt(i).getTitle()
                         .getGroup().equalsIgnoreCase(selectedGroupName)) {
-                    groupListModel.addElement(encounterListModel.getElementAt(i));
+                    groupEncounter.addElement(encounter.getElementAt(i));
                 }
             }
         }
@@ -199,12 +200,12 @@ public class MainDisplayPanel extends DisplayPanel implements ListSelectionListe
             refreshEncounterScrollPane();
         } else if (selectedGroupName != null) {
             for (int i : groupList.getSelectedIndices()) {
-                groupListModel.getElementAt(i).getTitle().setGroup(newGroupName);
+                groupEncounter.getElementAt(i).getTitle().setGroup(newGroupName);
                 refreshEncounterScrollPane();
             }
         } else if (encounterList.getSelectedIndices().length != 0) {
             for (int i : encounterList.getSelectedIndices()) {
-                encounterListModel.getElementAt(i).getTitle().setGroup(newGroupName);
+                encounter.getElementAt(i).getTitle().setGroup(newGroupName);
                 refreshEncounterScrollPane();
             }
         } else {
@@ -243,12 +244,12 @@ public class MainDisplayPanel extends DisplayPanel implements ListSelectionListe
             refreshEncounterScrollPane();
         } else if (selectedGroupName != null) {
             for (int i : groupList.getSelectedIndices()) {
-                groupListModel.getElementAt(i).changeHP(hpChange);
+                groupEncounter.getElementAt(i).changeHP(hpChange);
                 refreshEncounterScrollPane();
             }
         } else if (encounterList.getSelectedIndices().length != 0) {
             for (int i : encounterList.getSelectedIndices()) {
-                encounterListModel.getElementAt(i).changeHP(hpChange);
+                encounter.getElementAt(i).changeHP(hpChange);
                 refreshEncounterScrollPane();
             }
         } else {
@@ -267,16 +268,16 @@ public class MainDisplayPanel extends DisplayPanel implements ListSelectionListe
 
         if (confirmDelete == JOptionPane.YES_OPTION) {
             if (selectedNPC != null) {
-                encounterListModel.removeElement(selectedNPC);
+                encounter.removeElement(selectedNPC);
                 refreshEncounterScrollPane();
             } else if (selectedGroupName != null) {
                 for (Object o : groupList.getSelectedValuesList()) {
-                    encounterListModel.removeElement(o);
+                    encounter.removeElement(o);
                     refreshEncounterScrollPane();
                 }
             } else if (encounterList.getSelectedIndices().length != 0) {
                 for (Object o : encounterList.getSelectedValuesList()) {
-                    encounterListModel.removeElement(o);
+                    encounter.removeElement(o);
                     refreshEncounterScrollPane();
                 }
             } else {
@@ -309,13 +310,13 @@ public class MainDisplayPanel extends DisplayPanel implements ListSelectionListe
         } else if (selectedGroupName != null) {
             for (int i : groupList.getSelectedIndices()) {
                 mainMenuPanel.getSideDisplayPanel()
-                        .printToOutputLog(groupListModel.getElementAt(i).rollInitiative());
+                        .printToOutputLog(groupEncounter.getElementAt(i).rollInitiative());
                 refreshEncounterScrollPane();
             }
         } else if (encounterList.getSelectedIndices().length != 0) {
             for (int i : encounterList.getSelectedIndices()) {
                 mainMenuPanel.getSideDisplayPanel()
-                        .printToOutputLog(encounterListModel.getElementAt(i).rollInitiative());
+                        .printToOutputLog(encounter.getElementAt(i).rollInitiative());
                 refreshEncounterScrollPane();
             }
         } else {
@@ -354,13 +355,13 @@ public class MainDisplayPanel extends DisplayPanel implements ListSelectionListe
         } else if (selectedGroupName != null) {
             for (int i : groupList.getSelectedIndices()) {
                 mainMenuPanel.getSideDisplayPanel()
-                        .printToOutputLog(groupListModel.getElementAt(i).rollCheckAsString(abilityScore));
+                        .printToOutputLog(groupEncounter.getElementAt(i).rollCheckAsString(abilityScore));
                 refreshEncounterScrollPane();
             }
         } else if (encounterList.getSelectedIndices().length != 0) {
             for (int i : encounterList.getSelectedIndices()) {
                 mainMenuPanel.getSideDisplayPanel()
-                        .printToOutputLog(encounterListModel.getElementAt(i).rollCheckAsString(abilityScore));
+                        .printToOutputLog(encounter.getElementAt(i).rollCheckAsString(abilityScore));
                 refreshEncounterScrollPane();
             }
         } else {
@@ -374,9 +375,9 @@ public class MainDisplayPanel extends DisplayPanel implements ListSelectionListe
     public void passAction(ActionEvent e) {
         if (e.getSource() == openNonPlayerCharacterButton) {
             if (selectedGroupName == null) {
-                selectedNPC = (encounterListModel.getElementAt(encounterList.getSelectedIndex()));
+                selectedNPC = (encounter.getElementAt(encounterList.getSelectedIndex()));
             } else {
-                selectedNPC = (groupListModel.getElementAt(groupList.getSelectedIndex()));
+                selectedNPC = (groupEncounter.getElementAt(groupList.getSelectedIndex()));
             }
             mainMenuPanel.setDisplays("npc");
         } else if (e.getSource() == openGroupButton) {
@@ -400,7 +401,7 @@ public class MainDisplayPanel extends DisplayPanel implements ListSelectionListe
     // EFFECTS: selects the group of the selected NPC or displays an error
     private void trySelectGroup() {
         if (encounterList.getSelectedValue().hasGroup()) {
-            selectedGroupName = encounterListModel.getElementAt(encounterList.getSelectedIndex()).getTitle().getGroup();
+            selectedGroupName = encounter.getElementAt(encounterList.getSelectedIndex()).getTitle().getGroup();
             mainMenuPanel.setDisplays("group");
         } else {
             JOptionPane.showMessageDialog(this, "Selected NPC has no group.",

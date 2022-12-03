@@ -1,6 +1,7 @@
 package ui.panels;
 
 import enums.AbilityScore;
+import model.StatBlock;
 import model.statblockfields.*;
 import model.statblockfields.RollableAction;
 import ui.panels.menus.MainMenuPanel;
@@ -10,7 +11,7 @@ import javax.swing.*;
 // Represents a text area that displays a text representation of the selected statblock
 public class StatBlockDisplayTextArea extends JTextArea {
     private final MainMenuPanel mainMenuPanel;
-    private model.StatBlock selectedStatBlock;
+    private StatBlock selectedStatBlock;
 
     private static final String NONE_SELECTED = "No StatBlock Selected";
 

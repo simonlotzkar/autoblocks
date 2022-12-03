@@ -1,5 +1,6 @@
 package model.statblockfields;
 
+import exceptions.IncompleteFieldException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,12 +23,12 @@ public class TitleTest {
 
     @BeforeEach
     public void beforeEach() {
-        testTitle0 = new Title.TitleBuilder(testName0, testType0, testSize0, testAlignment0)
-                .group(testGroup0)
-                .build();
-
-        testTitle1 = new Title.TitleBuilder(testName1, testType1, testSize1, testAlignment1)
-                .build();
+        try {
+            testTitle0 = new Title(testName0, testType0, testSize0, testAlignment0, testGroup0);
+            testTitle1 = new Title(testName1, testType1, testSize1, testAlignment1, null);
+        } catch (IncompleteFieldException e) {
+            fail("Should not have thrown an exception!");
+        }
     }
 
     @Test

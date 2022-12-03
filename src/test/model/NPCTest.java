@@ -1,5 +1,6 @@
 package model;
 
+import exceptions.IncompleteFieldException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,19 +34,21 @@ public class NPCTest extends StatBlockTest {
         initializeStatBlock1();
         initializeStatBlock2();
 
-        statBlock0NPC0 = new NPC(statBlock0, TITLE_0.getName() + " 1");
+        try {
+            statBlock0NPC0 = new NPC(statBlock0);
+            statBlock1NPC0 = new NPC(statBlock1);
+            statBlock1NPC1 = new NPC(statBlock1);
+            statBlock1NPC2 = new NPC(statBlock1);
 
-        statBlock1NPC0 = new NPC(statBlock1, TITLE_1.getName() + " 1");
-        statBlock1NPC1 = new NPC(statBlock1, TITLE_1.getName() + " 2");
-        statBlock1NPC2 = new NPC(statBlock1, TITLE_1.getName() + " 3");
-
-        statBlock2NPC0 = new NPC(statBlock2, TITLE_2.getName() + " 1");
-        statBlock2NPC0.getTitle().setGroup(GROUP_0);
-        statBlock2NPC1 = new NPC(statBlock2, TITLE_2.getName() + " 2");
-        statBlock2NPC1.getTitle().setGroup(GROUP_0);
-        statBlock2NPC2 = new NPC(statBlock2, TITLE_2.getName() + " 3");
-        statBlock2NPC2.getTitle().setGroup(GROUP_0);
-
+            statBlock2NPC0 = new NPC(statBlock2);
+            statBlock2NPC0.getTitle().setGroup(GROUP_0);
+            statBlock2NPC1 = new NPC(statBlock2);
+            statBlock2NPC1.getTitle().setGroup(GROUP_0);
+            statBlock2NPC2 = new NPC(statBlock2);
+            statBlock2NPC2.getTitle().setGroup(GROUP_0);
+        } catch (IncompleteFieldException e) {
+            fail("exception!");
+        }
         sequentialEncounter.add(statBlock0NPC0);
         sequentialEncounter.add(statBlock1NPC0);
         sequentialEncounter.add(statBlock1NPC1);
@@ -67,10 +70,10 @@ public class NPCTest extends StatBlockTest {
         assertEquals(statBlock0, statBlock0NPC0.getParentStatBlock());
         assertEquals(statBlock0NPC0.getHP(), statBlock0NPC0.getMaxHP());
 
-        assertEquals(TITLE_0.getName() + " 1", statBlock0NPC0.getTitle().getName());
-        assertEquals(TITLE_0.getType(), statBlock0NPC0.getTitle().getType());
-        assertEquals(TITLE_0.getSize(), statBlock0NPC0.getTitle().getSize());
-        assertEquals(TITLE_0.getAlignment(), statBlock0NPC0.getTitle().getAlignment());
+        assertEquals(title0.getName() + " 1", statBlock0NPC0.getTitle().getName());
+        assertEquals(title0.getType(), statBlock0NPC0.getTitle().getType());
+        assertEquals(title0.getSize(), statBlock0NPC0.getTitle().getSize());
+        assertEquals(title0.getAlignment(), statBlock0NPC0.getTitle().getAlignment());
         assertNull(statBlock0NPC0.getTitle().getGroup());
 
         assertEquals(ROLL_FORMULA_0, statBlock0NPC0.getHPFormula());
@@ -91,10 +94,10 @@ public class NPCTest extends StatBlockTest {
         assertEquals(statBlock1, statBlock1NPC0.getParentStatBlock());
         assertEquals(statBlock1NPC0.getHP(), statBlock1NPC0.getMaxHP());
 
-        assertEquals(TITLE_1.getName() + " 1", statBlock1NPC0.getTitle().getName());
-        assertEquals(TITLE_1.getType(), statBlock1NPC0.getTitle().getType());
-        assertEquals(TITLE_1.getSize(), statBlock1NPC0.getTitle().getSize());
-        assertEquals(TITLE_1.getAlignment(), statBlock1NPC0.getTitle().getAlignment());
+        assertEquals(title1.getName() + " 1", statBlock1NPC0.getTitle().getName());
+        assertEquals(title1.getType(), statBlock1NPC0.getTitle().getType());
+        assertEquals(title1.getSize(), statBlock1NPC0.getTitle().getSize());
+        assertEquals(title1.getAlignment(), statBlock1NPC0.getTitle().getAlignment());
         assertNull(statBlock1NPC0.getTitle().getGroup());
 
         assertEquals(HP_FORMULA_0, statBlock1NPC0.getHPFormula());
@@ -121,17 +124,17 @@ public class NPCTest extends StatBlockTest {
         assertEquals(statBlock2, statBlock2NPC0.getParentStatBlock());
         assertEquals(statBlock2NPC0.getHP(), statBlock2NPC0.getMaxHP());
 
-        assertEquals(TITLE_2.getName() + " 1", statBlock2NPC0.getTitle().getName());
-        assertEquals(TITLE_2.getType(), statBlock2NPC0.getTitle().getType());
-        assertEquals(TITLE_2.getSize(), statBlock2NPC0.getTitle().getSize());
-        assertEquals(TITLE_2.getAlignment(), statBlock2NPC0.getTitle().getAlignment());
+        assertEquals(title2.getName() + " 1", statBlock2NPC0.getTitle().getName());
+        assertEquals(title2.getType(), statBlock2NPC0.getTitle().getType());
+        assertEquals(title2.getSize(), statBlock2NPC0.getTitle().getSize());
+        assertEquals(title2.getAlignment(), statBlock2NPC0.getTitle().getAlignment());
         assertEquals(GROUP_0, statBlock2NPC0.getTitle().getGroup());
 
         assertEquals(HP_FORMULA_1, statBlock2NPC0.getHPFormula());
         assertEquals(XP_2, statBlock2NPC0.getXP());
         assertEquals(PROFICIENCY_2, statBlock2NPC0.getProficiency());
 
-        assertEquals(ARMOUR_2, statBlock2NPC0.getArmour());
+        assertEquals(armour2, statBlock2NPC0.getArmour());
         assertEquals(SPEEDS_2, statBlock2NPC0.getSpeeds());
         assertEquals(SENSES_2, statBlock2NPC0.getSenses());
         assertEquals(ABILITY_SCORES_2, statBlock2NPC0.getAbilityScores());
@@ -155,8 +158,8 @@ public class NPCTest extends StatBlockTest {
         assertEquals(LANGUAGE_1, statBlock2NPC0.getLanguages().getLanguagesList().get(1));
 
         assertEquals(2, statBlock2NPC0.getAbilities().size());
-        assertEquals(ABILITY_0, statBlock2NPC0.getAbilities().get(0));
-        assertEquals(ABILITY_1, statBlock2NPC0.getAbilities().get(1));
+        assertEquals(ability0, statBlock2NPC0.getAbilities().get(0));
+        assertEquals(ability1, statBlock2NPC0.getAbilities().get(1));
 
         assertEquals(18, statBlock2NPC0.getSkillProficiencies().size());
         assertEquals(15, statBlock2NPC0.getConditionImmunities().size());
@@ -165,8 +168,8 @@ public class NPCTest extends StatBlockTest {
 
         assertEquals(2, statBlock2NPC0.getLegendaryMechanics().getLegendaryActions().size());
         assertEquals(LEGENDARY_MECHANIC_DESCRIPTION_0, statBlock2NPC0.getLegendaryMechanics().getLegendaryDescription());
-        assertEquals(LEGENDARY_ACTION_0, statBlock2NPC0.getLegendaryMechanics().getLegendaryActions().get(0));
-        assertEquals(LEGENDARY_ACTION_1, statBlock2NPC0.getLegendaryMechanics().getLegendaryActions().get(1));
+        assertEquals(legendaryAction0, statBlock2NPC0.getLegendaryMechanics().getLegendaryActions().get(0));
+        assertEquals(legendaryAction1, statBlock2NPC0.getLegendaryMechanics().getLegendaryActions().get(1));
     }
 
     @Test
@@ -261,7 +264,7 @@ public class NPCTest extends StatBlockTest {
         assertEquals(INTEGER_0, json.getInt("hp"));
         assertEquals(INTEGER_0, json.getInt("maxHP"));
 
-        assertEquals(TITLE_0.getName() + " 1", json.getJSONObject("title").get("name"));
+        assertEquals(title0.getName() + " 1", json.getJSONObject("title").get("name"));
         assertEquals(STRING_0, json.getJSONObject("title").get("type"));
         assertEquals(STRING_0, json.getJSONObject("title").get("size"));
         assertEquals(STRING_0, json.getJSONObject("title").get("alignment"));
@@ -318,20 +321,6 @@ public class NPCTest extends StatBlockTest {
         assertEquals(ABILITY_SCORES_1.getIntelligence(), json.getJSONObject("abilityScores").get("intelligence"));
         assertEquals(ABILITY_SCORES_1.getWisdom(), json.getJSONObject("abilityScores").get("wisdom"));
         assertEquals(ABILITY_SCORES_1.getCharisma(), json.getJSONObject("abilityScores").get("charisma"));
-
-        assertEquals(1, json.getJSONArray("actions").length());
-        assertEquals(HIT_FORMULA_1.getAmountOfDice(), json.getJSONArray("actions").getJSONObject(0)
-                .getJSONObject("hitFormula").get("amountOfDice"));
-        assertEquals(HIT_FORMULA_1.getDieSides(), json.getJSONArray("actions").getJSONObject(0)
-                .getJSONObject("hitFormula").get("dieSides"));
-        assertEquals(HIT_FORMULA_1.getModifier(), json.getJSONArray("actions").getJSONObject(0)
-                .getJSONObject("hitFormula").get("modifier"));
-        assertEquals(DAMAGE_FORMULA_1.getAmountOfDice(), json.getJSONArray("actions").getJSONObject(0)
-                .getJSONObject("damageMap").getJSONObject(DAMAGE_TYPE_1).get("amountOfDice"));
-        assertEquals(DAMAGE_FORMULA_1.getDieSides(), json.getJSONArray("actions").getJSONObject(0)
-                .getJSONObject("damageMap").getJSONObject(DAMAGE_TYPE_1).get("dieSides"));
-        assertEquals(DAMAGE_FORMULA_1.getModifier(), json.getJSONArray("actions").getJSONObject(0)
-                .getJSONObject("damageMap").getJSONObject(DAMAGE_TYPE_1).get("modifier"));
     }
 
     @Override
@@ -355,7 +344,7 @@ public class NPCTest extends StatBlockTest {
         assertEquals(HP_FORMULA_1.getModifier(), json.getJSONObject("hpFormula").get("modifier"));
         assertEquals(PROFICIENCY_2, json.get("proficiency"));
 
-        assertEquals(ARMOUR_2.getAC(), json.getJSONObject("armour").get("ac"));
+        assertEquals(armour2.getAC(), json.getJSONObject("armour").get("ac"));
         assertEquals(SPEEDS_2.getSpeed(), json.getJSONObject("speeds").get("speed"));
         assertEquals(SENSES_2.getPassivePerception(), json.getJSONObject("senses").get("passivePerception"));
 
@@ -365,33 +354,6 @@ public class NPCTest extends StatBlockTest {
         assertEquals(ABILITY_SCORES_2.getIntelligence(), json.getJSONObject("abilityScores").get("intelligence"));
         assertEquals(ABILITY_SCORES_2.getWisdom(), json.getJSONObject("abilityScores").get("wisdom"));
         assertEquals(ABILITY_SCORES_2.getCharisma(), json.getJSONObject("abilityScores").get("charisma"));
-
-        assertEquals(2, json.getJSONArray("actions").length());
-        assertEquals(HIT_FORMULA_2.getAmountOfDice(), json.getJSONArray("actions").getJSONObject(0)
-                .getJSONObject("hitFormula").get("amountOfDice"));
-        assertEquals(HIT_FORMULA_2.getDieSides(), json.getJSONArray("actions").getJSONObject(0)
-                .getJSONObject("hitFormula").get("dieSides"));
-        assertEquals(HIT_FORMULA_2.getModifier(), json.getJSONArray("actions").getJSONObject(0)
-                .getJSONObject("hitFormula").get("modifier"));
-        assertEquals(DAMAGE_FORMULA_2.getAmountOfDice(), json.getJSONArray("actions").getJSONObject(0)
-                .getJSONObject("damageMap").getJSONObject(DAMAGE_TYPE_2).get("amountOfDice"));
-        assertEquals(DAMAGE_FORMULA_2.getDieSides(), json.getJSONArray("actions").getJSONObject(0)
-                .getJSONObject("damageMap").getJSONObject(DAMAGE_TYPE_2).get("dieSides"));
-        assertEquals(DAMAGE_FORMULA_2.getModifier(), json.getJSONArray("actions").getJSONObject(0)
-                .getJSONObject("damageMap").getJSONObject(DAMAGE_TYPE_2).get("modifier"));
-
-        assertEquals(HIT_FORMULA_3.getAmountOfDice(), json.getJSONArray("actions").getJSONObject(1)
-                .getJSONObject("hitFormula").get("amountOfDice"));
-        assertEquals(HIT_FORMULA_3.getDieSides(), json.getJSONArray("actions").getJSONObject(1)
-                .getJSONObject("hitFormula").get("dieSides"));
-        assertEquals(HIT_FORMULA_3.getModifier(), json.getJSONArray("actions").getJSONObject(1)
-                .getJSONObject("hitFormula").get("modifier"));
-        assertEquals(DAMAGE_FORMULA_3.getAmountOfDice(), json.getJSONArray("actions").getJSONObject(1)
-                .getJSONObject("damageMap").getJSONObject(DAMAGE_TYPE_3).get("amountOfDice"));
-        assertEquals(DAMAGE_FORMULA_3.getDieSides(), json.getJSONArray("actions").getJSONObject(1)
-                .getJSONObject("damageMap").getJSONObject(DAMAGE_TYPE_3).get("dieSides"));
-        assertEquals(DAMAGE_FORMULA_3.getModifier(), json.getJSONArray("actions").getJSONObject(1)
-                .getJSONObject("damageMap").getJSONObject(DAMAGE_TYPE_3).get("modifier"));
     }
 
     @Test

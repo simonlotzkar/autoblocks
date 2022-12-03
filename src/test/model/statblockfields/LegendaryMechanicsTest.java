@@ -1,5 +1,6 @@
 package model.statblockfields;
 
+import exceptions.IncompleteFieldException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,14 +9,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class LegendaryMechanicsTest {
     String testDescription0 = "bloo blah dee bop";
     String testDescription1 = "This Is A Serious Description";
 
-    Ability testLegendaryAction0 = new Ability("super bloop", "boppity boop hard");
-    Ability testLegendaryAction1 = new Ability("Mega Blast", "Super Big Boom");
-    Ability testLegendaryAction2 = new Ability("Teleport ME", "makes ME teleport");
+    Ability testLegendaryAction0;
+    Ability testLegendaryAction1;
+    Ability testLegendaryAction2;
 
     List<Ability> testLegendaryActions0 = new ArrayList<>();
     List<Ability> testLegendaryActions1 = new ArrayList<>();
@@ -25,12 +27,19 @@ public class LegendaryMechanicsTest {
 
     @BeforeEach
     public void beforeEach() {
+        try {
+            testLegendaryAction0 = new Ability("super bloop", "boppity boop hard");
+            testLegendaryAction1 = new Ability("Mega Blast", "Super Big Boom");
+            testLegendaryAction2 = new Ability("Teleport ME", "makes ME teleport");
+
+            testLegendaryMechanics0 = new LegendaryMechanics(testDescription0, testLegendaryActions0);
+            testLegendaryMechanics1 = new LegendaryMechanics(testDescription1, testLegendaryActions1);
+        } catch (IncompleteFieldException e) {
+            fail("Should not have thrown an exception!");
+        }
         testLegendaryActions0.add(testLegendaryAction0);
         testLegendaryActions1.add(testLegendaryAction1);
         testLegendaryActions1.add(testLegendaryAction2);
-
-        testLegendaryMechanics0 = new LegendaryMechanics(testDescription0, testLegendaryActions0);
-        testLegendaryMechanics1 = new LegendaryMechanics(testDescription1, testLegendaryActions1);
     }
 
     @Test

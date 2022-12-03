@@ -1,5 +1,6 @@
 package model.statblockfields;
 
+import exceptions.IncompleteFieldException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,12 +18,16 @@ public class ArmourTest {
 
     @BeforeEach
     public void beforeEach() {
-        testArmour0 = new Armour.ArmourBuilder(testAC0)
-                .armourName(testArmourName0)
-                .magicArmour(testMagicArmour0)
-                .build();
-        testArmour1 = new Armour.ArmourBuilder(testAC1)
-                .build();
+        try {
+            testArmour0 = new Armour.ArmourBuilder(testAC0)
+                    .armourName(testArmourName0)
+                    .magicArmour(testMagicArmour0)
+                    .build();
+            testArmour1 = new Armour.ArmourBuilder(testAC1)
+                    .build();
+        } catch (IncompleteFieldException e) {
+            fail("Should not have thrown an exception!");
+        }
     }
 
     @Test

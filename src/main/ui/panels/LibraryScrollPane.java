@@ -17,7 +17,7 @@ import java.util.List;
 
 // Represents a scrollpane containing a list of statblocks that can be selected
 public class LibraryScrollPane extends JScrollPane implements ListSelectionListener {
-    private final JList<model.StatBlock> libraryList;
+    private final JList<StatBlock> libraryList;
     private final StatBlockLibrary libraryListModel;
     private Encounter encounterListModel;
     private final MainMenuPanel mainMenuPanel;

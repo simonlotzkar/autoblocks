@@ -1,6 +1,6 @@
 package ui.panels;
 
-import model.NPC;
+import model.Encounter;
 import model.StatBlock;
 import model.statblockfields.RollableAction;
 import ui.frames.CustomActionFrame;
@@ -55,13 +55,13 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener, Li
     private JTextArea outputLogTextArea;
     private final JList<RollableAction> rollableActionsList;
     private final DefaultListModel<RollableAction> rollableActionsListModel;
-    private final DefaultListModel<NPC> encounterListModel;
+    private final Encounter encounter;
 
     // MODIFIES: this
     // EFFECTS: constructs this display panel
     public SideDisplayPanel(MainMenuPanel mainMenuPanel) {
         super(null, mainMenuPanel); // sets the layout manager, mainmenu panel, size, and visibility
-        encounterListModel = mainMenuPanel.getMenuManagerPanel().getEncounter();
+        encounter = mainMenuPanel.getMenuManagerPanel().getEncounter();
         rollableActionsListModel = new DefaultListModel<>();
 
         initializeButtons();
@@ -171,18 +171,18 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener, Li
         rollableActionsListModel.removeAllElements();
 
         if (selectedGroupName != null) {
-            for (int i = 0; i < encounterListModel.getSize(); i++) {
-                if (encounterListModel.getElementAt(i).hasGroup() && encounterListModel.getElementAt(i).getTitle()
+            for (int i = 0; i < encounter.getSize(); i++) {
+                if (encounter.getElementAt(i).hasGroup() && encounter.getElementAt(i).getTitle()
                         .getGroup().equals(selectedGroupName)) {
-                    addAllRollableActionsToModel(encounterListModel.getElementAt(i).getRollableActions());
+                    addAllRollableActionsToModel(encounter.getElementAt(i).getRollableActions());
                 }
             }
         } else if (mainMenuPanel.getMainDisplayPanel().getSelectedNonPlayerCharacter() != null) {
             addAllRollableActionsToModel(mainMenuPanel.getMainDisplayPanel()
                     .getSelectedNonPlayerCharacter().getRollableActions());
         } else {
-            for (int i = 0; i < encounterListModel.getSize(); i++) {
-                addAllRollableActionsToModel(encounterListModel.getElementAt(i).getRollableActions());
+            for (int i = 0; i < encounter.getSize(); i++) {
+                addAllRollableActionsToModel(encounter.getElementAt(i).getRollableActions());
             }
         }
     }

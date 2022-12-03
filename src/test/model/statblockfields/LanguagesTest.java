@@ -1,5 +1,6 @@
 package model.statblockfields;
 
+import exceptions.IncompleteFieldException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class LanguagesTest {
     String testLanguage0 = "elvish";
@@ -27,11 +29,15 @@ public class LanguagesTest {
         testLanguagesList0.add(testLanguage0);
         testLanguagesList1.add(testLanguage1);
         testLanguagesList1.add(testLanguage2);
-        testLanguages0 = new Languages.LanguagesBuilder(testLanguagesList0)
-                .telepathy(testTelepathy0)
-                .build();
-        testLanguages1 = new Languages.LanguagesBuilder(testLanguagesList1)
-                .build();
+        try {
+            testLanguages0 = new Languages.LanguagesBuilder(testLanguagesList0)
+                    .telepathy(testTelepathy0)
+                    .build();
+            testLanguages1 = new Languages.LanguagesBuilder(testLanguagesList1)
+                    .build();
+        } catch (IncompleteFieldException e) {
+            fail("Should not have thrown an exception!");
+        }
     }
 
     @Test

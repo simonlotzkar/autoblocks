@@ -63,46 +63,55 @@ navigating to the library menu from the title screen. You can also generate mult
 
 ## Phase 4: Task 2
 - Start of EventLog:
-- Fri Dec 02 11:47:38 PST 2022:
-- Encounter constructed.
-- Fri Dec 02 11:47:38 PST 2022:
-- Library constructed.
-- Fri Dec 02 11:47:41 PST 2022:
-- Removed all encounter elements.
-- Fri Dec 02 11:47:41 PST 2022:
-- Added "Orc 1 (Group: Orcs), HP: 9/9" to the encounter.
-- Fri Dec 02 11:47:41 PST 2022:
-- Added "Orc 2 (Group: Orcs), HP: 4/4" to the encounter.
-- Fri Dec 02 11:47:41 PST 2022:
-- Added "Orc 3 (Group: Orcs), HP: 6/6" to the encounter.
-- Fri Dec 02 11:47:41 PST 2022:
-- Added "Goblin 1 (Group: Goblins), HP: 5/5" to the encounter.
-- Fri Dec 02 11:47:41 PST 2022:
-- Added "Goblin 2 (Group: Goblins), HP: 3/3" to the encounter.
-- Fri Dec 02 11:47:41 PST 2022:
-- Removed all library elements.
-- Fri Dec 02 11:47:41 PST 2022:
-- Added "Orc. CR: 1/2" to the library.
-- Fri Dec 02 11:47:41 PST 2022:
-- Added "Goblin. CR: 1/4" to the library.
-- Fri Dec 02 11:47:46 PST 2022:
-- Removed all encounter elements.
-- Fri Dec 02 11:47:46 PST 2022:
-- Added "Orc 1 (Group: Orcs), HP: 9/9" to the encounter.
-- Fri Dec 02 11:47:46 PST 2022:
-- Added "Orc 2 (Group: Orcs), HP: 4/4" to the encounter.
-- Fri Dec 02 11:47:46 PST 2022:
-- Added "Orc 3 (Group: Orcs), HP: 6/6" to the encounter.
-- Fri Dec 02 11:47:46 PST 2022:
-- Added "Goblin 1 (Group: Goblins), HP: 5/5" to the encounter.
-- Fri Dec 02 11:47:46 PST 2022:
-- Added "Goblin 2 (Group: Goblins), HP: 3/3" to the encounter.
-- Fri Dec 02 11:47:46 PST 2022:
-- Added "Goblin 3, HP: 4/4" to the encounter.
-- Fri Dec 02 11:47:46 PST 2022:
-- Added "Goblin 4, HP: 3/3" to the encounter.
-- Fri Dec 02 11:47:53 PST 2022:
-- Removed "Goblin 1 (Group: Goblins), HP: 5/5" from the encounter.
-- Fri Dec 02 11:47:53 PST 2022:
-- Removed "Goblin 2 (Group: Goblins), HP: 3/3" from the encounter.
+  - Fri Dec 02 11:47:38 PST 2022:
+    - Encounter constructed.
+  - Fri Dec 02 11:47:38 PST 2022:
+    - Library constructed.
+  - Fri Dec 02 11:47:41 PST 2022:
+    - Removed all encounter elements.
+  - Fri Dec 02 11:47:41 PST 2022:
+    - Added "Orc 1 (Group: Orcs), HP: 9/9" to the encounter.
+  - Fri Dec 02 11:47:41 PST 2022:
+    - Added "Orc 2 (Group: Orcs), HP: 4/4" to the encounter.
+  - Fri Dec 02 11:47:41 PST 2022:
+    - Added "Orc 3 (Group: Orcs), HP: 6/6" to the encounter.
+  - Fri Dec 02 11:47:41 PST 2022:
+    - Added "Goblin 1 (Group: Goblins), HP: 5/5" to the encounter.
+  - Fri Dec 02 11:47:41 PST 2022:
+    - Added "Goblin 2 (Group: Goblins), HP: 3/3" to the encounter.
+  - Fri Dec 02 11:47:41 PST 2022:
+    - Removed all library elements.
+  - Fri Dec 02 11:47:41 PST 2022:
+    - Added "Orc. CR: 1/2" to the library.
+  - Fri Dec 02 11:47:41 PST 2022:
+    - Added "Goblin. CR: 1/4" to the library.
+  - Fri Dec 02 11:47:46 PST 2022:
+    - Removed all encounter elements.
+  - Fri Dec 02 11:47:46 PST 2022:
+    - Added "Orc 1 (Group: Orcs), HP: 9/9" to the encounter.
+  - Fri Dec 02 11:47:46 PST 2022:
+    - Added "Orc 2 (Group: Orcs), HP: 4/4" to the encounter.
+  - Fri Dec 02 11:47:46 PST 2022:
+    - Added "Orc 3 (Group: Orcs), HP: 6/6" to the encounter.
+  - Fri Dec 02 11:47:46 PST 2022:
+    - Added "Goblin 1 (Group: Goblins), HP: 5/5" to the encounter.
+  - Fri Dec 02 11:47:46 PST 2022:
+    - Added "Goblin 2 (Group: Goblins), HP: 3/3" to the encounter.
+  - Fri Dec 02 11:47:46 PST 2022:
+    - Added "Goblin 3, HP: 4/4" to the encounter.
+  - Fri Dec 02 11:47:46 PST 2022:
+    - Added "Goblin 4, HP: 3/3" to the encounter.
+  - Fri Dec 02 11:47:53 PST 2022:
+    - Removed "Goblin 1 (Group: Goblins), HP: 5/5" from the encounter.
+  - Fri Dec 02 11:47:53 PST 2022:
+    - Removed "Goblin 2 (Group: Goblins), HP: 3/3" from the encounter.
 - End of EventLog.
+
+## Phase 4: Task 3
+- I could add more interfaces, considering I only added "Writable" from the jsonSerializationDemo.
+- I could use abstract classes to save on shared class methods, I didn't use any in my project which indicates I could 
+use some.
+- I could make my hashmaps into custom classes considering I use them quite a lot and in ways a traditional hashmap
+might not be best suited for
+- I could add more exceptions, I only had one custom one. This would make my errors more readable and improve my
+program's resilience to crashing.

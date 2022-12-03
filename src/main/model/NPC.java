@@ -4,6 +4,7 @@ import enums.AbilityScore;
 import exceptions.IncompleteFieldException;
 import model.statblockfields.*;
 import org.json.JSONObject;
+import persistence.Writable;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -11,7 +12,7 @@ import java.util.List;
 
 // Represents a non player character (NPC) that has all the fields of its given parent statblock but has a different
 // name, and additionally a max hp and a current hp.
-public class NPC extends StatBlock {
+public class NPC extends StatBlock implements Writable {
     // required fields
     private int maxHP;
     private int hp;
