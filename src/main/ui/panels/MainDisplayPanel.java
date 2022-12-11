@@ -54,6 +54,10 @@ public class MainDisplayPanel extends DisplayPanel implements ListSelectionListe
     private JButton rollInitiativeButton;
     private JButton backButton;
 
+    // images
+    private static final Image PARCHMENT = Toolkit.getDefaultToolkit()
+            .getImage("./data/images/parchment.jpg");
+
     // MODIFIES: this
     // EFFECTS: constructs this panel
     public MainDisplayPanel(MainMenuPanel mainMenuPanel) {
@@ -104,6 +108,7 @@ public class MainDisplayPanel extends DisplayPanel implements ListSelectionListe
         encounterList.setLayoutOrientation(JList.VERTICAL);
         encounterList.setVisibleRowCount(-1);
         encounterList.addListSelectionListener(this);
+        encounterList.setBackground(new Color(0, 0, 0, 0));
     }
 
     // MODIFIES: this
@@ -113,6 +118,7 @@ public class MainDisplayPanel extends DisplayPanel implements ListSelectionListe
         groupList.setLayoutOrientation(JList.VERTICAL);
         groupList.setVisibleRowCount(-1);
         groupList.addListSelectionListener(this);
+        groupList.setBackground(new Color(0, 0, 0, 0));
     }
 
     // MODIFIES: this

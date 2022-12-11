@@ -8,6 +8,7 @@ import persistence.JsonReader;
 import ui.frames.MainFrame;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;

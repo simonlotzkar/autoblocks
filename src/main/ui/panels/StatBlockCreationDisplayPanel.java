@@ -231,8 +231,9 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
     // EFFECTS: constructs this display panel
     public StatBlockCreationDisplayPanel(MainMenuPanel mainMenuPanel) {
         super(null, mainMenuPanel); // sets the layout manager, mainmenu panel, size, and visibility
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        this.setPreferredSize(new Dimension((int) (mainMenuPanel.getPreferredSize().width / 2.5), 2500));
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setPreferredSize(new Dimension((int) (mainMenuPanel.getPreferredSize().width / 2.5), 2500));
+        setOpaque(false);
 
         initializeAll();
 

@@ -6,6 +6,8 @@ import javax.swing.border.EmptyBorder;
 import ui.panels.menus.MenuManagerPanel;
 
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 // represents the main frame that contains the main panel
 public class MainFrame extends JFrame {

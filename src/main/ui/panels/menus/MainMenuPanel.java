@@ -23,10 +23,6 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
     private static final ImageIcon X_ICON = new ImageIcon(ICON_DIRECTORY + "x.png");
     private static final ImageIcon MINUS_ICON = new ImageIcon(ICON_DIRECTORY + "minus.png");
 
-    // labels
-    private final JLabel encounterTitleLabel = new JLabel("Main Menu: Encounter Loaded");
-    private final JLabel libraryTitleLabel = new JLabel("Main Menu: Library Loaded");
-
     // layouts
     private final CardLayout titleCardLayout = new CardLayout();
     private final CardLayout buttonCardLayout = new CardLayout();
@@ -73,17 +69,10 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
 
         initializeButtons();
         initializeButtonPanel();
+        initializeTitlePanel();
 
         mainDisplayPanel = new MainDisplayPanel(this);
         sideDisplayPanel = new SideDisplayPanel(this);
-
-        JLabel libraryBanner = new JLabel(new ImageIcon((new ImageIcon("./data/images/shortBanner1.jpg"))
-                .getImage().getScaledInstance(1080, 144, Image.SCALE_SMOOTH)));
-        titlePanel.add(libraryBanner, "library");
-
-        JLabel encounterBanner = new JLabel(new ImageIcon((new ImageIcon("./data/images/shortBanner0.jpg"))
-                .getImage().getScaledInstance(1080, 144, Image.SCALE_SMOOTH)));
-        titlePanel.add(encounterBanner, "encounter");
 
         JPanel displaysPanel = new JPanel(new GridLayout(1, 2));
         displaysPanel.add(mainDisplayPanel);
@@ -97,6 +86,24 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
 
         add(titlePanel, BorderLayout.NORTH);
         add(mainPanel, BorderLayout.CENTER);
+    }
+
+    @Override
+    // MODIFIES: this
+    // EFFECTS: paints as normal but changes the titlepanel's preferred size
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        titlePanel.setPreferredSize(new Dimension(getWidth(), getHeight() / 5));
+    }
+
+    // MODIFIES: this
+    // EFFECTS: formats title panel
+    private void initializeTitlePanel() {
+        BannerPanel encounterBannerPanel = new BannerPanel("encounter");
+        BannerPanel libraryBannerPanel = new BannerPanel("library");
+
+        titlePanel.add(encounterBannerPanel, "encounter");
+        titlePanel.add(libraryBannerPanel, "library");
     }
 
     // MODIFIES: this

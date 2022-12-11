@@ -28,6 +28,8 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener, Li
     private static final ImageIcon D20_ICON = new ImageIcon(ICON_DIRECTORY + "d20.png");
     private static final ImageIcon DICE_ICON = new ImageIcon(ICON_DIRECTORY + "dice.png");
     private static final ImageIcon SWORD_ICON = new ImageIcon(ICON_DIRECTORY + "sword.png");
+    private static final Image PARCHMENT = Toolkit.getDefaultToolkit()
+            .getImage("./data/images/parchment.jpg");
 
     // panels
     private final JPanel encounterSideDisplayPanel = new JPanel(new GridLayout(2, 1));
@@ -137,6 +139,7 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener, Li
     private void initializeOutputLogScrollPane() {
         outputLogTextArea = new JTextArea();
         outputLogTextArea.setEditable(false);
+        outputLogTextArea.setOpaque(false);
 
         outputLogScrollPane.setViewportView(outputLogTextArea);
         outputLogScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -162,6 +165,7 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener, Li
         rollableActionsList.setLayoutOrientation(JList.VERTICAL);
         rollableActionsList.setVisibleRowCount(-1);
         rollableActionsList.addListSelectionListener(this);
+        rollableActionsList.setBackground(new Color(0, 0, 0, 0));
     }
 
     // MODIFIES: this

@@ -8,6 +8,7 @@ import model.statblockfields.Title;
 import ui.panels.menus.MainMenuPanel;
 
 import javax.swing.*;
+import java.awt.*;
 
 // Represents a text area that displays a text representation of the selected npc
 public class NonPlayerCharacterDisplayTextArea extends JTextArea {
@@ -23,6 +24,7 @@ public class NonPlayerCharacterDisplayTextArea extends JTextArea {
         setEditable(false);
         setLineWrap(true);
         setWrapStyleWord(true);
+        setOpaque(false);
         repaint();
     }
 

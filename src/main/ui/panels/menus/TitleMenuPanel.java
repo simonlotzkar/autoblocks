@@ -7,23 +7,25 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 // Represents the title menu where the application launches to and terminates from as well as other options
 public class TitleMenuPanel extends MenuPanel implements ActionListener {
-    // panels
+    private Font dungeonFont;
     private final JPanel buttonsPanel = new JPanel(new GridLayout(2, 1));
 
     // images
-    private static final JLabel MAIN_BANNER_LABEL = new JLabel(new ImageIcon(
-            "./data/images/tallBanner0.jpg"));
+    private static final JLabel MAIN_BANNER_LABEL = new JLabel("AUTOBLOCKS");
     private static final ImageIcon D20_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "d20.png");
     private static final ImageIcon EXIT_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "exit.png");
     private static final ImageIcon LIBRARY_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "books.png");
     private static final ImageIcon ENCOUNTER_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "crossedSwords.png");
     private static final ImageIcon LOAD_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "folder.png");
     private static final ImageIcon SAVE_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "save.png");
+    private static final Image BANNER = Toolkit.getDefaultToolkit().getImage("./data/images/titleBanner.jpg");
 
     // buttons
     private final JButton customRollButton = new JButton("Open Custom Roller");
@@ -41,8 +43,26 @@ public class TitleMenuPanel extends MenuPanel implements ActionListener {
         initializeButtons();
         initializeButtonPanel();
 
-        this.add(MAIN_BANNER_LABEL, BorderLayout.CENTER);
-        this.add(buttonsPanel, BorderLayout.SOUTH);
+        try {
+            dungeonFont = Font.createFont(Font.TRUETYPE_FONT, new File("./data/dungeon(BySaesarezNovandito).TTF"));
+            MAIN_BANNER_LABEL.setFont(dungeonFont.deriveFont(150f));
+        } catch (IOException | FontFormatException e) {
+            JOptionPane.showMessageDialog(this, "Could not load dungeon font! ("
+                    + e.getMessage() + ")", "Failure!", JOptionPane.WARNING_MESSAGE);
+        }
+
+        MAIN_BANNER_LABEL.setHorizontalAlignment(SwingConstants.CENTER);
+        MAIN_BANNER_LABEL.setForeground(Color.WHITE);
+
+        add(MAIN_BANNER_LABEL, BorderLayout.CENTER);
+        add(buttonsPanel, BorderLayout.SOUTH);
+    }
+
+    @Override
+    // MODIFIES: this
+    // EFFECTS: draws the background image
+    public void paintComponent(Graphics g) {
+        g.drawImage(BANNER, 0, 0, MAIN_BANNER_LABEL.getWidth(), MAIN_BANNER_LABEL.getHeight(), this);
     }
 
     // MODIFIES: this

@@ -20,10 +20,11 @@ public class StatBlockDisplayTextArea extends JTextArea {
     public StatBlockDisplayTextArea(MainMenuPanel mainMenuPanel) {
         super(NONE_SELECTED);
         this.mainMenuPanel = mainMenuPanel;
-        this.setVisible(true);
-        this.setEditable(false);
-        this.setLineWrap(true);
-        this.setWrapStyleWord(true);
+        setVisible(true);
+        setEditable(false);
+        setLineWrap(true);
+        setWrapStyleWord(true);
+        setOpaque(false);
 
         initializeAll();
     }

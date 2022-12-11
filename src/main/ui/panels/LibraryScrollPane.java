@@ -11,6 +11,7 @@ import ui.panels.menus.MainMenuPanel;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,13 +35,14 @@ public class LibraryScrollPane extends JScrollPane implements ListSelectionListe
     public LibraryScrollPane(MainMenuPanel mainMenuPanel) {
         super(null);
         this.mainMenuPanel = mainMenuPanel;
-        this.setSize(mainMenuPanel.getSize());
-        this.setVisible(true);
-        this.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        this.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        setSize(mainMenuPanel.getSize());
+        setVisible(true);
+        setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
         libraryListModel = mainMenuPanel.getMenuManagerPanel().getStatBlockLibrary();
         libraryList = new JList<>(libraryListModel);
+        libraryList.setBackground(new Color(0, 0, 0, 0));
         setViewportView(libraryList);
 
         importButtons();
