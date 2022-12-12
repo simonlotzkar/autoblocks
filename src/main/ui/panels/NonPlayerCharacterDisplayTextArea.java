@@ -15,6 +15,10 @@ public class NonPlayerCharacterDisplayTextArea extends JTextArea {
     private final MainMenuPanel mainMenuPanel;
     private NPC selectedNPC;
 
+    // images
+    private static final Image PARCHMENT = Toolkit.getDefaultToolkit()
+            .getImage("./data/images/parchment.jpg");
+
     // MODIFIES: this
     // EFFECTS: constructs this text area
     public NonPlayerCharacterDisplayTextArea(MainMenuPanel mainMenuPanel) {

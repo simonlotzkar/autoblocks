@@ -1,9 +1,10 @@
 package ui.panels;
 
 import enums.AbilityScore;
-import model.Encounter;
 import model.NPC;
 import ui.panels.menus.MainMenuPanel;
+import ui.scrollpanes.EncounterScrollPane;
+import ui.scrollpanes.LibraryScrollPane;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -28,16 +29,8 @@ public class MainDisplayPanel extends DisplayPanel implements ListSelectionListe
     private final JPanel mainDisplaysManagerPanel = new JPanel(mainDisplaysCardLayout);
     private final JPanel encounterMainDisplayManagerPanel = new JPanel(encounterMainDisplayCardLayout);
 
-    // lists
-    private Encounter encounter
-            = mainMenuPanel.getMenuManagerPanel().getEncounter();
-    private final JList<NPC> encounterList = new JList<>(encounter);
-
-    private final Encounter groupEncounter = new Encounter();
-    private final JList<NPC> groupList = new JList<>(groupEncounter);
-
     // scroll panes
-    private final JScrollPane encounterScrollPane = new JScrollPane();
+    private final JScrollPane encounterScrollPane = new EncounterScrollPane(mainMenuPanel);
     private final LibraryScrollPane libraryScrollPane = new LibraryScrollPane(mainMenuPanel);
 
     // text areas

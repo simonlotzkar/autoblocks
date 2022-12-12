@@ -19,6 +19,7 @@ import java.util.Objects;
 
 // Represents a panel that allows the user to create a new statblock
 public class StatBlockCreationDisplayPanel extends DisplayPanel implements ActionListener, ListSelectionListener {
+    // fields ----------------------------------------------------------------------
     // textfields
     private final ArrayList<JTextField> requiredTextFieldsList = new ArrayList<>();
     private final ArrayList<JTextField> numberTextFieldList = new ArrayList<>();
@@ -227,6 +228,11 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
     private static final String[] ACTION_DESCRIPTIONS = {"Melee Weapon Attack", "Melee Spell Attack",
             "Ranged Weapon Attack", "Ranged Spell Attack", "Melee or Ranged Weapon Attack", "Action"};
 
+    // images
+    private static final Image PARCHMENT = Toolkit.getDefaultToolkit()
+            .getImage("./data/images/parchment.jpg");
+
+    // ------------------------------------------------------------------------------
     // MODIFIES: this
     // EFFECTS: constructs this display panel
     public StatBlockCreationDisplayPanel(MainMenuPanel mainMenuPanel) {

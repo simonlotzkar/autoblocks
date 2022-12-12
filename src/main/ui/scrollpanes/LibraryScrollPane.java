@@ -1,4 +1,4 @@
-package ui.panels;
+package ui.scrollpanes;
 
 import exceptions.IncompleteFieldException;
 import model.Encounter;

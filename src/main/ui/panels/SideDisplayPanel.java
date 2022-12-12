@@ -28,8 +28,6 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener, Li
     private static final ImageIcon D20_ICON = new ImageIcon(ICON_DIRECTORY + "d20.png");
     private static final ImageIcon DICE_ICON = new ImageIcon(ICON_DIRECTORY + "dice.png");
     private static final ImageIcon SWORD_ICON = new ImageIcon(ICON_DIRECTORY + "sword.png");
-    private static final Image PARCHMENT = Toolkit.getDefaultToolkit()
-            .getImage("./data/images/parchment.jpg");
 
     // panels
     private final JPanel encounterSideDisplayPanel = new JPanel(new GridLayout(2, 1));
