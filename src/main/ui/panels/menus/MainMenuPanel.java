@@ -1,7 +1,9 @@
 package ui.panels.menus;
 
+import ui.panels.BannerPanel;
 import ui.panels.MainDisplayPanel;
 import ui.panels.SideDisplayPanel;
+import ui.panels.StatBlockCreationDisplayPanel;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -285,9 +287,9 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
     private void setLibraryFullDisplay() {
         initializeLibraryButtonPanel();
 
+        mainDisplayPanel.setDisplay("library");
+        sideDisplayPanel.setDisplay("library");
         titleCardLayout.show(titlePanel, "library");
-        mainDisplayPanel.setMainDisplay("library");
-        sideDisplayPanel.setSideDisplay("library");
     }
 
     // MODIFIES: this
@@ -296,8 +298,8 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
         initializeLibraryButtonPanel();
 
         titleCardLayout.show(titlePanel, "library");
-        mainDisplayPanel.setMainDisplay("library");
-        sideDisplayPanel.setSideDisplay("statBlock");
+        mainDisplayPanel.setDisplay("library");
+        sideDisplayPanel.setDisplay("statBlock");
     }
 
     // MODIFIES: this
@@ -306,8 +308,8 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
         initializeStatBlockCreationButtonPanel();
 
         titleCardLayout.show(titlePanel, "library");
-        mainDisplayPanel.setMainDisplay("library");
-        sideDisplayPanel.setSideDisplay("statBlockCreation");
+        mainDisplayPanel.setDisplay("library");
+        sideDisplayPanel.setDisplay("statBlockCreation");
     }
 
     // MODIFIES: this
@@ -316,37 +318,39 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
         initializeEncounterButtonPanel();
 
         titleCardLayout.show(titlePanel, "encounter");
-        mainDisplayPanel.setMainDisplay("encounter");
-        sideDisplayPanel.setSideDisplay("encounter");
-        sideDisplayPanel.initializeRollableActionsListModel();
+        mainDisplayPanel.setDisplay("encounter");
+        sideDisplayPanel.setDisplay("encounter");
+        sideDisplayPanel.refresh();
     }
 
     // MODIFIES: this
     // EFFECTS: sets the main display to the group context and the side display to the encounter context
     private void setEncounterGroupDisplay() {
         initializeGroupButtonPanel();
-        mainDisplayPanel.setMainDisplay("group");
-        sideDisplayPanel.setSideDisplay("encounter");
-        sideDisplayPanel.initializeRollableActionsListModel();
+        mainDisplayPanel.setDisplay("group");
+        sideDisplayPanel.setDisplay("encounter");
+        sideDisplayPanel.refresh();
     }
 
     // MODIFIES: this
     // EFFECTS: sets the main display to the npc context and the side display to the encounter context
     private void setEncounterNonPlayerCharacterDisplay() {
         initializeNonPlayerCharacterButtonPanel();
-        mainDisplayPanel.setMainDisplay("npc");
-        sideDisplayPanel.setSideDisplay("encounter");
-        sideDisplayPanel.initializeRollableActionsListModel();
+        mainDisplayPanel.setDisplay("npc");
+        sideDisplayPanel.setDisplay("encounter");
+        sideDisplayPanel.refresh();
     }
 
     @Override
     // EFFECTS: processes button presses from user
     public void actionPerformed(ActionEvent e) {
         if (mainDisplayPanel.getLibraryScrollPane().isShowing()) {
-            if (sideDisplayPanel.getStatBlockCreationDisplayPanel().isShowing()) {
-                sideDisplayPanel.getStatBlockCreationDisplayPanel().passAction(e);
+            StatBlockCreationDisplayPanel creationPanel
+                    = sideDisplayPanel.getLibrarySideDisplayScrollPane().getStatBlockCreationDisplayPanel();
+            if (creationPanel.isShowing()) {
+                creationPanel.passAction(e);
             } else {
-                mainDisplayPanel.getLibraryScrollPane().passAction(e);
+                mainDisplayPanel.getLibraryScrollPane().processAction(e);
             }
         } else {
             mainDisplayPanel.passAction(e);

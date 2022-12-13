@@ -7,6 +7,7 @@ import model.StatBlock;
 import model.StatBlockLibrary;
 import model.statblockfields.Title;
 import ui.panels.menus.MainMenuPanel;
+import ui.textareas.StatBlockDisplayTextArea;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -14,14 +15,15 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
-import java.util.List;
 
-// Represents a scrollpane containing a list of statblocks that can be selected
+// Represents a scroll pane containing a list of statblocks that can be selected
 public class LibraryScrollPane extends JScrollPane implements ListSelectionListener {
+    private final MainMenuPanel mainMenuPanel;
+
+    // lists
     private final JList<StatBlock> libraryList;
     private final StatBlockLibrary libraryListModel;
-    private Encounter encounterListModel;
-    private final MainMenuPanel mainMenuPanel;
+    private Encounter encounter;
 
     // buttons
     private JButton addStatBlocksToEncounterButton;
@@ -42,11 +44,19 @@ public class LibraryScrollPane extends JScrollPane implements ListSelectionListe
 
         libraryListModel = mainMenuPanel.getMenuManagerPanel().getStatBlockLibrary();
         libraryList = new JList<>(libraryListModel);
-        libraryList.setBackground(new Color(0, 0, 0, 0));
         setViewportView(libraryList);
 
         importButtons();
         initializeLibraryList();
+    }
+
+    // MODIFIES: this
+    // EFFECTS: repopulates, revalidates, and repaints
+    public void refresh() {
+        libraryList.removeAll();
+        libraryList.setModel(libraryListModel);
+        revalidate();
+        repaint();
     }
 
     // MODIFIES: this
@@ -66,9 +76,6 @@ public class LibraryScrollPane extends JScrollPane implements ListSelectionListe
         libraryList.setLayoutOrientation(JList.VERTICAL);
         libraryList.setVisibleRowCount(-1);
         libraryList.addListSelectionListener(this);
-        libraryList.clearSelection();
-        revalidate();
-        repaint();
     }
 
     // MODIFIES: mainMenuPanel
@@ -93,13 +100,13 @@ public class LibraryScrollPane extends JScrollPane implements ListSelectionListe
     // EFFECTS: adds the selected statblocks to the menucard's encounter list model as new characters,
     //          repeating each for number equal to the given integer
     private void addSelectedToEncounter(int copies) throws IncompleteFieldException {
-        encounterListModel = mainMenuPanel.getMenuManagerPanel().getEncounter();
+        encounter = mainMenuPanel.getMenuManagerPanel().getEncounter();
         ListModel<StatBlock> libraryListModel = libraryList.getModel();
         ArrayList<NPC> encounterList = new ArrayList<>();
 
         // converts menucard's encounter list model to an array list
-        for (int i = 0; i < encounterListModel.getSize(); i++) {
-            encounterList.add(encounterListModel.getElementAt(i));
+        for (int i = 0; i < encounter.getSize(); i++) {
+            encounterList.add(encounter.getElementAt(i));
         }
 
         for (int i : libraryList.getSelectedIndices()) {
@@ -112,7 +119,7 @@ public class LibraryScrollPane extends JScrollPane implements ListSelectionListe
                 encounterList.add(newNPC);
             }
         }
-        encounterListModel.removeAllElements();
+        encounter.removeAllElements();
         addAllToEncounter(encounterList);
     }
 
@@ -121,7 +128,7 @@ public class LibraryScrollPane extends JScrollPane implements ListSelectionListe
     //          this is only here because the autograder didn't like using the native addAll()
     private void addAllToEncounter(java.util.List<NPC> npcList) {
         for (NPC c : npcList) {
-            encounterListModel.addElement(c);
+            encounter.addElement(c);
         }
     }
 
@@ -145,14 +152,15 @@ public class LibraryScrollPane extends JScrollPane implements ListSelectionListe
 
     // MODIFIES: mainMenuPanel
     // EFFECTS: processes button presses from user
-    public void passAction(ActionEvent e) {
+    public void processAction(ActionEvent e) {
+        LibrarySideDisplayScrollPane librarySideDisplayScrollPane
+                = mainMenuPanel.getSideDisplayPanel().getLibrarySideDisplayScrollPane();
         if (e.getSource() == addStatBlocksToEncounterButton) {
             tryAddSelectedToEncounter();
             libraryList.clearSelection();
         } else if (e.getSource() == openStatBlockButton) {
-            mainMenuPanel.getSideDisplayPanel()
-                    .setSelectedStatBlock(libraryListModel.getElementAt(libraryList.getSelectedIndex()));
-            mainMenuPanel.setDisplays("statBlock");
+            librarySideDisplayScrollPane
+                    .processOpenButton(libraryListModel.getElementAt(libraryList.getSelectedIndex()));
             libraryList.clearSelection();
         } else if (e.getSource() == createNewStatBlockButton) {
             mainMenuPanel.setDisplays("statBlockCreation");
@@ -160,27 +168,22 @@ public class LibraryScrollPane extends JScrollPane implements ListSelectionListe
         } else if (e.getSource() == deleteStatBlocksButton) {
             deleteStatBlocks();
         } else if (e.getSource() == backButton) {
-            if (mainMenuPanel.getSideDisplayPanel().getSelectedStatBlock() != null) {
-                mainMenuPanel.setDisplays("library");
-            } else {
-                mainMenuPanel.getMenuManagerPanel().setMenu("title");
-            }
+            librarySideDisplayScrollPane.processBackButton();
         }
     }
 
     @Override
     // MODIFIES: this
-    // EFFECTS: disables and enables multi selection buttons when user is changing list selection
-    //          or if just one item is selected enables or disables single selection buttons
+    // EFFECTS: disables and enables buttons when the user selection is changing
     public void valueChanged(ListSelectionEvent e) {
+        // disables when selection is changing, enables otherwise
         addStatBlocksToEncounterButton.setEnabled(!e.getValueIsAdjusting());
-        if (libraryList.getSelectedIndices().length < 1) {
-            addStatBlocksToEncounterButton.setEnabled(false);
-        }
         deleteStatBlocksButton.setEnabled(!e.getValueIsAdjusting());
 
-        mainMenuPanel.getSideDisplayPanel().valueChanged(e);
-
+        // enables when 1 cell is selected, disables otherwise
         openStatBlockButton.setEnabled(libraryList.getSelectedIndices().length == 1);
+
+        // enables when at least 1 cell is selected, disables otherwise
+        addStatBlocksToEncounterButton.setEnabled(libraryList.getSelectedIndices().length >= 1);
     }
 }

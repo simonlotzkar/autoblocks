@@ -1,28 +1,22 @@
 package ui.panels;
 
-import model.Encounter;
-import model.StatBlock;
-import model.statblockfields.RollableAction;
+import ui.scrollpanes.LibrarySideDisplayScrollPane;
+import ui.scrollpanes.RollLogScrollPane;
+import ui.scrollpanes.RollableActionsScrollPane;
 import ui.frames.CustomActionFrame;
 import ui.frames.CustomRollFrame;
 import ui.panels.menus.MainMenuPanel;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-// Represents a side display panel that can be an encounter, statblock display, or statblock creation display
-public class SideDisplayPanel extends DisplayPanel implements ActionListener, ListSelectionListener {
-    // selections
-    private StatBlock selectedStatBlock;
-
-    // layouts
+// Represents a side panel that can be an encounter, statblock display, or statblock creation display
+public class SideDisplayPanel extends DisplayPanel implements ActionListener {
     private final CardLayout sideDisplayCardLayout = new CardLayout();
-    private final CardLayout librarySidePanelCardLayout = new CardLayout();
 
     // images
     private static final ImageIcon D20_ICON = new ImageIcon(ICON_DIRECTORY + "d20.png");
@@ -31,45 +25,35 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener, Li
 
     // panels
     private final JPanel encounterSideDisplayPanel = new JPanel(new GridLayout(2, 1));
-    private final JPanel librarySideDisplayPanel = new JPanel(new BorderLayout());
-    private final JPanel librarySideDisplayCardManagerPanel = new JPanel(librarySidePanelCardLayout);
-    private final JPanel outputLogPanel = new JPanel(new BorderLayout());
+    private final JPanel rollLogPanel = new JPanel(new BorderLayout());
+    private final JPanel rollLogTitlePanel = new JPanel(new GridLayout(1, 2));
     private final JPanel rollableActionsPanel = new JPanel(new BorderLayout());
-    private final JPanel outputLogTitlePanel = new JPanel(new GridLayout(1, 2));
     private final JPanel rollableActionsTitlePanel = new JPanel(new GridLayout(1, 2));
 
-    private StatBlockDisplayTextArea statBlockDisplayTextArea;
-    private StatBlockCreationDisplayPanel statBlockCreationDisplayPanel;
-
-    // scrollpanes
-    private final JScrollPane librarySideDisplayScrollPane = new JScrollPane();
-    private final JScrollPane outputLogScrollPane = new JScrollPane();
-    private final JScrollPane rollableActionsScrollPane = new JScrollPane();
+    // scroll panes
+    private final LibrarySideDisplayScrollPane librarySideDisplayScrollPane;
+    private final RollLogScrollPane rollLogScrollPane;
+    private final RollableActionsScrollPane rollableActionsScrollPane;
 
     // buttons
-    private final JButton rollRollableActionsButton = new JButton("Roll Selected");
-    private final JButton customRollButton = new JButton("Custom Dice Roller");
-    private final JButton customRollableActionButton = new JButton("Custom Action Roller");
-
-    // components
-    private JTextArea outputLogTextArea;
-    private final JList<RollableAction> rollableActionsList;
-    private final DefaultListModel<RollableAction> rollableActionsListModel;
-    private final Encounter encounter;
+    private final JButton rollRollableActionsButton = new JButton("Roll Selected Actions");
+    private final JButton customRollButton = new JButton("Open Custom Dice Roller");
+    private final JButton customRollableActionButton = new JButton("Open Custom Action Roller");
 
     // MODIFIES: this
     // EFFECTS: constructs this display panel
     public SideDisplayPanel(MainMenuPanel mainMenuPanel) {
         super(null, mainMenuPanel); // sets the layout manager, mainmenu panel, size, and visibility
-        encounter = mainMenuPanel.getMenuManagerPanel().getEncounter();
-        rollableActionsListModel = new DefaultListModel<>();
 
-        initializeButtons();
-        initializeRollableActionsListModel();
-        rollableActionsList = new JList<>(rollableActionsListModel);
+        librarySideDisplayScrollPane = new LibrarySideDisplayScrollPane(mainMenuPanel);
+        rollLogScrollPane = new RollLogScrollPane();
+        rollableActionsScrollPane = new RollableActionsScrollPane(mainMenuPanel);
 
         initializeEncounterSideDisplayPanel();
-        initializeLibrarySideDisplayPanel();
+
+        JPanel librarySideDisplayPanel = new JPanel(new BorderLayout());
+        librarySideDisplayPanel.add(new JLabel("Selected:"), BorderLayout.NORTH);
+        librarySideDisplayPanel.add(librarySideDisplayScrollPane, BorderLayout.CENTER);
 
         setLayout(sideDisplayCardLayout);
         add(encounterSideDisplayPanel, "encounter");
@@ -77,8 +61,44 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener, Li
     }
 
     // MODIFIES: this
+    // EFFECTS: sets the side display to show whatever the given string is then refreshes
+    public void setDisplay(String s) {
+        if ("statBlock".equals(s) || "statBlockCreation".equals(s)) {
+            sideDisplayCardLayout.show(this, "library");
+            librarySideDisplayScrollPane.setDisplay(s);
+        } else if ("library".equals(s)) {
+            sideDisplayCardLayout.show(this, "library");
+            librarySideDisplayScrollPane.setDisplay("statBlock");
+            librarySideDisplayScrollPane.getStatBlockDisplayTextArea().setSelectedStatBlock(null);
+        } else {
+            sideDisplayCardLayout.show(this, "encounter");
+        }
+        refresh();
+    }
+
+    // MODIFIES: this
+    // EFFECTS: refreshes subcomponents, revalidates, and repaints
+    public void refresh() {
+        rollableActionsScrollPane.refresh();
+        librarySideDisplayScrollPane.refresh();
+        revalidate();
+        repaint();
+    }
+
+    // MODIFIES: this
+    // EFFECTS: sets up the encounter side display sub panels
+    private void initializeEncounterSideDisplayPanel() {
+        initializeEncounterSideDisplayButtons();
+        initializeRollLogPanel();
+        initializeRollableActionsPanel();
+
+        encounterSideDisplayPanel.add(rollLogPanel);
+        encounterSideDisplayPanel.add(rollableActionsPanel);
+    }
+
+    // MODIFIES: this
     // EFFECTS: formats all buttons
-    private void initializeButtons() {
+    private void initializeEncounterSideDisplayButtons() {
         ArrayList<JButton> buttonList = new ArrayList<>();
 
         buttonList.add(customRollableActionButton);
@@ -106,185 +126,24 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener, Li
     }
 
     // MODIFIES: this
-    // EFFECTS: sets up the encounter side display sub panels
-    private void initializeEncounterSideDisplayPanel() {
-        initializeOutputLogPanel();
-        initializeRollableActionsPanel();
+    // EFFECTS: sets up the roll log panel
+    private void initializeRollLogPanel() {
+        rollLogTitlePanel.add(new JLabel("Roll Log:"));
+        rollLogTitlePanel.add(customRollButton);
 
-        encounterSideDisplayPanel.add(outputLogPanel);
-        encounterSideDisplayPanel.add(rollableActionsPanel);
-    }
-
-    // MODIFIES: this
-    // EFFECTS: sets up the outputlog panel
-    private void initializeOutputLogPanel() {
-        initializeOutputLogTitlePanel();
-        initializeOutputLogScrollPane();
-
-        outputLogPanel.add(outputLogTitlePanel, BorderLayout.NORTH);
-        outputLogPanel.add(outputLogScrollPane, BorderLayout.CENTER);
-    }
-
-    // MODIFIES: this
-    // EFFECTS: sets up the outputlog title panel
-    private void initializeOutputLogTitlePanel() {
-        outputLogTitlePanel.add(new JLabel("Roll Output Log:"));
-        outputLogTitlePanel.add(customRollButton);
-    }
-
-    // MODIFIES: this
-    // EFFECTS: sets up the outputlog scroll pane
-    private void initializeOutputLogScrollPane() {
-        outputLogTextArea = new JTextArea();
-        outputLogTextArea.setEditable(false);
-        outputLogTextArea.setOpaque(false);
-
-        outputLogScrollPane.setViewportView(outputLogTextArea);
-        outputLogScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        outputLogScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        rollLogPanel.add(rollLogTitlePanel, BorderLayout.NORTH);
+        rollLogPanel.add(rollLogScrollPane, BorderLayout.CENTER);
     }
 
     // MODIFIES: this
     // EFFECTS: sets up the rollable actions panel
     private void initializeRollableActionsPanel() {
-        initializeRollableActionsList();
-        initializeRollableActionsTitlePanel();
-        initializeRollableActionsScrollPane();
+        rollableActionsTitlePanel.add(new JLabel("Actions in Current Context:"));
+        rollableActionsTitlePanel.add(customRollableActionButton);
 
         rollableActionsPanel.add(rollableActionsTitlePanel, BorderLayout.NORTH);
         rollableActionsPanel.add(rollableActionsScrollPane, BorderLayout.CENTER);
         rollableActionsPanel.add(rollRollableActionsButton, BorderLayout.SOUTH);
-    }
-
-    // MODIFIES: this
-    // EFFECTS: sets up the rollable actions list
-    private void initializeRollableActionsList() {
-        rollableActionsList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-        rollableActionsList.setLayoutOrientation(JList.VERTICAL);
-        rollableActionsList.setVisibleRowCount(-1);
-        rollableActionsList.addListSelectionListener(this);
-        rollableActionsList.setBackground(new Color(0, 0, 0, 0));
-    }
-
-    // MODIFIES: this
-    // EFFECTS: sets up the rollable actions list model
-    public void initializeRollableActionsListModel() {
-        String selectedGroupName = mainMenuPanel.getMainDisplayPanel().getSelectedGroupName();
-        rollableActionsListModel.removeAllElements();
-
-        if (selectedGroupName != null) {
-            for (int i = 0; i < encounter.getSize(); i++) {
-                if (encounter.getElementAt(i).hasGroup() && encounter.getElementAt(i).getTitle()
-                        .getGroup().equals(selectedGroupName)) {
-                    addAllRollableActionsToModel(encounter.getElementAt(i).getRollableActions());
-                }
-            }
-        } else if (mainMenuPanel.getMainDisplayPanel().getSelectedNonPlayerCharacter() != null) {
-            addAllRollableActionsToModel(mainMenuPanel.getMainDisplayPanel()
-                    .getSelectedNonPlayerCharacter().getRollableActions());
-        } else {
-            for (int i = 0; i < encounter.getSize(); i++) {
-                addAllRollableActionsToModel(encounter.getElementAt(i).getRollableActions());
-            }
-        }
-    }
-
-    // MODIFIES: this
-    // EFFECTS: adds all rollable actions to the list model
-    //          *this is only here because the autograder didn't like using the native addAll()
-    private void addAllRollableActionsToModel(java.util.List<RollableAction> rollableActionsList) {
-        for (RollableAction a : rollableActionsList) {
-            rollableActionsListModel.addElement(a);
-        }
-    }
-
-    // MODIFIES: this
-    // EFFECTS: sets up the rollable actions title panel
-    private void initializeRollableActionsTitlePanel() {
-        rollableActionsTitlePanel.add(new JLabel("Actions in Current Context:"));
-        rollableActionsTitlePanel.add(customRollableActionButton);
-    }
-
-    // MODIFIES: this
-    // EFFECTS: sets up the rollable actions scroll pane
-    private void initializeRollableActionsScrollPane() {
-        rollableActionsScrollPane.setViewportView(rollableActionsList);
-        rollableActionsScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        rollableActionsScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-    }
-
-    // MODIFIES: this
-    // EFFECTS: sets up the library side display panel
-    private void initializeLibrarySideDisplayPanel() {
-        statBlockDisplayTextArea = new StatBlockDisplayTextArea(mainMenuPanel);
-        statBlockCreationDisplayPanel = new StatBlockCreationDisplayPanel(mainMenuPanel);
-
-        librarySideDisplayCardManagerPanel.add(statBlockDisplayTextArea, "statBlock");
-        librarySideDisplayCardManagerPanel.add(statBlockCreationDisplayPanel, "statBlockCreation");
-
-        librarySideDisplayScrollPane.setViewportView(librarySideDisplayCardManagerPanel);
-        librarySideDisplayScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        librarySideDisplayScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-
-        librarySideDisplayPanel.add(new JLabel("Selected:"), BorderLayout.NORTH);
-        librarySideDisplayPanel.add(librarySideDisplayScrollPane, BorderLayout.CENTER);
-    }
-
-    // MODIFIES: this
-    // EFFECTS: prints all selected actions to the output log then refreshes
-    private void rollRollableActions() {
-        for (int i : rollableActionsList.getSelectedIndices()) {
-            printToOutputLog(rollableActionsList.getModel().getElementAt(i).generateFullRollString());
-        }
-        refreshAll();
-    }
-
-    // MODIFIES: this
-    // EFFECTS: prints the given string to the output log
-    public void printToOutputLog(String s) {
-        if (outputLogTextArea.getText().equals("")) {
-            outputLogTextArea.append(s);
-        } else {
-            outputLogTextArea.append("\n" + s);
-        }
-    }
-
-    // MODIFIES: this
-    // EFFECTS: sets the side display to show whatever the given string is
-    public void setSideDisplay(String s) {
-        refreshAll();
-
-        if ("statBlockCreation".equals(s)) {
-            initializeLibrarySideDisplayPanel();
-            sideDisplayCardLayout.show(this, "library");
-            librarySidePanelCardLayout.show(librarySideDisplayCardManagerPanel, s);
-        } else if ("encounter".equals(s)) {
-            selectedStatBlock = null;
-            sideDisplayCardLayout.show(this, s);
-            rollableActionsList.removeAll();
-        } else if ("statBlock".equals(s)) {
-            sideDisplayCardLayout.show(this, "library");
-            librarySidePanelCardLayout.show(librarySideDisplayCardManagerPanel, "statBlock");
-            statBlockDisplayTextArea.initializeAll();
-        } else {
-            sideDisplayCardLayout.show(this, "library");
-            librarySidePanelCardLayout.show(librarySideDisplayCardManagerPanel, "statBlock");
-            selectedStatBlock = null;
-            statBlockDisplayTextArea.initializeAll();
-        }
-    }
-
-    // MODIFIES: this
-    // EFFECTS: clears the rollable actions list selection and revalidates/repaints
-    private void refreshAll() {
-        rollableActionsList.clearSelection();
-        revalidate();
-        repaint();
-    }
-
-    // EFFECTS: returns the statblock creation display panel
-    public StatBlockCreationDisplayPanel getStatBlockCreationDisplayPanel() {
-        return statBlockCreationDisplayPanel;
     }
 
     @Override
@@ -292,7 +151,7 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener, Li
     // EFFECTS: processes button presses for this frame
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == rollRollableActionsButton) {
-            rollRollableActions();
+            rollableActionsScrollPane.rollSelectedRollableActions();
         } else if (e.getSource() == customRollButton) {
             new CustomRollFrame();
         } else if (e.getSource() == customRollableActionButton) {
@@ -300,22 +159,22 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener, Li
         }
     }
 
-    @Override
     // MODIFIES: this
-    // EFFECTS: enables or disables the rollable actions button depending on changing selections etc
-    public void valueChanged(ListSelectionEvent e) {
+    // EFFECTS: enables or disables the roll rollable actions button if the list selection in the rollable actions
+    //          scroll pane is stable or changing, respectively
+    public void passListSelectionEvent(ListSelectionEvent e) {
         rollRollableActionsButton.setEnabled(!e.getValueIsAdjusting());
-        rollRollableActionsButton.setEnabled(rollableActionsList.getSelectedIndices().length >= 1);
     }
 
-    // EFFECTS: returns the selected statblock
-    public StatBlock getSelectedStatBlock() {
-        return selectedStatBlock;
+   // -----------------------------------------------------------------------
+   // getters
+   // EFFECTS: returns the library side display scroll pane
+    public LibrarySideDisplayScrollPane getLibrarySideDisplayScrollPane() {
+        return librarySideDisplayScrollPane;
     }
 
-    // MODIFIES: this
-    // EFFECTS: sets the selected statblock to the given statblock
-    public void setSelectedStatBlock(StatBlock selectedStatBlock) {
-        this.selectedStatBlock = selectedStatBlock;
+    // EFFECTS: returns the roll log scroll pane
+    public RollLogScrollPane getRollLogScrollPane() {
+        return rollLogScrollPane;
     }
 }

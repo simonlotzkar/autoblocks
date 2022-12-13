@@ -31,9 +31,9 @@
                 "swim": 0
             },
             "title": {
-                "size": "Humanoid",
+                "size": "Medium",
                 "name": "Orc",
-                "type": "Medium",
+                "type": "Humanoid",
                 "alignment": "chaotic evil"
             },
             "rollableActions": [
@@ -108,9 +108,9 @@
                 "swim": 0
             },
             "title": {
-                "size": "Small",
+                "size": "Humanoid",
                 "name": "Goblin",
-                "type": "Humanoid",
+                "type": "Small",
                 "alignment": "chaotic evil"
             },
             "rollableActions": [
@@ -176,9 +176,9 @@
             "hp": 9,
             "resistances": {},
             "title": {
-                "size": "Humanoid",
+                "size": "Medium",
                 "name": "Orc 1",
-                "type": "Medium",
+                "type": "Humanoid",
                 "alignment": "chaotic evil",
                 "group": "Orcs"
             },
@@ -253,9 +253,9 @@
                     "swim": 0
                 },
                 "title": {
-                    "size": "Humanoid",
+                    "size": "Medium",
                     "name": "Orc",
-                    "type": "Medium",
+                    "type": "Humanoid",
                     "alignment": "chaotic evil"
                 },
                 "rollableActions": [
@@ -333,9 +333,9 @@
             "hp": 4,
             "resistances": {},
             "title": {
-                "size": "Humanoid",
+                "size": "Medium",
                 "name": "Orc 2",
-                "type": "Medium",
+                "type": "Humanoid",
                 "alignment": "chaotic evil",
                 "group": "Orcs"
             },
@@ -410,9 +410,9 @@
                     "swim": 0
                 },
                 "title": {
-                    "size": "Humanoid",
+                    "size": "Medium",
                     "name": "Orc",
-                    "type": "Medium",
+                    "type": "Humanoid",
                     "alignment": "chaotic evil"
                 },
                 "rollableActions": [
@@ -490,9 +490,9 @@
             "hp": 6,
             "resistances": {},
             "title": {
-                "size": "Humanoid",
+                "size": "Medium",
                 "name": "Orc 3",
-                "type": "Medium",
+                "type": "Humanoid",
                 "alignment": "chaotic evil",
                 "group": "Orcs"
             },
@@ -567,9 +567,9 @@
                     "swim": 0
                 },
                 "title": {
-                    "size": "Humanoid",
+                    "size": "Medium",
                     "name": "Orc",
-                    "type": "Medium",
+                    "type": "Humanoid",
                     "alignment": "chaotic evil"
                 },
                 "rollableActions": [
@@ -647,9 +647,9 @@
             "hp": 4,
             "resistances": {},
             "title": {
-                "size": "Small",
+                "size": "Humanoid",
                 "name": "Goblin 3",
-                "type": "Humanoid",
+                "type": "Small",
                 "alignment": "chaotic evil"
             },
             "rollableActions": [
@@ -723,9 +723,9 @@
                     "swim": 0
                 },
                 "title": {
-                    "size": "Small",
+                    "size": "Humanoid",
                     "name": "Goblin",
-                    "type": "Humanoid",
+                    "type": "Small",
                     "alignment": "chaotic evil"
                 },
                 "rollableActions": [
@@ -803,9 +803,9 @@
             "hp": 3,
             "resistances": {},
             "title": {
-                "size": "Small",
+                "size": "Humanoid",
                 "name": "Goblin 4",
-                "type": "Humanoid",
+                "type": "Small",
                 "alignment": "chaotic evil"
             },
             "rollableActions": [
@@ -879,9 +879,9 @@
                     "swim": 0
                 },
                 "title": {
-                    "size": "Small",
+                    "size": "Humanoid",
                     "name": "Goblin",
-                    "type": "Humanoid",
+                    "type": "Small",
                     "alignment": "chaotic evil"
                 },
                 "rollableActions": [

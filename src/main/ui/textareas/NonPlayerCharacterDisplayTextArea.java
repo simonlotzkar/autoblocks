@@ -1,4 +1,4 @@
-package ui.panels;
+package ui.textareas;
 
 import enums.AbilityScore;
 import model.NPC;
@@ -35,7 +35,7 @@ public class NonPlayerCharacterDisplayTextArea extends JTextArea {
     // MODIFIES: this
     // EFFECTS: selects npc and adds all of the selected npc's data to the text area
     public void initializeAll() {
-        selectedNPC = mainMenuPanel.getMainDisplayPanel().getSelectedNonPlayerCharacter();
+        selectedNPC = mainMenuPanel.getMainDisplayPanel().getEncounterScrollPane().getSelectedNPC();
         setText("");
 
         initializeTitlePanel();

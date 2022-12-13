@@ -256,7 +256,7 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
     }
 
     // MODIFIES: this
-    // EFFECTS: creates every component and container for this panel as well as refreshes the panel
+    // EFFECTS: creates every component and container for this panel
     private void initializeAll() {
         initializeTitlePanel();
         initializeCombatStatsPanel();
@@ -270,8 +270,6 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
         initializeButtons();
         initializeLists();
         initializeCheckBoxLists();
-        revalidate();
-        repaint();
     }
 
     // MODIFIES: this
