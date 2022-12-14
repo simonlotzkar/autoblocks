@@ -11,17 +11,13 @@ This does not simulate any form of map, it's intended to be used with an externa
     - *view statblock details*
     - *add custom statblocks*
     - *delete statblocks*
-  - **view a list of NPCs by their names, groups, and hit points:**
-    - *select an NPC with a group and view a list of the NPCs in that group*
+  - **view a list of NPCs by their names and hit points:**
     - *roll actions, initiatives, or ability checks*
     - *track and edit hit points*
-    - *edit NPC groups*
 <p>
-I made this application because I'm a D&D DM and I think there is no other application like this one. While there are 
-some other applications for automating rolls, most try to do automation and map simulation at the same time. I think 
-it's better to keep them separate because some people like theatre of the mind (no maps), and some people prefer in 
-person. This app allows the DM to only exclude repetitive simple rolls and hp management so they can focus on the rest
-of the game. So in short, I made this for personal use, but also because I think it solves a problem in a unique way.
+I made this application because I'm a D&D fan, and I couldn't find a program that was made just for the DM to speed up combat.  
+This app allows the DM to only exclude repetitive simple rolls and hp management, so they can focus on the rest of the game. 
+So in short, I made this for personal use, but also because I think it solves a problem in a unique way.
 </p>
 
 ### TODO (in order):
