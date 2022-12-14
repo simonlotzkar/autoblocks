@@ -13,8 +13,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 
 // Represents...
-public class EncounterScrollPane extends JScrollPane implements ListSelectionListener {
-    private final MainMenuPanel mainMenuPanel;
+public class EncounterScrollPane extends ParchmentScrollPane implements ListSelectionListener {
     private String selectedGroupName;
     private NPC selectedNPC;
 
@@ -47,8 +46,7 @@ public class EncounterScrollPane extends JScrollPane implements ListSelectionLis
     // MODIFIES: this
     // EFFECTS: constructs the scroll pane
     public EncounterScrollPane(MainMenuPanel mainMenuPanel) {
-        super(null);
-        this.mainMenuPanel = mainMenuPanel;
+        super(mainMenuPanel);
         npcDisplayTextArea = new NonPlayerCharacterDisplayTextArea(mainMenuPanel);
 
         importButtons();
@@ -58,6 +56,7 @@ public class EncounterScrollPane extends JScrollPane implements ListSelectionLis
         viewportDisplayManagerPanel.add(encounterList, "encounter");
         viewportDisplayManagerPanel.add(groupList, "group");
         viewportDisplayManagerPanel.add(npcDisplayTextArea, "npc");
+        viewportDisplayManagerPanel.setOpaque(false);
 
         setViewportView(viewportDisplayManagerPanel);
         setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -121,6 +120,8 @@ public class EncounterScrollPane extends JScrollPane implements ListSelectionLis
         encounterList.setLayoutOrientation(JList.VERTICAL);
         encounterList.setVisibleRowCount(-1);
         encounterList.addListSelectionListener(this);
+        encounterList.setCellRenderer(new TransparentListCellRenderer());
+        encounterList.setOpaque(false);
     }
 
     // MODIFIES: this
@@ -130,6 +131,8 @@ public class EncounterScrollPane extends JScrollPane implements ListSelectionLis
         groupList.setLayoutOrientation(JList.VERTICAL);
         groupList.setVisibleRowCount(-1);
         groupList.addListSelectionListener(this);
+        groupList.setCellRenderer(new TransparentListCellRenderer());
+        groupList.setOpaque(false);
     }
 
     // MODIFIES: this

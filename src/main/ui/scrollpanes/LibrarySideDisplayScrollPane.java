@@ -12,10 +12,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 
 // Represents a library side display's scroll pane and its contents
-public class LibrarySideDisplayScrollPane extends JScrollPane {
-    private final MainMenuPanel mainMenuPanel;
+public class LibrarySideDisplayScrollPane extends ParchmentScrollPane {
     boolean statBlockCreationDisplayPanelIsShowing = false;
-
     private final CardLayout cardLayout = new CardLayout();
     private final JPanel cardManagerPanel = new JPanel(cardLayout);
     private final StatBlockDisplayTextArea statBlockDisplayTextArea;
@@ -24,14 +22,14 @@ public class LibrarySideDisplayScrollPane extends JScrollPane {
     // MODIFIES: this
     // EFFECTS: constructs this scroll pane
     public LibrarySideDisplayScrollPane(MainMenuPanel mainMenuPanel) {
-        super();
-        this.mainMenuPanel = mainMenuPanel;
+        super(mainMenuPanel);
 
         statBlockDisplayTextArea = new StatBlockDisplayTextArea();
         statBlockCreationDisplayPanel = new StatBlockCreationDisplayPanel(mainMenuPanel);
 
         cardManagerPanel.add(statBlockDisplayTextArea, "statBlock");
         cardManagerPanel.add(statBlockCreationDisplayPanel, "statBlockCreation");
+        cardManagerPanel.setOpaque(false);
 
         setViewportView(cardManagerPanel);
         setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);

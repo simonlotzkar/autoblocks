@@ -309,8 +309,7 @@ public class StatBlock implements Writable {
             if (skillProficiencies.contains(s)) {
                 skillProficienciesString.append(s.toString().toLowerCase())
                         .append(" ")
-                        .append(abilityScoreSet.toModifier(s.getAbilityScore()))
-                        .append(proficiency)
+                        .append(proficiency + abilityScoreSet.toModifier(s.getAbilityScore()))
                         .append(", ");
             }
         }

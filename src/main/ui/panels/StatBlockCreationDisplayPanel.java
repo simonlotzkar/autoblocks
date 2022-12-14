@@ -6,6 +6,7 @@ import model.StatBlock;
 import model.statblockfields.*;
 import exceptions.IncompleteFieldException;
 import ui.panels.menus.MainMenuPanel;
+import ui.scrollpanes.TransparentListCellRenderer;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -228,10 +229,6 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
     private static final String[] ACTION_DESCRIPTIONS = {"Melee Weapon Attack", "Melee Spell Attack",
             "Ranged Weapon Attack", "Ranged Spell Attack", "Melee or Ranged Weapon Attack", "Action"};
 
-    // images
-    private static final Image PARCHMENT = Toolkit.getDefaultToolkit()
-            .getImage("./data/images/parchment.jpg");
-
     // ------------------------------------------------------------------------------
     // MODIFIES: this
     // EFFECTS: constructs this display panel
@@ -258,6 +255,7 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
     // MODIFIES: this
     // EFFECTS: creates every component and container for this panel
     private void initializeAll() {
+        initializeButtons();
         initializeTitlePanel();
         initializeCombatStatsPanel();
         initializeAbilityScoresPanel();
@@ -265,24 +263,54 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
         initializeAbilityCreationPanel();
         initializeActionCreationPanel();
         initializeLegendaryCreationPanel();
+
+        buildSavingThrowCheckBoxList();
+        buildSkillCheckBoxList();
+        buildImmunityCheckBoxList();
+
         formatTextFields();
         formatScrollPanes();
-        initializeButtons();
-        initializeLists();
-        initializeCheckBoxLists();
+        formatCheckBoxes();
+        formatLists();
     }
 
     // MODIFIES: this
-    // EFFECTS: adds all the checkboxes to their respective lists
-    private void initializeCheckBoxLists() {
-        initializeSavingThrowCheckBoxList();
-        initializeSkillCheckBoxList();
-        initializeImmunityCheckBoxList();
+    // EFFECTS: formats title panel
+    private void initializeTitlePanel() {
+        wordTextFieldList.add(nameTextField);
+        numberTextFieldList.add(xpTextField);
+
+        requiredTextFieldsList.add(nameTextField);
+        requiredTextFieldsList.add(xpTextField);
+
+        initializeNameCRPanel();
+        initializeSizeTypeAlignmentPanel();
+
+        titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));
+        titlePanel.add(nameCRPanel);
+        titlePanel.add(sizeTypeAlignmentPanel);
+        titlePanel.setOpaque(false);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: formats the combat stats panel
+    private void initializeCombatStatsPanel() {
+        initializeHPPanel();
+        initializeArmourPanel();
+        initializeSpeedsPanel();
+        initializeSensesPanel();
+
+        combatStatsPanel.setLayout(new BoxLayout(combatStatsPanel, BoxLayout.Y_AXIS));
+        combatStatsPanel.add(hpPanel);
+        combatStatsPanel.add(armourPanel);
+        combatStatsPanel.add(speedsPanel);
+        combatStatsPanel.add(sensesPanel);
+        combatStatsPanel.setOpaque(false);
     }
 
     // MODIFIES: this
     // EFFECTS: adds all saving throw check boxes to its list
-    private void initializeSavingThrowCheckBoxList() {
+    private void buildSavingThrowCheckBoxList() {
         savingThrowCheckBoxList.add(strengthSavingThrowProficiencyCheckBox);
         savingThrowCheckBoxList.add(dexteritySavingThrowProficiencyCheckBox);
         savingThrowCheckBoxList.add(constitutionSavingThrowProficiencyCheckBox);
@@ -293,7 +321,7 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
 
     // MODIFIES: this
     // EFFECTS: adds all skill check boxes to its list
-    private void initializeSkillCheckBoxList() {
+    private void buildSkillCheckBoxList() {
         skillCheckBoxList.add(acrobaticsProficiencyCheckBox);
         skillCheckBoxList.add(animalHandlingProficiencyCheckBox);
         skillCheckBoxList.add(arcanaProficiencyCheckBox);
@@ -316,7 +344,7 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
 
     // MODIFIES: this
     // EFFECTS: adds all immunity check boxes to its list
-    private void initializeImmunityCheckBoxList() {
+    private void buildImmunityCheckBoxList() {
         immunityCheckBoxList.add(blindedImmunityCheckBox);
         immunityCheckBoxList.add(charmedImmunityCheckBox);
         immunityCheckBoxList.add(deafenedImmunityCheckBox);
@@ -365,32 +393,37 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
     }
 
     // MODIFIES: this
-    // EFFECTS: formats all jlists
-    private void initializeLists() {
-        languageList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-        languageList.setLayoutOrientation(JList.VERTICAL);
-        languageList.setVisibleRowCount(-1);
-        languageList.addListSelectionListener(this);
+    // EFFECTS: formats all lists
+    private void formatLists() {
+        ArrayList<JList<?>> listOfLists = new ArrayList<>();
+        listOfLists.add(languageList);
+        listOfLists.add(abilitiesList);
+        listOfLists.add(actionsList);
+        listOfLists.add(actionDamageMapList);
+        listOfLists.add(legendaryActionsList);
 
-        abilitiesList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-        abilitiesList.setLayoutOrientation(JList.VERTICAL);
-        abilitiesList.setVisibleRowCount(-1);
-        abilitiesList.addListSelectionListener(this);
+        for (JList<?> l : listOfLists) {
+            l.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+            l.setLayoutOrientation(JList.VERTICAL);
+            l.setVisibleRowCount(-1);
+            l.addListSelectionListener(this);
+            l.setCellRenderer(new TransparentListCellRenderer());
+            l.setOpaque(false);
+        }
+    }
 
-        actionsList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-        actionsList.setLayoutOrientation(JList.VERTICAL);
-        actionsList.setVisibleRowCount(-1);
-        actionsList.addListSelectionListener(this);
-
-        actionDamageMapList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-        actionDamageMapList.setLayoutOrientation(JList.VERTICAL);
-        actionDamageMapList.setVisibleRowCount(-1);
-        actionDamageMapList.addListSelectionListener(this);
-
-        legendaryActionsList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-        legendaryActionsList.setLayoutOrientation(JList.VERTICAL);
-        legendaryActionsList.setVisibleRowCount(-1);
-        legendaryActionsList.addListSelectionListener(this);
+    // MODIFIES: this
+    // EFFECTS: formats all check boxes
+    private void formatCheckBoxes() {
+        for (JCheckBox cb : savingThrowCheckBoxList) {
+            cb.setOpaque(false);
+        }
+        for (JCheckBox cb : skillCheckBoxList) {
+            cb.setOpaque(false);
+        }
+        for (JCheckBox cb : immunityCheckBoxList) {
+            cb.setOpaque(false);
+        }
     }
 
     // MODIFIES: this
@@ -398,12 +431,15 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
     private void formatTextFields() {
         for (JTextField tf : numberTextFieldList) {
             tf.setPreferredSize(new Dimension(50, 25));
+            tf.setOpaque(false);
         }
         for (JTextField tf : wordTextFieldList) {
             tf.setPreferredSize(new Dimension(150, 25));
+            tf.setOpaque(false);
         }
         for (JTextField tf : requiredTextFieldsList) {
             tf.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
+            tf.setOpaque(false);
         }
     }
 
@@ -426,30 +462,15 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
             sp.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
             sp.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
             sp.setPreferredSize(new Dimension(this.getPreferredSize().width, 75));
+            sp.setOpaque(false);
         }
 
         for (JScrollPane sp : shortScrollPanesList) {
             sp.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
             sp.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
             sp.setPreferredSize(new Dimension(this.getPreferredSize().width, 50));
+            sp.setOpaque(false);
         }
-    }
-
-    // MODIFIES: this
-    // EFFECTS: formats title panel
-    private void initializeTitlePanel() {
-        wordTextFieldList.add(nameTextField);
-        numberTextFieldList.add(xpTextField);
-
-        requiredTextFieldsList.add(nameTextField);
-        requiredTextFieldsList.add(xpTextField);
-
-        initializeNameCRPanel();
-        initializeSizeTypeAlignmentPanel();
-
-        titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));
-        titlePanel.add(nameCRPanel);
-        titlePanel.add(sizeTypeAlignmentPanel);
     }
 
     // MODIFIES: this
@@ -459,16 +480,19 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
         namePanel.setLayout(new FlowLayout(FlowLayout.LEFT, FLOW_H_GAP, FLOW_V_GAP));
         namePanel.add(new JLabel("Name:"));
         namePanel.add(nameTextField);
+        namePanel.setOpaque(false);
 
         JPanel xpPanel = new JPanel();
         xpPanel.setLayout(new FlowLayout(FlowLayout.LEFT, FLOW_H_GAP, FLOW_V_GAP));
         xpPanel.add(new JLabel("XP:"));
         xpPanel.add(xpTextField);
+        xpPanel.setOpaque(false);
 
         nameCRPanel.setLayout(new FlowLayout(FlowLayout.LEFT, FLOW_H_GAP, FLOW_V_GAP));
         nameCRPanel.setPreferredSize(new Dimension(this.getWidth(), 5));
         nameCRPanel.add(namePanel);
         nameCRPanel.add(xpPanel);
+        nameCRPanel.setOpaque(false);
     }
 
     // MODIFIES: this
@@ -478,38 +502,27 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
         sizePanel.setLayout(new FlowLayout(FlowLayout.LEFT, FLOW_H_GAP, FLOW_V_GAP));
         sizePanel.add(new JLabel("Size:"));
         sizePanel.add(sizeComboBox);
+        sizePanel.setOpaque(false);
 
         JPanel typePanel = new JPanel();
         typePanel.setLayout(new FlowLayout(FlowLayout.LEFT, FLOW_H_GAP, FLOW_V_GAP));
         typePanel.add(new JLabel("Type:"));
         typePanel.add(typeComboBox);
+        typePanel.setOpaque(false);
 
         JPanel alignmentPanel = new JPanel();
         alignmentPanel.setLayout(new FlowLayout(FlowLayout.LEFT, FLOW_H_GAP, FLOW_V_GAP));
         alignmentPanel.add(new JLabel("Alignment:"));
         alignmentPanel.add(alignmentComboBox);
+        alignmentPanel.setOpaque(false);
 
         sizeTypeAlignmentPanel.setLayout(new FlowLayout(FlowLayout.LEFT, FLOW_H_GAP, FLOW_V_GAP));
         sizeTypeAlignmentPanel.setPreferredSize(new Dimension(this.getWidth(), 5));
         sizeTypeAlignmentPanel.add(sizePanel);
         sizeTypeAlignmentPanel.add(typePanel);
         sizeTypeAlignmentPanel.add(alignmentPanel);
-    }
-
-
-    // MODIFIES: this
-    // EFFECTS: formats the combat stats panel
-    private void initializeCombatStatsPanel() {
-        initializeHPPanel();
-        initializeArmourPanel();
-        initializeSpeedsPanel();
-        initializeSensesPanel();
-
-        combatStatsPanel.setLayout(new BoxLayout(combatStatsPanel, BoxLayout.Y_AXIS));
-        combatStatsPanel.add(hpPanel);
-        combatStatsPanel.add(armourPanel);
-        combatStatsPanel.add(speedsPanel);
-        combatStatsPanel.add(sensesPanel);
+        sizeTypeAlignmentPanel.setOpaque(false);
+        sizeTypeAlignmentPanel.setOpaque(false);
     }
 
     // MODIFIES: this
@@ -533,6 +546,7 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
         hpPanel.add(new JLabel("+"));
         hpPanel.add(hpModifierTextField);
         hpPanel.add(proficiencyPanel);
+        hpPanel.setOpaque(false);
     }
 
     // MODIFIES: this
@@ -543,6 +557,7 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
 
         proficiencyPanel.add(new JLabel("Proficiency Bonus:"));
         proficiencyPanel.add(proficiencyTextField);
+        proficiencyPanel.setOpaque(false);
     }
 
     // MODIFIES: this
@@ -561,6 +576,7 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
         armourPanel.add(armourNameTextField);
         armourPanel.add(new JLabel("Magic Armour Class:"));
         armourPanel.add(magicArmourTextField);
+        armourPanel.setOpaque(false);
     }
 
     // MODIFIES: this
@@ -585,6 +601,7 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
         speedsPanel.add(climbTextField);
         speedsPanel.add(new JLabel("Burrow:"));
         speedsPanel.add(burrowTextField);
+        speedsPanel.setOpaque(false);
     }
 
     // MODIFIES: this
@@ -609,6 +626,7 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
         sensesPanel.add(blindSightTextField);
         sensesPanel.add(new JLabel("TremorSense:"));
         sensesPanel.add(tremorSenseTextField);
+        sensesPanel.setOpaque(false);
     }
 
     // MODIFIES: this
@@ -630,6 +648,7 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
         abilityScoresPanel.add(intelligencePanel);
         abilityScoresPanel.add(wisdomPanel);
         abilityScoresPanel.add(charismaPanel);
+        abilityScoresPanel.setOpaque(false);
     }
 
     // MODIFIES: this
@@ -637,8 +656,10 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
     private void initializeStrengthPanel() {
         numberTextFieldList.add(strengthTextField);
         requiredTextFieldsList.add(strengthTextField);
+
         strengthPanel.add(new JLabel("STR:"));
         strengthPanel.add(strengthTextField);
+        strengthPanel.setOpaque(false);
     }
 
     // MODIFIES: this
@@ -646,8 +667,10 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
     private void initializeDexterityPanel() {
         numberTextFieldList.add(dexterityTextField);
         requiredTextFieldsList.add(dexterityTextField);
+
         dexterityPanel.add(new JLabel("DEX:"));
         dexterityPanel.add(dexterityTextField);
+        dexterityPanel.setOpaque(false);
     }
 
     // MODIFIES: this
@@ -655,8 +678,10 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
     private void initializeConstitutionPanel() {
         numberTextFieldList.add(constitutionTextField);
         requiredTextFieldsList.add(constitutionTextField);
+
         constitutionPanel.add(new JLabel("CON:"));
         constitutionPanel.add(constitutionTextField);
+        constitutionPanel.setOpaque(false);
     }
 
     // MODIFIES: this
@@ -664,8 +689,10 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
     private void initializeIntelligencePanel() {
         numberTextFieldList.add(intelligenceTextField);
         requiredTextFieldsList.add(intelligenceTextField);
+
         intelligencePanel.add(new JLabel("INT:"));
         intelligencePanel.add(intelligenceTextField);
+        intelligencePanel.setOpaque(false);
     }
 
     // MODIFIES: this
@@ -673,8 +700,10 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
     private void initializeWisdomPanel() {
         numberTextFieldList.add(wisdomTextField);
         requiredTextFieldsList.add(wisdomTextField);
+
         wisdomPanel.add(new JLabel("WIS:"));
         wisdomPanel.add(wisdomTextField);
+        wisdomPanel.setOpaque(false);
     }
 
     // MODIFIES: this
@@ -682,8 +711,10 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
     private void initializeCharismaPanel() {
         numberTextFieldList.add(charismaTextField);
         requiredTextFieldsList.add(charismaTextField);
+
         charismaPanel.add(new JLabel("CHA:"));
         charismaPanel.add(charismaTextField);
+        charismaPanel.setOpaque(false);
     }
 
     // MODIFIES: this
@@ -702,6 +733,7 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
         peripheralFieldsPanel.add(immunitiesPanel);
         peripheralFieldsPanel.add(languageCreationPanel);
         peripheralFieldsPanel.add(languagesScrollPane);
+        peripheralFieldsPanel.setOpaque(false);
     }
 
     // MODIFIES: this
@@ -716,6 +748,7 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
         savingThrowsPanel.add(intelligenceSavingThrowProficiencyCheckBox);
         savingThrowsPanel.add(wisdomSavingThrowProficiencyCheckBox);
         savingThrowsPanel.add(charismaSavingThrowProficiencyCheckBox);
+        savingThrowsPanel.setOpaque(false);
     }
 
     // MODIFIES: this
@@ -742,6 +775,7 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
         skillsPanel.add(sleightOfHandProficiencyCheckBox);
         skillsPanel.add(stealthProficiencyCheckBox);
         skillsPanel.add(survivalProficiencyCheckBox);
+        skillsPanel.setOpaque(false);
     }
 
     // MODIFIES: this
@@ -762,7 +796,9 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
         resistancesPanel.add(forceResistanceComboBox);
         resistancesPanel.add(new JLabel("Lightning"));
         resistancesPanel.add(lightningResistanceComboBox);
+
         initializeResistancesPanelPartTwo();
+        resistancesPanel.setOpaque(false);
     }
 
     // MODIFIES: this
@@ -805,6 +841,7 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
         immunitiesPanel.add(stunnedImmunityCheckBox);
         immunitiesPanel.add(unconsciousImmunityCheckBox);
         immunitiesPanel.add(exhaustionImmunityCheckBox);
+        immunitiesPanel.setOpaque(false);
     }
 
     // MODIFIES: this
@@ -820,6 +857,7 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
         languageCreationPanel.add(addLanguageButton);
         languageCreationPanel.add(new JLabel("Telepathy Range:"));
         languageCreationPanel.add(telepathyTextField);
+        languageCreationPanel.setOpaque(false);
     }
 
     // MODIFIES: this
@@ -832,6 +870,7 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
         setNamePanel.add(new JLabel("Ability Name:"));
         setNamePanel.add(abilityNameTextField);
         setNamePanel.add(new JLabel("Ability Description:" + TAB));
+        setNamePanel.setOpaque(false);
 
         abilityCreationPanel.setLayout(new BoxLayout(abilityCreationPanel, BoxLayout.Y_AXIS));
         abilityCreationPanel.setPreferredSize(new Dimension(this.getWidth(), 5));
@@ -839,6 +878,7 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
         abilityCreationPanel.add(abilityDescriptionScrollPane);
         abilityCreationPanel.add(new JLabel("Abilities:"));
         abilityCreationPanel.add(abilitiesScrollPane);
+        abilityCreationPanel.setOpaque(false);
     }
 
     // MODIFIES: this
@@ -857,6 +897,7 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
         nameRangePanel.add(actionRangeTextField);
         nameRangePanel.add(new JLabel("Long Range (Optional):"));
         nameRangePanel.add(actionLongRangeTextField);
+        nameRangePanel.setOpaque(false);
 
         initializeActionHitDescriptionPanel();
         initializeActionAddDamageEntryPanel();
@@ -868,6 +909,7 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
         actionCreationPanel.add(new JLabel("Damage Rolls for this Action:"));
         actionCreationPanel.add(actionDamageScrollPane);
         actionCreationPanel.add(new JLabel("Actions:"));
+        actionCreationPanel.setOpaque(false);
     }
 
     // MODIFIES: this
@@ -881,6 +923,7 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
         hitDescriptionPanel.add(actionHitModifierTextField);
         hitDescriptionPanel.add(new JLabel("Description:"));
         hitDescriptionPanel.add(actionDescriptionComboBox);
+        hitDescriptionPanel.setOpaque(false);
     }
 
     // MODIFIES: this
@@ -901,6 +944,7 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
         addDamageEntryPanel.add(actionDamageModifierTextField);
         addDamageEntryPanel.add(new JLabel("Type:"));
         addDamageEntryPanel.add(actionDamageTypeComboBox);
+        addDamageEntryPanel.setOpaque(false);
     }
 
     // MODIFIES: this
@@ -914,6 +958,7 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
         legendaryActionPanel.add(new JLabel("Legendary Action Name:"));
         legendaryActionPanel.add(legendaryActionNameTextField);
         legendaryActionPanel.add(new JLabel("Legendary Action Description:"));
+        legendaryActionPanel.setOpaque(false);
 
         legendaryCreationPanel.setLayout(new BoxLayout(legendaryCreationPanel, BoxLayout.Y_AXIS));
         legendaryCreationPanel.setPreferredSize(new Dimension(this.getWidth(), 50));
@@ -923,6 +968,7 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
         legendaryCreationPanel.add(legendaryActionDescriptionScrollPane);
         legendaryCreationPanel.add(new JLabel("Legendary Actions:"));
         legendaryCreationPanel.add(legendaryActionsScrollPane);
+        legendaryCreationPanel.setOpaque(false);
     }
 
     // MODIFIES: mainMenuPanel, this

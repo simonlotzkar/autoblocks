@@ -3,13 +3,13 @@ package ui.scrollpanes;
 import javax.swing.*;
 
 // Represents a scroll pane of a text area that contains roll results
-public class RollLogScrollPane extends JScrollPane {
+public class RollLogScrollPane extends ParchmentScrollPane {
     private final JTextArea rollLogTextArea;
 
     // MODIFIES: this
     // EFFECTS: constructs this scroll pane
     public RollLogScrollPane() {
-        super();
+        super(null);
 
         rollLogTextArea = new JTextArea();
         rollLogTextArea.setEditable(false);

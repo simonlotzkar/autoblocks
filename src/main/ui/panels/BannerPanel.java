@@ -5,7 +5,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
-// Represents a banner panel that contains an image behind title text
+// Represents a banner panel that contains an image behind text
 public class BannerPanel extends JPanel {
     private final String title;
 

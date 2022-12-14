@@ -7,19 +7,15 @@ import model.StatBlock;
 import model.StatBlockLibrary;
 import model.statblockfields.Title;
 import ui.panels.menus.MainMenuPanel;
-import ui.textareas.StatBlockDisplayTextArea;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
 // Represents a scroll pane containing a list of statblocks that can be selected
-public class LibraryScrollPane extends JScrollPane implements ListSelectionListener {
-    private final MainMenuPanel mainMenuPanel;
-
+public class LibraryScrollPane extends ParchmentScrollPane implements ListSelectionListener {
     // lists
     private final JList<StatBlock> libraryList;
     private final StatBlockLibrary libraryListModel;
@@ -35,10 +31,7 @@ public class LibraryScrollPane extends JScrollPane implements ListSelectionListe
     // MODIFIES: this
     // EFFECTS: constructs this display panel
     public LibraryScrollPane(MainMenuPanel mainMenuPanel) {
-        super(null);
-        this.mainMenuPanel = mainMenuPanel;
-        setSize(mainMenuPanel.getSize());
-        setVisible(true);
+        super(mainMenuPanel);
         setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
@@ -76,6 +69,8 @@ public class LibraryScrollPane extends JScrollPane implements ListSelectionListe
         libraryList.setLayoutOrientation(JList.VERTICAL);
         libraryList.setVisibleRowCount(-1);
         libraryList.addListSelectionListener(this);
+        libraryList.setCellRenderer(new TransparentListCellRenderer());
+        libraryList.setOpaque(false);
     }
 
     // MODIFIES: mainMenuPanel

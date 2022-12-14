@@ -19,7 +19,6 @@ public class MenuManagerPanel extends JPanel {
     private final Encounter encounter = new Encounter();
     private final StatBlockLibrary statBlockLibrary = new StatBlockLibrary();
 
-    private final TitleMenuPanel titleMenuPanel = new TitleMenuPanel(this);
     private final MainMenuPanel mainMenuPanel = new MainMenuPanel(this);
 
     private final CardLayout cardLayout = new CardLayout();
@@ -30,11 +29,13 @@ public class MenuManagerPanel extends JPanel {
     // EFFECTS: constructs this panel
     public MenuManagerPanel(MainFrame mainFrame) {
         super();
-        this.setPreferredSize(mainFrame.getPreferredSize());
-        this.setLayout(cardLayout);
-        this.add(titleMenuPanel, "title");
-        this.add(mainMenuPanel, "main");
-        this.setVisible(true);
+        setPreferredSize(mainFrame.getPreferredSize());
+        setLayout(cardLayout);
+        setVisible(true);
+
+        TitleMenuPanel titleMenuPanel = new TitleMenuPanel(this);
+        add(titleMenuPanel, "title");
+        add(mainMenuPanel, "main");
         cardLayout.show(this, "title");
     }
 
@@ -58,7 +59,6 @@ public class MenuManagerPanel extends JPanel {
 
     // MODIFIES: this
     // EFFECTS: adds all given statblocks to the libraryListModel
-    //          this is only here because the autograder didn't like using the native addAll()
     private void addAllToLibrary(java.util.List<StatBlock> statBlockList) {
         for (StatBlock sb : statBlockList) {
             statBlockLibrary.addElement(sb);
@@ -67,7 +67,6 @@ public class MenuManagerPanel extends JPanel {
 
     // MODIFIES: this
     // EFFECTS: adds all given characters to the encounterListModel
-    //          this is only here because the autograder didn't like using the native addAll()
     private void addAllToEncounter(java.util.List<NPC> npcList) {
         for (NPC c : npcList) {
             encounter.addElement(c);
@@ -96,18 +95,24 @@ public class MenuManagerPanel extends JPanel {
     }
 
     // MODIFIES: this
-    // EFFECTS: prompts user to load library and/or encounter then attempts to load from file,
+    // EFFECTS: prompts the user to set the encounter and library model lists to that which is saved on file,
     //          displays an error message if it fails
     public void tryLoad() {
-        try {
-            load();
-            JOptionPane.showMessageDialog(this, "Successfully loaded from " + JSON_DIRECTORY + ":"
-                            + "\n" + statBlockLibrary.getSize() + " statblocks and "
-                            + encounter.getSize() + " characters.",
-                    "Success!", JOptionPane.PLAIN_MESSAGE);
-        } catch (IOException exception) {
-            JOptionPane.showMessageDialog(this, "IOException Caught. Message: "
-                    + exception.getMessage() + ".", "Failure!", JOptionPane.WARNING_MESSAGE);
+        int command = JOptionPane.showConfirmDialog(this,
+                "Do you want to load? The current data will be overwritten!",
+                "Confirmation Needed",
+                JOptionPane.YES_NO_OPTION);
+        if (command == JOptionPane.YES_OPTION) {
+            try {
+                load();
+                JOptionPane.showMessageDialog(this, "Successfully loaded from " + JSON_DIRECTORY + ":"
+                                + "\n" + statBlockLibrary.getSize() + " statblocks and "
+                                + encounter.getSize() + " characters.",
+                        "Success!", JOptionPane.PLAIN_MESSAGE);
+            } catch (IOException exception) {
+                JOptionPane.showMessageDialog(this, "IOException Caught. Message: "
+                        + exception.getMessage() + ".", "Failure!", JOptionPane.WARNING_MESSAGE);
+            }
         }
     }
 
@@ -115,13 +120,19 @@ public class MenuManagerPanel extends JPanel {
     // EFFECTS: prompts user to save library and/or encounter then attempts to load from file,
     //          displays an error message if it fails
     public void trySave() {
-        try {
-            save();
-            JOptionPane.showMessageDialog(this, "Successfully saved to " + JSON_DIRECTORY,
-                    "Success!", JOptionPane.PLAIN_MESSAGE);
-        } catch (IOException exception) {
-            JOptionPane.showMessageDialog(this, "IOException Caught. Message: "
-                    + exception.getMessage() + ".", "Failure!", JOptionPane.WARNING_MESSAGE);
+        int command = JOptionPane.showConfirmDialog(this,
+                "Do you want to save? The data on file will be overwritten!",
+                "Confirmation Needed",
+                JOptionPane.YES_NO_OPTION);
+        if (command == JOptionPane.YES_OPTION) {
+            try {
+                save();
+                JOptionPane.showMessageDialog(this, "Successfully saved to " + JSON_DIRECTORY,
+                        "Success!", JOptionPane.PLAIN_MESSAGE);
+            } catch (IOException exception) {
+                JOptionPane.showMessageDialog(this, "IOException Caught. Message: "
+                        + exception.getMessage() + ".", "Failure!", JOptionPane.WARNING_MESSAGE);
+            }
         }
     }
 

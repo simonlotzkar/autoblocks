@@ -10,22 +10,21 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 // Represents a scroll pane of rollable actions for the NPCs that the encounter main display is showing
-public class RollableActionsScrollPane extends JScrollPane implements ListSelectionListener {
-    private final MainMenuPanel mainMenuPanel;
+public class RollableActionsScrollPane extends ParchmentScrollPane implements ListSelectionListener {
     private final Encounter encounter;
-
     private final JList<RollableAction> rollableActionsList;
     private final DefaultListModel<RollableAction> rollableActionsListModel;
 
     // MODIFIES: this
     // EFFECTS: constructs this scroll pane
     public RollableActionsScrollPane(MainMenuPanel mainMenuPanel) {
-        super();
-        this.mainMenuPanel = mainMenuPanel;
+        super(mainMenuPanel);
 
         encounter = mainMenuPanel.getMenuManagerPanel().getEncounter();
         rollableActionsListModel = new DefaultListModel<>();
         rollableActionsList = new JList<>(rollableActionsListModel);
+        rollableActionsList.setCellRenderer(new TransparentListCellRenderer());
+        rollableActionsList.setOpaque(false);
 
         initializeRollableActionsList();
         initializeRollableActionsListModel();
@@ -78,7 +77,6 @@ public class RollableActionsScrollPane extends JScrollPane implements ListSelect
 
     // MODIFIES: this
     // EFFECTS: adds all rollable actions to the list model
-    //          *this is only here because the autograder didn't like using the native addAll()
     private void addAllRollableActionsToModel(java.util.List<RollableAction> rollableActionsList) {
         for (RollableAction a : rollableActionsList) {
             rollableActionsListModel.addElement(a);

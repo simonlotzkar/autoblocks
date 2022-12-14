@@ -9,6 +9,7 @@ import ui.panels.menus.MainMenuPanel;
 import ui.scrollpanes.LibrarySideDisplayScrollPane;
 
 import javax.swing.*;
+import java.awt.*;
 
 // Represents a text area that displays a text representation of the selected statblock or lack thereof
 public class StatBlockDisplayTextArea extends JTextArea {
@@ -71,18 +72,27 @@ public class StatBlockDisplayTextArea extends JTextArea {
         AbilityScoreSet abilityScoreSet = selectedStatBlock.getAbilityScores();
         this.append("\n---------------");
         this.append("\nSTR " + abilityScoreSet.getStrength()
-                + " (" + abilityScoreSet.toModifier(AbilityScore.STRENGTH) + ")");
-        this.append("\nDEX" + abilityScoreSet.getDexterity()
-                + " (" + abilityScoreSet.toModifier(AbilityScore.DEXTERITY) + ")");
-        this.append("\nCON" + abilityScoreSet.getConstitution()
-                + " (" + abilityScoreSet.toModifier(AbilityScore.CONSTITUTION) + ")");
-        this.append("\nINT" + abilityScoreSet.getIntelligence()
-                + " (" + abilityScoreSet.toModifier(AbilityScore.INTELLIGENCE) + ")");
-        this.append("\nWIS" + abilityScoreSet.getWisdom()
-                + " (" + abilityScoreSet.toModifier(AbilityScore.WISDOM) + ")");
-        this.append("\nCHA" + abilityScoreSet.getCharisma()
-                + " (" + abilityScoreSet.toModifier(AbilityScore.CHARISMA) + ")");
+                + " (" + integerToDescriptiveString(abilityScoreSet.toModifier(AbilityScore.STRENGTH)) + ")");
+        this.append("\nDEX " + abilityScoreSet.getDexterity()
+                + " (" + integerToDescriptiveString(abilityScoreSet.toModifier(AbilityScore.DEXTERITY)) + ")");
+        this.append("\nCON " + abilityScoreSet.getConstitution()
+                + " (" + integerToDescriptiveString(abilityScoreSet.toModifier(AbilityScore.CONSTITUTION)) + ")");
+        this.append("\nINT " + abilityScoreSet.getIntelligence()
+                + " (" + integerToDescriptiveString(abilityScoreSet.toModifier(AbilityScore.INTELLIGENCE)) + ")");
+        this.append("\nWIS " + abilityScoreSet.getWisdom()
+                + " (" + integerToDescriptiveString(abilityScoreSet.toModifier(AbilityScore.WISDOM)) + ")");
+        this.append("\nCHA " + abilityScoreSet.getCharisma()
+                + " (" + integerToDescriptiveString(abilityScoreSet.toModifier(AbilityScore.CHARISMA)) + ")");
         this.append("\n---------------");
+    }
+
+    // EFFECTS: adds a positive sign to the given number if it's positive, then returns it as a string
+    private String integerToDescriptiveString(int number) {
+        if (number < 0) {
+            return String.valueOf(number);
+        } else {
+            return "+" + number;
+        }
     }
 
     // MODIFIES: this

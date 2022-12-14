@@ -6,6 +6,9 @@ import javax.swing.border.EmptyBorder;
 import ui.panels.menus.MenuManagerPanel;
 
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
 
@@ -19,11 +22,21 @@ public class MainFrame extends JFrame {
     // EFFECTS: constructs this frame
     public MainFrame() {
         super("AutoBlocks");
-        this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.setIconImage(DND_ICON.getImage());
-        this.add(new MenuManagerPanel(this));
-        this.pack();
-        this.setVisible(true);
+        setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        setIconImage(DND_ICON.getImage());
+        MenuManagerPanel menuManagerPanel = new MenuManagerPanel(this);
+        add(menuManagerPanel);
+        pack();
+        setVisible(true);
+
+        WindowListener exitListener = new WindowAdapter() {
+            @Override
+            // EFFECTS: handles window close from user
+            public void windowClosing(WindowEvent e) {
+                menuManagerPanel.confirmQuit();
+            }
+        };
+        addWindowListener(exitListener);
     }
 }
