@@ -31,6 +31,7 @@ of the game. So in short, I made this for personal use, but also because I think
   - change into display panels
 - redesign statblock/npc displays *and refactor*
 - redesign statblock creation display
+- custom action window
 
 ### Current Bugs:
 - damage types are stuck capitalized
@@ -41,4 +42,3 @@ of the game. So in short, I made this for personal use, but also because I think
 - automated rolls for skills and saving throws
 - turn order and automation of turns
 - inventory/loot generation
-- custom action window
