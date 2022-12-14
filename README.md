@@ -24,9 +24,19 @@ person. This app allows the DM to only exclude repetitive simple rolls and hp ma
 of the game. So in short, I made this for personal use, but also because I think it solves a problem in a unique way.
 </p>
 
+### TODO:
+- remove group system
+- change the string generation of actions (formulae and rolls)
+  - add NPC name tags
+  - change into display panels
+- redesign statblock/npc displays *and refactor*
+- redesign statblock creation display
+
+### Current Bugs:
+- damage types are stuck capitalized
+
 ### Future Additions:
 - come with all default monsters in the 5th edition monsters manual (2/300)
-- add NPC name tags to the actions display and roll outputs
 - save system to allow for multiple save/load files
 - automated rolls for skills and saving throws
 - turn order and automation of turns
