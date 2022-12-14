@@ -24,21 +24,37 @@ person. This app allows the DM to only exclude repetitive simple rolls and hp ma
 of the game. So in short, I made this for personal use, but also because I think it solves a problem in a unique way.
 </p>
 
-### TODO:
+### TODO (in order):
 - remove group system
-- change the string generation of actions (formulae and rolls)
-  - add NPC name tags
-  - change into display panels
-- redesign statblock/npc displays *and refactor*
-- redesign statblock creation display
+- edit custom roll window (make fields above button, parchment, etc)
 - custom action window
+- make encounter and library alphabetical
+    - update npc name generation based on that
+- update test suite
+- change the display of actions (formulae and rolls)
+    - add NPC name tags
+    - change from strings to grid panels
+- redesign statblock/npc displays 
+  - refactor (use inheritance)
+  - change text areas to panels with sub grids
+- redesign statblock creation display
+  - change flow layouts to grids
+- add turn order functionality
+  - add turn order list in between encounter list and side panel
+  - add next turn button at bottom
+  - make initiative rolls update turn order
+- add skill roll button that takes into account proficiency
+- add saving throw button that takes into account proficiency
+- redesign buttons
+  - add custom text to all
+  - create custom image for backgrounds (and maybe redo icons)
+- redesign save/load system
+    - make default library file and add import functionality (just adds to existing library)
+        - come with all default monsters in the 5th edition monsters manual (2/300)
+    - allow for multiple save/load files
+    - redesign json tests and files
 
 ### Current Bugs:
 - damage types are stuck capitalized
-
-### Future Additions:
-- come with all default monsters in the 5th edition monsters manual (2/300)
-- save system to allow for multiple save/load files
-- automated rolls for skills and saving throws
-- turn order and automation of turns
-- inventory/loot generation
+- statblock creation doesn't reset when restarting creation
+- editing npc doesn't update npc display
