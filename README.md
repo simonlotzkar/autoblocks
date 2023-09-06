@@ -21,12 +21,15 @@ focus on the rest of the game. This is for personal use, but I think any DM woul
 </p>
 
 ### TODO (in order):
-- remove group system
-- test suite
+- update test suite
+- custom roll window
+    - make fields above button, parchment, etc
+- custom action window
 - buttons
     - add custom text to all
     - create custom image for backgrounds (and maybe redo icons)
 - encounter and library lists
+    - convert to: "JTable - Sort Using Column Headers"
     - add "sort by..." combobox next to the main display titles
       - name
       - type
@@ -34,14 +37,10 @@ focus on the rest of the game. This is for personal use, but I think any DM woul
       - alignment
       - cr
       - hp
-    - convert to: "JTable - Sort Using Column Headers"
     - scale text size
-- custom roll window
-  - make fields above button, parchment, etc
-- custom action window
 - display of actions (formulae and rolls)
     - add NPC name tags
-    - change from strings to grid panels
+    - change from strings to grid panels (hit/dmg/etc)
 - statblock/npc displays 
   - refactor (use inheritance)
   - change text areas to panels with sub grids
@@ -50,7 +49,9 @@ focus on the rest of the game. This is for personal use, but I think any DM woul
 
 ### Current Bugs:
 - damage types are stuck capitalized
-- statblock creation doesn't reset when restarting creation
+- statblock creation
+  - doesn't reset when restarting creation
+  - buttons act on library and not creation panel
 - editing hp doesn't update npc display
 
 ### Future Additions:

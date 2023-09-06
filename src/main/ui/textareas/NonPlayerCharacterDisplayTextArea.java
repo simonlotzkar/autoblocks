@@ -49,24 +49,17 @@ public class NonPlayerCharacterDisplayTextArea extends JTextArea {
     // EFFECTS: adds the selected npc's title data to the text area
     private void initializeTitlePanel() {
         Title title = selectedNPC.getTitle();
-        if (title.getGroup() != null) {
-            this.append(title.getName() + " (CR " + selectedNPC.getChallengeRating()
-                    + "), Group: " + title.getGroup());
-            this.append("\n" + title.getSize() + " " + title.getType() + ", " + title.getAlignment());
-            this.append("\n---------------");
-        } else {
-            this.append(title.getName() + " (CR " + selectedNPC.getChallengeRating() + ")");
-            this.append("\n" + title.getSize() + " " + title.getType() + ", " + title.getAlignment());
-            this.append("\n---------------");
-        }
+        append(title.getName() + " (CR " + selectedNPC.getChallengeRating() + ")");
+        append("\n" + title.getSize() + " " + title.getType() + ", " + title.getAlignment());
+        append("\n---------------");
     }
 
     // MODIFIES: this
     // EFFECTS: adds the selected npc's combat stats data to the text area
     private void initializeCombatStatsPanel() {
-        this.append("\nHit Points: " + selectedNPC.getHPString());
-        this.append("\nArmour Class: " + selectedNPC.getArmour().toString());
-        this.append("\nSpeeds: " + selectedNPC.getSpeeds().toString());
+        append("\nHit Points: " + selectedNPC.getHPString());
+        append("\nArmour Class: " + selectedNPC.getArmour().toString());
+        append("\nSpeeds: " + selectedNPC.getSpeeds().toString());
     }
 
     // MODIFIES: this

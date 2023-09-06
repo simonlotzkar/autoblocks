@@ -93,21 +93,11 @@ public class JsonReader {
     // EFFECTS: parses title from JSON object and returns it
     //          throws an exception if there is any errors when reading
     private Title parseTitle(JSONObject jsonObject) throws IncompleteFieldException {
-        if (jsonObject.optString("group").equals("")) {
-            return new Title(
-                    jsonObject.getString("name"),
-                    jsonObject.getString("type"),
-                    jsonObject.getString("size"),
-                    jsonObject.getString("alignment"),
-                    null);
-        } else {
-            return new Title(
-                    jsonObject.getString("name"),
-                    jsonObject.getString("type"),
-                    jsonObject.getString("size"),
-                    jsonObject.getString("alignment"),
-                    jsonObject.getString("group"));
-        }
+        return new Title(
+                jsonObject.getString("name"),
+                jsonObject.getString("type"),
+                jsonObject.getString("size"),
+                jsonObject.getString("alignment"));
     }
 
     // EFFECTS: parses hp formula from JSON object and returns it
@@ -386,17 +376,13 @@ public class JsonReader {
             Title parentTitle = parentStatBlock.getTitle();
             NPC npc = new NPC(parentStatBlock);
 
-            String groupName = jsonObject.getJSONObject("title").optString("group");
-            if (groupName.equalsIgnoreCase("")) {
-                groupName = null;
-            }
-
             npc.setTitle(new Title(jsonObject.getJSONObject("title").getString("name"), parentTitle.getSize(),
-                    parentTitle.getType(), parentTitle.getAlignment(), groupName));
+                    parentTitle.getType(), parentTitle.getAlignment()));
             npc.setMaxHP(jsonObject.getInt("maxHP"));
             npc.setHP(jsonObject.getInt("hp"));
 
             return npc;
+
         } catch (IncompleteFieldException e) {
             throw new IOException("incomplete field found reading an NPC");
         }

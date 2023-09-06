@@ -56,17 +56,9 @@ public class RollableActionsScrollPane extends ParchmentScrollPane implements Li
     // EFFECTS: sets up the rollable actions list model based on what the main display is showing
     private void initializeRollableActionsListModel() {
         NPC selectedNPC = mainMenuPanel.getMainDisplayPanel().getEncounterScrollPane().getSelectedNPC();
-        String selectedGroupName = mainMenuPanel.getMainDisplayPanel().getEncounterScrollPane().getSelectedGroupName();
         rollableActionsListModel.removeAllElements();
 
-        if (selectedGroupName != null) {
-            for (int i = 0; i < encounter.getSize(); i++) {
-                if (encounter.getElementAt(i).hasGroup() && encounter.getElementAt(i).getTitle()
-                        .getGroup().equals(selectedGroupName)) {
-                    addAllRollableActionsToModel(encounter.getElementAt(i).getRollableActions());
-                }
-            }
-        } else if (selectedNPC != null) {
+        if (selectedNPC != null) {
             addAllRollableActionsToModel(selectedNPC.getRollableActions());
         } else {
             for (int i = 0; i < encounter.getSize(); i++) {

@@ -128,13 +128,7 @@ public class NPC extends StatBlock implements Writable {
     @Override
     // EFFECTS: returns a string representation of the character
     public String toString() {
-        Title title = getTitle();
-        String name = title.getName();
-        if (title.getGroup() != null) {
-            return (name + " (Group: " + title.getGroup() + "), HP: " + getHPString());
-        } else {
-            return (name + ", HP: " + getHPString());
-        }
+        return (getTitle().getName() + ", HP: " + getHPString());
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -183,10 +177,5 @@ public class NPC extends StatBlock implements Writable {
     // EFFECTS: get current hp
     public int getHP() {
         return hp;
-    }
-
-    // EFFECTS: returns true if the character has a group and false otherwise
-    public boolean hasGroup() {
-        return this.title.getGroup() != null;
     }
 }

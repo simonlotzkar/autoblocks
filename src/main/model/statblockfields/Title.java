@@ -11,11 +11,10 @@ public class Title implements Writable {
     private final String size;
     private final String type;
     private final String alignment;
-    private String group;
 
     // MODIFIES: this
     // EFFECTS: constructs Title using the given fields and throws an exception if any of the required fields are empty
-    public Title(String name, String size, String type, String alignment, String group)
+    public Title(String name, String size, String type, String alignment)
             throws IncompleteFieldException {
         if (name == null || name.isEmpty()) {
             throw new IncompleteFieldException("given name is empty or null");
@@ -30,7 +29,6 @@ public class Title implements Writable {
             this.type = type;
             this.size = size;
             this.alignment = alignment;
-            this.group = group;
         }
     }
 
@@ -42,17 +40,7 @@ public class Title implements Writable {
         json.put("type", type);
         json.put("size", size);
         json.put("alignment", alignment);
-        if (group != null && !group.isEmpty()) {
-            json.put("group", group);
-        }
         return json;
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
-    // setters:
-    // EFFECTS: set group
-    public void setGroup(String group) {
-        this.group = group;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -75,10 +63,5 @@ public class Title implements Writable {
     // EFFECTS: gets alignment
     public String getAlignment() {
         return alignment;
-    }
-
-    // EFFECTS: get group
-    public String getGroup() {
-        return group;
     }
 }

@@ -110,7 +110,7 @@ public class LibraryScrollPane extends ParchmentScrollPane implements ListSelect
             for (int n = 0; n < copies; n++) {
                 NPC newNPC = new NPC(statBlock);
                 newNPC.setTitle(new Title(NPC.generateNameForEncounter(statBlock, encounterList),
-                        statBlockTitle.getSize(), statBlockTitle.getType(), statBlockTitle.getAlignment(), null));
+                        statBlockTitle.getSize(), statBlockTitle.getType(), statBlockTitle.getAlignment()));
                 encounterList.add(newNPC);
             }
         }

@@ -1010,8 +1010,7 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
         return new Title(nameTextField.getText(),
                 Objects.requireNonNull(typeComboBox.getSelectedItem()).toString(),
                 Objects.requireNonNull(sizeComboBox.getSelectedItem()).toString(),
-                Objects.requireNonNull(alignmentComboBox.getSelectedItem()).toString(),
-                null);
+                Objects.requireNonNull(alignmentComboBox.getSelectedItem()).toString());
     }
 
     // EFFECTS: returns an armour from the given user fields and throws an exception if any issues are found
