@@ -41,11 +41,8 @@ public class NPCTest extends StatBlockTest {
             statBlock1NPC2 = new NPC(statBlock1);
 
             statBlock2NPC0 = new NPC(statBlock2);
-            statBlock2NPC0.getTitle().setGroup(GROUP_0);
             statBlock2NPC1 = new NPC(statBlock2);
-            statBlock2NPC1.getTitle().setGroup(GROUP_0);
             statBlock2NPC2 = new NPC(statBlock2);
-            statBlock2NPC2.getTitle().setGroup(GROUP_0);
         } catch (IncompleteFieldException e) {
             fail("exception!");
         }
@@ -74,7 +71,6 @@ public class NPCTest extends StatBlockTest {
         assertEquals(title0.getType(), statBlock0NPC0.getTitle().getType());
         assertEquals(title0.getSize(), statBlock0NPC0.getTitle().getSize());
         assertEquals(title0.getAlignment(), statBlock0NPC0.getTitle().getAlignment());
-        assertNull(statBlock0NPC0.getTitle().getGroup());
 
         assertEquals(ROLL_FORMULA_0, statBlock0NPC0.getHPFormula());
         assertEquals(INTEGER_0, statBlock0NPC0.getXP());
@@ -98,7 +94,6 @@ public class NPCTest extends StatBlockTest {
         assertEquals(title1.getType(), statBlock1NPC0.getTitle().getType());
         assertEquals(title1.getSize(), statBlock1NPC0.getTitle().getSize());
         assertEquals(title1.getAlignment(), statBlock1NPC0.getTitle().getAlignment());
-        assertNull(statBlock1NPC0.getTitle().getGroup());
 
         assertEquals(HP_FORMULA_0, statBlock1NPC0.getHPFormula());
         assertEquals(XP_1, statBlock1NPC0.getXP());
@@ -114,7 +109,7 @@ public class NPCTest extends StatBlockTest {
         assertEquals(ACTION_NAME_1, statBlock1NPC0.getRollableActions().get(0).getName());
         assertEquals(ACTION_DESCRIPTION_1, statBlock1NPC0.getRollableActions().get(0).getDescription());
         assertEquals(ACTION_REACH_1, statBlock1NPC0.getRollableActions().get(0).getRange());
-        assertEquals(HIT_FORMULA_1, statBlock1NPC0.getRollableActions().get(0).getHitFormula());
+        assertEquals(HIT_MODIFIER_1, statBlock1NPC0.getRollableActions().get(0).getHitModifier());
         assertEquals(DAMAGE_FORMULA_1, statBlock1NPC0.getRollableActions().get(0).getDamageMap().get(DAMAGE_TYPE_1));
     }
 
@@ -128,7 +123,6 @@ public class NPCTest extends StatBlockTest {
         assertEquals(title2.getType(), statBlock2NPC0.getTitle().getType());
         assertEquals(title2.getSize(), statBlock2NPC0.getTitle().getSize());
         assertEquals(title2.getAlignment(), statBlock2NPC0.getTitle().getAlignment());
-        assertEquals(GROUP_0, statBlock2NPC0.getTitle().getGroup());
 
         assertEquals(HP_FORMULA_1, statBlock2NPC0.getHPFormula());
         assertEquals(XP_2, statBlock2NPC0.getXP());
@@ -144,13 +138,13 @@ public class NPCTest extends StatBlockTest {
         assertEquals(ACTION_NAME_2, statBlock2NPC0.getRollableActions().get(0).getName());
         assertEquals(ACTION_DESCRIPTION_2, statBlock2NPC0.getRollableActions().get(0).getDescription());
         assertEquals(ACTION_REACH_2, statBlock2NPC0.getRollableActions().get(0).getRange());
-        assertEquals(HIT_FORMULA_2, statBlock2NPC0.getRollableActions().get(0).getHitFormula());
+        assertEquals(HIT_MODIFIER_2, statBlock2NPC0.getRollableActions().get(0).getHitModifier());
         assertEquals(DAMAGE_FORMULA_2, statBlock2NPC0.getRollableActions().get(0).getDamageMap().get(DAMAGE_TYPE_2));
 
         assertEquals(ACTION_NAME_3, statBlock2NPC0.getRollableActions().get(1).getName());
         assertEquals(ACTION_DESCRIPTION_3, statBlock2NPC0.getRollableActions().get(1).getDescription());
         assertEquals(ACTION_REACH_3, statBlock2NPC0.getRollableActions().get(1).getRange());
-        assertEquals(HIT_FORMULA_3, statBlock2NPC0.getRollableActions().get(1).getHitFormula());
+        assertEquals(HIT_MODIFIER_3, statBlock2NPC0.getRollableActions().get(1).getHitModifier());
         assertEquals(DAMAGE_FORMULA_3, statBlock2NPC0.getRollableActions().get(1).getDamageMap().get(DAMAGE_TYPE_3));
 
         assertEquals(2, statBlock2NPC0.getLanguages().getLanguagesList().size());
@@ -336,7 +330,6 @@ public class NPCTest extends StatBlockTest {
         assertEquals(statBlock2NPC0.getTitle().getType(), json.getJSONObject("title").get("type"));
         assertEquals(statBlock2NPC0.getTitle().getSize(), json.getJSONObject("title").get("size"));
         assertEquals(statBlock2NPC0.getTitle().getAlignment(), json.getJSONObject("title").get("alignment"));
-        assertEquals(statBlock2NPC0.getTitle().getGroup(), json.getJSONObject("title").get("group"));
 
         assertEquals(XP_2, json.get("xp"));
         assertEquals(HP_FORMULA_1.getAmountOfDice(), json.getJSONObject("hpFormula").get("amountOfDice"));
@@ -363,7 +356,7 @@ public class NPCTest extends StatBlockTest {
         String statBlock1Character0String = statBlock1NPC0.getTitle().getName() + ", HP: "
                 + statBlock1NPC0.getHPString();
         String statBlock2Character0String = statBlock2NPC0.getTitle().getName() + " (Group: "
-                + statBlock2NPC0.getTitle().getGroup() + "), HP: " + statBlock2NPC0.getHPString();
+                + statBlock2NPC0.getTitle() + "), HP: " + statBlock2NPC0.getHPString();
 
         assertEquals(statBlock0Character0String, statBlock0NPC0.toString());
         assertEquals(statBlock1Character0String, statBlock1NPC0.toString());

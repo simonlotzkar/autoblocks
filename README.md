@@ -22,6 +22,7 @@ focus on the rest of the game. This is for personal use, but I think any DM woul
 
 ### TODO (in order):
 - update test suite
+- make actions an optional field
 - custom roll window
     - make fields above button, parchment, etc
 - custom action window
@@ -48,32 +49,32 @@ focus on the rest of the game. This is for personal use, but I think any DM woul
   - change flow layouts to grids
 
 ### Current Bugs:
-- damage types are stuck capitalized
 - statblock creation
   - doesn't reset when restarting creation
-  - buttons act on library and not creation panel
-- editing hp doesn't update npc display
+  - buttons for library not disabled
+  - cannot finish creation
+- editing hp doesn't update on npc sheet
 
 ### Future Additions:
-- add **advantage / disadvantage system**
+- add **advantage and disadvantage**
   - include option with all non damage rolls
-- add **skill system**
+- add **skills**
   - roll button that takes into account proficiency
-- add **saving throw system**
+- add **saving throws**
   - button that takes into account proficiency
-- add **turn system**
+- add **turn tracking**
     - add turn order list in between encounter list and side panel
     - add next turn button at bottom
     - make initiative rolls update turn order
-- redesign **hp system**
+- redesign **hp tracking**
     - turn change hp button into a 'damage' and a 'heal' button
     - have damage type options that take into account resistances
     - add a bloodied display to hp (shows when at or under 50%)
-- add **conditions system**
+- add **conditions**
     - track and view conditions for npcs
     - button that adds a condition to the selected npcs but takes immunities into account
       - checkbox for saving throw checks (takes the largest bonus)
-- redesign **save/load system**
+- redesign **save and load**
     - make default library json file
         - come with all default monsters in the 5th edition monsters manual (2/300)
     - add toolbar to top of window for the following:

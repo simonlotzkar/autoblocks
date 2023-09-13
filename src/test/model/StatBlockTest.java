@@ -44,7 +44,7 @@ public class StatBlockTest {
 
     protected Title title1;
     protected final static RollFormula HP_FORMULA_0 = new RollFormula(1, 8, 0);
-    protected final static int HIT_FORMULA_1 = 2;
+    protected final static int HIT_MODIFIER_1 = 2;
     protected final static RollFormula DAMAGE_FORMULA_1 = new RollFormula(1, 4, 0);
     protected final static Armour ARMOUR_1 = new Armour.ArmourBuilder(13).build();
     protected final static Speeds SPEEDS_1 = new Speeds.SpeedsBuilder(50).build();
@@ -79,9 +79,9 @@ public class StatBlockTest {
 
     protected Title title2;
     protected final static RollFormula HP_FORMULA_1 = new RollFormula(10, 40, 30);
-    protected final static int HIT_FORMULA_2 = -30;
+    protected final static int HIT_MODIFIER_2 = -30;
     protected final static RollFormula DAMAGE_FORMULA_2 = new RollFormula(12, 23, 24);
-    protected final static int HIT_FORMULA_3 = -3;
+    protected final static int HIT_MODIFIER_3 = -3;
     protected final static RollFormula DAMAGE_FORMULA_3 = new RollFormula(13, 8, 100);
     protected Armour armour2;
     protected final static Speeds SPEEDS_2 = new Speeds
@@ -126,7 +126,7 @@ public class StatBlockTest {
     // EFFECTS: builds statblock0 from constants
     protected void initializeStatBlock0() {
         try {
-            title0 = new Title("statblock zero", STRING_0, STRING_0, STRING_0, null);
+            title0 = new Title("statblock zero", STRING_0, STRING_0, STRING_0);
             statBlock0 = new StatBlock.StatBlockBuilder(
                     title0,
                     INTEGER_0, ROLL_FORMULA_0, INTEGER_0,
@@ -142,9 +142,9 @@ public class StatBlockTest {
     // EFFECTS: builds statblock1 from constants
     protected void initializeStatBlock1() {
         try {
-            title1 = new Title("Deer", "Beast", "Medium", "unaligned", null);
+            title1 = new Title("Deer", "Beast", "Medium", "unaligned");
             damageMap1.put(DAMAGE_TYPE_1, DAMAGE_FORMULA_1);
-            RollableAction1 = new RollableAction(ACTION_NAME_1, ACTION_DESCRIPTION_1, ACTION_REACH_1, 0, HIT_FORMULA_1, damageMap1);
+            RollableAction1 = new RollableAction(ACTION_NAME_1, ACTION_DESCRIPTION_1, ACTION_REACH_1, 0, HIT_MODIFIER_1, damageMap1);
             actions1.add(RollableAction1);
 
             statBlock1 = new StatBlock.StatBlockBuilder(
@@ -162,7 +162,7 @@ public class StatBlockTest {
     // EFFECTS: builds statblock2 from constants
     protected void initializeStatBlock2() {
         try {
-            title2 = new Title("statblock two", "type two", "size two", "alignment two", null);
+            title2 = new Title("statblock two", "type two", "size two", "alignment two");
             armour2 = new Armour
                     .ArmourBuilder(200)
                     .armourName("ridiculous armour")
@@ -171,8 +171,8 @@ public class StatBlockTest {
 
             damageMap2.put(DAMAGE_TYPE_2, DAMAGE_FORMULA_2);
             damageMap3.put(DAMAGE_TYPE_3, DAMAGE_FORMULA_3);
-            RollableAction2 = new RollableAction(ACTION_NAME_2, ACTION_DESCRIPTION_2, ACTION_REACH_2, 0, HIT_FORMULA_2, damageMap2);
-            RollableAction3 = new RollableAction(ACTION_NAME_3, ACTION_DESCRIPTION_3, ACTION_REACH_3, 0, HIT_FORMULA_3, damageMap3);
+            RollableAction2 = new RollableAction(ACTION_NAME_2, ACTION_DESCRIPTION_2, ACTION_REACH_2, 0, HIT_MODIFIER_2, damageMap2);
+            RollableAction3 = new RollableAction(ACTION_NAME_3, ACTION_DESCRIPTION_3, ACTION_REACH_3, 0, HIT_MODIFIER_3, damageMap3);
             actions2.add(RollableAction2);
             actions2.add(RollableAction3);
 
@@ -318,7 +318,7 @@ public class StatBlockTest {
         assertEquals(ACTION_NAME_1, statBlock1.getRollableActions().get(0).getName());
         assertEquals(ACTION_DESCRIPTION_1, statBlock1.getRollableActions().get(0).getDescription());
         assertEquals(ACTION_REACH_1, statBlock1.getRollableActions().get(0).getRange());
-        assertEquals(HIT_FORMULA_1, statBlock1.getRollableActions().get(0).getHitFormula());
+        assertEquals(HIT_MODIFIER_1, statBlock1.getRollableActions().get(0).getHitModifier());
         assertEquals(DAMAGE_FORMULA_1, statBlock1.getRollableActions().get(0).getDamageMap().get(DAMAGE_TYPE_1));
     }
 
@@ -339,13 +339,13 @@ public class StatBlockTest {
         assertEquals(ACTION_NAME_2, statBlock2.getRollableActions().get(0).getName());
         assertEquals(ACTION_DESCRIPTION_2, statBlock2.getRollableActions().get(0).getDescription());
         assertEquals(ACTION_REACH_2, statBlock2.getRollableActions().get(0).getRange());
-        assertEquals(HIT_FORMULA_2, statBlock2.getRollableActions().get(0).getHitFormula());
+        assertEquals(HIT_MODIFIER_2, statBlock2.getRollableActions().get(0).getHitModifier());
         assertEquals(DAMAGE_FORMULA_2, statBlock2.getRollableActions().get(0).getDamageMap().get(DAMAGE_TYPE_2));
 
         assertEquals(ACTION_NAME_3, statBlock2.getRollableActions().get(1).getName());
         assertEquals(ACTION_DESCRIPTION_3, statBlock2.getRollableActions().get(1).getDescription());
         assertEquals(ACTION_REACH_3, statBlock2.getRollableActions().get(1).getRange());
-        assertEquals(HIT_FORMULA_3, statBlock2.getRollableActions().get(1).getHitFormula());
+        assertEquals(HIT_MODIFIER_3, statBlock2.getRollableActions().get(1).getHitModifier());
         assertEquals(DAMAGE_FORMULA_3, statBlock2.getRollableActions().get(1).getDamageMap().get(DAMAGE_TYPE_3));
 
         assertEquals(2, statBlock2.getLanguages().getLanguagesList().size());
@@ -505,7 +505,7 @@ public class StatBlockTest {
         assertEquals(ABILITY_SCORES_1.getCharisma(), json.getJSONObject("abilityScores").get("charisma"));
 
         assertEquals(1, json.getJSONArray("actions").length());
-        assertEquals(HIT_FORMULA_1, json.getJSONArray("actions").getJSONObject(0)
+        assertEquals(HIT_MODIFIER_1, json.getJSONArray("actions").getJSONObject(0)
                 .getJSONObject("hitModifier").get("amountOfDice"));
         assertEquals(DAMAGE_FORMULA_1.getAmountOfDice(), json.getJSONArray("actions").getJSONObject(0)
                 .getJSONObject("damageMap").getJSONObject(String.valueOf(DAMAGE_TYPE_1)).get("amountOfDice"));
@@ -543,7 +543,7 @@ public class StatBlockTest {
         assertEquals(ABILITY_SCORES_2.getCharisma(), json.getJSONObject("abilityScores").get("charisma"));
 
         assertEquals(2, json.getJSONArray("actions").length());
-        assertEquals(HIT_FORMULA_2, json.getJSONArray("actions").getJSONObject(0)
+        assertEquals(HIT_MODIFIER_2, json.getJSONArray("actions").getJSONObject(0)
                 .getJSONObject("hitModifier").get("amountOfDice"));
         assertEquals(DAMAGE_FORMULA_2.getAmountOfDice(), json.getJSONArray("actions").getJSONObject(0)
                 .getJSONObject("damageMap").getJSONObject(String.valueOf(DAMAGE_TYPE_2)).get("amountOfDice"));
@@ -552,7 +552,7 @@ public class StatBlockTest {
         assertEquals(DAMAGE_FORMULA_2.getModifier(), json.getJSONArray("actions").getJSONObject(0)
                 .getJSONObject("damageMap").getJSONObject(String.valueOf(DAMAGE_TYPE_2)).get("modifier"));
 
-        assertEquals(HIT_FORMULA_3, json.getJSONArray("actions").getJSONObject(1)
+        assertEquals(HIT_MODIFIER_3, json.getJSONArray("actions").getJSONObject(1)
                 .getJSONObject("hitModifier").get("amountOfDice"));
         assertEquals(DAMAGE_FORMULA_3.getAmountOfDice(), json.getJSONArray("actions").getJSONObject(1)
                 .getJSONObject("damageMap").getJSONObject(String.valueOf(DAMAGE_TYPE_3)).get("amountOfDice"));

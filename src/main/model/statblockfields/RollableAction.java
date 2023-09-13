@@ -13,29 +13,29 @@ public class RollableAction extends Ability implements Writable {
     // required fields
     private final int range;
     private final int longRange;
-    private final RollFormula hitFormula;
+    private final int hitModifier;
     private final HashMap<DamageType, RollFormula> damageMap;
 
+    // REQUIRES: range must be greater than 0, long range must be greater than range or 0, damage map cannot be empty
     // MODIFIES: this
-    // EFFECTS: constructs a rollable action with the given range/long range, hit modifier, and hashmap of damage type
-    //          and roll formulae key value pairs. throws exceptions for incomplete fields and if the ranges are out of
-    //          bounds
+    // EFFECTS: constructs a rollable action with the given name, description, range, long range, hit modifier, and
+    //          damage map
     public RollableAction(String name, String description, int range, int longRange, int hitModifier,
                           HashMap<DamageType, RollFormula> damageMap) throws IncompleteFieldException,
             IndexOutOfBoundsException {
         super(name, description);
         if (range <= 0) {
-            throw new IndexOutOfBoundsException("given range is less than or equal to zero");
+            throw new IndexOutOfBoundsException("range is less than or equal to zero");
         } else if (longRange != 0) {
             if (range >= longRange) {
-                throw new IndexOutOfBoundsException("given long range is less than or equal to the given normal range");
+                throw new IndexOutOfBoundsException("range is greater than or equal to long range");
             }
         } else if (damageMap == null) {
             throw new IncompleteFieldException("null damage formula given");
         }
         this.range = range;
         this.longRange = longRange;
-        this.hitFormula = new RollFormula(1, 20, hitModifier);
+        this.hitModifier = hitModifier;
         this.damageMap = damageMap;
     }
 
@@ -46,7 +46,7 @@ public class RollableAction extends Ability implements Writable {
                 .append(" and (")
                 .append(rollFormula.toString())
                 .append(") ")
-                .append(s)
+                .append(s.toString().toLowerCase())
                 .append(" damage"));
         return damageStringBuilder.toString();
     }
@@ -54,6 +54,7 @@ public class RollableAction extends Ability implements Writable {
     // EFFECTS: gets a descriptive string of this action with its hit and damage formulae rolled
     public String generateFullRollString() {
         String rangeString = String.valueOf(range);
+        RollFormula hitFormula = new RollFormula(1, 20, hitModifier);
 
         if (longRange != 0) {
             rangeString = range + "/" + longRange;
@@ -78,7 +79,7 @@ public class RollableAction extends Ability implements Writable {
                 .append(" and (")
                 .append(rollFormula.roll())
                 .append(") ")
-                .append(s)
+                .append(s.toString().toLowerCase())
                 .append(" damage"));
         return damageStringBuilder.toString();
     }
@@ -91,7 +92,7 @@ public class RollableAction extends Ability implements Writable {
         json.put("description", getDescription());
         json.put("range", range);
         json.put("longRange", longRange);
-        json.put("hitModifier", hitFormula.getModifier());
+        json.put("hitModifier", hitModifier);
         json.put("damageMap", damageMapToJson());
         return json;
     }
@@ -110,17 +111,14 @@ public class RollableAction extends Ability implements Writable {
     // EFFECTS: returns a descriptive string of this rollable action
     public String toString() {
         String rangeString = String.valueOf(range);
+        String hitModifierString = "+" + hitModifier;
 
         if (longRange != 0) {
             rangeString = range + "/" + longRange;
         }
 
-        String hitModifier;
-
-        if (hitFormula.getModifier() < 0) {
-            hitModifier = String.valueOf(hitFormula.getModifier());
-        } else {
-            hitModifier = "+" + hitFormula.getModifier();
+        if (hitModifier < 0) {
+            hitModifierString = String.valueOf(hitModifier);
         }
 
         return getDescription()
@@ -129,10 +127,9 @@ public class RollableAction extends Ability implements Writable {
                 + " ("
                 + rangeString
                 + "ft), ("
-                + hitModifier
+                + hitModifierString
                 + ") to hit"
-                + generateDamageFormulaString()
-                + ".";
+                + generateDamageFormulaString();
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -144,12 +141,12 @@ public class RollableAction extends Ability implements Writable {
 
     // EFFECTS: get long range
     public int getLongRange() {
-        return range;
+        return longRange;
     }
 
     // EFFECTS: get hit formula
-    public RollFormula getHitFormula() {
-        return hitFormula;
+    public Integer getHitModifier() {
+        return hitModifier;
     }
 
     // EFFECTS: get damage map
