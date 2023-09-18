@@ -1,12 +1,12 @@
 package enums;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public enum Condition {
     BLINDED,
     CHARMED,
     DEAFENED,
+    EXHAUSTED,
     FRIGHTENED,
     GRAPPLED,
     INCAPACITATED,
@@ -17,8 +17,7 @@ public enum Condition {
     PRONE,
     RESTRAINED,
     STUNNED,
-    UNCONSCIOUS,
-    EXHAUSTION;
+    UNCONSCIOUS;
 
     // EFFECTS: returns a string array list of this enum's values
     //          with the first letter capitalized and the rest uppercase

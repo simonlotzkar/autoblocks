@@ -42,7 +42,7 @@ public class JsonReaderTest {
             List<StatBlock> library = reader.readLibrary();
             List<NPC> encounter = reader.readEncounter();
             assertEquals(2, library.size());
-            assertEquals(3, encounter.size());
+            assertEquals(5, encounter.size());
         } catch (IOException e) {
             fail("Couldn't read from file");
         }

@@ -50,10 +50,8 @@ public class NPC extends StatBlock implements Writable {
     public static String generateNameForEncounter(StatBlock parentStatBlock, List<NPC> encounter) {
         Title title = parentStatBlock.getTitle();
         int lowestNumber = 1;
-        List<Integer> suffixes;
         if (checkEncounterForSameParentTitle(title, encounter)) {
-            suffixes = generateSuffixes(title, encounter);
-            lowestNumber = findFirstIntegerGap(suffixes);
+            lowestNumber = findFirstIntegerGap(generateSuffixes(title, encounter));
         }
         return title.getName() + " " + lowestNumber;
     }
@@ -74,7 +72,11 @@ public class NPC extends StatBlock implements Writable {
         List<Integer> suffixes = new ArrayList<>();
         for (NPC c : encounter) {
             if (c.getTitle().getName().toLowerCase().contains(parentTitle.getName().toLowerCase())) {
-                suffixes.add(Integer.parseInt(c.getTitle().getName().toLowerCase().replaceAll("[^\\d]", "")));
+                try {
+                    suffixes.add(Integer.parseInt(c.getTitle().getName().toLowerCase().replaceAll("[^\\d]", "")));
+                } catch (NumberFormatException e) {
+                    // don't add to suffixes
+                }
             }
         }
         return suffixes;
@@ -154,6 +156,15 @@ public class NPC extends StatBlock implements Writable {
     // EFFECTS: sets title to given title
     public void setTitle(Title title) {
         this.title = title;
+    }
+
+    // EFFECTS: sets title name to given name
+    public void setTitleName(String name) {
+        try {
+            this.setTitle(new Title(name, this.title.getSize(), this.title.getType(), this.title.getAlignment()));
+        } catch (IncompleteFieldException e) {
+            // name given was incomplete TODO throw exception
+        }
     }
 
     // -----------------------------------------------------------------------------------------------------------------

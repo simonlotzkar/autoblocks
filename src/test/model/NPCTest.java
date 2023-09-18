@@ -21,8 +21,6 @@ public class NPCTest extends StatBlockTest {
     private NPC statBlock2NPC1;
     private NPC statBlock2NPC2;
 
-    private static final String GROUP_0 = "group-1";
-
     private final List<NPC> emptyEncounter = new ArrayList<>();
     private final List<NPC> notSequentialEncounter = new ArrayList<>();
     private final List<NPC> sequentialEncounter = new ArrayList<>();
@@ -46,19 +44,6 @@ public class NPCTest extends StatBlockTest {
         } catch (IncompleteFieldException e) {
             fail("exception!");
         }
-        sequentialEncounter.add(statBlock0NPC0);
-        sequentialEncounter.add(statBlock1NPC0);
-        sequentialEncounter.add(statBlock1NPC1);
-        sequentialEncounter.add(statBlock1NPC2);
-        sequentialEncounter.add(statBlock2NPC0);
-        sequentialEncounter.add(statBlock2NPC1);
-        sequentialEncounter.add(statBlock2NPC2);
-
-        notSequentialEncounter.add(statBlock0NPC0);
-        notSequentialEncounter.add(statBlock1NPC0);
-        notSequentialEncounter.add(statBlock1NPC2);
-        notSequentialEncounter.add(statBlock2NPC0);
-        notSequentialEncounter.add(statBlock2NPC2);
     }
 
     @Override
@@ -67,7 +52,7 @@ public class NPCTest extends StatBlockTest {
         assertEquals(statBlock0, statBlock0NPC0.getParentStatBlock());
         assertEquals(statBlock0NPC0.getHP(), statBlock0NPC0.getMaxHP());
 
-        assertEquals(title0.getName() + " 1", statBlock0NPC0.getTitle().getName());
+        assertEquals(title0.getName(), statBlock0NPC0.getTitle().getName());
         assertEquals(title0.getType(), statBlock0NPC0.getTitle().getType());
         assertEquals(title0.getSize(), statBlock0NPC0.getTitle().getSize());
         assertEquals(title0.getAlignment(), statBlock0NPC0.getTitle().getAlignment());
@@ -90,7 +75,7 @@ public class NPCTest extends StatBlockTest {
         assertEquals(statBlock1, statBlock1NPC0.getParentStatBlock());
         assertEquals(statBlock1NPC0.getHP(), statBlock1NPC0.getMaxHP());
 
-        assertEquals(title1.getName() + " 1", statBlock1NPC0.getTitle().getName());
+        assertEquals(title1.getName(), statBlock1NPC0.getTitle().getName());
         assertEquals(title1.getType(), statBlock1NPC0.getTitle().getType());
         assertEquals(title1.getSize(), statBlock1NPC0.getTitle().getSize());
         assertEquals(title1.getAlignment(), statBlock1NPC0.getTitle().getAlignment());
@@ -108,7 +93,7 @@ public class NPCTest extends StatBlockTest {
 
         assertEquals(ACTION_NAME_1, statBlock1NPC0.getRollableActions().get(0).getName());
         assertEquals(ACTION_DESCRIPTION_1, statBlock1NPC0.getRollableActions().get(0).getDescription());
-        assertEquals(ACTION_REACH_1, statBlock1NPC0.getRollableActions().get(0).getRange());
+        assertEquals(ACTION_RANGE_1, statBlock1NPC0.getRollableActions().get(0).getRange());
         assertEquals(HIT_MODIFIER_1, statBlock1NPC0.getRollableActions().get(0).getHitModifier());
         assertEquals(DAMAGE_FORMULA_1, statBlock1NPC0.getRollableActions().get(0).getDamageMap().get(DAMAGE_TYPE_1));
     }
@@ -119,7 +104,7 @@ public class NPCTest extends StatBlockTest {
         assertEquals(statBlock2, statBlock2NPC0.getParentStatBlock());
         assertEquals(statBlock2NPC0.getHP(), statBlock2NPC0.getMaxHP());
 
-        assertEquals(title2.getName() + " 1", statBlock2NPC0.getTitle().getName());
+        assertEquals(title2.getName(), statBlock2NPC0.getTitle().getName());
         assertEquals(title2.getType(), statBlock2NPC0.getTitle().getType());
         assertEquals(title2.getSize(), statBlock2NPC0.getTitle().getSize());
         assertEquals(title2.getAlignment(), statBlock2NPC0.getTitle().getAlignment());
@@ -137,13 +122,13 @@ public class NPCTest extends StatBlockTest {
 
         assertEquals(ACTION_NAME_2, statBlock2NPC0.getRollableActions().get(0).getName());
         assertEquals(ACTION_DESCRIPTION_2, statBlock2NPC0.getRollableActions().get(0).getDescription());
-        assertEquals(ACTION_REACH_2, statBlock2NPC0.getRollableActions().get(0).getRange());
+        assertEquals(ACTION_RANGE_2, statBlock2NPC0.getRollableActions().get(0).getRange());
         assertEquals(HIT_MODIFIER_2, statBlock2NPC0.getRollableActions().get(0).getHitModifier());
         assertEquals(DAMAGE_FORMULA_2, statBlock2NPC0.getRollableActions().get(0).getDamageMap().get(DAMAGE_TYPE_2));
 
         assertEquals(ACTION_NAME_3, statBlock2NPC0.getRollableActions().get(1).getName());
         assertEquals(ACTION_DESCRIPTION_3, statBlock2NPC0.getRollableActions().get(1).getDescription());
-        assertEquals(ACTION_REACH_3, statBlock2NPC0.getRollableActions().get(1).getRange());
+        assertEquals(ACTION_RANGE_3, statBlock2NPC0.getRollableActions().get(1).getRange());
         assertEquals(HIT_MODIFIER_3, statBlock2NPC0.getRollableActions().get(1).getHitModifier());
         assertEquals(DAMAGE_FORMULA_3, statBlock2NPC0.getRollableActions().get(1).getDamageMap().get(DAMAGE_TYPE_3));
 
@@ -167,17 +152,9 @@ public class NPCTest extends StatBlockTest {
     }
 
     @Test
-    public void testGenerateNameForEncounterBaseCase() {
-        assertEquals(statBlock0.getTitle().getName() + " 1",
-                NPC.generateNameForEncounter(statBlock0, emptyEncounter));
-        assertEquals(statBlock1.getTitle().getName() + " 1",
-                NPC.generateNameForEncounter(statBlock1, emptyEncounter));
-        assertEquals(statBlock2.getTitle().getName() + " 1",
-                NPC.generateNameForEncounter(statBlock2, emptyEncounter));
-    }
-
-    @Test
     public void testGenerateNameForEncounterSequentialCase() {
+        initializeNamesForEncounter();
+
         assertEquals(statBlock0.getTitle().getName() + " 2",
                 NPC.generateNameForEncounter(statBlock0, sequentialEncounter));
         assertEquals(statBlock1.getTitle().getName() + " 4",
@@ -188,12 +165,41 @@ public class NPCTest extends StatBlockTest {
 
     @Test
     public void testGenerateNameForEncounterNotSequentialCase() {
+        initializeNamesForEncounter();
+
         assertEquals(statBlock0.getTitle().getName() + " 2",
                 NPC.generateNameForEncounter(statBlock0, notSequentialEncounter));
         assertEquals(statBlock1.getTitle().getName() + " 2",
                 NPC.generateNameForEncounter(statBlock1, notSequentialEncounter));
-        assertEquals(statBlock2.getTitle().getName() + " 2",
+        assertEquals(statBlock2.getTitle().getName() + " 1",
                 NPC.generateNameForEncounter(statBlock2, notSequentialEncounter));
+    }
+
+    // EFFECT: helper that sets names for each NPC to mimic what they'd be if added to an encounter normally
+    public void initializeNamesForEncounter() {
+        statBlock0NPC0.setTitleName(statBlock0.title.getName() + " 1");
+
+        statBlock1NPC0.setTitleName(statBlock1.title.getName() + " 1");
+        statBlock1NPC1.setTitleName(statBlock1.title.getName() + " 2");
+        statBlock1NPC2.setTitleName(statBlock1.title.getName() + " 3");
+
+        statBlock2NPC0.setTitleName(statBlock2.title.getName() + " 1");
+        statBlock2NPC1.setTitleName(statBlock2.title.getName() + " 2");
+        statBlock2NPC2.setTitleName(statBlock2.title.getName() + " 3");
+
+        sequentialEncounter.add(statBlock0NPC0); //statblock zero 1
+        sequentialEncounter.add(statBlock1NPC0); //statblock one 1
+        sequentialEncounter.add(statBlock1NPC1); //statblock one 2
+        sequentialEncounter.add(statBlock1NPC2); //statblock one 3
+        sequentialEncounter.add(statBlock2NPC0); //statblock two 1
+        sequentialEncounter.add(statBlock2NPC1); //statblock two 2
+        sequentialEncounter.add(statBlock2NPC2); //statblock two 3
+
+        notSequentialEncounter.add(statBlock0NPC0); //statblock zero 1
+        notSequentialEncounter.add(statBlock1NPC0); //statblock one 1
+        notSequentialEncounter.add(statBlock1NPC2); //statblock one 3
+        notSequentialEncounter.add(statBlock2NPC1); //statblock two 2
+        notSequentialEncounter.add(statBlock2NPC2); //statblock two 3
     }
 
     @Test
@@ -258,11 +264,10 @@ public class NPCTest extends StatBlockTest {
         assertEquals(INTEGER_0, json.getInt("hp"));
         assertEquals(INTEGER_0, json.getInt("maxHP"));
 
-        assertEquals(title0.getName() + " 1", json.getJSONObject("title").get("name"));
+        assertEquals(title0.getName(), json.getJSONObject("title").get("name"));
         assertEquals(STRING_0, json.getJSONObject("title").get("type"));
         assertEquals(STRING_0, json.getJSONObject("title").get("size"));
         assertEquals(STRING_0, json.getJSONObject("title").get("alignment"));
-        assertFalse(json.getJSONObject("title").has("group"));
 
         assertEquals(INTEGER_0, json.get("xp"));
         assertEquals(INTEGER_0, json.getJSONObject("hpFormula").get("amountOfDice"));
@@ -274,14 +279,14 @@ public class NPCTest extends StatBlockTest {
         assertEquals(INTEGER_0, json.getJSONObject("speeds").get("speed"));
         assertEquals(INTEGER_0, json.getJSONObject("senses").get("passivePerception"));
 
-        assertEquals(INTEGER_0, json.getJSONObject("abilityScores").get("strength"));
-        assertEquals(INTEGER_0, json.getJSONObject("abilityScores").get("dexterity"));
-        assertEquals(INTEGER_0, json.getJSONObject("abilityScores").get("constitution"));
-        assertEquals(INTEGER_0, json.getJSONObject("abilityScores").get("intelligence"));
-        assertEquals(INTEGER_0, json.getJSONObject("abilityScores").get("wisdom"));
-        assertEquals(INTEGER_0, json.getJSONObject("abilityScores").get("charisma"));
+        assertEquals(1, json.getJSONObject("abilityScores").get("strength"));
+        assertEquals(1, json.getJSONObject("abilityScores").get("dexterity"));
+        assertEquals(1, json.getJSONObject("abilityScores").get("constitution"));
+        assertEquals(1, json.getJSONObject("abilityScores").get("intelligence"));
+        assertEquals(1, json.getJSONObject("abilityScores").get("wisdom"));
+        assertEquals(1, json.getJSONObject("abilityScores").get("charisma"));
 
-        assertTrue(json.getJSONArray("actions").isEmpty());
+        assertTrue(json.getJSONArray("rollableActions").isEmpty());
     }
 
     @Override
@@ -297,7 +302,6 @@ public class NPCTest extends StatBlockTest {
         assertEquals(statBlock1NPC0.getTitle().getType(), json.getJSONObject("title").get("type"));
         assertEquals(statBlock1NPC0.getTitle().getSize(), json.getJSONObject("title").get("size"));
         assertEquals(statBlock1NPC0.getTitle().getAlignment(), json.getJSONObject("title").get("alignment"));
-        assertFalse(json.getJSONObject("title").has("group"));
 
         assertEquals(XP_1, json.get("xp"));
         assertEquals(HP_FORMULA_0.getAmountOfDice(), json.getJSONObject("hpFormula").get("amountOfDice"));
@@ -355,8 +359,8 @@ public class NPCTest extends StatBlockTest {
                 + statBlock0NPC0.getHPString();
         String statBlock1Character0String = statBlock1NPC0.getTitle().getName() + ", HP: "
                 + statBlock1NPC0.getHPString();
-        String statBlock2Character0String = statBlock2NPC0.getTitle().getName() + " (Group: "
-                + statBlock2NPC0.getTitle() + "), HP: " + statBlock2NPC0.getHPString();
+        String statBlock2Character0String = statBlock2NPC0.getTitle().getName() + ", HP: "
+                + statBlock2NPC0.getHPString();
 
         assertEquals(statBlock0Character0String, statBlock0NPC0.toString());
         assertEquals(statBlock1Character0String, statBlock1NPC0.toString());

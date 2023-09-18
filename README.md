@@ -21,32 +21,31 @@ focus on the rest of the game. This is for personal use, but I think any DM woul
 </p>
 
 ### TODO (in order):
-- update test suite
 - make actions an optional field
-- custom roll window
+- update custom roll window
     - make fields above button, parchment, etc
-- custom action window
+- make custom action window
 - buttons
     - add custom text to all
     - create custom image for backgrounds (and maybe redo icons)
-- encounter and library lists
-    - convert to: "JTable - Sort Using Column Headers"
-    - add "sort by..." combobox next to the main display titles
-      - name
-      - type
-      - size
-      - alignment
-      - cr
-      - hp
-    - scale text size
-- display of actions (formulae and rolls)
-    - add NPC name tags
-    - change from strings to grid panels (hit/dmg/etc)
 - statblock/npc displays 
   - refactor (use inheritance)
   - change text areas to panels with sub grids
 - statblock creation display
   - change flow layouts to grids
+- display of actions (formulae and rolls)
+    - add NPC name tags
+    - change from strings to grid panels (hit/dmg/etc)
+- encounter and library lists
+    - convert to: "JTable - Sort Using Column Headers"
+    - add "sort by..." combobox next to the main display titles
+        - name
+        - type
+        - size
+        - alignment
+        - cr
+        - hp
+    - scale text size
 
 ### Current Bugs:
 - statblock creation
@@ -54,10 +53,13 @@ focus on the rest of the game. This is for personal use, but I think any DM woul
   - buttons for library not disabled
   - cannot finish creation
 - editing hp doesn't update on npc sheet
+- legendary mechanics toJson broken
 
 ### Future Additions:
 - add **advantage and disadvantage**
   - include option with all non damage rolls
+- add **critical hit** functionality
+  - display if a roll was a "critical hit" and roll damage normally
 - add **skills**
   - roll button that takes into account proficiency
 - add **saving throws**

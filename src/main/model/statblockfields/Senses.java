@@ -101,7 +101,7 @@ public class Senses implements Writable {
         // constructs a builder with required fields and throws exception if given sense is negative
         public SensesBuilder(int passivePerception) throws IndexOutOfBoundsException {
             if (passivePerception < 0) {
-                throw new IndexOutOfBoundsException("given passive perception is negative");
+                throw new IndexOutOfBoundsException("passive perception is negative");
             } else {
                 this.passivePerception = passivePerception;
             }

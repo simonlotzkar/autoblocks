@@ -285,8 +285,7 @@ public class StatBlock implements Writable {
             if (savingThrowProficiencies.contains(as)) {
                 savingThrowProficienciesString.append(as.toString().toLowerCase())
                         .append(" ")
-                        .append(abilityScoreSet.toModifier(as))
-                        .append(proficiency)
+                        .append(abilityScoreSet.toModifier(as) + proficiency)
                         .append(", ");
             }
         }
@@ -332,7 +331,7 @@ public class StatBlock implements Writable {
                 conditionImmunitiesString.append(c).append(", ");
             }
         }
-        return conditionImmunitiesString.toString();
+        return conditionImmunitiesString.toString().toLowerCase();
     }
 
     // EFFECTS: gets resistances
@@ -395,8 +394,7 @@ public class StatBlock implements Writable {
         // EFFECTS: constructs a builder with required fields
         public StatBlockBuilder(Title title, int xp, RollFormula hpFormula, int proficiency, Armour armour,
                                 Speeds speeds, Senses senses, AbilityScoreSet abilityScoreSet,
-                                List<RollableAction> rollableActions) throws IncompleteFieldException,
-                IndexOutOfBoundsException {
+                                List<RollableAction> rollableActions) throws IndexOutOfBoundsException {
             if (xp < 0) {
                 throw new IndexOutOfBoundsException("given xp is negative");
             } else if (proficiency < 0) {

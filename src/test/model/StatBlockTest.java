@@ -19,14 +19,14 @@ public class StatBlockTest {
     protected StatBlock statBlock0;
 
     protected final static int INTEGER_0 = 0;
-    protected final static String STRING_0 = "";
+    protected final static String STRING_0 = "blank";
     protected final static RollFormula ROLL_FORMULA_0 = new RollFormula(INTEGER_0, INTEGER_0, INTEGER_0);
 
     protected Title title0;
     protected final static Armour ARMOUR_0 = new Armour.ArmourBuilder(INTEGER_0).build();
     protected final static Speeds SPEEDS_0 = new Speeds.SpeedsBuilder(INTEGER_0).build();
     protected final static Senses SENSES_0 = new Senses.SensesBuilder(INTEGER_0).build();
-    protected final static AbilityScoreSet ABILITY_SCORES_0 = new AbilityScoreSet(INTEGER_0, INTEGER_0, INTEGER_0, INTEGER_0, INTEGER_0, INTEGER_0);
+    protected final static AbilityScoreSet ABILITY_SCORES_0 = new AbilityScoreSet(1, 1, 1, 1, 1, 1);
 
     protected List<RollableAction> actions0 = new ArrayList<>();
 
@@ -39,7 +39,7 @@ public class StatBlockTest {
 
     protected final static String ACTION_NAME_1 = "Bite";
     protected final static String ACTION_DESCRIPTION_1 = "Melee Weapon Attack";
-    protected final static int ACTION_REACH_1 = 5;
+    protected final static int ACTION_RANGE_1 = 5;
     protected final static DamageType DAMAGE_TYPE_1 = DamageType.PIERCING;
 
     protected Title title1;
@@ -64,12 +64,12 @@ public class StatBlockTest {
 
     protected final static String ACTION_NAME_2 = "testAction2";
     protected final static String ACTION_DESCRIPTION_2 = "testActionDescription2";
-    protected final static int ACTION_REACH_2 = 100;
+    protected final static int ACTION_RANGE_2 = 100;
     protected final static DamageType DAMAGE_TYPE_2 = DamageType.COLD;
 
     protected final static String ACTION_NAME_3 = "testAction3";
     protected final static String ACTION_DESCRIPTION_3 = "testActionDescription3";
-    protected final static int ACTION_REACH_3 = 300;
+    protected final static int ACTION_RANGE_3 = 300;
     protected final static DamageType DAMAGE_TYPE_3 = DamageType.SLASHING;
 
     protected final static String LANGUAGE_0 = "language0";
@@ -135,16 +135,16 @@ public class StatBlockTest {
                     actions0)
                     .build();
         } catch (IncompleteFieldException e) {
-            fail("Should not have thrown an exception!");
+            fail("Should not have thrown an exception! Message: " + e.getMessage());
         }
     }
 
     // EFFECTS: builds statblock1 from constants
     protected void initializeStatBlock1() {
         try {
-            title1 = new Title("Deer", "Beast", "Medium", "unaligned");
+            title1 = new Title("Deer", "Medium", "Beast", "unaligned");
             damageMap1.put(DAMAGE_TYPE_1, DAMAGE_FORMULA_1);
-            RollableAction1 = new RollableAction(ACTION_NAME_1, ACTION_DESCRIPTION_1, ACTION_REACH_1, 0, HIT_MODIFIER_1, damageMap1);
+            RollableAction1 = new RollableAction(ACTION_NAME_1, ACTION_DESCRIPTION_1, ACTION_RANGE_1, 0, HIT_MODIFIER_1, damageMap1);
             actions1.add(RollableAction1);
 
             statBlock1 = new StatBlock.StatBlockBuilder(
@@ -155,14 +155,14 @@ public class StatBlockTest {
                     actions1)
                     .build();
         } catch (IncompleteFieldException e) {
-            fail("Should not have thrown an exception!");
+            fail("Should not have thrown an exception! Message: " + e.getMessage());
         }
     }
 
     // EFFECTS: builds statblock2 from constants
     protected void initializeStatBlock2() {
         try {
-            title2 = new Title("statblock two", "type two", "size two", "alignment two");
+            title2 = new Title("statblock two", "size two","type two",  "alignment two");
             armour2 = new Armour
                     .ArmourBuilder(200)
                     .armourName("ridiculous armour")
@@ -171,8 +171,8 @@ public class StatBlockTest {
 
             damageMap2.put(DAMAGE_TYPE_2, DAMAGE_FORMULA_2);
             damageMap3.put(DAMAGE_TYPE_3, DAMAGE_FORMULA_3);
-            RollableAction2 = new RollableAction(ACTION_NAME_2, ACTION_DESCRIPTION_2, ACTION_REACH_2, 0, HIT_MODIFIER_2, damageMap2);
-            RollableAction3 = new RollableAction(ACTION_NAME_3, ACTION_DESCRIPTION_3, ACTION_REACH_3, 0, HIT_MODIFIER_3, damageMap3);
+            RollableAction2 = new RollableAction(ACTION_NAME_2, ACTION_DESCRIPTION_2, ACTION_RANGE_2, 0, HIT_MODIFIER_2, damageMap2);
+            RollableAction3 = new RollableAction(ACTION_NAME_3, ACTION_DESCRIPTION_3, ACTION_RANGE_3, 0, HIT_MODIFIER_3, damageMap3);
             actions2.add(RollableAction2);
             actions2.add(RollableAction3);
 
@@ -206,7 +206,7 @@ public class StatBlockTest {
                     .legendaryMechanics(legendaryMechanics0)
                     .build();
         } catch (IncompleteFieldException e) {
-            fail("Should not have thrown an exception!");
+            fail("Should not have thrown an exception! Message: " + e.getMessage());
         }
     }
 
@@ -271,7 +271,7 @@ public class StatBlockTest {
         conditionImmunities.add(Condition.BLINDED);
         conditionImmunities.add(Condition.CHARMED);
         conditionImmunities.add(Condition.DEAFENED);
-        conditionImmunities.add(Condition.EXHAUSTION);
+        conditionImmunities.add(Condition.EXHAUSTED);
         conditionImmunities.add(Condition.FRIGHTENED);
         conditionImmunities.add(Condition.GRAPPLED);
         conditionImmunities.add(Condition.INCAPACITATED);
@@ -317,7 +317,7 @@ public class StatBlockTest {
 
         assertEquals(ACTION_NAME_1, statBlock1.getRollableActions().get(0).getName());
         assertEquals(ACTION_DESCRIPTION_1, statBlock1.getRollableActions().get(0).getDescription());
-        assertEquals(ACTION_REACH_1, statBlock1.getRollableActions().get(0).getRange());
+        assertEquals(ACTION_RANGE_1, statBlock1.getRollableActions().get(0).getRange());
         assertEquals(HIT_MODIFIER_1, statBlock1.getRollableActions().get(0).getHitModifier());
         assertEquals(DAMAGE_FORMULA_1, statBlock1.getRollableActions().get(0).getDamageMap().get(DAMAGE_TYPE_1));
     }
@@ -338,13 +338,13 @@ public class StatBlockTest {
 
         assertEquals(ACTION_NAME_2, statBlock2.getRollableActions().get(0).getName());
         assertEquals(ACTION_DESCRIPTION_2, statBlock2.getRollableActions().get(0).getDescription());
-        assertEquals(ACTION_REACH_2, statBlock2.getRollableActions().get(0).getRange());
+        assertEquals(ACTION_RANGE_2, statBlock2.getRollableActions().get(0).getRange());
         assertEquals(HIT_MODIFIER_2, statBlock2.getRollableActions().get(0).getHitModifier());
         assertEquals(DAMAGE_FORMULA_2, statBlock2.getRollableActions().get(0).getDamageMap().get(DAMAGE_TYPE_2));
 
         assertEquals(ACTION_NAME_3, statBlock2.getRollableActions().get(1).getName());
         assertEquals(ACTION_DESCRIPTION_3, statBlock2.getRollableActions().get(1).getDescription());
-        assertEquals(ACTION_REACH_3, statBlock2.getRollableActions().get(1).getRange());
+        assertEquals(ACTION_RANGE_3, statBlock2.getRollableActions().get(1).getRange());
         assertEquals(HIT_MODIFIER_3, statBlock2.getRollableActions().get(1).getHitModifier());
         assertEquals(DAMAGE_FORMULA_3, statBlock2.getRollableActions().get(1).getDamageMap().get(DAMAGE_TYPE_3));
 
@@ -376,12 +376,12 @@ public class StatBlockTest {
 
     @Test
     public void testGetSavingThrowProficienciesString() {
-        String testString =  "Strength " + (statBlock2.getAbilityScores().toModifier(AbilityScore.STRENGTH) + PROFICIENCY_2)
-                + ", Dexterity " + (statBlock2.getAbilityScores().toModifier(AbilityScore.DEXTERITY) + PROFICIENCY_2)
-                + ", Constitution " + (statBlock2.getAbilityScores().toModifier(AbilityScore.CONSTITUTION) + PROFICIENCY_2)
-                + ", Intelligence " + (statBlock2.getAbilityScores().toModifier(AbilityScore.INTELLIGENCE) + PROFICIENCY_2)
-                + ", Wisdom " + (statBlock2.getAbilityScores().toModifier(AbilityScore.WISDOM) + PROFICIENCY_2)
-                + ", Charisma " + (statBlock2.getAbilityScores().toModifier(AbilityScore.CHARISMA) + PROFICIENCY_2)
+        String testString =  "strength " + (statBlock2.getAbilityScores().toModifier(AbilityScore.STRENGTH) + PROFICIENCY_2)
+                + ", dexterity " + (statBlock2.getAbilityScores().toModifier(AbilityScore.DEXTERITY) + PROFICIENCY_2)
+                + ", constitution " + (statBlock2.getAbilityScores().toModifier(AbilityScore.CONSTITUTION) + PROFICIENCY_2)
+                + ", intelligence " + (statBlock2.getAbilityScores().toModifier(AbilityScore.INTELLIGENCE) + PROFICIENCY_2)
+                + ", wisdom " + (statBlock2.getAbilityScores().toModifier(AbilityScore.WISDOM) + PROFICIENCY_2)
+                + ", charisma " + (statBlock2.getAbilityScores().toModifier(AbilityScore.CHARISMA) + PROFICIENCY_2)
                 + ", ";
 
         assertEquals("", statBlock0.getSavingThrowProficienciesString());
@@ -392,22 +392,22 @@ public class StatBlockTest {
     @Test
     public void testGetSkillProficienciesString() {
         String testString = "acrobatics " + (statBlock2.getAbilityScores().toModifier(AbilityScore.DEXTERITY) + PROFICIENCY_2)
-                + ", sleightOfHand " + (statBlock2.getAbilityScores().toModifier(AbilityScore.DEXTERITY) + PROFICIENCY_2)
-                + ", stealth " + (statBlock2.getAbilityScores().toModifier(AbilityScore.DEXTERITY) + PROFICIENCY_2)
+                + ", animal_handling " + (statBlock2.getAbilityScores().toModifier(AbilityScore.WISDOM) + PROFICIENCY_2)
                 + ", arcana " + (statBlock2.getAbilityScores().toModifier(AbilityScore.INTELLIGENCE) + PROFICIENCY_2)
-                + ", history " + (statBlock2.getAbilityScores().toModifier(AbilityScore.INTELLIGENCE) + PROFICIENCY_2)
-                + ", religion " + (statBlock2.getAbilityScores().toModifier(AbilityScore.INTELLIGENCE) + PROFICIENCY_2)
-                + ", investigation " + (statBlock2.getAbilityScores().toModifier(AbilityScore.INTELLIGENCE) + PROFICIENCY_2)
-                + ", nature " + (statBlock2.getAbilityScores().toModifier(AbilityScore.INTELLIGENCE) + PROFICIENCY_2)
                 + ", athletics " + (statBlock2.getAbilityScores().toModifier(AbilityScore.STRENGTH) + PROFICIENCY_2)
                 + ", deception " + (statBlock2.getAbilityScores().toModifier(AbilityScore.CHARISMA) + PROFICIENCY_2)
+                + ", history " + (statBlock2.getAbilityScores().toModifier(AbilityScore.INTELLIGENCE) + PROFICIENCY_2)
+                + ", insight " + (statBlock2.getAbilityScores().toModifier(AbilityScore.WISDOM) + PROFICIENCY_2)
                 + ", intimidation " + (statBlock2.getAbilityScores().toModifier(AbilityScore.CHARISMA) + PROFICIENCY_2)
+                + ", investigation " + (statBlock2.getAbilityScores().toModifier(AbilityScore.INTELLIGENCE) + PROFICIENCY_2)
+                + ", medicine " + (statBlock2.getAbilityScores().toModifier(AbilityScore.WISDOM) + PROFICIENCY_2)
+                + ", nature " + (statBlock2.getAbilityScores().toModifier(AbilityScore.INTELLIGENCE) + PROFICIENCY_2)
+                + ", perception " + (statBlock2.getAbilityScores().toModifier(AbilityScore.WISDOM) + PROFICIENCY_2)
                 + ", performance " + (statBlock2.getAbilityScores().toModifier(AbilityScore.CHARISMA) + PROFICIENCY_2)
                 + ", persuasion " + (statBlock2.getAbilityScores().toModifier(AbilityScore.CHARISMA) + PROFICIENCY_2)
-                + ", animalHandling " + (statBlock2.getAbilityScores().toModifier(AbilityScore.WISDOM) + PROFICIENCY_2)
-                + ", insight " + (statBlock2.getAbilityScores().toModifier(AbilityScore.WISDOM) + PROFICIENCY_2)
-                + ", medicine " + (statBlock2.getAbilityScores().toModifier(AbilityScore.WISDOM) + PROFICIENCY_2)
-                + ", perception " + (statBlock2.getAbilityScores().toModifier(AbilityScore.WISDOM) + PROFICIENCY_2)
+                + ", religion " + (statBlock2.getAbilityScores().toModifier(AbilityScore.INTELLIGENCE) + PROFICIENCY_2)
+                + ", sleight_of_hand " + (statBlock2.getAbilityScores().toModifier(AbilityScore.DEXTERITY) + PROFICIENCY_2)
+                + ", stealth " + (statBlock2.getAbilityScores().toModifier(AbilityScore.DEXTERITY) + PROFICIENCY_2)
                 + ", survival " + (statBlock2.getAbilityScores().toModifier(AbilityScore.WISDOM) + PROFICIENCY_2)
                 + ", ";
 
@@ -418,7 +418,7 @@ public class StatBlockTest {
 
     @Test
     public void testGetConditionImmunitiesString() {
-        String testString = "blinded, charmed, deafened, exhaustion, frightened, grappled, incapacitated, invisible, "
+        String testString = "blinded, charmed, deafened, exhausted, frightened, grappled, incapacitated, invisible, "
                 + "paralyzed, petrified, poisoned, prone, restrained, stunned, unconscious, ";
 
         assertEquals("", statBlock0.getConditionImmunitiesString());
@@ -467,14 +467,14 @@ public class StatBlockTest {
         assertEquals(INTEGER_0, json.getJSONObject("speeds").get("speed"));
         assertEquals(INTEGER_0, json.getJSONObject("senses").get("passivePerception"));
 
-        assertEquals(INTEGER_0, json.getJSONObject("abilityScores").get("strength"));
-        assertEquals(INTEGER_0, json.getJSONObject("abilityScores").get("dexterity"));
-        assertEquals(INTEGER_0, json.getJSONObject("abilityScores").get("constitution"));
-        assertEquals(INTEGER_0, json.getJSONObject("abilityScores").get("intelligence"));
-        assertEquals(INTEGER_0, json.getJSONObject("abilityScores").get("wisdom"));
-        assertEquals(INTEGER_0, json.getJSONObject("abilityScores").get("charisma"));
+        assertEquals(1, json.getJSONObject("abilityScores").get("strength"));
+        assertEquals(1, json.getJSONObject("abilityScores").get("dexterity"));
+        assertEquals(1, json.getJSONObject("abilityScores").get("constitution"));
+        assertEquals(1, json.getJSONObject("abilityScores").get("intelligence"));
+        assertEquals(1, json.getJSONObject("abilityScores").get("wisdom"));
+        assertEquals(1, json.getJSONObject("abilityScores").get("charisma"));
 
-        assertTrue(json.getJSONArray("actions").isEmpty());
+        assertTrue(json.getJSONArray("rollableActions").isEmpty());
     }
 
     @Test
@@ -504,14 +504,14 @@ public class StatBlockTest {
         assertEquals(ABILITY_SCORES_1.getWisdom(), json.getJSONObject("abilityScores").get("wisdom"));
         assertEquals(ABILITY_SCORES_1.getCharisma(), json.getJSONObject("abilityScores").get("charisma"));
 
-        assertEquals(1, json.getJSONArray("actions").length());
-        assertEquals(HIT_MODIFIER_1, json.getJSONArray("actions").getJSONObject(0)
-                .getJSONObject("hitModifier").get("amountOfDice"));
-        assertEquals(DAMAGE_FORMULA_1.getAmountOfDice(), json.getJSONArray("actions").getJSONObject(0)
+        assertEquals(1, json.getJSONArray("rollableActions").length());
+        assertEquals(HIT_MODIFIER_1, json.getJSONArray("rollableActions").getJSONObject(0)
+                .get("hitModifier"));
+        assertEquals(DAMAGE_FORMULA_1.getAmountOfDice(), json.getJSONArray("rollableActions").getJSONObject(0)
                 .getJSONObject("damageMap").getJSONObject(String.valueOf(DAMAGE_TYPE_1)).get("amountOfDice"));
-        assertEquals(DAMAGE_FORMULA_1.getDieSides(), json.getJSONArray("actions").getJSONObject(0)
+        assertEquals(DAMAGE_FORMULA_1.getDieSides(), json.getJSONArray("rollableActions").getJSONObject(0)
                 .getJSONObject("damageMap").getJSONObject(String.valueOf(DAMAGE_TYPE_1)).get("dieSides"));
-        assertEquals(DAMAGE_FORMULA_1.getModifier(), json.getJSONArray("actions").getJSONObject(0)
+        assertEquals(DAMAGE_FORMULA_1.getModifier(), json.getJSONArray("rollableActions").getJSONObject(0)
                 .getJSONObject("damageMap").getJSONObject(String.valueOf(DAMAGE_TYPE_1)).get("modifier"));
     }
 
@@ -542,23 +542,23 @@ public class StatBlockTest {
         assertEquals(ABILITY_SCORES_2.getWisdom(), json.getJSONObject("abilityScores").get("wisdom"));
         assertEquals(ABILITY_SCORES_2.getCharisma(), json.getJSONObject("abilityScores").get("charisma"));
 
-        assertEquals(2, json.getJSONArray("actions").length());
-        assertEquals(HIT_MODIFIER_2, json.getJSONArray("actions").getJSONObject(0)
-                .getJSONObject("hitModifier").get("amountOfDice"));
-        assertEquals(DAMAGE_FORMULA_2.getAmountOfDice(), json.getJSONArray("actions").getJSONObject(0)
+        assertEquals(2, json.getJSONArray("rollableActions").length());
+        assertEquals(HIT_MODIFIER_2, json.getJSONArray("rollableActions").getJSONObject(0)
+                .get("hitModifier"));
+        assertEquals(DAMAGE_FORMULA_2.getAmountOfDice(), json.getJSONArray("rollableActions").getJSONObject(0)
                 .getJSONObject("damageMap").getJSONObject(String.valueOf(DAMAGE_TYPE_2)).get("amountOfDice"));
-        assertEquals(DAMAGE_FORMULA_2.getDieSides(), json.getJSONArray("actions").getJSONObject(0)
+        assertEquals(DAMAGE_FORMULA_2.getDieSides(), json.getJSONArray("rollableActions").getJSONObject(0)
                 .getJSONObject("damageMap").getJSONObject(String.valueOf(DAMAGE_TYPE_2)).get("dieSides"));
-        assertEquals(DAMAGE_FORMULA_2.getModifier(), json.getJSONArray("actions").getJSONObject(0)
+        assertEquals(DAMAGE_FORMULA_2.getModifier(), json.getJSONArray("rollableActions").getJSONObject(0)
                 .getJSONObject("damageMap").getJSONObject(String.valueOf(DAMAGE_TYPE_2)).get("modifier"));
 
-        assertEquals(HIT_MODIFIER_3, json.getJSONArray("actions").getJSONObject(1)
-                .getJSONObject("hitModifier").get("amountOfDice"));
-        assertEquals(DAMAGE_FORMULA_3.getAmountOfDice(), json.getJSONArray("actions").getJSONObject(1)
+        assertEquals(HIT_MODIFIER_3, json.getJSONArray("rollableActions").getJSONObject(1)
+                .get("hitModifier"));
+        assertEquals(DAMAGE_FORMULA_3.getAmountOfDice(), json.getJSONArray("rollableActions").getJSONObject(1)
                 .getJSONObject("damageMap").getJSONObject(String.valueOf(DAMAGE_TYPE_3)).get("amountOfDice"));
-        assertEquals(DAMAGE_FORMULA_3.getDieSides(), json.getJSONArray("actions").getJSONObject(1)
+        assertEquals(DAMAGE_FORMULA_3.getDieSides(), json.getJSONArray("rollableActions").getJSONObject(1)
                 .getJSONObject("damageMap").getJSONObject(String.valueOf(DAMAGE_TYPE_3)).get("dieSides"));
-        assertEquals(DAMAGE_FORMULA_3.getModifier(), json.getJSONArray("actions").getJSONObject(1)
+        assertEquals(DAMAGE_FORMULA_3.getModifier(), json.getJSONArray("rollableActions").getJSONObject(1)
                 .getJSONObject("damageMap").getJSONObject(String.valueOf(DAMAGE_TYPE_3)).get("modifier"));
     }
 }

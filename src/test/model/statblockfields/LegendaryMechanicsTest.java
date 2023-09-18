@@ -27,15 +27,17 @@ public class LegendaryMechanicsTest {
 
     @BeforeEach
     public void beforeEach() {
-        testLegendaryActions0.add(testLegendaryAction0);
-        testLegendaryActions1.add(testLegendaryAction1);
-        testLegendaryActions1.add(testLegendaryAction2);
-        
         try {
             testLegendaryAction0 = new Ability("super bloop", "boppity boop hard");
             testLegendaryAction1 = new Ability("Mega Blast", "Super Big Boom");
             testLegendaryAction2 = new Ability("Teleport ME", "makes ME teleport");
 
+            testLegendaryActions0.add(testLegendaryAction0);
+            testLegendaryActions1.add(testLegendaryAction1);
+            testLegendaryActions1.add(testLegendaryAction2);
+        } catch (IncompleteFieldException e) {
+            fail("Should not have thrown an exception!");
+        } try {
             testLegendaryMechanics0 = new LegendaryMechanics(testDescription0, testLegendaryActions0);
             testLegendaryMechanics1 = new LegendaryMechanics(testDescription1, testLegendaryActions1);
         } catch (IncompleteFieldException e) {
