@@ -80,7 +80,7 @@ public class Languages implements Writable {
         // EFFECTS: returns a builder with required fields and throws an exception if the given list is empty
         public LanguagesBuilder(List<String> languagesList) throws IncompleteFieldException {
             if (languagesList == null || languagesList.isEmpty()) {
-                throw new IncompleteFieldException("given languages list is empty or null");
+                throw new IncompleteFieldException("(languages) list is empty or null");
             } else {
                 this.languagesList = languagesList;
             }
@@ -96,7 +96,7 @@ public class Languages implements Writable {
         //          range is negative
         public LanguagesBuilder telepathy(int telepathy) throws IndexOutOfBoundsException {
             if (telepathy < 0) {
-                throw new IndexOutOfBoundsException("given telepathy is negative");
+                throw new IndexOutOfBoundsException("(languages) telepathy is negative");
             } else {
                 this.telepathy = telepathy;
                 return this;

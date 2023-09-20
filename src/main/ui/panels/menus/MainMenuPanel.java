@@ -311,10 +311,8 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
     // EFFECTS: processes button presses from user
     public void actionPerformed(ActionEvent e) {
         if (mainDisplayPanel.getLibraryScrollPane().isShowing()) {
-            StatBlockCreationDisplayPanel creationPanel
-                    = sideDisplayPanel.getLibrarySideDisplayScrollPane().getStatBlockCreationDisplayPanel();
-            if (creationPanel.isShowing()) {
-                creationPanel.passAction(e);
+            if (sideDisplayPanel.statblockCreationIsDisplayed()) {
+                sideDisplayPanel.getLibrarySideDisplayScrollPane().getStatBlockCreationDisplayPanel().passAction(e);
             } else {
                 mainDisplayPanel.getLibraryScrollPane().processAction(e);
             }

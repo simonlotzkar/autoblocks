@@ -85,7 +85,7 @@ public class Armour implements Writable {
         // EFFECTS: constructs a builder with required fields, throws an exception if the given ac is negative
         public ArmourBuilder(int ac) throws IndexOutOfBoundsException {
             if (ac < 0) {
-                throw new IndexOutOfBoundsException("given armour class is negative");
+                throw new IndexOutOfBoundsException("(armour class) is negative");
             } else {
                 this.ac = ac;
             }
@@ -99,7 +99,7 @@ public class Armour implements Writable {
         // EFFECTS: returns a builder that assigns given armour name to Armour
         public ArmourBuilder armourName(String armourName) throws IncompleteFieldException {
             if (armourName != null && armourName.isEmpty()) {
-                throw new IncompleteFieldException("given armour name is empty");
+                throw new IncompleteFieldException("(armour class) name is empty or null");
             } else {
                 this.armourName = armourName;
                 return this;
@@ -110,7 +110,7 @@ public class Armour implements Writable {
         //          magic armour is negative
         public ArmourBuilder magicArmour(int magicArmour) throws IndexOutOfBoundsException {
             if (magicArmour < 0) {
-                throw new IndexOutOfBoundsException("given magic armour class is negative");
+                throw new IndexOutOfBoundsException("magic (armour class) is negative");
             } else {
                 this.magicArmour = magicArmour;
                 return this;

@@ -17,9 +17,9 @@ public class LegendaryMechanics implements Writable {
     public LegendaryMechanics(String legendaryDescription, List<Ability> legendaryActions)
             throws IncompleteFieldException {
         if (legendaryActions.isEmpty()) {
-            throw new IncompleteFieldException("the given legendary actions list is empty");
+            throw new IncompleteFieldException("(legendary actions) list is empty");
         } else if (legendaryDescription.isEmpty()) {
-            throw new IncompleteFieldException("the given legendary description is empty");
+            throw new IncompleteFieldException("(legendary actions) description is empty");
         } else {
             this.legendaryDescription = legendaryDescription;
             this.legendaryActions = legendaryActions;

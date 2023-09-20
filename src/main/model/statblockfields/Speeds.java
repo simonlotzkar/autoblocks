@@ -99,7 +99,7 @@ public class Speeds implements Writable {
         // EFFECTS: constructs a builder with required fields and throws exception if given speed is negative
         public SpeedsBuilder(int speed) throws IndexOutOfBoundsException {
             if (speed < 0) {
-                throw new IndexOutOfBoundsException("speed given negative value");
+                throw new IndexOutOfBoundsException("(speeds) base speed is negative");
             } else {
                 this.speed = speed;
             }
@@ -114,7 +114,7 @@ public class Speeds implements Writable {
         //          and throws exception if given speed is negative
         public SpeedsBuilder burrow(int burrow) throws IndexOutOfBoundsException {
             if (burrow < 0) {
-                throw new IndexOutOfBoundsException("given burrow speed is negative");
+                throw new IndexOutOfBoundsException("(speeds) burrow speed is negative");
             } else {
                 this.burrow = burrow;
                 return this;
@@ -125,7 +125,7 @@ public class Speeds implements Writable {
         //          and throws exception if given speed is negative
         public SpeedsBuilder climb(int climb) throws IndexOutOfBoundsException {
             if (climb < 0) {
-                throw new IndexOutOfBoundsException("given climb speed is negative");
+                throw new IndexOutOfBoundsException("(speeds) climb speed is negative");
             } else {
                 this.climb = climb;
                 return this;
@@ -136,7 +136,7 @@ public class Speeds implements Writable {
         //          and throws exception if given speed is negative
         public SpeedsBuilder fly(int fly) throws IndexOutOfBoundsException {
             if (fly < 0) {
-                throw new IndexOutOfBoundsException("given fly speed is negative");
+                throw new IndexOutOfBoundsException("(speeds) fly speed is negative");
             } else {
                 this.fly = fly;
                 return this;
@@ -147,7 +147,7 @@ public class Speeds implements Writable {
         //          and throws exception if given speed is negative
         public SpeedsBuilder swim(int swim) throws IndexOutOfBoundsException {
             if (swim < 0) {
-                throw new IndexOutOfBoundsException("given swim speed is negative");
+                throw new IndexOutOfBoundsException("(speeds) swim speed is negative");
             } else {
                 this.swim = swim;
                 return this;

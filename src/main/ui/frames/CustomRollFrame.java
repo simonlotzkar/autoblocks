@@ -15,20 +15,20 @@ public class CustomRollFrame extends JFrame implements ActionListener {
     private static final int HEIGHT = 320;
 
     // panels
-    JPanel rollParametersPanel = new JPanel();
-    JScrollPane outputLogScrollPane = new JScrollPane();
+    private final JPanel rollParametersPanel = new JPanel();
+    private final JScrollPane outputLogScrollPane = new JScrollPane();
 
     // buttons
-    JButton rollButton = new JButton("Roll!");
+    private final JButton rollButton = new JButton("Roll!");
 
     // text areas
-    JTextArea outputLogTextArea;
+    private JTextArea outputLogTextArea;
 
     // textfields
-    ArrayList<JTextField> textFieldList = new ArrayList<>();
-    JTextField amountOfDiceTextField = new JTextField();
-    JTextField dieSidesTextField = new JTextField();
-    JTextField modifierTextField = new JTextField();
+    private final ArrayList<JTextField> textFieldList = new ArrayList<>();
+    private final JTextField amountOfDiceTextField = new JTextField();
+    private final JTextField dieSidesTextField = new JTextField();
+    private final JTextField modifierTextField = new JTextField();
 
     // images
     private static final ImageIcon D20_ICON = new ImageIcon(ICON_DIRECTORY + "d20.png");

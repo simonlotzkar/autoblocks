@@ -20,49 +20,38 @@ automate NPC mechanics. This app allows the DM to only exclude repetitive simple
 focus on the rest of the game. This is for personal use, but I think any DM would benefit from this app!
 </p>
 
+### Current Bugs:
+- editing hp doesn't update on npc sheet when its selected (encounter view updates fine)
+- statblock creation
+    - doesn't reset when restarting creation
+    - buttons for library not disabled
+    - all text fields allow typing but dont update their documents
+
 ### TODO (in order):
+- statblock creation
+  - change from side panel to a pop-up window
 - make actions an optional field
-- update custom roll window
-    - make fields above button, parchment, etc
 - make custom action window
-- buttons
-    - add custom text to all
-    - create custom image for backgrounds (and maybe redo icons)
-- statblock/npc displays 
-  - refactor (use inheritance)
-  - change text areas to panels with sub grids
-- statblock creation display
-  - change flow layouts to grids
-- display of actions (formulae and rolls)
-    - add NPC name tags
-    - change from strings to grid panels (hit/dmg/etc)
+- statblock/npc displays
+    - refactor (use inheritance)
 - encounter and library lists
     - convert to: "JTable - Sort Using Column Headers"
     - add "sort by..." combobox next to the main display titles
-        - name
-        - type
-        - size
-        - alignment
-        - cr
+      - name
+      - type
+      - size
+      - alignment
+      - cr
         - hp
-    - scale text size
-
-### Current Bugs:
-- statblock creation
-  - doesn't reset when restarting creation
-  - buttons for library not disabled
-  - cannot finish creation
-- editing hp doesn't update on npc sheet
-- legendary mechanics toJson broken
 
 ### Future Additions:
 - add **advantage and disadvantage**
   - include option with all non damage rolls
 - add **critical hit** functionality
-  - display if a roll was a "critical hit" and roll damage normally
-- add **skills**
+  - display if a roll was a "critical hit" (rolled d20 was a 20 before modifiers)
+- automate **skills**
   - roll button that takes into account proficiency
-- add **saving throws**
+- automate **saving throws**
   - button that takes into account proficiency
 - add **turn tracking**
     - add turn order list in between encounter list and side panel
@@ -72,7 +61,7 @@ focus on the rest of the game. This is for personal use, but I think any DM woul
     - turn change hp button into a 'damage' and a 'heal' button
     - have damage type options that take into account resistances
     - add a bloodied display to hp (shows when at or under 50%)
-- add **conditions**
+- automate **conditions**
     - track and view conditions for npcs
     - button that adds a condition to the selected npcs but takes immunities into account
       - checkbox for saving throw checks (takes the largest bonus)

@@ -76,6 +76,11 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener {
         refresh();
     }
 
+    // EFFECTS: returns true if the current side display is statblock creation
+    public Boolean statblockCreationIsDisplayed() {
+        return librarySideDisplayScrollPane.statblockCreationIsDisplayed();
+    }
+
     // MODIFIES: this
     // EFFECTS: refreshes subcomponents, revalidates, and repaints
     public void refresh() {

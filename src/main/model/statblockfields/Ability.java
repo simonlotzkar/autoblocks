@@ -14,7 +14,7 @@ public class Ability implements Writable {
     //          empty name
     public Ability(String name, String description) throws IncompleteFieldException {
         if (name == null || name.isEmpty()) {
-            throw new IncompleteFieldException("ability has no name or is null");
+            throw new IncompleteFieldException("(ability) has no name or is null");
         } else {
             this.name = name;
             this.description = description;

@@ -7,24 +7,23 @@ import model.statblockfields.*;
 import exceptions.IncompleteFieldException;
 import ui.panels.menus.MainMenuPanel;
 import ui.scrollpanes.TransparentListCellRenderer;
-
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.util.HashMap;
 import java.util.Objects;
 
 // Represents a panel that allows the user to create a new statblock
 public class StatBlockCreationDisplayPanel extends DisplayPanel implements ActionListener, ListSelectionListener {
-    // fields ----------------------------------------------------------------------
-    // textfields
+    // text fields
     private final ArrayList<JTextField> requiredTextFieldsList = new ArrayList<>();
     private final ArrayList<JTextField> numberTextFieldList = new ArrayList<>();
     private final ArrayList<JTextField> wordTextFieldList = new ArrayList<>();
+
     private final JTextField nameTextField = new JTextField();
     private final JTextField xpTextField = new JTextField();
 
@@ -228,6 +227,13 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
     private static final String[] RESISTANCE_OPTIONS = {"---", "Resistance", "Vulnerability", "Immunity"};
     private static final String[] ACTION_DESCRIPTIONS = {"Melee Weapon Attack", "Melee Spell Attack",
             "Ranged Weapon Attack", "Ranged Spell Attack", "Melee or Ranged Weapon Attack", "Action"};
+
+    // dynamic integers
+    private int parsedXP;
+    private int parsedHPAmountOfDice;
+    private int parsedHPDieSides;
+    private int parsedHPModifier;
+    private int parsedProficiency;
 
     // ------------------------------------------------------------------------------
     // MODIFIES: this
@@ -976,14 +982,12 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
     //          and creates an error message if any exceptions are caught
     private void tryCreatingStatBlock() {
         try {
-            int amountOfDice = Integer.parseInt(actionDamageAmountOfDiceTextField.getText());
-            int dieSides = Integer.parseInt(actionDamageDieSidesTextField.getText());
-            int modifier = Integer.parseInt(actionDamageModifierTextField.getText());
+            System.out.println("XP Text Field Contents: \"" + xpTextField.getText() + "\"");
+            parseStatBlockSingleFields();
 
-            StatBlock statBlock = new StatBlock.StatBlockBuilder(getTitle(),
-                    Integer.parseInt(xpTextField.getText()), new RollFormula(amountOfDice,
-                            dieSides, modifier), Integer.parseInt(proficiencyTextField.getText()),
-                            getArmour(), getSpeeds(), getSenses(), getAbilityScores(), getRollableActions())
+            StatBlock statBlock = new StatBlock.StatBlockBuilder(getTitle(), parsedXP,
+                    new RollFormula(parsedHPAmountOfDice, parsedHPDieSides, parsedHPModifier), parsedProficiency,
+                    getArmour(), getSpeeds(), getSenses(), getAbilityScores(), getRollableActions())
                     .skillProficiencies(getSkillProficiencies())
                     .savingThrowProficiencies(getSavingThrowProficiencies())
                     .languages(getLanguages())
@@ -1001,11 +1005,26 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
         }
     }
 
+    // REQUIRES: StatBlock single fields are not empty
+    // EFFECTS: parses the single StatBlock fields into integers and assigns them
+    private void parseStatBlockSingleFields() throws IncompleteFieldException {
+        try {
+            parsedXP = Integer.parseInt(xpTextField.getText());
+            parsedHPAmountOfDice = Integer.parseInt(hpAmountOfDiceTextField.getText());
+            parsedHPDieSides = Integer.parseInt(hpDieSidesTextField.getText());
+            parsedHPModifier = Integer.parseInt(hpModifierTextField.getText());
+            parsedProficiency = Integer.parseInt(proficiencyTextField.getText());
+        } catch (NumberFormatException e) {
+            throw new IncompleteFieldException("Required single field (xp, hp formula, or proficiency) "
+                    + "is empty or invalid.");
+        }
+    }
+
     // EFFECTS: returns a title from the given user fields and boxes but if any numbers are in the title or any
     //          other exceptions are thrown, it throws an exception
     private Title getTitle() throws IncompleteFieldException {
         if (nameTextField.getText().matches(".*\\d+.*")) {
-            throw new IndexOutOfBoundsException("title cannot have numbers in it");
+            throw new IndexOutOfBoundsException("title fields cannot contain numbers");
         }
         return new Title(nameTextField.getText(),
                 Objects.requireNonNull(typeComboBox.getSelectedItem()).toString(),
@@ -1109,7 +1128,7 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
         ArrayList<RollableAction> rollableActions = new ArrayList<>();
 
         if (rollableActionsListModel.isEmpty()) {
-            throw new IncompleteFieldException("given rollable actions is empty");
+            throw new IncompleteFieldException("rollable actions list is empty");
         } else {
             for (int i = 0; i < rollableActionsListModel.getSize(); i++) {
                 rollableActions.add(rollableActionsListModel.getElementAt(i));

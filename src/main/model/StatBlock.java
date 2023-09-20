@@ -396,9 +396,9 @@ public class StatBlock implements Writable {
                                 Speeds speeds, Senses senses, AbilityScoreSet abilityScoreSet,
                                 List<RollableAction> rollableActions) throws IndexOutOfBoundsException {
             if (xp < 0) {
-                throw new IndexOutOfBoundsException("given xp is negative");
+                throw new IndexOutOfBoundsException("(statBlock) xp is negative");
             } else if (proficiency < 0) {
-                throw new IndexOutOfBoundsException("given proficiency bonus is negative");
+                throw new IndexOutOfBoundsException("(statBlock) proficiency bonus is negative");
             } else {
                 this.title = title;
                 this.hpFormula = hpFormula;
