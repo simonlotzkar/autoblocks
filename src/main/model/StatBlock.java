@@ -22,15 +22,16 @@ public class StatBlock implements Writable {
     protected final int proficiency;
     protected final int xp;
     protected final AbilityScoreSet abilityScoreSet;
-    protected final List<RollableAction> rollableActions;
 
     // optional fields
-    protected final Languages languages;
-    protected final List<Ability> abilities;
     protected final List<AbilityScore> savingThrowProficiencies;
     protected final List<Skill> skillProficiencies;
     protected final List<Condition> conditionImmunities;
     protected final HashMap<DamageType, ResistanceType> resistances;
+
+    protected final Languages languages;
+    protected final List<Ability> abilities;
+    protected final List<RollableAction> rollableActions;
     protected final LegendaryMechanics legendaryMechanics;
 
     // EFFECTS: constructs a StatBlock using a builder
@@ -65,7 +66,6 @@ public class StatBlock implements Writable {
         json.put("speeds", speeds.toJson());
         json.put("senses", senses.toJson());
         json.put("abilityScores", abilityScoreSet.toJson());
-        json.put("rollableActions", actionsToJson());
         return optionalFieldsToJson(json);
     }
 
@@ -88,7 +88,11 @@ public class StatBlock implements Writable {
     }
 
     // EFFECTS: adds optional fields that exist to the given json object and returns it
+    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
     protected JSONObject optionalFieldsToJson(JSONObject json) {
+        if (rollableActions != null) {
+            json.put("rollableActions", actionsToJson());
+        }
         if (languages != null) {
             json.put("languages", languages.toJson());
         }
@@ -379,26 +383,27 @@ public class StatBlock implements Writable {
         protected final int proficiency;
         protected final int xp;
         protected final AbilityScoreSet abilityScoreSet;
-        protected final List<RollableAction> rollableActions;
 
         // optional fields
-        protected Languages languages;
-        protected List<Ability> abilities;
         protected List<AbilityScore> savingThrowProficiencies;
         protected List<Skill> skillProficiencies;
         protected List<Condition> conditionImmunities;
         protected HashMap<DamageType, ResistanceType> resistances;
+
+        protected Languages languages;
+        protected List<Ability> abilities;
+        protected List<RollableAction> rollableActions;
         protected LegendaryMechanics legendaryMechanics;
 
         // MODIFIES: this
         // EFFECTS: constructs a builder with required fields
         public StatBlockBuilder(Title title, int xp, RollFormula hpFormula, int proficiency, Armour armour,
-                                Speeds speeds, Senses senses, AbilityScoreSet abilityScoreSet,
-                                List<RollableAction> rollableActions) throws IndexOutOfBoundsException {
+                                Speeds speeds, Senses senses, AbilityScoreSet abilityScoreSet)
+                throws IndexOutOfBoundsException {
             if (xp < 0) {
-                throw new IndexOutOfBoundsException("(statBlock) xp is negative");
+                throw new IndexOutOfBoundsException("(StatBlock) XP cannot be negative.");
             } else if (proficiency < 0) {
-                throw new IndexOutOfBoundsException("(statBlock) proficiency bonus is negative");
+                throw new IndexOutOfBoundsException("(StatBlock) Proficiency Bonus cannot be negative.");
             } else {
                 this.title = title;
                 this.hpFormula = hpFormula;
@@ -408,7 +413,6 @@ public class StatBlock implements Writable {
                 this.proficiency = proficiency;
                 this.xp = xp;
                 this.abilityScoreSet = abilityScoreSet;
-                this.rollableActions = rollableActions;
             }
         }
 
@@ -457,6 +461,12 @@ public class StatBlock implements Writable {
         // EFFECTS: returns a builder that assigns the given legendary mechanics to the StatBlock
         public StatBlockBuilder legendaryMechanics(LegendaryMechanics legendaryMechanics) {
             this.legendaryMechanics = legendaryMechanics;
+            return this;
+        }
+
+        // EFFECTS: returns a builder that assigns the given rollable actions to the StatBlock
+        public StatBlockBuilder rollableActions(List<RollableAction> rollableActions) {
+            this.rollableActions = rollableActions;
             return this;
         }
     }

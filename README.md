@@ -24,7 +24,6 @@ focus on the rest of the game. This is for personal use, but I think any DM woul
 - editing hp doesn't update on npc sheet when its selected (encounter view updates fine)
 
 ### TODO (in order):
-- make actions an optional field
 - update all exceptions and add new ones where needed (statblock creator needs it for all fields)
 - make custom action window
 - statblock/npc displays

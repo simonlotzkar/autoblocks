@@ -29,8 +29,8 @@ public class NPC extends StatBlock implements Writable {
                 parentStatBlock.armour,
                 parentStatBlock.speeds,
                 parentStatBlock.senses,
-                parentStatBlock.abilityScoreSet,
-                parentStatBlock.rollableActions)
+                parentStatBlock.abilityScoreSet)
+                .rollableActions(parentStatBlock.rollableActions)
                 .languages(parentStatBlock.languages)
                 .abilities(parentStatBlock.abilities)
                 .savingThrowProficiencies(parentStatBlock.savingThrowProficiencies)

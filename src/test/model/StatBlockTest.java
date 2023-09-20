@@ -131,8 +131,7 @@ public class StatBlockTest {
                     title0,
                     INTEGER_0, ROLL_FORMULA_0, INTEGER_0,
                     ARMOUR_0, SPEEDS_0, SENSES_0,
-                    ABILITY_SCORES_0,
-                    actions0)
+                    ABILITY_SCORES_0)
                     .build();
         } catch (IncompleteFieldException e) {
             fail("Should not have thrown an exception! Message: " + e.getMessage());
@@ -151,8 +150,8 @@ public class StatBlockTest {
                     title1,
                     XP_1, HP_FORMULA_0, PROFICIENCY_1,
                     ARMOUR_1, SPEEDS_1, SENSES_1,
-                    ABILITY_SCORES_1,
-                    actions1)
+                    ABILITY_SCORES_1)
+                    .rollableActions(actions1)
                     .build();
         } catch (IncompleteFieldException e) {
             fail("Should not have thrown an exception! Message: " + e.getMessage());
@@ -195,8 +194,8 @@ public class StatBlockTest {
                     title2,
                     XP_2, HP_FORMULA_1, PROFICIENCY_2,
                     armour2, SPEEDS_2, SENSES_2,
-                    ABILITY_SCORES_2,
-                    actions2)
+                    ABILITY_SCORES_2)
+                    .rollableActions(actions2)
                     .languages(new Languages.LanguagesBuilder(languagesList0).build())
                     .abilities(abilities0)
                     .skillProficiencies(getAllSkillProficiencies())
@@ -297,8 +296,6 @@ public class StatBlockTest {
         assertEquals(SPEEDS_0, statBlock0.getSpeeds());
         assertEquals(SENSES_0, statBlock0.getSenses());
         assertEquals(ABILITY_SCORES_0, statBlock0.getAbilityScores());
-
-        assertTrue(statBlock0.getRollableActions().isEmpty());
     }
 
     @Test
@@ -473,8 +470,6 @@ public class StatBlockTest {
         assertEquals(1, json.getJSONObject("abilityScores").get("intelligence"));
         assertEquals(1, json.getJSONObject("abilityScores").get("wisdom"));
         assertEquals(1, json.getJSONObject("abilityScores").get("charisma"));
-
-        assertTrue(json.getJSONArray("rollableActions").isEmpty());
     }
 
     @Test

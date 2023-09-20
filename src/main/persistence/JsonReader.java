@@ -74,8 +74,8 @@ public class JsonReader {
                     parseArmour(jsonObject.getJSONObject("armour")),
                     parseSpeeds(jsonObject.getJSONObject("speeds")),
                     parseSenses(jsonObject.getJSONObject("senses")),
-                    parseAbilityScores(jsonObject.getJSONObject("abilityScores")),
-                    parseRollableActions(jsonObject.getJSONArray("rollableActions")))
+                    parseAbilityScores(jsonObject.getJSONObject("abilityScores")))
+                    .rollableActions(parseRollableActions(jsonObject.getJSONArray("rollableActions")))
                     .languages(parseLanguages(jsonObject.optJSONObject("languages")))
                     .abilities(parseAbilities(jsonObject.optJSONArray("abilities")))
                     .savingThrowProficiencies(

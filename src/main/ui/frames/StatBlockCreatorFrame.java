@@ -1030,7 +1030,8 @@ public class StatBlockCreatorFrame extends JFrame implements ActionListener, Lis
 
             StatBlock statBlock = new StatBlock.StatBlockBuilder(getStatBlockTitle(), parsedXP,
                     new RollFormula(parsedHPAmountOfDice, parsedHPDieSides, parsedHPModifier), parsedProficiency,
-                    getArmour(), getSpeeds(), getSenses(), getAbilityScores(), getRollableActions())
+                    getArmour(), getSpeeds(), getSenses(), getAbilityScores())
+                    .rollableActions(getRollableActions())
                     .skillProficiencies(getSkillProficiencies())
                     .savingThrowProficiencies(getSavingThrowProficiencies())
                     .languages(getLanguages())
@@ -1167,15 +1168,11 @@ public class StatBlockCreatorFrame extends JFrame implements ActionListener, Lis
     }
 
     // EFFECTS: returns all rollable actions from the given user fields and throws an exception if any issues are found
-    private ArrayList<RollableAction> getRollableActions() throws IncompleteFieldException {
+    private ArrayList<RollableAction> getRollableActions() {
         ArrayList<RollableAction> rollableActions = new ArrayList<>();
 
-        if (rollableActionsListModel.isEmpty()) {
-            throw new IncompleteFieldException("rollable actions list is empty");
-        } else {
-            for (int i = 0; i < rollableActionsListModel.getSize(); i++) {
-                rollableActions.add(rollableActionsListModel.getElementAt(i));
-            }
+        for (int i = 0; i < rollableActionsListModel.getSize(); i++) {
+            rollableActions.add(rollableActionsListModel.getElementAt(i));
         }
 
         return rollableActions;

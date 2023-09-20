@@ -128,10 +128,12 @@ public class StatBlockDisplayTextArea extends JTextArea {
     // MODIFIES: this
     // EFFECTS: adds the selected statblock's rollable actions data to the text area
     private void populateRollableActionsPanel() {
-        this.append("\n\nActions");
-        this.append("\n---------------");
-        for (RollableAction a : selectedStatBlock.getRollableActions()) {
-            this.append("\n" + a.toString());
+        if (selectedStatBlock.getRollableActions() != null && !selectedStatBlock.getRollableActions().isEmpty()) {
+            this.append("\n\nActions");
+            this.append("\n---------------");
+            for (RollableAction a : selectedStatBlock.getRollableActions()) {
+                this.append("\n" + a.toString());
+            }
         }
     }
 
