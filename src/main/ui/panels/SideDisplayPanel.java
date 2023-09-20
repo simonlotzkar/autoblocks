@@ -65,20 +65,13 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener {
     public void setDisplay(String s) {
         if ("statBlock".equals(s) || "statBlockCreation".equals(s)) {
             sideDisplayCardLayout.show(this, "library");
-            librarySideDisplayScrollPane.setDisplay(s);
         } else if ("library".equals(s)) {
             sideDisplayCardLayout.show(this, "library");
-            librarySideDisplayScrollPane.setDisplay("statBlock");
             librarySideDisplayScrollPane.getStatBlockDisplayTextArea().setSelectedStatBlock(null);
         } else {
             sideDisplayCardLayout.show(this, "encounter");
         }
         refresh();
-    }
-
-    // EFFECTS: returns true if the current side display is statblock creation
-    public Boolean statblockCreationIsDisplayed() {
-        return librarySideDisplayScrollPane.statblockCreationIsDisplayed();
     }
 
     // MODIFIES: this

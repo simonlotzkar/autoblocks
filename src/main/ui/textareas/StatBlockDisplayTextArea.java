@@ -4,12 +4,8 @@ import enums.AbilityScore;
 import model.StatBlock;
 import model.statblockfields.*;
 import model.statblockfields.RollableAction;
-import ui.panels.StatBlockCreationDisplayPanel;
-import ui.panels.menus.MainMenuPanel;
-import ui.scrollpanes.LibrarySideDisplayScrollPane;
 
 import javax.swing.*;
-import java.awt.*;
 
 // Represents a text area that displays a text representation of the selected statblock or lack thereof
 public class StatBlockDisplayTextArea extends JTextArea {

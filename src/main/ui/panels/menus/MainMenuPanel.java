@@ -3,7 +3,6 @@ package ui.panels.menus;
 import ui.panels.BannerPanel;
 import ui.panels.MainDisplayPanel;
 import ui.panels.SideDisplayPanel;
-import ui.panels.StatBlockCreationDisplayPanel;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -187,21 +186,6 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
     }
 
     // MODIFIES: this
-    // EFFECTS: adds button sub panels to library button panel and sets button fields to the statblock creation context
-    private void initializeStatBlockCreationButtonPanel() {
-        initializeLibraryButtonPanel();
-
-        backButton.setIcon(scaleIcon(X_ICON));
-        openStatBlockButton.setIcon(scaleIcon(CHECK_ICON));
-        deleteStatBlocksButton.setIcon(scaleIcon(MINUS_ICON));
-
-        backButton.setText("Cancel");
-        deleteStatBlocksButton.setText("Remove");
-        openStatBlockButton.setText("Finish");
-        openStatBlockButton.setEnabled(true);
-    }
-
-    // MODIFIES: this
     // EFFECTS: adds button sub panels to encounter button panel and sets button fields to the encounter context
     private void initializeEncounterButtonPanel() {
         openNonPlayerCharacterButton.setEnabled(false);
@@ -245,9 +229,6 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
             case "statBlock":
                 setLibraryStatBlockDisplay();
                 break;
-            case "statBlockCreation":
-                setLibraryStatBlockCreationDisplay();
-                break;
             case "npc":
                 setEncounterNonPlayerCharacterDisplay();
                 break;
@@ -278,16 +259,6 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
     }
 
     // MODIFIES: this
-    // EFFECTS: sets the main display to the library context and the side display to the statblock creation context
-    private void setLibraryStatBlockCreationDisplay() {
-        initializeStatBlockCreationButtonPanel();
-
-        titleCardLayout.show(titlePanel, "library");
-        mainDisplayPanel.setDisplay("library");
-        sideDisplayPanel.setDisplay("statBlockCreation");
-    }
-
-    // MODIFIES: this
     // EFFECTS: sets the main and side displays to the encounter context
     private void setEncounterFullDisplay() {
         initializeEncounterButtonPanel();
@@ -311,11 +282,7 @@ public class MainMenuPanel extends MenuPanel implements ActionListener {
     // EFFECTS: processes button presses from user
     public void actionPerformed(ActionEvent e) {
         if (mainDisplayPanel.getLibraryScrollPane().isShowing()) {
-            if (sideDisplayPanel.statblockCreationIsDisplayed()) {
-                sideDisplayPanel.getLibrarySideDisplayScrollPane().getStatBlockCreationDisplayPanel().passAction(e);
-            } else {
-                mainDisplayPanel.getLibraryScrollPane().processAction(e);
-            }
+            mainDisplayPanel.getLibraryScrollPane().processAction(e);
         } else {
             mainDisplayPanel.passAction(e);
         }

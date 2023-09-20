@@ -1,11 +1,13 @@
-package ui.panels;
+package ui.frames;
 
 import enums.*;
 import model.RollFormula;
 import model.StatBlock;
 import model.statblockfields.*;
 import exceptions.IncompleteFieldException;
+import ui.Main;
 import ui.panels.menus.MainMenuPanel;
+import ui.scrollpanes.ParchmentScrollPane;
 import ui.scrollpanes.TransparentListCellRenderer;
 import javax.swing.*;
 import java.awt.*;
@@ -17,8 +19,8 @@ import javax.swing.event.ListSelectionListener;
 import java.util.HashMap;
 import java.util.Objects;
 
-// Represents a panel that allows the user to create a new statblock
-public class StatBlockCreationDisplayPanel extends DisplayPanel implements ActionListener, ListSelectionListener {
+// Represents a window that allows the user to create a new statblock
+public class StatBlockCreatorFrame extends JFrame implements ActionListener, ListSelectionListener {
     // text fields
     private final ArrayList<JTextField> requiredTextFieldsList = new ArrayList<>();
     private final ArrayList<JTextField> numberTextFieldList = new ArrayList<>();
@@ -143,6 +145,9 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
     private final JCheckBox exhaustionImmunityCheckBox = new JCheckBox("exhaustion");
 
     // panels
+    private final JPanel inputPanel = new JPanel();
+    private final JPanel buttonPanel = new JPanel();
+
     private final JPanel titlePanel = new JPanel();
     private final JPanel nameCRPanel = new JPanel();
     private final JPanel sizeTypeAlignmentPanel = new JPanel();
@@ -176,9 +181,9 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
     private final JPanel legendaryCreationPanel = new JPanel();
 
     // buttons
-    private JButton backButton;
-    private JButton openStatBlockButton;
-    private JButton deleteStatBlocksButton;
+    private final JButton cancelButton = new JButton("Cancel");
+    private final JButton finishButton = new JButton("Finish");
+    private final JButton deleteButton = new JButton("Delete");
 
     private final JButton addLanguageButton = new JButton("Add");
     private final JButton addAbilityButton = new JButton("Add");
@@ -204,6 +209,8 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
     private final JList<Ability> legendaryActionsList = new JList<>(legendaryActionsListModel);
 
     // scroll panes
+    private final ParchmentScrollPane inputScrollPane = new ParchmentScrollPane(null);
+
     private final JScrollPane languagesScrollPane = new JScrollPane(languageList);
     private final JScrollPane abilityDescriptionScrollPane = new JScrollPane(abilityDescriptionTextField);
     private final JScrollPane abilitiesScrollPane = new JScrollPane(abilitiesList);
@@ -215,6 +222,12 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
     private final JScrollPane legendaryActionsScrollPane = new JScrollPane(legendaryActionsList);
 
     // constants
+    private static final String ICON_DIRECTORY = "./data/images/icons/";
+    private static final int WIDTH = 540;
+    private static final int HEIGHT = 720;
+
+    private final MainMenuPanel mainMenuPanel;
+
     private static final String TAB = "    ";
     private static final int FLOW_H_GAP = 5;
     private static final int FLOW_V_GAP = 5;
@@ -228,7 +241,10 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
     private static final String[] ACTION_DESCRIPTIONS = {"Melee Weapon Attack", "Melee Spell Attack",
             "Ranged Weapon Attack", "Ranged Spell Attack", "Melee or Ranged Weapon Attack", "Action"};
 
-    // dynamic integers
+    // images
+    private static final ImageIcon D20_ICON = new ImageIcon(ICON_DIRECTORY + "d20.png");
+
+    // parsing integers
     private int parsedXP;
     private int parsedHPAmountOfDice;
     private int parsedHPDieSides;
@@ -237,30 +253,32 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
 
     // ------------------------------------------------------------------------------
     // MODIFIES: this
-    // EFFECTS: constructs this display panel
-    public StatBlockCreationDisplayPanel(MainMenuPanel mainMenuPanel) {
-        super(null, mainMenuPanel); // sets the layout manager, mainmenu panel, size, and visibility
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setPreferredSize(new Dimension((int) (mainMenuPanel.getPreferredSize().width / 2.5), 2500));
-        setOpaque(false);
+    // EFFECTS: constructs this frame
+    public StatBlockCreatorFrame(MainMenuPanel mainMenuPanel) {
+        super("StatBlock Creator");
+        this.setSize(WIDTH, HEIGHT);
+        this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        this.setIconImage(D20_ICON.getImage());
+        this.mainMenuPanel = mainMenuPanel;
 
         initializeAll();
 
-        add(titlePanel);
-        add(combatStatsPanel);
-        add(abilityScoresPanel);
-        add(peripheralFieldsPanel);
-        add(abilityCreationPanel);
-        add(abilitiesScrollPane);
-        add(actionCreationPanel);
-        add(actionsScrollPane);
-        add(legendaryCreationPanel);
-        add(legendaryActionsScrollPane);
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BorderLayout());
+        mainPanel.add(inputScrollPane, BorderLayout.CENTER);
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+        this.add(mainPanel);
+        this.setVisible(true);
     }
 
     // MODIFIES: this
     // EFFECTS: creates every component and container for this panel
     private void initializeAll() {
+        initializeInputPanel();
+        initializeInputScrollPane();
+        initializeButtonPanel();
+
         initializeButtons();
         initializeTitlePanel();
         initializeCombatStatsPanel();
@@ -278,6 +296,41 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
         formatScrollPanes();
         formatCheckBoxes();
         formatLists();
+    }
+
+    // EFFECTS: TODO effects
+    private void initializeInputPanel() {
+        inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS));
+        inputPanel.setPreferredSize(new Dimension(WIDTH, 2500));
+        inputPanel.setOpaque(false);
+
+        inputPanel.add(titlePanel);
+        inputPanel.add(combatStatsPanel);
+        inputPanel.add(abilityScoresPanel);
+        inputPanel.add(peripheralFieldsPanel);
+        inputPanel.add(abilityCreationPanel);
+        inputPanel.add(abilitiesScrollPane);
+        inputPanel.add(actionCreationPanel);
+        inputPanel.add(actionsScrollPane);
+        inputPanel.add(legendaryCreationPanel);
+        inputPanel.add(legendaryActionsScrollPane);
+    }
+
+    // EFFECTS: TODO effects
+    private void initializeInputScrollPane() {
+        inputScrollPane.setViewportView(inputPanel);
+        inputScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        inputScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+    }
+
+    // EFFECTS: TODO effects
+    private void initializeButtonPanel() {
+        buttonPanel.setLayout(new GridLayout(1, 3));
+        buttonPanel.setPreferredSize(new Dimension(WIDTH, (HEIGHT / 10)));
+        buttonPanel.add(finishButton);
+        buttonPanel.add(deleteButton);
+        buttonPanel.add(cancelButton);
+        buttonPanel.setOpaque(false);
     }
 
     // MODIFIES: this
@@ -371,13 +424,12 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
     // MODIFIES: this
     // EFFECTS: imports and formats all buttons
     private void initializeButtons() {
-        importButtons();
-
         ArrayList<JButton> buttonList = new ArrayList<>();
 
-        buttonList.add(backButton);
-        buttonList.add(openStatBlockButton);
-        buttonList.add(deleteStatBlocksButton);
+        buttonList.add(cancelButton);
+        buttonList.add(finishButton);
+        buttonList.add(deleteButton);
+
         buttonList.add(addLanguageButton);
         buttonList.add(addAbilityButton);
         buttonList.add(addActionDamageButton);
@@ -388,14 +440,6 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
             jb.addActionListener(this);
         }
         //initializeButtonIcons();
-    }
-
-    // MODIFIES: this
-    // EFFECTS: imports buttons from the main menu panel
-    private void importButtons() {
-        backButton = mainMenuPanel.getBackButton();
-        openStatBlockButton = mainMenuPanel.getOpenStatBlockButton();
-        deleteStatBlocksButton = mainMenuPanel.getDeleteStatBlocksButton();
     }
 
     // MODIFIES: this
@@ -982,10 +1026,9 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
     //          and creates an error message if any exceptions are caught
     private void tryCreatingStatBlock() {
         try {
-            System.out.println("XP Text Field Contents: \"" + xpTextField.getText() + "\"");
             parseStatBlockSingleFields();
 
-            StatBlock statBlock = new StatBlock.StatBlockBuilder(getTitle(), parsedXP,
+            StatBlock statBlock = new StatBlock.StatBlockBuilder(getStatBlockTitle(), parsedXP,
                     new RollFormula(parsedHPAmountOfDice, parsedHPDieSides, parsedHPModifier), parsedProficiency,
                     getArmour(), getSpeeds(), getSenses(), getAbilityScores(), getRollableActions())
                     .skillProficiencies(getSkillProficiencies())
@@ -997,7 +1040,7 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
                     .build();
 
             mainMenuPanel.getMenuManagerPanel().getStatBlockLibrary().addElement(statBlock);
-            mainMenuPanel.setDisplays("library");
+            this.dispose();
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Could not build StatBlock: "
@@ -1022,7 +1065,7 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
 
     // EFFECTS: returns a title from the given user fields and boxes but if any numbers are in the title or any
     //          other exceptions are thrown, it throws an exception
-    private Title getTitle() throws IncompleteFieldException {
+    private Title getStatBlockTitle() throws IncompleteFieldException {
         if (nameTextField.getText().matches(".*\\d+.*")) {
             throw new IndexOutOfBoundsException("title fields cannot contain numbers");
         }
@@ -1460,23 +1503,17 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
         }
     }
 
-    // MODIFIES: mainMenuPanel, this
-    // EFFECTS: processes the main menu button presses
-    public void passAction(ActionEvent e) {
-        if (e.getSource() == backButton) {
-            mainMenuPanel.setDisplays("library");
-        } else if (e.getSource() == openStatBlockButton) {
-            tryCreatingStatBlock();
-        } else if (e.getSource() == deleteStatBlocksButton) {
-            deleteSelection();
-        }
-    }
-
     @Override
     // MODIFIES: this
     // EFFECTS: processes this panel's button presses
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == addLanguageButton) {
+        if (e.getSource() == cancelButton) {
+            this.dispose();
+        } else if (e.getSource() == finishButton) {
+            tryCreatingStatBlock();
+        } else if (e.getSource() == deleteButton) {
+            deleteSelection();
+        } else if (e.getSource() == addLanguageButton) {
             tryAddLanguage();
         } else if (e.getSource() == addAbilityButton) {
             tryAddAbility();
@@ -1524,7 +1561,7 @@ public class StatBlockCreationDisplayPanel extends DisplayPanel implements Actio
     // MODIFIES: this
     // EFFECTS: disables buttons for jlists when the jlist selection is changing
     public void valueChanged(ListSelectionEvent e) {
-        deleteStatBlocksButton.setEnabled(!e.getValueIsAdjusting());
+        deleteButton.setEnabled(!e.getValueIsAdjusting());
         addLanguageButton.setEnabled(!e.getValueIsAdjusting());
         addAbilityButton.setEnabled(!e.getValueIsAdjusting());
         addActionDamageButton.setEnabled(!e.getValueIsAdjusting());

@@ -22,14 +22,8 @@ focus on the rest of the game. This is for personal use, but I think any DM woul
 
 ### Current Bugs:
 - editing hp doesn't update on npc sheet when its selected (encounter view updates fine)
-- statblock creation
-    - doesn't reset when restarting creation
-    - buttons for library not disabled
-    - all text fields allow typing but dont update their documents
 
 ### TODO (in order):
-- statblock creation
-  - change from side panel to a pop-up window
 - make actions an optional field
 - make custom action window
 - statblock/npc displays

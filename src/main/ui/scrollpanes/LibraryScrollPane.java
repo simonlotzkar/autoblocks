@@ -6,6 +6,7 @@ import model.NPC;
 import model.StatBlock;
 import model.StatBlockLibrary;
 import model.statblockfields.Title;
+import ui.frames.StatBlockCreatorFrame;
 import ui.panels.menus.MainMenuPanel;
 
 import javax.swing.*;
@@ -158,8 +159,7 @@ public class LibraryScrollPane extends ParchmentScrollPane implements ListSelect
                     .processOpenButton(libraryListModel.getElementAt(libraryList.getSelectedIndex()));
             libraryList.clearSelection();
         } else if (e.getSource() == createNewStatBlockButton) {
-            mainMenuPanel.setDisplays("statBlockCreation");
-            libraryList.clearSelection();
+            new StatBlockCreatorFrame(mainMenuPanel);
         } else if (e.getSource() == deleteStatBlocksButton) {
             deleteStatBlocks();
         } else if (e.getSource() == backButton) {
