@@ -25,13 +25,13 @@ public class RollableAction extends Ability implements Writable {
             IndexOutOfBoundsException {
         super(name, description);
         if (range <= 0) {
-            throw new IndexOutOfBoundsException("(rollable action) range is less than or equal to zero");
+            throw new IndexOutOfBoundsException("(Rollable Action) range must be positive.");
         } else if (longRange != 0) {
             if (range >= longRange) {
-                throw new IndexOutOfBoundsException("(rollable action) range is greater than or equal to long range");
+                throw new IndexOutOfBoundsException("(Rollable Action) long range must be greater than range.");
             }
         } else if (damageMap == null) {
-            throw new IncompleteFieldException("(rollable action) null damage formula");
+            throw new IncompleteFieldException("(Rollable Action) damage list must contain at least one entry.");
         }
         this.range = range;
         this.longRange = longRange;

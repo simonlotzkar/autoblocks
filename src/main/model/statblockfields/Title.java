@@ -17,13 +17,13 @@ public class Title implements Writable {
     public Title(String name, String size, String type, String alignment)
             throws IncompleteFieldException {
         if (name == null || name.isEmpty()) {
-            throw new IncompleteFieldException("(title) name is empty or null");
+            throw new IncompleteFieldException("(Title) name must contain at least one character.");
         } else if (size == null || size.isEmpty()) {
-            throw new IncompleteFieldException("(title) size is empty or null");
+            throw new IncompleteFieldException("(Title) size must contain at least one character.");
         } else if (type == null || type.isEmpty()) {
-            throw new IncompleteFieldException("(title) type is empty or null");
+            throw new IncompleteFieldException("(Title) type must contain at least one character.");
         } else if (alignment == null || alignment.isEmpty()) {
-            throw new IncompleteFieldException("(title) alignment is empty or null");
+            throw new IncompleteFieldException("(Title) alignment must contain at least one character.");
         } else {
             this.name = name;
             this.type = type;

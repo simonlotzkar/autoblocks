@@ -27,7 +27,7 @@ public class AbilityScoreSet implements Writable {
                 || (wisdom > 30) || (charisma > 30);
 
         if (oneIsLow || oneIsHigh) {
-            throw new IndexOutOfBoundsException("(ability scores) one or more is greater than 30 or less than 1");
+            throw new IndexOutOfBoundsException("(Ability Scores) cannot be greater than 30 or less than 1.");
         } else {
             this.strength = strength;
             this.dexterity = dexterity;

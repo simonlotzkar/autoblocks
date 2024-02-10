@@ -24,32 +24,29 @@ focus on the rest of the game. This is for personal use, but I think any DM woul
 - editing hp doesn't update on npc sheet when its selected (encounter view updates fine)
 
 ### TODO (in order):
-- update all exceptions and add new ones where needed (statblock creator needs it for all fields)
 - make custom action window
-- statblock/npc displays
-  - refactor (use inheritance)
-- encounter and library lists
-  - convert to: "JTable - Sort Using Column Headers"
-  - add "sort by..." combobox next to the main display titles
-    - name
-    - type
-    - size
-    - alignment
-    - cr
-    - hp
-- formatting
-  - custom roll window
-    - make fields above roll button and add parchment background
-  - buttons
-    - add custom text to all
-    - create custom image for backgrounds (and maybe redo icons)
-  - display of actions (formulae and rolls)
-    - add NPC name tags
-    - change from strings to grid panels (hit/dmg/etc)
-  - statblock/npc displays
-    - change text areas to panels with sub grids
 
-### Future Additions:
+### Future Plans:
+- flesh out **ux/ui** design
+    - custom roll window
+        - make fields above roll button and add parchment background
+    - buttons
+        - add custom text to all
+        - create custom image for backgrounds (and maybe redo icons)
+    - display of actions (formulae and rolls)
+        - add NPC name tags
+        - change from strings to grid panels (hit/dmg/etc)
+    - statblock/npc displays
+        - change text areas to panels with sub grid
+    - encounter and library lists
+      - convert to: "JTable - Sort Using Column Headers"
+      - add "sort by..." combobox next to the main display titles
+          - name
+          - type
+          - size
+          - alignment
+          - cr
+          - hp
 - automate **skills**
   - roll button that takes into account proficiency
 - automate **saving throws**

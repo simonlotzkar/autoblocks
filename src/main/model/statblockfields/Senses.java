@@ -101,7 +101,7 @@ public class Senses implements Writable {
         // constructs a builder with required fields and throws exception if given sense is negative
         public SensesBuilder(int passivePerception) throws IndexOutOfBoundsException {
             if (passivePerception < 0) {
-                throw new IndexOutOfBoundsException("(senses) passive perception is negative");
+                throw new IndexOutOfBoundsException("(Senses) passive perception cannot be negative.");
             } else {
                 this.passivePerception = passivePerception;
             }
@@ -117,7 +117,7 @@ public class Senses implements Writable {
         //          and throws exception if given sense is negative
         public SensesBuilder blindSight(int blindSight) throws IndexOutOfBoundsException {
             if (blindSight < 0) {
-                throw new IndexOutOfBoundsException("(senses) blindSight is negative");
+                throw new IndexOutOfBoundsException("(Senses) blind sight cannot be negative.");
             } else {
                 this.blindSight = blindSight;
                 return this;
@@ -128,7 +128,7 @@ public class Senses implements Writable {
         //          and throws exception if given sense is negative
         public SensesBuilder darkVision(int darkVision) throws IndexOutOfBoundsException {
             if (darkVision < 0) {
-                throw new IndexOutOfBoundsException("(senses) darkVision is negative");
+                throw new IndexOutOfBoundsException("(Senses) dark vision cannot be negative.");
             } else {
                 this.darkVision = darkVision;
                 return this;
@@ -139,7 +139,7 @@ public class Senses implements Writable {
         //          and throws exception if given sense is negative
         public SensesBuilder tremorSense(int tremorSense) throws IndexOutOfBoundsException {
             if (tremorSense < 0) {
-                throw new IndexOutOfBoundsException("(senses) tremorSense is negative");
+                throw new IndexOutOfBoundsException("(Senses) tremor sense cannot be negative.");
             } else {
                 this.tremorSense = tremorSense;
                 return this;
@@ -150,7 +150,7 @@ public class Senses implements Writable {
         //          and throws exception if given sense is negative
         public SensesBuilder trueSight(int trueSight) throws IndexOutOfBoundsException {
             if (trueSight < 0) {
-                throw new IndexOutOfBoundsException("(senses) trueSight is negative");
+                throw new IndexOutOfBoundsException("(Senses) true sight cannot be negative.");
             } else {
                 this.trueSight = trueSight;
                 return this;
