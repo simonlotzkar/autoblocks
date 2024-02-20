@@ -7,7 +7,9 @@ import org.json.JSONObject;
 import persistence.JsonReader;
 import ui.frames.MainFrame;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -21,8 +23,6 @@ public class MenuManagerPanel extends JPanel {
     private final MainMenuPanel mainMenuPanel = new MainMenuPanel(this);
 
     private final CardLayout cardLayout = new CardLayout();
-
-    private static final String JSON_DIRECTORY = "autoBlocksApp.json";
 
     // MODIFIES: this
     // EFFECTS: constructs this panel
@@ -46,8 +46,8 @@ public class MenuManagerPanel extends JPanel {
 
     // MODIFIES: this
     // EFFECTS: sets the encounter and library model lists to that which is saved on file
-    private void load() throws IOException {
-        JsonReader jsonReader = new JsonReader(JSON_DIRECTORY);
+    private void load(String filepath) throws IOException {
+        JsonReader jsonReader = new JsonReader(filepath);
 
         encounter.removeAllElements();
         addAllToEncounter(jsonReader.readEncounter());
@@ -74,8 +74,8 @@ public class MenuManagerPanel extends JPanel {
 
     // MODIFIES: json file
     // EFFECTS: saves the current library and encounter to file
-    private void save() throws FileNotFoundException {
-        PrintWriter jsonWriter = new PrintWriter(JSON_DIRECTORY);
+    private void save(String filepath) throws FileNotFoundException {
+        PrintWriter jsonWriter = new PrintWriter(filepath);
         JSONArray jsonLibrary = new JSONArray();
         JSONArray jsonEncounter = new JSONArray();
         JSONObject json = new JSONObject();
@@ -98,35 +98,47 @@ public class MenuManagerPanel extends JPanel {
     //          displays an error message if it fails
     public void tryLoad() {
         int command = JOptionPane.showConfirmDialog(this,
-                "Do you want to load? The current data will be overwritten!",
-                "Confirmation Needed",
+                "Do you want to load? The current data will be overwritten!", "Confirmation Needed",
                 JOptionPane.YES_NO_OPTION);
         if (command == JOptionPane.YES_OPTION) {
-            try {
-                load();
-                JOptionPane.showMessageDialog(this, "Successfully loaded from " + JSON_DIRECTORY + ":"
-                                + "\n" + statBlockLibrary.getSize() + " statblocks and "
-                                + encounter.getSize() + " characters.",
-                        "Success!", JOptionPane.PLAIN_MESSAGE);
-            } catch (IOException exception) {
-                JOptionPane.showMessageDialog(this, "IOException Caught. Message: "
-                        + exception.getMessage() + ".", "Failure!", JOptionPane.WARNING_MESSAGE);
+            JFileChooser fileChooser = new JFileChooser();
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("JSON files", "json");
+            fileChooser.setFileFilter(filter);
+
+            int result = fileChooser.showOpenDialog(this);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                try {
+                    File selectedFile = fileChooser.getSelectedFile();
+                    load(selectedFile.getAbsolutePath());
+                    JOptionPane.showMessageDialog(this, "Successfully loaded from "
+                                    + selectedFile.getAbsolutePath() + ":"
+                                    + "\n" + statBlockLibrary.getSize() + " statblocks and "
+                                    + encounter.getSize() + " characters.",
+                            "Success!", JOptionPane.PLAIN_MESSAGE);
+                } catch (IOException exception) {
+                    JOptionPane.showMessageDialog(this, "IOException Caught. Message: "
+                            + exception.getMessage() + ".", "Failure!", JOptionPane.WARNING_MESSAGE);
+                }
             }
         }
     }
 
     // MODIFIES: this
-    // EFFECTS: prompts user to save library and/or encounter then attempts to load from file,
-    //          displays an error message if it fails
+    // EFFECTS: attempts to load from file, displays an error message if it fails
     public void trySave() {
-        int command = JOptionPane.showConfirmDialog(this,
-                "Do you want to save? The data on file will be overwritten!",
-                "Confirmation Needed",
-                JOptionPane.YES_NO_OPTION);
-        if (command == JOptionPane.YES_OPTION) {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Specify a file to save");
+
+        int userSelection = fileChooser.showSaveDialog(this);
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToSave = fileChooser.getSelectedFile();
+            // Check if the file name ends with ".json", if not, append it
+            if (!fileToSave.getName().toLowerCase().endsWith(".json")) {
+                fileToSave = new File(fileToSave.getAbsolutePath() + ".json");
+            }
             try {
-                save();
-                JOptionPane.showMessageDialog(this, "Successfully saved to " + JSON_DIRECTORY,
+                save(fileToSave.getAbsolutePath());
+                JOptionPane.showMessageDialog(this, "Successfully saved to " + fileToSave.getAbsolutePath(),
                         "Success!", JOptionPane.PLAIN_MESSAGE);
             } catch (IOException exception) {
                 JOptionPane.showMessageDialog(this, "IOException Caught. Message: "

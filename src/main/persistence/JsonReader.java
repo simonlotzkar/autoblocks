@@ -9,6 +9,8 @@ import model.statblockfields.RollableAction;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -28,16 +30,12 @@ public class JsonReader {
 
     // EFFECTS: reads source file as string and returns it
     //          throws an exception if there is any errors when reading
-    private String readFile(String source) throws IOException {
+    private String readFile(String filepath) throws IOException {
         StringBuilder contentBuilder = new StringBuilder();
-        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(source)) {
-            if (inputStream == null) {
-                throw new IOException("Resource not found: " + source);
-            }
-            try (Scanner scanner = new Scanner(inputStream)) {
-                while (scanner.hasNextLine()) {
-                    contentBuilder.append(scanner.nextLine());
-                }
+        try (BufferedReader reader = new BufferedReader(new FileReader(filepath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                contentBuilder.append(line);
             }
         }
         return contentBuilder.toString();
