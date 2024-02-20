@@ -7,34 +7,36 @@ This does not simulate any form of map, it's intended to be used with an externa
 
 ***With this application you can do the following:***
   - **simulate rolling any number of dice, with any number of sides, and with any modifier**
-  - **view a list of statblocks by their names:**
+  - **view a list of statblocks by their names (library):**
     - *view statblock details*
     - *add custom statblocks*
     - *delete statblocks*
-  - **view a list of NPCs by their names and hit points:**
+  - **view a list of NPCs by their names and hit points (encounter):**
     - *roll actions, initiatives, or ability checks*
     - *track and edit hit points*
+  - **save and load your libraries and encounters**
 <p>
 I made this application because I'm a D&D fan, and I couldn't find a program that was made just for the DM to only 
 automate NPC mechanics. This app allows the DM to only exclude repetitive simple rolls and hp management, so they can 
 focus on the rest of the game. This is for personal use, but I think any DM would benefit from this app!
 </p>
 
-### Current Bugs:
-- editing hp doesn't update on npc sheet when its selected (encounter view updates fine)
+### Known Bugs:
+- none :)
 
 ### TODO (in order):
+- remove proficiency, replace saving throw and skill proficiencies with set values
 - make custom action window
 
-### Future Plans:
-- flesh out **ux/ui** design
+### 2.0 Improvements:
+In the future I want to rebuild this project as a web application so it's more accessible. Here are some features I'd like to include as expansions:
+- polish **ux/ui** design
     - custom roll window
         - make fields above roll button and add parchment background
     - buttons
         - add custom text to all
         - create custom image for backgrounds (and maybe redo icons)
     - display of actions (formulae and rolls)
-        - add NPC name tags
         - change from strings to grid panels (hit/dmg/etc)
     - statblock/npc displays
         - change text areas to panels with sub grid

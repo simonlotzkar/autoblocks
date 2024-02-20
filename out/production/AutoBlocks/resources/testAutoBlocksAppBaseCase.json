@@ -1,0 +1,943 @@
+{
+  "library": [
+    {
+      "skillProficiencies": ["INTIMIDATION"],
+      "languages": {
+        "telepathy": 0,
+        "languagesList": [
+          "Common",
+          "Orc"
+        ]
+      },
+      "senses": {
+        "trueSight": 0,
+        "passivePerception": 10,
+        "darkVision": 60,
+        "blindSight": 0,
+        "tremorSense": 0
+      },
+      "hpFormula": {
+        "modifier": 3,
+        "amountOfDice": 1,
+        "dieSides": 6
+      },
+      "xp": 100,
+      "resistances": {},
+      "speeds": {
+        "climb": 0,
+        "fly": 0,
+        "burrow": 0,
+        "speed": 30,
+        "swim": 0
+      },
+      "title": {
+        "size": "Medium",
+        "name": "Orc",
+        "type": "Humanoid",
+        "alignment": "chaotic evil"
+      },
+      "rollableActions": [
+        {
+          "longRange": 0,
+          "name": "Greataxe",
+          "damageMap": {"SLASHING": {
+            "modifier": 3,
+            "amountOfDice": 1,
+            "dieSides": 12
+          }},
+          "description": "Melee Weapon Attack",
+          "range": 5,
+          "hitModifier": 5
+        },
+        {
+          "longRange": 120,
+          "name": "Javelin",
+          "damageMap": {"PIERCING": {
+            "modifier": 3,
+            "amountOfDice": 1,
+            "dieSides": 6
+          }},
+          "description": "Melee or Ranged Weapon Attack",
+          "range": 30,
+          "hitModifier": 5
+        }
+      ],
+      "proficiency": 2,
+      "abilityScores": {
+        "dexterity": 12,
+        "constitution": 16,
+        "strength": 16,
+        "charisma": 10,
+        "intelligence": 7,
+        "wisdom": 11
+      },
+      "armour": {
+        "ac": 13,
+        "armourName": "hide armour",
+        "magicArmour": 0
+      }
+    },
+    {
+      "skillProficiencies": ["STEALTH"],
+      "languages": {
+        "telepathy": 0,
+        "languagesList": [
+          "Common",
+          "Goblin"
+        ]
+      },
+      "senses": {
+        "trueSight": 0,
+        "passivePerception": 9,
+        "darkVision": 60,
+        "blindSight": 0,
+        "tremorSense": 0
+      },
+      "hpFormula": {
+        "modifier": 2,
+        "amountOfDice": 1,
+        "dieSides": 6
+      },
+      "xp": 50,
+      "resistances": {},
+      "speeds": {
+        "climb": 0,
+        "fly": 0,
+        "burrow": 0,
+        "speed": 30,
+        "swim": 0
+      },
+      "title": {
+        "size": "Humanoid",
+        "name": "Goblin",
+        "type": "Small",
+        "alignment": "chaotic evil"
+      },
+      "rollableActions": [
+        {
+          "longRange": 0,
+          "name": "Scimitar",
+          "damageMap": {"SLASHING": {
+            "modifier": 2,
+            "amountOfDice": 1,
+            "dieSides": 6
+          }},
+          "description": "Melee Weapon Attack",
+          "range": 5,
+          "hitModifier": 4
+        },
+        {
+          "longRange": 320,
+          "name": "Shortbow",
+          "damageMap": {"PIERCING": {
+            "modifier": 2,
+            "amountOfDice": 1,
+            "dieSides": 6
+          }},
+          "description": "Ranged Weapon Attack",
+          "range": 80,
+          "hitModifier": 2
+        }
+      ],
+      "proficiency": 2,
+      "abilityScores": {
+        "dexterity": 14,
+        "constitution": 10,
+        "strength": 8,
+        "charisma": 8,
+        "intelligence": 10,
+        "wisdom": 8
+      },
+      "armour": {
+        "ac": 15,
+        "armourName": "leather armour, shield",
+        "magicArmour": 0
+      }
+    }
+  ],
+  "encounter": [
+    {
+      "skillProficiencies": ["INTIMIDATION"],
+      "maxHP": 9,
+      "languages": {
+        "telepathy": 0,
+        "languagesList": [
+          "Common",
+          "Orc"
+        ]
+      },
+      "senses": {
+        "trueSight": 0,
+        "passivePerception": 10,
+        "darkVision": 60,
+        "blindSight": 0,
+        "tremorSense": 0
+      },
+      "hp": 9,
+      "resistances": {},
+      "title": {
+        "size": "Medium",
+        "name": "Orc 1",
+        "type": "Humanoid",
+        "alignment": "chaotic evil",
+        "group": "Orcs"
+      },
+      "rollableActions": [
+        {
+          "longRange": 0,
+          "name": "Greataxe",
+          "damageMap": {"SLASHING": {
+            "modifier": 3,
+            "amountOfDice": 1,
+            "dieSides": 12
+          }},
+          "description": "Melee Weapon Attack",
+          "range": 5,
+          "hitModifier": 5
+        },
+        {
+          "longRange": 120,
+          "name": "Javelin",
+          "damageMap": {"PIERCING": {
+            "modifier": 3,
+            "amountOfDice": 1,
+            "dieSides": 6
+          }},
+          "description": "Melee or Ranged Weapon Attack",
+          "range": 30,
+          "hitModifier": 5
+        }
+      ],
+      "proficiency": 2,
+      "abilityScores": {
+        "dexterity": 12,
+        "constitution": 16,
+        "strength": 16,
+        "charisma": 10,
+        "intelligence": 7,
+        "wisdom": 11
+      },
+      "armour": {
+        "ac": 13,
+        "armourName": "hide armour",
+        "magicArmour": 0
+      },
+      "parentStatBlock": {
+        "skillProficiencies": ["INTIMIDATION"],
+        "languages": {
+          "telepathy": 0,
+          "languagesList": [
+            "Common",
+            "Orc"
+          ]
+        },
+        "senses": {
+          "trueSight": 0,
+          "passivePerception": 10,
+          "darkVision": 60,
+          "blindSight": 0,
+          "tremorSense": 0
+        },
+        "hpFormula": {
+          "modifier": 3,
+          "amountOfDice": 1,
+          "dieSides": 6
+        },
+        "xp": 100,
+        "resistances": {},
+        "speeds": {
+          "climb": 0,
+          "fly": 0,
+          "burrow": 0,
+          "speed": 30,
+          "swim": 0
+        },
+        "title": {
+          "size": "Medium",
+          "name": "Orc",
+          "type": "Humanoid",
+          "alignment": "chaotic evil"
+        },
+        "rollableActions": [
+          {
+            "longRange": 0,
+            "name": "Greataxe",
+            "damageMap": {"SLASHING": {
+              "modifier": 3,
+              "amountOfDice": 1,
+              "dieSides": 12
+            }},
+            "description": "Melee Weapon Attack",
+            "range": 5,
+            "hitModifier": 5
+          },
+          {
+            "longRange": 120,
+            "name": "Javelin",
+            "damageMap": {"PIERCING": {
+              "modifier": 3,
+              "amountOfDice": 1,
+              "dieSides": 6
+            }},
+            "description": "Melee or Ranged Weapon Attack",
+            "range": 30,
+            "hitModifier": 5
+          }
+        ],
+        "proficiency": 2,
+        "abilityScores": {
+          "dexterity": 12,
+          "constitution": 16,
+          "strength": 16,
+          "charisma": 10,
+          "intelligence": 7,
+          "wisdom": 11
+        },
+        "armour": {
+          "ac": 13,
+          "armourName": "hide armour",
+          "magicArmour": 0
+        }
+      },
+      "hpFormula": {
+        "modifier": 3,
+        "amountOfDice": 1,
+        "dieSides": 6
+      },
+      "xp": 100,
+      "speeds": {
+        "climb": 0,
+        "fly": 0,
+        "burrow": 0,
+        "speed": 30,
+        "swim": 0
+      }
+    },
+    {
+      "skillProficiencies": ["INTIMIDATION"],
+      "maxHP": 4,
+      "languages": {
+        "telepathy": 0,
+        "languagesList": [
+          "Common",
+          "Orc"
+        ]
+      },
+      "senses": {
+        "trueSight": 0,
+        "passivePerception": 10,
+        "darkVision": 60,
+        "blindSight": 0,
+        "tremorSense": 0
+      },
+      "hp": 4,
+      "resistances": {},
+      "title": {
+        "size": "Medium",
+        "name": "Orc 2",
+        "type": "Humanoid",
+        "alignment": "chaotic evil",
+        "group": "Orcs"
+      },
+      "rollableActions": [
+        {
+          "longRange": 0,
+          "name": "Greataxe",
+          "damageMap": {"SLASHING": {
+            "modifier": 3,
+            "amountOfDice": 1,
+            "dieSides": 12
+          }},
+          "description": "Melee Weapon Attack",
+          "range": 5,
+          "hitModifier": 5
+        },
+        {
+          "longRange": 120,
+          "name": "Javelin",
+          "damageMap": {"PIERCING": {
+            "modifier": 3,
+            "amountOfDice": 1,
+            "dieSides": 6
+          }},
+          "description": "Melee or Ranged Weapon Attack",
+          "range": 30,
+          "hitModifier": 5
+        }
+      ],
+      "proficiency": 2,
+      "abilityScores": {
+        "dexterity": 12,
+        "constitution": 16,
+        "strength": 16,
+        "charisma": 10,
+        "intelligence": 7,
+        "wisdom": 11
+      },
+      "armour": {
+        "ac": 13,
+        "armourName": "hide armour",
+        "magicArmour": 0
+      },
+      "parentStatBlock": {
+        "skillProficiencies": ["INTIMIDATION"],
+        "languages": {
+          "telepathy": 0,
+          "languagesList": [
+            "Common",
+            "Orc"
+          ]
+        },
+        "senses": {
+          "trueSight": 0,
+          "passivePerception": 10,
+          "darkVision": 60,
+          "blindSight": 0,
+          "tremorSense": 0
+        },
+        "hpFormula": {
+          "modifier": 3,
+          "amountOfDice": 1,
+          "dieSides": 6
+        },
+        "xp": 100,
+        "resistances": {},
+        "speeds": {
+          "climb": 0,
+          "fly": 0,
+          "burrow": 0,
+          "speed": 30,
+          "swim": 0
+        },
+        "title": {
+          "size": "Medium",
+          "name": "Orc",
+          "type": "Humanoid",
+          "alignment": "chaotic evil"
+        },
+        "rollableActions": [
+          {
+            "longRange": 0,
+            "name": "Greataxe",
+            "damageMap": {"SLASHING": {
+              "modifier": 3,
+              "amountOfDice": 1,
+              "dieSides": 12
+            }},
+            "description": "Melee Weapon Attack",
+            "range": 5,
+            "hitModifier": 5
+          },
+          {
+            "longRange": 120,
+            "name": "Javelin",
+            "damageMap": {"PIERCING": {
+              "modifier": 3,
+              "amountOfDice": 1,
+              "dieSides": 6
+            }},
+            "description": "Melee or Ranged Weapon Attack",
+            "range": 30,
+            "hitModifier": 5
+          }
+        ],
+        "proficiency": 2,
+        "abilityScores": {
+          "dexterity": 12,
+          "constitution": 16,
+          "strength": 16,
+          "charisma": 10,
+          "intelligence": 7,
+          "wisdom": 11
+        },
+        "armour": {
+          "ac": 13,
+          "armourName": "hide armour",
+          "magicArmour": 0
+        }
+      },
+      "hpFormula": {
+        "modifier": 3,
+        "amountOfDice": 1,
+        "dieSides": 6
+      },
+      "xp": 100,
+      "speeds": {
+        "climb": 0,
+        "fly": 0,
+        "burrow": 0,
+        "speed": 30,
+        "swim": 0
+      }
+    },
+    {
+      "skillProficiencies": ["INTIMIDATION"],
+      "maxHP": 6,
+      "languages": {
+        "telepathy": 0,
+        "languagesList": [
+          "Common",
+          "Orc"
+        ]
+      },
+      "senses": {
+        "trueSight": 0,
+        "passivePerception": 10,
+        "darkVision": 60,
+        "blindSight": 0,
+        "tremorSense": 0
+      },
+      "hp": 6,
+      "resistances": {},
+      "title": {
+        "size": "Medium",
+        "name": "Orc 3",
+        "type": "Humanoid",
+        "alignment": "chaotic evil",
+        "group": "Orcs"
+      },
+      "rollableActions": [
+        {
+          "longRange": 0,
+          "name": "Greataxe",
+          "damageMap": {"SLASHING": {
+            "modifier": 3,
+            "amountOfDice": 1,
+            "dieSides": 12
+          }},
+          "description": "Melee Weapon Attack",
+          "range": 5,
+          "hitModifier": 5
+        },
+        {
+          "longRange": 120,
+          "name": "Javelin",
+          "damageMap": {"PIERCING": {
+            "modifier": 3,
+            "amountOfDice": 1,
+            "dieSides": 6
+          }},
+          "description": "Melee or Ranged Weapon Attack",
+          "range": 30,
+          "hitModifier": 5
+        }
+      ],
+      "proficiency": 2,
+      "abilityScores": {
+        "dexterity": 12,
+        "constitution": 16,
+        "strength": 16,
+        "charisma": 10,
+        "intelligence": 7,
+        "wisdom": 11
+      },
+      "armour": {
+        "ac": 13,
+        "armourName": "hide armour",
+        "magicArmour": 0
+      },
+      "parentStatBlock": {
+        "skillProficiencies": ["INTIMIDATION"],
+        "languages": {
+          "telepathy": 0,
+          "languagesList": [
+            "Common",
+            "Orc"
+          ]
+        },
+        "senses": {
+          "trueSight": 0,
+          "passivePerception": 10,
+          "darkVision": 60,
+          "blindSight": 0,
+          "tremorSense": 0
+        },
+        "hpFormula": {
+          "modifier": 3,
+          "amountOfDice": 1,
+          "dieSides": 6
+        },
+        "xp": 100,
+        "resistances": {},
+        "speeds": {
+          "climb": 0,
+          "fly": 0,
+          "burrow": 0,
+          "speed": 30,
+          "swim": 0
+        },
+        "title": {
+          "size": "Medium",
+          "name": "Orc",
+          "type": "Humanoid",
+          "alignment": "chaotic evil"
+        },
+        "rollableActions": [
+          {
+            "longRange": 0,
+            "name": "Greataxe",
+            "damageMap": {"SLASHING": {
+              "modifier": 3,
+              "amountOfDice": 1,
+              "dieSides": 12
+            }},
+            "description": "Melee Weapon Attack",
+            "range": 5,
+            "hitModifier": 5
+          },
+          {
+            "longRange": 120,
+            "name": "Javelin",
+            "damageMap": {"PIERCING": {
+              "modifier": 3,
+              "amountOfDice": 1,
+              "dieSides": 6
+            }},
+            "description": "Melee or Ranged Weapon Attack",
+            "range": 30,
+            "hitModifier": 5
+          }
+        ],
+        "proficiency": 2,
+        "abilityScores": {
+          "dexterity": 12,
+          "constitution": 16,
+          "strength": 16,
+          "charisma": 10,
+          "intelligence": 7,
+          "wisdom": 11
+        },
+        "armour": {
+          "ac": 13,
+          "armourName": "hide armour",
+          "magicArmour": 0
+        }
+      },
+      "hpFormula": {
+        "modifier": 3,
+        "amountOfDice": 1,
+        "dieSides": 6
+      },
+      "xp": 100,
+      "speeds": {
+        "climb": 0,
+        "fly": 0,
+        "burrow": 0,
+        "speed": 30,
+        "swim": 0
+      }
+    },
+    {
+      "skillProficiencies": ["STEALTH"],
+      "maxHP": 4,
+      "languages": {
+        "telepathy": 0,
+        "languagesList": [
+          "Common",
+          "Goblin"
+        ]
+      },
+      "senses": {
+        "trueSight": 0,
+        "passivePerception": 9,
+        "darkVision": 60,
+        "blindSight": 0,
+        "tremorSense": 0
+      },
+      "hp": 4,
+      "resistances": {},
+      "title": {
+        "size": "Humanoid",
+        "name": "Goblin 3",
+        "type": "Small",
+        "alignment": "chaotic evil"
+      },
+      "rollableActions": [
+        {
+          "longRange": 0,
+          "name": "Scimitar",
+          "damageMap": {"SLASHING": {
+            "modifier": 2,
+            "amountOfDice": 1,
+            "dieSides": 6
+          }},
+          "description": "Melee Weapon Attack",
+          "range": 5,
+          "hitModifier": 4
+        },
+        {
+          "longRange": 320,
+          "name": "Shortbow",
+          "damageMap": {"PIERCING": {
+            "modifier": 2,
+            "amountOfDice": 1,
+            "dieSides": 6
+          }},
+          "description": "Ranged Weapon Attack",
+          "range": 80,
+          "hitModifier": 2
+        }
+      ],
+      "proficiency": 2,
+      "abilityScores": {
+        "dexterity": 14,
+        "constitution": 10,
+        "strength": 8,
+        "charisma": 8,
+        "intelligence": 10,
+        "wisdom": 8
+      },
+      "armour": {
+        "ac": 15,
+        "armourName": "leather armour, shield",
+        "magicArmour": 0
+      },
+      "parentStatBlock": {
+        "skillProficiencies": ["STEALTH"],
+        "languages": {
+          "telepathy": 0,
+          "languagesList": [
+            "Common",
+            "Goblin"
+          ]
+        },
+        "senses": {
+          "trueSight": 0,
+          "passivePerception": 9,
+          "darkVision": 60,
+          "blindSight": 0,
+          "tremorSense": 0
+        },
+        "hpFormula": {
+          "modifier": 2,
+          "amountOfDice": 1,
+          "dieSides": 6
+        },
+        "xp": 50,
+        "resistances": {},
+        "speeds": {
+          "climb": 0,
+          "fly": 0,
+          "burrow": 0,
+          "speed": 30,
+          "swim": 0
+        },
+        "title": {
+          "size": "Humanoid",
+          "name": "Goblin",
+          "type": "Small",
+          "alignment": "chaotic evil"
+        },
+        "rollableActions": [
+          {
+            "longRange": 0,
+            "name": "Scimitar",
+            "damageMap": {"SLASHING": {
+              "modifier": 2,
+              "amountOfDice": 1,
+              "dieSides": 6
+            }},
+            "description": "Melee Weapon Attack",
+            "range": 5,
+            "hitModifier": 4
+          },
+          {
+            "longRange": 320,
+            "name": "Shortbow",
+            "damageMap": {"PIERCING": {
+              "modifier": 2,
+              "amountOfDice": 1,
+              "dieSides": 6
+            }},
+            "description": "Ranged Weapon Attack",
+            "range": 80,
+            "hitModifier": 2
+          }
+        ],
+        "proficiency": 2,
+        "abilityScores": {
+          "dexterity": 14,
+          "constitution": 10,
+          "strength": 8,
+          "charisma": 8,
+          "intelligence": 10,
+          "wisdom": 8
+        },
+        "armour": {
+          "ac": 15,
+          "armourName": "leather armour, shield",
+          "magicArmour": 0
+        }
+      },
+      "hpFormula": {
+        "modifier": 2,
+        "amountOfDice": 1,
+        "dieSides": 6
+      },
+      "xp": 50,
+      "speeds": {
+        "climb": 0,
+        "fly": 0,
+        "burrow": 0,
+        "speed": 30,
+        "swim": 0
+      }
+    },
+    {
+      "skillProficiencies": ["STEALTH"],
+      "maxHP": 3,
+      "languages": {
+        "telepathy": 0,
+        "languagesList": [
+          "Common",
+          "Goblin"
+        ]
+      },
+      "senses": {
+        "trueSight": 0,
+        "passivePerception": 9,
+        "darkVision": 60,
+        "blindSight": 0,
+        "tremorSense": 0
+      },
+      "hp": 3,
+      "resistances": {},
+      "title": {
+        "size": "Humanoid",
+        "name": "Goblin 4",
+        "type": "Small",
+        "alignment": "chaotic evil"
+      },
+      "rollableActions": [
+        {
+          "longRange": 0,
+          "name": "Scimitar",
+          "damageMap": {"SLASHING": {
+            "modifier": 2,
+            "amountOfDice": 1,
+            "dieSides": 6
+          }},
+          "description": "Melee Weapon Attack",
+          "range": 5,
+          "hitModifier": 4
+        },
+        {
+          "longRange": 320,
+          "name": "Shortbow",
+          "damageMap": {"PIERCING": {
+            "modifier": 2,
+            "amountOfDice": 1,
+            "dieSides": 6
+          }},
+          "description": "Ranged Weapon Attack",
+          "range": 80,
+          "hitModifier": 2
+        }
+      ],
+      "proficiency": 2,
+      "abilityScores": {
+        "dexterity": 14,
+        "constitution": 10,
+        "strength": 8,
+        "charisma": 8,
+        "intelligence": 10,
+        "wisdom": 8
+      },
+      "armour": {
+        "ac": 15,
+        "armourName": "leather armour, shield",
+        "magicArmour": 0
+      },
+      "parentStatBlock": {
+        "skillProficiencies": ["STEALTH"],
+        "languages": {
+          "telepathy": 0,
+          "languagesList": [
+            "Common",
+            "Goblin"
+          ]
+        },
+        "senses": {
+          "trueSight": 0,
+          "passivePerception": 9,
+          "darkVision": 60,
+          "blindSight": 0,
+          "tremorSense": 0
+        },
+        "hpFormula": {
+          "modifier": 2,
+          "amountOfDice": 1,
+          "dieSides": 6
+        },
+        "xp": 50,
+        "resistances": {},
+        "speeds": {
+          "climb": 0,
+          "fly": 0,
+          "burrow": 0,
+          "speed": 30,
+          "swim": 0
+        },
+        "title": {
+          "size": "Humanoid",
+          "name": "Goblin",
+          "type": "Small",
+          "alignment": "chaotic evil"
+        },
+        "rollableActions": [
+          {
+            "longRange": 0,
+            "name": "Scimitar",
+            "damageMap": {"SLASHING": {
+              "modifier": 2,
+              "amountOfDice": 1,
+              "dieSides": 6
+            }},
+            "description": "Melee Weapon Attack",
+            "range": 5,
+            "hitModifier": 4
+          },
+          {
+            "longRange": 320,
+            "name": "Shortbow",
+            "damageMap": {"PIERCING": {
+              "modifier": 2,
+              "amountOfDice": 1,
+              "dieSides": 6
+            }},
+            "description": "Ranged Weapon Attack",
+            "range": 80,
+            "hitModifier": 2
+          }
+        ],
+        "proficiency": 2,
+        "abilityScores": {
+          "dexterity": 14,
+          "constitution": 10,
+          "strength": 8,
+          "charisma": 8,
+          "intelligence": 10,
+          "wisdom": 8
+        },
+        "armour": {
+          "ac": 15,
+          "armourName": "leather armour, shield",
+          "magicArmour": 0
+        }
+      },
+      "hpFormula": {
+        "modifier": 2,
+        "amountOfDice": 1,
+        "dieSides": 6
+      },
+      "xp": 50,
+      "speeds": {
+        "climb": 0,
+        "fly": 0,
+        "burrow": 0,
+        "speed": 30,
+        "swim": 0
+      }
+    }
+  ]
+}

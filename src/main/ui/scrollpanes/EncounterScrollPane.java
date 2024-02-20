@@ -73,6 +73,10 @@ public class EncounterScrollPane extends ParchmentScrollPane implements ListSele
     public void refresh() {
         encounterList.removeAll();
         encounterList.setModel(encounter);
+        mainMenuPanel.getSideDisplayPanel().refresh();
+        if (selectedNPC != null) {
+            npcDisplayTextArea.initializeAll();
+        }
 
         revalidate();
         repaint();
@@ -133,8 +137,8 @@ public class EncounterScrollPane extends ParchmentScrollPane implements ListSele
         } else if (encounterList.getSelectedIndices().length != 0) {
             for (int i : encounterList.getSelectedIndices()) {
                 encounter.getElementAt(i).changeHP(hpChange);
-                refresh();
             }
+            refresh();
         } else {
             JOptionPane.showMessageDialog(this, "Nothing available for hp change.",
                     "Failure!", JOptionPane.WARNING_MESSAGE);

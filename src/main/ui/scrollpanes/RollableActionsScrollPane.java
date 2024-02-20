@@ -2,12 +2,14 @@ package ui.scrollpanes;
 
 import model.Encounter;
 import model.NPC;
+import model.StatBlock;
 import model.statblockfields.RollableAction;
 import ui.panels.menus.MainMenuPanel;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import java.util.ArrayList;
 
 // Represents a scroll pane of rollable actions for the NPCs that the encounter main display is showing
 public class RollableActionsScrollPane extends ParchmentScrollPane implements ListSelectionListener {
@@ -58,11 +60,18 @@ public class RollableActionsScrollPane extends ParchmentScrollPane implements Li
         NPC selectedNPC = mainMenuPanel.getMainDisplayPanel().getEncounterScrollPane().getSelectedNPC();
         rollableActionsListModel.removeAllElements();
 
+        java.util.List<StatBlock> addedStatBlocks = new ArrayList<>();
+
         if (selectedNPC != null) {
             addAllRollableActionsToModel(selectedNPC.getRollableActions());
         } else {
             for (int i = 0; i < encounter.getSize(); i++) {
-                addAllRollableActionsToModel(encounter.getElementAt(i).getRollableActions());
+                NPC npc = encounter.getElementAt(i);
+                StatBlock statBlock = npc.getParentStatBlock();
+                if (!addedStatBlocks.contains(statBlock)) {
+                    addAllRollableActionsToModel(npc.getRollableActions());
+                    addedStatBlocks.add(statBlock);
+                }
             }
         }
     }

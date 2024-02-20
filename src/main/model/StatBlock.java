@@ -371,6 +371,23 @@ public class StatBlock implements Writable {
         return legendaryMechanics;
     }
 
+    @Override
+    public boolean equals(Object anObject) {
+        if (this == anObject) {
+            return true;
+        }
+        if (anObject == null || getClass() != anObject.getClass()) {
+            return false;
+        }
+        StatBlock other = (StatBlock) anObject;
+        return this.toString().equals(other.toString());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.toString());
+    }
+
     // -----------------------------------------------------------------------------------------------------------------
     // builder class
     public static class StatBlockBuilder {
