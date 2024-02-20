@@ -5,7 +5,7 @@ import java.awt.*;
 
 // Represents a panel that has a layout manager and a parent menucard panel
 public class MenuPanel extends JPanel {
-    protected static final String ICON_DIRECTORY = "./data/images/icons/";
+    protected static final String ICON_DIRECTORY = "images/icons/";
     protected final MenuManagerPanel menuManagerPanel;
 
     // MODIFIES: this

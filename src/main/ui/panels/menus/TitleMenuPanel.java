@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,13 +20,13 @@ public class TitleMenuPanel extends MenuPanel implements ActionListener {
 
     // images
     private static final JLabel MAIN_BANNER_LABEL = new JLabel("AUTOBLOCKS");
-    private static final ImageIcon D20_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "d20.png");
-    private static final ImageIcon EXIT_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "exit.png");
-    private static final ImageIcon LIBRARY_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "books.png");
-    private static final ImageIcon ENCOUNTER_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "crossedSwords.png");
-    private static final ImageIcon LOAD_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "folder.png");
-    private static final ImageIcon SAVE_IMAGE_ICON = new ImageIcon(ICON_DIRECTORY + "save.png");
-    private static final Image BANNER = Toolkit.getDefaultToolkit().getImage("./data/images/titleBanner.jpg");
+    private static final ImageIcon D20_IMAGE_ICON = new ImageIcon(ClassLoader.getSystemResource(ICON_DIRECTORY + "d20.png"));
+    private static final ImageIcon EXIT_IMAGE_ICON = new ImageIcon(ClassLoader.getSystemResource(ICON_DIRECTORY + "exit.png"));
+    private static final ImageIcon LIBRARY_IMAGE_ICON = new ImageIcon(ClassLoader.getSystemResource(ICON_DIRECTORY + "books.png"));
+    private static final ImageIcon ENCOUNTER_IMAGE_ICON = new ImageIcon(ClassLoader.getSystemResource(ICON_DIRECTORY + "crossedSwords.png"));
+    private static final ImageIcon LOAD_IMAGE_ICON = new ImageIcon(ClassLoader.getSystemResource(ICON_DIRECTORY + "folder.png"));
+    private static final ImageIcon SAVE_IMAGE_ICON = new ImageIcon(ClassLoader.getSystemResource(ICON_DIRECTORY + "save.png"));
+    private static final Image BANNER = Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource("images/titleBanner.jpg"));
 
     // buttons
     private final JButton customRollButton = new JButton("Open Custom Roller");
@@ -44,8 +45,15 @@ public class TitleMenuPanel extends MenuPanel implements ActionListener {
         initializeButtonPanel();
 
         try {
-            dungeonFont = Font.createFont(Font.TRUETYPE_FONT, new File("./data/dungeon(BySaesarezNovandito).TTF"));
-            MAIN_BANNER_LABEL.setFont(dungeonFont.deriveFont(150f));
+            InputStream inputStream = ClassLoader.getSystemResourceAsStream("dungeon(BySaesarezNovandito).TTF");
+            Font dungeonFont = null;
+
+            if (inputStream != null) {
+                dungeonFont = Font.createFont(Font.TRUETYPE_FONT, inputStream);
+                MAIN_BANNER_LABEL.setFont(dungeonFont.deriveFont(150f));
+            } else {
+                throw new IOException("Font file not found");
+            }
         } catch (IOException | FontFormatException e) {
             JOptionPane.showMessageDialog(this, "Could not load dungeon font! ("
                     + e.getMessage() + ")", "Failure!", JOptionPane.WARNING_MESSAGE);

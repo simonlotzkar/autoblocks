@@ -8,7 +8,6 @@ import persistence.JsonReader;
 import ui.frames.MainFrame;
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -23,7 +22,7 @@ public class MenuManagerPanel extends JPanel {
 
     private final CardLayout cardLayout = new CardLayout();
 
-    private static final String JSON_DIRECTORY = "./data/autoBlocksApp.json";
+    private static final String JSON_DIRECTORY = "autoBlocksApp.json";
 
     // MODIFIES: this
     // EFFECTS: constructs this panel

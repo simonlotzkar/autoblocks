@@ -6,7 +6,7 @@ import java.awt.*;
 
 // Represents a panel that displays information and has a parent main menu panel
 public class DisplayPanel extends JPanel {
-    protected static final String ICON_DIRECTORY = "./data/images/icons/";
+    protected static final String ICON_DIRECTORY = "images/icons/";
     protected MainMenuPanel mainMenuPanel;
 
     // MODIFIES: this

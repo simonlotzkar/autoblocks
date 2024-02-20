@@ -14,15 +14,15 @@ import java.util.ArrayList;
 // Represents a main menu panel that manages switching between the title menu and main menu
 public class MainMenuPanel extends MenuPanel implements ActionListener {
     // images
-    private static final ImageIcon RETURN_ICON = new ImageIcon(ICON_DIRECTORY + "return.png");
-    private static final ImageIcon CHECK_ICON = new ImageIcon(ICON_DIRECTORY + "check.png");
-    private static final ImageIcon PLUS_ICON = new ImageIcon(ICON_DIRECTORY + "plus.png");
-    private static final ImageIcon TRASH_ICON = new ImageIcon(ICON_DIRECTORY + "trash.png");
-    private static final ImageIcon JUMP_ICON = new ImageIcon(ICON_DIRECTORY + "jumpingGuy.png");
-    private static final ImageIcon CLOCK_ICON = new ImageIcon(ICON_DIRECTORY + "clock.png");
-    private static final ImageIcon HEART_ICON = new ImageIcon(ICON_DIRECTORY + "heart.png");
-    private static final ImageIcon X_ICON = new ImageIcon(ICON_DIRECTORY + "x.png");
-    private static final ImageIcon MINUS_ICON = new ImageIcon(ICON_DIRECTORY + "minus.png");
+    private static final ImageIcon RETURN_ICON = new ImageIcon(ClassLoader.getSystemResource(ICON_DIRECTORY + "return.png"));
+    private static final ImageIcon CHECK_ICON = new ImageIcon(ClassLoader.getSystemResource(ICON_DIRECTORY + "check.png"));
+    private static final ImageIcon PLUS_ICON = new ImageIcon(ClassLoader.getSystemResource(ICON_DIRECTORY + "plus.png"));
+    private static final ImageIcon TRASH_ICON = new ImageIcon(ClassLoader.getSystemResource(ICON_DIRECTORY + "trash.png"));
+    private static final ImageIcon JUMP_ICON = new ImageIcon(ClassLoader.getSystemResource(ICON_DIRECTORY + "jumpingGuy.png"));
+    private static final ImageIcon CLOCK_ICON = new ImageIcon(ClassLoader.getSystemResource(ICON_DIRECTORY + "clock.png"));
+    private static final ImageIcon HEART_ICON = new ImageIcon(ClassLoader.getSystemResource(ICON_DIRECTORY + "heart.png"));
+    private static final ImageIcon X_ICON = new ImageIcon(ClassLoader.getSystemResource(ICON_DIRECTORY + "x.png"));
+    private static final ImageIcon MINUS_ICON = new ImageIcon(ClassLoader.getSystemResource(ICON_DIRECTORY + "minus.png"));
 
     // layouts
     private final CardLayout titleCardLayout = new CardLayout();

@@ -9,7 +9,7 @@ import java.awt.*;
 public class ParchmentScrollPane extends JScrollPane {
     protected final MainMenuPanel mainMenuPanel;
     protected static final Image PARCHMENT = Toolkit.getDefaultToolkit()
-            .getImage("./data/images/parchment.jpg");
+            .getImage(ClassLoader.getSystemResource("images/parchment.jpg"));
 
     // MODIFIES: this
     // EFFECTS: constructs this scroll pane with a parchment background

@@ -19,9 +19,9 @@ public class SideDisplayPanel extends DisplayPanel implements ActionListener {
     private final CardLayout sideDisplayCardLayout = new CardLayout();
 
     // images
-    private static final ImageIcon D20_ICON = new ImageIcon(ICON_DIRECTORY + "d20.png");
-    private static final ImageIcon DICE_ICON = new ImageIcon(ICON_DIRECTORY + "dice.png");
-    private static final ImageIcon SWORD_ICON = new ImageIcon(ICON_DIRECTORY + "sword.png");
+    private static final ImageIcon D20_ICON = new ImageIcon(ClassLoader.getSystemResource(ICON_DIRECTORY + "d20.png"));
+    private static final ImageIcon DICE_ICON = new ImageIcon(ClassLoader.getSystemResource(ICON_DIRECTORY + "dice.png"));
+    private static final ImageIcon SWORD_ICON = new ImageIcon(ClassLoader.getSystemResource(ICON_DIRECTORY + "sword.png"));
 
     // panels
     private final JPanel encounterSideDisplayPanel = new JPanel(new GridLayout(2, 1));

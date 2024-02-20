@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 public class JsonReaderTest {
     @Test
     void testReaderNonExistentFileCase() {
-        JsonReader reader = new JsonReader("./data/nonExistentFile.json");
+        JsonReader reader = new JsonReader("./resources/nonExistentFile.json");
         try {
             reader.readLibrary();
             reader.readEncounter();
@@ -24,7 +24,7 @@ public class JsonReaderTest {
 
     @Test
     void testReaderEmptyFileCase() {
-        JsonReader reader = new JsonReader("./data/testAutoBlocksAppEmptyCase.json");
+        JsonReader reader = new JsonReader("./resources/testAutoBlocksAppEmptyCase.json");
         try {
             List<StatBlock> library = reader.readLibrary();
             List<NPC> encounter = reader.readEncounter();
@@ -37,7 +37,7 @@ public class JsonReaderTest {
 
     @Test
     void testReaderBaseCase() {
-        JsonReader reader = new JsonReader("./data/testAutoBlocksAppBaseCase.json");
+        JsonReader reader = new JsonReader("./resources/testAutoBlocksAppBaseCase.json");
         try {
             List<StatBlock> library = reader.readLibrary();
             List<NPC> encounter = reader.readEncounter();

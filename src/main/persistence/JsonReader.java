@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -27,11 +28,17 @@ public class JsonReader {
 
     // EFFECTS: reads source file as string and returns it
     //          throws an exception if there is any errors when reading
-    // CITATION: from JsonReader.java in JsonSerializationDemo
     private String readFile(String source) throws IOException {
         StringBuilder contentBuilder = new StringBuilder();
-        try (Stream<String> stream = Files.lines(Paths.get(source), StandardCharsets.UTF_8)) {
-            stream.forEach(contentBuilder::append);
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(source)) {
+            if (inputStream == null) {
+                throw new IOException("Resource not found: " + source);
+            }
+            try (Scanner scanner = new Scanner(inputStream)) {
+                while (scanner.hasNextLine()) {
+                    contentBuilder.append(scanner.nextLine());
+                }
+            }
         }
         return contentBuilder.toString();
     }

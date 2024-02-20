@@ -10,7 +10,7 @@ import java.util.ArrayList;
 // Represents a custom roll frame that has a log of previous rolls
 public class CustomRollFrame extends JFrame implements ActionListener {
     // constants
-    private static final String ICON_DIRECTORY = "./data/images/icons/";
+    private static final String ICON_DIRECTORY = "./resources/images/icons/";
     private static final int WIDTH = 480;
     private static final int HEIGHT = 320;
 
@@ -31,8 +31,8 @@ public class CustomRollFrame extends JFrame implements ActionListener {
     private final JTextField modifierTextField = new JTextField();
 
     // images
-    private static final ImageIcon D20_ICON = new ImageIcon(ICON_DIRECTORY + "d20.png");
-    private static final ImageIcon DICE_ICON = new ImageIcon((new ImageIcon(ICON_DIRECTORY + "dice.png"))
+    private static final ImageIcon D20_ICON = new ImageIcon(ClassLoader.getSystemResource(ICON_DIRECTORY + "d20.png"));
+    private static final ImageIcon DICE_ICON = new ImageIcon((new ImageIcon(ClassLoader.getSystemResource(ICON_DIRECTORY + "dice.png")))
             .getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
 
     // EFFECTS: constructs a custom roll frame

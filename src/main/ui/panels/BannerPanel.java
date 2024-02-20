@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 // Represents a banner panel that contains an image behind text
 public class BannerPanel extends JPanel {
@@ -15,9 +16,9 @@ public class BannerPanel extends JPanel {
 
     // images
     private static final Image LIBRARY_BANNER = Toolkit.getDefaultToolkit()
-            .getImage("./data/images/libraryBanner.jpg");
+            .getImage(ClassLoader.getSystemResource("images/libraryBanner.jpg"));
     private static final Image ENCOUNTER_BANNER = Toolkit.getDefaultToolkit()
-            .getImage("./data/images/encounterBanner.jpg");
+            .getImage(ClassLoader.getSystemResource("images/encounterBanner.jpg"));
 
     // MODIFIES: this
     // EFFECTS: constructs this panel
@@ -33,8 +34,14 @@ public class BannerPanel extends JPanel {
         try {
             float fontSize = 100f;
 
-            Font dungeonFont = Font.createFont(Font.TRUETYPE_FONT, new File("./data/dungeon(BySaesarezNovandito).TTF"));
+            InputStream inputStream = ClassLoader.getSystemResourceAsStream("dungeon(BySaesarezNovandito).TTF");
+            Font dungeonFont = null;
 
+            if (inputStream != null) {
+                dungeonFont = Font.createFont(Font.TRUETYPE_FONT, inputStream);
+            } else {
+                throw new IOException("Font file not found");
+            }
             encounterTitleLabel.setFont(dungeonFont.deriveFont(fontSize));
             libraryTitleLabel.setFont(dungeonFont.deriveFont(fontSize));
 

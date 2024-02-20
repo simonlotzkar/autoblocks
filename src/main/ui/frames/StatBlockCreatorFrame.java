@@ -5,7 +5,6 @@ import model.RollFormula;
 import model.StatBlock;
 import model.statblockfields.*;
 import exceptions.IncompleteFieldException;
-import ui.Main;
 import ui.panels.menus.MainMenuPanel;
 import ui.scrollpanes.ParchmentScrollPane;
 import ui.scrollpanes.TransparentListCellRenderer;
@@ -13,6 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -222,7 +222,7 @@ public class StatBlockCreatorFrame extends JFrame implements ActionListener, Lis
     private final JScrollPane legendaryActionsScrollPane = new JScrollPane(legendaryActionsList);
 
     // constants
-    private static final String ICON_DIRECTORY = "./data/images/icons/";
+    private static final String ICON_DIRECTORY = "images/icons/";
     private static final int WIDTH = 540;
     private static final int HEIGHT = 720;
 
@@ -242,8 +242,7 @@ public class StatBlockCreatorFrame extends JFrame implements ActionListener, Lis
             "Ranged Weapon Attack", "Ranged Spell Attack", "Melee or Ranged Weapon Attack", "Action"};
 
     // images
-    private static final ImageIcon D20_ICON = new ImageIcon(ICON_DIRECTORY + "d20.png");
-
+    private static final ImageIcon D20_ICON = new ImageIcon(ClassLoader.getSystemResource(ICON_DIRECTORY + "d20.png"));
     // parsing integers
     private int parsedXP;
     private int parsedHPAmountOfDice;
@@ -1066,14 +1065,19 @@ public class StatBlockCreatorFrame extends JFrame implements ActionListener, Lis
 
     // EFFECTS: returns a title from the given user fields and boxes but if any numbers are in the title or any
     //          other exceptions are thrown, it throws an exception
-    private Title getStatBlockTitle() throws IncompleteFieldException {
+    private Title getStatBlockTitle() throws IncompleteFieldException, IndexOutOfBoundsException {
         if (nameTextField.getText().matches(".*\\d+.*")) {
             throw new IndexOutOfBoundsException("title fields cannot contain numbers");
         }
-        return new Title(nameTextField.getText(),
-                Objects.requireNonNull(typeComboBox.getSelectedItem()).toString(),
-                Objects.requireNonNull(sizeComboBox.getSelectedItem()).toString(),
-                Objects.requireNonNull(alignmentComboBox.getSelectedItem()).toString());
+        try {
+            return new Title(nameTextField.getText(),
+                    Objects.requireNonNull(typeComboBox.getSelectedItem()).toString(),
+                    Objects.requireNonNull(sizeComboBox.getSelectedItem()).toString(),
+                    Objects.requireNonNull(alignmentComboBox.getSelectedItem()).toString());
+        } catch (IncompleteFieldException e) {
+            String newMessage = "TITLE: " + e.getMessage();
+            throw new IncompleteFieldException(newMessage);
+        }
     }
 
     // EFFECTS: returns an armour from the given user fields and throws an exception if any issues are found
@@ -1081,18 +1085,26 @@ public class StatBlockCreatorFrame extends JFrame implements ActionListener, Lis
         String armourName = armourNameTextField.getText();
         int magicArmour = 0;
 
-        if (armourName.equals("")) {
-            armourName = null;
-        }
+        try {
+            if (armourName.equals("")) {
+                armourName = null;
+            }
 
-        if (!magicArmourTextField.getText().isEmpty()) {
-            magicArmour = Integer.parseInt(magicArmourTextField.getText());
-        }
+            if (!magicArmourTextField.getText().isEmpty()) {
+                magicArmour = Integer.parseInt(magicArmourTextField.getText());
+            }
 
-        return new Armour.ArmourBuilder(Integer.parseInt(armourTextField.getText()))
-                .magicArmour(magicArmour)
-                .armourName(armourName)
-                .build();
+            return new Armour.ArmourBuilder(Integer.parseInt(armourTextField.getText()))
+                    .magicArmour(magicArmour)
+                    .armourName(armourName)
+                    .build();
+        } catch (NumberFormatException e) {
+            String newMessage = "ARMOR: " + e.getMessage();
+            throw new NumberFormatException(newMessage);
+        } catch (IncompleteFieldException e) {
+            String newMessage = "ARMOR: " + e.getMessage();
+            throw new IncompleteFieldException(newMessage);
+        }
     }
 
     // EFFECTS: returns a speeds from the given user fields and throws an exception if any issues are found
@@ -1102,20 +1114,25 @@ public class StatBlockCreatorFrame extends JFrame implements ActionListener, Lis
         int burrow = 0;
         int climb = 0;
 
-        if (!flyTextField.getText().isEmpty()) {
-            fly = Integer.parseInt(flyTextField.getText());
-        }
+        try {
+            if (!flyTextField.getText().isEmpty()) {
+                fly = Integer.parseInt(flyTextField.getText());
+            }
 
-        if (!flyTextField.getText().isEmpty()) {
-            swim = Integer.parseInt(swimTextField.getText());
-        }
+            if (!swimTextField.getText().isEmpty()) {
+                swim = Integer.parseInt(swimTextField.getText());
+            }
 
-        if (!flyTextField.getText().isEmpty()) {
-            burrow = Integer.parseInt(burrowTextField.getText());
-        }
+            if (!burrowTextField.getText().isEmpty()) {
+                burrow = Integer.parseInt(burrowTextField.getText());
+            }
 
-        if (!flyTextField.getText().isEmpty()) {
-            climb = Integer.parseInt(climbTextField.getText());
+            if (!climbTextField.getText().isEmpty()) {
+                climb = Integer.parseInt(climbTextField.getText());
+            }
+        } catch (NumberFormatException e) {
+            String newMessage = "SPEEDS: " + e.getMessage();
+            throw new NumberFormatException(newMessage);
         }
 
         return new Speeds.SpeedsBuilder(Integer.parseInt(speedTextField.getText()))
@@ -1133,20 +1150,25 @@ public class StatBlockCreatorFrame extends JFrame implements ActionListener, Lis
         int blindSight = 0;
         int darkVision = 0;
 
-        if (!tremorSenseTextField.getText().isEmpty()) {
-            tremorSense = Integer.parseInt(tremorSenseTextField.getText());
-        }
+        try {
+            if (!tremorSenseTextField.getText().isEmpty()) {
+                tremorSense = Integer.parseInt(tremorSenseTextField.getText());
+            }
 
-        if (!trueSightTextField.getText().isEmpty()) {
-            trueSight = Integer.parseInt(trueSightTextField.getText());
-        }
+            if (!trueSightTextField.getText().isEmpty()) {
+                trueSight = Integer.parseInt(trueSightTextField.getText());
+            }
 
-        if (!blindSightTextField.getText().isEmpty()) {
-            blindSight = Integer.parseInt(blindSightTextField.getText());
-        }
+            if (!blindSightTextField.getText().isEmpty()) {
+                blindSight = Integer.parseInt(blindSightTextField.getText());
+            }
 
-        if (!darkVisionTextField.getText().isEmpty()) {
-            darkVision = Integer.parseInt(darkVisionTextField.getText());
+            if (!darkVisionTextField.getText().isEmpty()) {
+                darkVision = Integer.parseInt(darkVisionTextField.getText());
+            }
+        } catch (NumberFormatException e) {
+            String newMessage = "SENSES: " + e.getMessage();
+            throw new NumberFormatException(newMessage);
         }
 
         return new Senses.SensesBuilder(Integer.parseInt(passivePerceptionTextField.getText()))
@@ -1159,12 +1181,20 @@ public class StatBlockCreatorFrame extends JFrame implements ActionListener, Lis
 
     // EFFECTS: returns an ability score set from the given user fields and throws an exception if any issues are found
     private AbilityScoreSet getAbilityScores() throws NumberFormatException, IndexOutOfBoundsException {
-        return new AbilityScoreSet(Integer.parseInt(strengthTextField.getText()),
-                Integer.parseInt(dexterityTextField.getText()),
-                Integer.parseInt(constitutionTextField.getText()),
-                Integer.parseInt(intelligenceTextField.getText()),
-                Integer.parseInt(wisdomTextField.getText()),
-                Integer.parseInt(charismaTextField.getText()));
+        try {
+            return new AbilityScoreSet(Integer.parseInt(strengthTextField.getText()),
+                    Integer.parseInt(dexterityTextField.getText()),
+                    Integer.parseInt(constitutionTextField.getText()),
+                    Integer.parseInt(intelligenceTextField.getText()),
+                    Integer.parseInt(wisdomTextField.getText()),
+                    Integer.parseInt(charismaTextField.getText()));
+        } catch (NumberFormatException e) {
+            String newMessage = "ABILITIES: " + e.getMessage();
+            throw new NumberFormatException(newMessage);
+        } catch (IndexOutOfBoundsException e) {
+            String newMessage = "ABILITIES: " + e.getMessage();
+            throw new IndexOutOfBoundsException(newMessage);
+        }
     }
 
     // EFFECTS: returns all rollable actions from the given user fields and throws an exception if any issues are found

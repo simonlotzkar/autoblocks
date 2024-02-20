@@ -1,7 +1,6 @@
 package ui.frames;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 
 import ui.panels.menus.MenuManagerPanel;
 
@@ -9,16 +8,13 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.File;
-import java.io.IOException;
 
 // represents the main frame that contains the main panel
 public class MainFrame extends JFrame {
     private static final int WIDTH = 1080;
     private static final int HEIGHT = 720;
 
-    private static final ImageIcon DND_ICON = new ImageIcon("./data/images/icons/dndLogo.png");
-
+    private static final ImageIcon DND_ICON = new ImageIcon(ClassLoader.getSystemResource("images/icons/dndLogo.png"));
     // EFFECTS: constructs this frame
     public MainFrame() {
         super("AutoBlocks");
