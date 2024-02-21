@@ -1041,16 +1041,32 @@ public class StatBlockCreatorFrame extends JFrame implements ActionListener, Lis
 
     // REQUIRES: StatBlock single fields are not empty
     // EFFECTS: parses the single StatBlock fields into integers and assigns them
+    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
     private void parseStatBlockSingleFields() throws IncompleteFieldException {
         try {
             parsedXP = Integer.parseInt(xpTextField.getText());
+        } catch (Exception e) {
+            throw new IncompleteFieldException("XP is empty or invalid");
+        }
+        try {
             parsedHPAmountOfDice = Integer.parseInt(hpAmountOfDiceTextField.getText());
+        } catch (Exception e) {
+            throw new IncompleteFieldException("HP amount is empty or invalid");
+        }
+        try {
             parsedHPDieSides = Integer.parseInt(hpDieSidesTextField.getText());
+        } catch (Exception e) {
+            throw new IncompleteFieldException("HP sides is empty or invalid");
+        }
+        try {
             parsedHPModifier = Integer.parseInt(hpModifierTextField.getText());
+        } catch (Exception e) {
+            throw new IncompleteFieldException("HP modifier is empty or invalid");
+        }
+        try {
             parsedProficiency = Integer.parseInt(proficiencyTextField.getText());
-        } catch (NumberFormatException e) {
-            throw new IncompleteFieldException("Required single field (xp, hp formula, or proficiency) "
-                    + "is empty or invalid.");
+        } catch (Exception e) {
+            throw new IncompleteFieldException("Proficiency is empty or invalid");
         }
     }
 
@@ -1101,12 +1117,15 @@ public class StatBlockCreatorFrame extends JFrame implements ActionListener, Lis
     // EFFECTS: returns a speeds from the given user fields and throws an exception if any issues are found
     @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
     private Speeds getSpeeds() throws NumberFormatException, IndexOutOfBoundsException {
+        int speed;
         int fly = 0;
         int swim = 0;
         int burrow = 0;
         int climb = 0;
 
         try {
+            speed = Integer.parseInt(speedTextField.getText());
+
             if (!flyTextField.getText().isEmpty()) {
                 fly = Integer.parseInt(flyTextField.getText());
             }
@@ -1127,7 +1146,7 @@ public class StatBlockCreatorFrame extends JFrame implements ActionListener, Lis
             throw new NumberFormatException(newMessage);
         }
 
-        return new Speeds.SpeedsBuilder(Integer.parseInt(speedTextField.getText()))
+        return new Speeds.SpeedsBuilder(speed)
                 .swim(swim)
                 .fly(fly)
                 .burrow(burrow)
@@ -1138,12 +1157,15 @@ public class StatBlockCreatorFrame extends JFrame implements ActionListener, Lis
     // EFFECTS: returns a senses from the given user fields and throws an exception if any issues are found
     @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
     private Senses getSenses() throws NumberFormatException, IndexOutOfBoundsException {
+        int perception;
         int tremorSense = 0;
         int trueSight = 0;
         int blindSight = 0;
         int darkVision = 0;
 
         try {
+            perception = Integer.parseInt(passivePerceptionTextField.getText());
+
             if (!tremorSenseTextField.getText().isEmpty()) {
                 tremorSense = Integer.parseInt(tremorSenseTextField.getText());
             }
@@ -1164,7 +1186,7 @@ public class StatBlockCreatorFrame extends JFrame implements ActionListener, Lis
             throw new NumberFormatException(newMessage);
         }
 
-        return new Senses.SensesBuilder(Integer.parseInt(passivePerceptionTextField.getText()))
+        return new Senses.SensesBuilder(perception)
                 .tremorSense(tremorSense)
                 .trueSight(trueSight)
                 .blindSight(blindSight)
