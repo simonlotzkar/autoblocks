@@ -118,6 +118,7 @@ public class StatBlockDisplayTextArea extends JTextArea {
     // EFFECTS: adds the selected statblock's abilities data to the text area
     private void populateAbilitiesPanel() {
         if (selectedStatBlock.getAbilities() != null) {
+            this.append("\n\nAbilities");
             this.append("\n---------------");
             for (Ability a : selectedStatBlock.getAbilities()) {
                 this.append("\n" + a.toString());

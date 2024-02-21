@@ -1028,6 +1028,7 @@ public class StatBlockCreatorFrame extends JFrame implements ActionListener, Lis
                     .conditionImmunities(getConditionImmunities())
                     .resistances(getResistances())
                     .legendaryMechanics(getLegendaryMechanics())
+                    .abilities(getAbilities())
                     .build();
 
             mainMenuPanel.getMenuManagerPanel().getStatBlockLibrary().addElement(statBlock);
@@ -1454,6 +1455,21 @@ public class StatBlockCreatorFrame extends JFrame implements ActionListener, Lis
                     .build();
         } else {
             return null;
+        }
+    }
+
+    // EFFECTS: returns a list of abilities from the given user fields
+    private ArrayList<Ability> getAbilities() {
+        ArrayList<Ability> newAbilities = new ArrayList<>();
+
+        for (int i = 0; i < abilitiesListModel.getSize(); i++) {
+            newAbilities.add(abilitiesListModel.getElementAt(i));
+        }
+
+        if (abilitiesListModel.isEmpty()) {
+            return null;
+        } else {
+            return newAbilities;
         }
     }
 

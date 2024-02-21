@@ -118,6 +118,7 @@ public class NonPlayerCharacterDisplayTextArea extends JTextArea {
     // EFFECTS: adds the selected npc's abilities data to the text area
     private void initializeAbilitiesPanel() {
         if (selectedNPC.getAbilities() != null) {
+            this.append("\n\nAbilities");
             this.append("\n---------------");
             for (Ability a : selectedNPC.getAbilities()) {
                 this.append("\n" + a.toString());
