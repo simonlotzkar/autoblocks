@@ -23,13 +23,10 @@ focus on the rest of the game. This is for personal use, but I think any DM woul
 </p>
 
 ### Usage:
-Download the jar from
-[this link here](https://drive.google.com/file/d/1Ka9iZDmY39zismaPqZYcx4jRnOoq-Fe6/view?usp=sharing).
+Download the jar. From this page (/main) -> "out" -> "artifacts/AutoBlocks_jar" -> "AutoBlocks.jar" -> on the top right, click the download icon ("download raw file"). 
 Or you can fork and compile the code from an IDE/command line.
 <br/>
-Once in the app, save and load to any directory. I have an example file from 
-[this link here](https://drive.google.com/file/d/1ThDA3bB_DW5DZm7RE5bzSn8wl3AMPnmI/view?usp=sharing)
-that you can load from to get an idea of what this app can do.
+Once in the app, save and load to any directory. I have an example file that you can download and use. From this page (/main) -> "autoBlocksApp.json" -> on the top right, click the download icon ("download raw file"). 
 
 ### Known Limitations/Bugs:
 - custom action window is unimplemented (button does nothing)
