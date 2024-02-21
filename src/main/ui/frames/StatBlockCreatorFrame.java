@@ -12,7 +12,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -98,6 +97,25 @@ public class StatBlockCreatorFrame extends JFrame implements ActionListener, Lis
     private final JComboBox<String> actionDamageTypeComboBox = new JComboBox<>(DamageType
             .getStringArrayList().toArray(new String[0]));
 
+    private final JComboBox<Integer> acrobaticsProficiencyComboBox = new JComboBox<>(SKILL_OPTIONS);
+    private final JComboBox<Integer> animalHandlingProficiencyComboBox = new JComboBox<>(SKILL_OPTIONS);
+    private final JComboBox<Integer> arcanaProficiencyComboBox = new JComboBox<>(SKILL_OPTIONS);
+    private final JComboBox<Integer> athleticsProficiencyComboBox = new JComboBox<>(SKILL_OPTIONS);
+    private final JComboBox<Integer> deceptionProficiencyComboBox = new JComboBox<>(SKILL_OPTIONS);
+    private final JComboBox<Integer> historyProficiencyComboBox = new JComboBox<>(SKILL_OPTIONS);
+    private final JComboBox<Integer> insightProficiencyComboBox = new JComboBox<>(SKILL_OPTIONS);
+    private final JComboBox<Integer> intimidationProficiencyComboBox = new JComboBox<>(SKILL_OPTIONS);
+    private final JComboBox<Integer> investigationProficiencyComboBox = new JComboBox<>(SKILL_OPTIONS);
+    private final JComboBox<Integer> medicineProficiencyComboBox = new JComboBox<>(SKILL_OPTIONS);
+    private final JComboBox<Integer> natureProficiencyComboBox = new JComboBox<>(SKILL_OPTIONS);
+    private final JComboBox<Integer> perceptionProficiencyComboBox = new JComboBox<>(SKILL_OPTIONS);
+    private final JComboBox<Integer> performanceProficiencyComboBox = new JComboBox<>(SKILL_OPTIONS);
+    private final JComboBox<Integer> persuasionProficiencyComboBox = new JComboBox<>(SKILL_OPTIONS);
+    private final JComboBox<Integer> religionProficiencyComboBox = new JComboBox<>(SKILL_OPTIONS);
+    private final JComboBox<Integer> sleightOfHandProficiencyComboBox = new JComboBox<>(SKILL_OPTIONS);
+    private final JComboBox<Integer> stealthProficiencyComboBox = new JComboBox<>(SKILL_OPTIONS);
+    private final JComboBox<Integer> survivalProficiencyComboBox = new JComboBox<>(SKILL_OPTIONS);
+
     // check boxes
     private final ArrayList<JCheckBox> savingThrowCheckBoxList = new ArrayList<>();
     private final JCheckBox strengthSavingThrowProficiencyCheckBox = new JCheckBox("strength");
@@ -106,26 +124,6 @@ public class StatBlockCreatorFrame extends JFrame implements ActionListener, Lis
     private final JCheckBox intelligenceSavingThrowProficiencyCheckBox = new JCheckBox("intelligence");
     private final JCheckBox wisdomSavingThrowProficiencyCheckBox = new JCheckBox("wisdom");
     private final JCheckBox charismaSavingThrowProficiencyCheckBox = new JCheckBox("charisma");
-
-    private final ArrayList<JCheckBox> skillCheckBoxList = new ArrayList<>();
-    private final JCheckBox acrobaticsProficiencyCheckBox = new JCheckBox("acrobatics");
-    private final JCheckBox animalHandlingProficiencyCheckBox = new JCheckBox("animalHandling");
-    private final JCheckBox arcanaProficiencyCheckBox = new JCheckBox("arcana");
-    private final JCheckBox athleticsProficiencyCheckBox = new JCheckBox("athletics");
-    private final JCheckBox deceptionProficiencyCheckBox = new JCheckBox("deception");
-    private final JCheckBox historyProficiencyCheckBox = new JCheckBox("history");
-    private final JCheckBox insightProficiencyCheckBox = new JCheckBox("insight");
-    private final JCheckBox intimidationProficiencyCheckBox = new JCheckBox("intimidation");
-    private final JCheckBox investigationProficiencyCheckBox = new JCheckBox("investigation");
-    private final JCheckBox medicineProficiencyCheckBox = new JCheckBox("medicine");
-    private final JCheckBox natureProficiencyCheckBox = new JCheckBox("nature");
-    private final JCheckBox perceptionProficiencyCheckBox = new JCheckBox("perception");
-    private final JCheckBox performanceProficiencyCheckBox = new JCheckBox("performance");
-    private final JCheckBox persuasionProficiencyCheckBox = new JCheckBox("persuasion");
-    private final JCheckBox religionProficiencyCheckBox = new JCheckBox("religion");
-    private final JCheckBox sleightOfHandProficiencyCheckBox = new JCheckBox("sleightOfHand");
-    private final JCheckBox stealthProficiencyCheckBox = new JCheckBox("stealth");
-    private final JCheckBox survivalProficiencyCheckBox = new JCheckBox("survival");
 
     private final ArrayList<JCheckBox> immunityCheckBoxList = new ArrayList<>();
     private final JCheckBox blindedImmunityCheckBox = new JCheckBox("blinded");
@@ -240,6 +238,7 @@ public class StatBlockCreatorFrame extends JFrame implements ActionListener, Lis
     private static final String[] RESISTANCE_OPTIONS = {"---", "Resistance", "Vulnerability", "Immunity"};
     private static final String[] ACTION_DESCRIPTIONS = {"Melee Weapon Attack", "Melee Spell Attack",
             "Ranged Weapon Attack", "Ranged Spell Attack", "Melee or Ranged Weapon Attack", "Action"};
+    private static final Integer[] SKILL_OPTIONS = {0,1,2};
 
     // images
     private static final ImageIcon D20_ICON = new ImageIcon(ClassLoader.getSystemResource(ICON_DIRECTORY + "d20.png"));
@@ -288,7 +287,6 @@ public class StatBlockCreatorFrame extends JFrame implements ActionListener, Lis
         initializeLegendaryCreationPanel();
 
         buildSavingThrowCheckBoxList();
-        buildSkillCheckBoxList();
         buildImmunityCheckBoxList();
 
         formatTextFields();
@@ -378,29 +376,6 @@ public class StatBlockCreatorFrame extends JFrame implements ActionListener, Lis
     }
 
     // MODIFIES: this
-    // EFFECTS: adds all skill check boxes to its list
-    private void buildSkillCheckBoxList() {
-        skillCheckBoxList.add(acrobaticsProficiencyCheckBox);
-        skillCheckBoxList.add(animalHandlingProficiencyCheckBox);
-        skillCheckBoxList.add(arcanaProficiencyCheckBox);
-        skillCheckBoxList.add(athleticsProficiencyCheckBox);
-        skillCheckBoxList.add(deceptionProficiencyCheckBox);
-        skillCheckBoxList.add(historyProficiencyCheckBox);
-        skillCheckBoxList.add(insightProficiencyCheckBox);
-        skillCheckBoxList.add(intimidationProficiencyCheckBox);
-        skillCheckBoxList.add(investigationProficiencyCheckBox);
-        skillCheckBoxList.add(medicineProficiencyCheckBox);
-        skillCheckBoxList.add(natureProficiencyCheckBox);
-        skillCheckBoxList.add(perceptionProficiencyCheckBox);
-        skillCheckBoxList.add(performanceProficiencyCheckBox);
-        skillCheckBoxList.add(persuasionProficiencyCheckBox);
-        skillCheckBoxList.add(religionProficiencyCheckBox);
-        skillCheckBoxList.add(sleightOfHandProficiencyCheckBox);
-        skillCheckBoxList.add(stealthProficiencyCheckBox);
-        skillCheckBoxList.add(survivalProficiencyCheckBox);
-    }
-
-    // MODIFIES: this
     // EFFECTS: adds all immunity check boxes to its list
     private void buildImmunityCheckBoxList() {
         immunityCheckBoxList.add(blindedImmunityCheckBox);
@@ -465,9 +440,6 @@ public class StatBlockCreatorFrame extends JFrame implements ActionListener, Lis
     // EFFECTS: formats all check boxes
     private void formatCheckBoxes() {
         for (JCheckBox cb : savingThrowCheckBoxList) {
-            cb.setOpaque(false);
-        }
-        for (JCheckBox cb : skillCheckBoxList) {
             cb.setOpaque(false);
         }
         for (JCheckBox cb : immunityCheckBoxList) {
@@ -802,28 +774,47 @@ public class StatBlockCreatorFrame extends JFrame implements ActionListener, Lis
 
     // MODIFIES: this
     // EFFECTS: formats the skills panel
+    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
     private void initializeSkillsPanel() {
         skillsPanel.setLayout(new FlowLayout(FlowLayout.LEFT, FLOW_H_GAP, FLOW_V_GAP));
         skillsPanel.setPreferredSize(new Dimension(this.getWidth(), 80));
         skillsPanel.add(new JLabel("Skill Proficiencies:"));
-        skillsPanel.add(acrobaticsProficiencyCheckBox);
-        skillsPanel.add(animalHandlingProficiencyCheckBox);
-        skillsPanel.add(arcanaProficiencyCheckBox);
-        skillsPanel.add(athleticsProficiencyCheckBox);
-        skillsPanel.add(deceptionProficiencyCheckBox);
-        skillsPanel.add(historyProficiencyCheckBox);
-        skillsPanel.add(insightProficiencyCheckBox);
-        skillsPanel.add(intimidationProficiencyCheckBox);
-        skillsPanel.add(investigationProficiencyCheckBox);
-        skillsPanel.add(medicineProficiencyCheckBox);
-        skillsPanel.add(natureProficiencyCheckBox);
-        skillsPanel.add(perceptionProficiencyCheckBox);
-        skillsPanel.add(performanceProficiencyCheckBox);
-        skillsPanel.add(persuasionProficiencyCheckBox);
-        skillsPanel.add(religionProficiencyCheckBox);
-        skillsPanel.add(sleightOfHandProficiencyCheckBox);
-        skillsPanel.add(stealthProficiencyCheckBox);
-        skillsPanel.add(survivalProficiencyCheckBox);
+        skillsPanel.add(new JLabel("Acrobatics"));
+        skillsPanel.add(acrobaticsProficiencyComboBox);
+        skillsPanel.add(new JLabel("Animal Handling"));
+        skillsPanel.add(animalHandlingProficiencyComboBox);
+        skillsPanel.add(new JLabel("Arcana"));
+        skillsPanel.add(arcanaProficiencyComboBox);
+        skillsPanel.add(new JLabel("Athletics"));
+        skillsPanel.add(athleticsProficiencyComboBox);
+        skillsPanel.add(new JLabel("Deception"));
+        skillsPanel.add(deceptionProficiencyComboBox);
+        skillsPanel.add(new JLabel("History"));
+        skillsPanel.add(historyProficiencyComboBox);
+        skillsPanel.add(new JLabel("Insight"));
+        skillsPanel.add(insightProficiencyComboBox);
+        skillsPanel.add(new JLabel("Intimidation"));
+        skillsPanel.add(intimidationProficiencyComboBox);
+        skillsPanel.add(new JLabel("Investigation"));
+        skillsPanel.add(investigationProficiencyComboBox);
+        skillsPanel.add(new JLabel("Medicine"));
+        skillsPanel.add(medicineProficiencyComboBox);
+        skillsPanel.add(new JLabel("Nature"));
+        skillsPanel.add(natureProficiencyComboBox);
+        skillsPanel.add(new JLabel("Perception"));
+        skillsPanel.add(perceptionProficiencyComboBox);
+        skillsPanel.add(new JLabel("Performance"));
+        skillsPanel.add(performanceProficiencyComboBox);
+        skillsPanel.add(new JLabel("Persuasion"));
+        skillsPanel.add(persuasionProficiencyComboBox);
+        skillsPanel.add(new JLabel("Religion"));
+        skillsPanel.add(religionProficiencyComboBox);
+        skillsPanel.add(new JLabel("Sleight Of Hand"));
+        skillsPanel.add(sleightOfHandProficiencyComboBox);
+        skillsPanel.add(new JLabel("Stealth"));
+        skillsPanel.add(stealthProficiencyComboBox);
+        skillsPanel.add(new JLabel("Survival"));
+        skillsPanel.add(survivalProficiencyComboBox);
         skillsPanel.setOpaque(false);
     }
 
@@ -1108,6 +1099,7 @@ public class StatBlockCreatorFrame extends JFrame implements ActionListener, Lis
     }
 
     // EFFECTS: returns a speeds from the given user fields and throws an exception if any issues are found
+    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
     private Speeds getSpeeds() throws NumberFormatException, IndexOutOfBoundsException {
         int fly = 0;
         int swim = 0;
@@ -1144,6 +1136,7 @@ public class StatBlockCreatorFrame extends JFrame implements ActionListener, Lis
     }
 
     // EFFECTS: returns a senses from the given user fields and throws an exception if any issues are found
+    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
     private Senses getSenses() throws NumberFormatException, IndexOutOfBoundsException {
         int tremorSense = 0;
         int trueSight = 0;
@@ -1225,18 +1218,81 @@ public class StatBlockCreatorFrame extends JFrame implements ActionListener, Lis
     }
 
     // EFFECTS: returns all skill proficiencies from the given user fields and throws an exception if any issues are
-    //          found
-    private ArrayList<Skill> getSkillProficiencies() {
-        ArrayList<Skill> skills = new ArrayList<>();
+    //          found TODO exception
+    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
+    private HashMap<Skill, Integer> getSkillProficiencies() {
+        HashMap<Skill, Integer> skills = new HashMap<>();
 
-        for (JCheckBox cb : skillCheckBoxList) {
-            if (cb.isSelected()) {
-                for (Skill s : Skill.values()) {
-                    if (cb.getText().equalsIgnoreCase(s.toString())) {
-                        skills.add(s);
-                    }
-                }
-            }
+        if (acrobaticsProficiencyComboBox.getSelectedIndex() > 0) {
+            skills.put(Skill.ACROBATICS, acrobaticsProficiencyComboBox.getSelectedIndex());
+        }
+
+        if (animalHandlingProficiencyComboBox.getSelectedIndex() > 0) {
+            skills.put(Skill.ANIMAL_HANDLING, animalHandlingProficiencyComboBox.getSelectedIndex());
+        }
+
+        if (arcanaProficiencyComboBox.getSelectedIndex() > 0) {
+            skills.put(Skill.ARCANA, arcanaProficiencyComboBox.getSelectedIndex());
+        }
+
+        if (athleticsProficiencyComboBox.getSelectedIndex() > 0) {
+            skills.put(Skill.ATHLETICS, athleticsProficiencyComboBox.getSelectedIndex());
+        }
+
+        if (deceptionProficiencyComboBox.getSelectedIndex() > 0) {
+            skills.put(Skill.DECEPTION, deceptionProficiencyComboBox.getSelectedIndex());
+        }
+
+        if (historyProficiencyComboBox.getSelectedIndex() > 0) {
+            skills.put(Skill.HISTORY, historyProficiencyComboBox.getSelectedIndex());
+        }
+
+        if (insightProficiencyComboBox.getSelectedIndex() > 0) {
+            skills.put(Skill.INSIGHT, insightProficiencyComboBox.getSelectedIndex());
+        }
+
+        if (intimidationProficiencyComboBox.getSelectedIndex() > 0) {
+            skills.put(Skill.INTIMIDATION, intimidationProficiencyComboBox.getSelectedIndex());
+        }
+
+        if (investigationProficiencyComboBox.getSelectedIndex() > 0) {
+            skills.put(Skill.INVESTIGATION, investigationProficiencyComboBox.getSelectedIndex());
+        }
+
+        if (medicineProficiencyComboBox.getSelectedIndex() > 0) {
+            skills.put(Skill.MEDICINE, medicineProficiencyComboBox.getSelectedIndex());
+        }
+
+        if (natureProficiencyComboBox.getSelectedIndex() > 0) {
+            skills.put(Skill.NATURE, natureProficiencyComboBox.getSelectedIndex());
+        }
+
+        if (perceptionProficiencyComboBox.getSelectedIndex() > 0) {
+            skills.put(Skill.PERCEPTION, perceptionProficiencyComboBox.getSelectedIndex());
+        }
+
+        if (performanceProficiencyComboBox.getSelectedIndex() > 0) {
+            skills.put(Skill.PERFORMANCE, performanceProficiencyComboBox.getSelectedIndex());
+        }
+
+        if (persuasionProficiencyComboBox.getSelectedIndex() > 0) {
+            skills.put(Skill.PERSUASION, persuasionProficiencyComboBox.getSelectedIndex());
+        }
+
+        if (religionProficiencyComboBox.getSelectedIndex() > 0) {
+            skills.put(Skill.RELIGION, religionProficiencyComboBox.getSelectedIndex());
+        }
+
+        if (sleightOfHandProficiencyComboBox.getSelectedIndex() > 0) {
+            skills.put(Skill.SLEIGHT_OF_HAND, sleightOfHandProficiencyComboBox.getSelectedIndex());
+        }
+
+        if (stealthProficiencyComboBox.getSelectedIndex() > 0) {
+            skills.put(Skill.STEALTH, stealthProficiencyComboBox.getSelectedIndex());
+        }
+
+        if (survivalProficiencyComboBox.getSelectedIndex() > 0) {
+            skills.put(Skill.SURVIVAL, survivalProficiencyComboBox.getSelectedIndex());
         }
 
         return skills;
@@ -1260,6 +1316,7 @@ public class StatBlockCreatorFrame extends JFrame implements ActionListener, Lis
     }
 
     // EFFECTS: returns all resistances from the given user fields and throws an exception if any issues are found
+    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
     private HashMap<DamageType, ResistanceType> getResistances() {
         HashMap<DamageType, ResistanceType> resistances = new HashMap<>();
 
@@ -1283,12 +1340,7 @@ public class StatBlockCreatorFrame extends JFrame implements ActionListener, Lis
                 resistances.put(DamageType.COLD, rt);
             }
         }
-        return getResistancesHelperOne(resistances);
-    }
 
-    // EFFECTS: helper for getResistances
-    private HashMap<DamageType, ResistanceType> getResistancesHelperOne(
-            HashMap<DamageType, ResistanceType> resistances) {
         for (ResistanceType rt : ResistanceType.values()) {
             if (Objects.requireNonNull(fireResistanceComboBox.getSelectedItem()).toString()
                     .equalsIgnoreCase(rt.toString())) {
@@ -1310,12 +1362,6 @@ public class StatBlockCreatorFrame extends JFrame implements ActionListener, Lis
             }
         }
 
-        return getResistancesHelperTwo(resistances);
-    }
-
-    // EFFECTS: helper for getResistances
-    private HashMap<DamageType, ResistanceType> getResistancesHelperTwo(
-            HashMap<DamageType, ResistanceType> resistances) {
         for (ResistanceType rt : ResistanceType.values()) {
             if (Objects.requireNonNull(necroticResistanceComboBox.getSelectedItem()).toString()
                     .equalsIgnoreCase(rt.toString())) {
@@ -1337,12 +1383,6 @@ public class StatBlockCreatorFrame extends JFrame implements ActionListener, Lis
             }
         }
 
-        return getResistancesHelperThree(resistances);
-    }
-
-    // EFFECTS: helper for getResistances
-    private HashMap<DamageType, ResistanceType> getResistancesHelperThree(
-            HashMap<DamageType, ResistanceType> resistances) {
         for (ResistanceType rt : ResistanceType.values()) {
             if (Objects.requireNonNull(psychicResistanceComboBox.getSelectedItem()).toString()
                     .equalsIgnoreCase(rt.toString())) {
@@ -1364,12 +1404,6 @@ public class StatBlockCreatorFrame extends JFrame implements ActionListener, Lis
             }
         }
 
-        return getResistancesHelperFour(resistances);
-    }
-
-    // EFFECTS: helper for getResistances
-    private HashMap<DamageType, ResistanceType> getResistancesHelperFour(
-            HashMap<DamageType, ResistanceType> resistances) {
         for (ResistanceType rt : ResistanceType.values()) {
             if (Objects.requireNonNull(thunderResistanceComboBox.getSelectedItem()).toString()
                     .equalsIgnoreCase(rt.toString())) {

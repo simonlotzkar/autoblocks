@@ -81,7 +81,7 @@ public class RollableActionTest {
     @Test
     public void testGetStringAction1() {
         String testRollString = "Something Something Spell, Test Action 1 (60/120ft), "
-                + "(-5) to hit and (1d1+1) slashing damage and (1d1+1) fire damage";
+                + "(-5) to hit and (1d1+1) fire damage and (1d1+1) slashing damage";
         assertEquals(testRollString, testRollableAction1.toString());
     }
 

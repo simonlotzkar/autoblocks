@@ -241,26 +241,26 @@ public class StatBlockTest {
     }
 
     // EFFECTS: returns a list representing all possible skill proficiencies
-    protected List<Skill> getAllSkillProficiencies() {
-        List<Skill> skillProficiencies = new ArrayList<>();
-        skillProficiencies.add(Skill.ACROBATICS);
-        skillProficiencies.add(Skill.SLEIGHT_OF_HAND);
-        skillProficiencies.add(Skill.STEALTH);
-        skillProficiencies.add(Skill.ARCANA);
-        skillProficiencies.add(Skill.HISTORY);
-        skillProficiencies.add(Skill.RELIGION);
-        skillProficiencies.add(Skill.INVESTIGATION);
-        skillProficiencies.add(Skill.NATURE);
-        skillProficiencies.add(Skill.ATHLETICS);
-        skillProficiencies.add(Skill.DECEPTION);
-        skillProficiencies.add(Skill.INTIMIDATION);
-        skillProficiencies.add(Skill.PERFORMANCE);
-        skillProficiencies.add(Skill.PERSUASION);
-        skillProficiencies.add(Skill.ANIMAL_HANDLING);
-        skillProficiencies.add(Skill.INSIGHT);
-        skillProficiencies.add(Skill.MEDICINE);
-        skillProficiencies.add(Skill.PERCEPTION);
-        skillProficiencies.add(Skill.SURVIVAL);
+    protected HashMap<Skill, Integer> getAllSkillProficiencies() {
+        HashMap<Skill, Integer> skillProficiencies = new HashMap<>();
+        skillProficiencies.put(Skill.ACROBATICS, 1);
+        skillProficiencies.put(Skill.SLEIGHT_OF_HAND, 1);
+        skillProficiencies.put(Skill.STEALTH, 1);
+        skillProficiencies.put(Skill.ARCANA, 1);
+        skillProficiencies.put(Skill.HISTORY, 1);
+        skillProficiencies.put(Skill.RELIGION, 1);
+        skillProficiencies.put(Skill.INVESTIGATION, 1);
+        skillProficiencies.put(Skill.NATURE, 1);
+        skillProficiencies.put(Skill.ATHLETICS, 1);
+        skillProficiencies.put(Skill.DECEPTION, 1);
+        skillProficiencies.put(Skill.INTIMIDATION, 1);
+        skillProficiencies.put(Skill.PERFORMANCE, 1);
+        skillProficiencies.put(Skill.PERSUASION, 1);
+        skillProficiencies.put(Skill.ANIMAL_HANDLING, 1);
+        skillProficiencies.put(Skill.INSIGHT, 1);
+        skillProficiencies.put(Skill.MEDICINE, 1);
+        skillProficiencies.put(Skill.PERCEPTION, 1);
+        skillProficiencies.put(Skill.SURVIVAL, 1);
         return skillProficiencies;
     }
 
@@ -388,24 +388,24 @@ public class StatBlockTest {
 
     @Test
     public void testGetSkillProficienciesString() {
-        String testString = "acrobatics " + (statBlock2.getAbilityScores().toModifier(AbilityScore.DEXTERITY) + PROFICIENCY_2)
-                + ", animal_handling " + (statBlock2.getAbilityScores().toModifier(AbilityScore.WISDOM) + PROFICIENCY_2)
-                + ", arcana " + (statBlock2.getAbilityScores().toModifier(AbilityScore.INTELLIGENCE) + PROFICIENCY_2)
-                + ", athletics " + (statBlock2.getAbilityScores().toModifier(AbilityScore.STRENGTH) + PROFICIENCY_2)
-                + ", deception " + (statBlock2.getAbilityScores().toModifier(AbilityScore.CHARISMA) + PROFICIENCY_2)
-                + ", history " + (statBlock2.getAbilityScores().toModifier(AbilityScore.INTELLIGENCE) + PROFICIENCY_2)
-                + ", insight " + (statBlock2.getAbilityScores().toModifier(AbilityScore.WISDOM) + PROFICIENCY_2)
-                + ", intimidation " + (statBlock2.getAbilityScores().toModifier(AbilityScore.CHARISMA) + PROFICIENCY_2)
-                + ", investigation " + (statBlock2.getAbilityScores().toModifier(AbilityScore.INTELLIGENCE) + PROFICIENCY_2)
-                + ", medicine " + (statBlock2.getAbilityScores().toModifier(AbilityScore.WISDOM) + PROFICIENCY_2)
-                + ", nature " + (statBlock2.getAbilityScores().toModifier(AbilityScore.INTELLIGENCE) + PROFICIENCY_2)
-                + ", perception " + (statBlock2.getAbilityScores().toModifier(AbilityScore.WISDOM) + PROFICIENCY_2)
-                + ", performance " + (statBlock2.getAbilityScores().toModifier(AbilityScore.CHARISMA) + PROFICIENCY_2)
-                + ", persuasion " + (statBlock2.getAbilityScores().toModifier(AbilityScore.CHARISMA) + PROFICIENCY_2)
-                + ", religion " + (statBlock2.getAbilityScores().toModifier(AbilityScore.INTELLIGENCE) + PROFICIENCY_2)
-                + ", sleight_of_hand " + (statBlock2.getAbilityScores().toModifier(AbilityScore.DEXTERITY) + PROFICIENCY_2)
-                + ", stealth " + (statBlock2.getAbilityScores().toModifier(AbilityScore.DEXTERITY) + PROFICIENCY_2)
-                + ", survival " + (statBlock2.getAbilityScores().toModifier(AbilityScore.WISDOM) + PROFICIENCY_2)
+        String testString = "acrobatics proficiency (" + (statBlock2.getAbilityScores().toModifier(AbilityScore.DEXTERITY) + PROFICIENCY_2 + ")")
+                + ", animal_handling proficiency (" + (statBlock2.getAbilityScores().toModifier(AbilityScore.WISDOM) + PROFICIENCY_2 + ")")
+                + ", arcana proficiency (" + (statBlock2.getAbilityScores().toModifier(AbilityScore.INTELLIGENCE) + PROFICIENCY_2 + ")")
+                + ", athletics proficiency (" + (statBlock2.getAbilityScores().toModifier(AbilityScore.STRENGTH) + PROFICIENCY_2 + ")")
+                + ", deception proficiency (" + (statBlock2.getAbilityScores().toModifier(AbilityScore.CHARISMA) + PROFICIENCY_2 + ")")
+                + ", history proficiency (" + (statBlock2.getAbilityScores().toModifier(AbilityScore.INTELLIGENCE) + PROFICIENCY_2 + ")")
+                + ", insight proficiency (" + (statBlock2.getAbilityScores().toModifier(AbilityScore.WISDOM) + PROFICIENCY_2 + ")")
+                + ", intimidation proficiency (" + (statBlock2.getAbilityScores().toModifier(AbilityScore.CHARISMA) + PROFICIENCY_2 + ")")
+                + ", investigation proficiency (" + (statBlock2.getAbilityScores().toModifier(AbilityScore.INTELLIGENCE) + PROFICIENCY_2 + ")")
+                + ", medicine proficiency (" + (statBlock2.getAbilityScores().toModifier(AbilityScore.WISDOM) + PROFICIENCY_2 + ")")
+                + ", nature proficiency (" + (statBlock2.getAbilityScores().toModifier(AbilityScore.INTELLIGENCE) + PROFICIENCY_2 + ")")
+                + ", perception proficiency (" + (statBlock2.getAbilityScores().toModifier(AbilityScore.WISDOM) + PROFICIENCY_2 + ")")
+                + ", performance proficiency (" + (statBlock2.getAbilityScores().toModifier(AbilityScore.CHARISMA) + PROFICIENCY_2 + ")")
+                + ", persuasion proficiency (" + (statBlock2.getAbilityScores().toModifier(AbilityScore.CHARISMA) + PROFICIENCY_2 + ")")
+                + ", religion proficiency (" + (statBlock2.getAbilityScores().toModifier(AbilityScore.INTELLIGENCE) + PROFICIENCY_2 + ")")
+                + ", sleight_of_hand proficiency (" + (statBlock2.getAbilityScores().toModifier(AbilityScore.DEXTERITY) + PROFICIENCY_2 + ")")
+                + ", stealth proficiency (" + (statBlock2.getAbilityScores().toModifier(AbilityScore.DEXTERITY) + PROFICIENCY_2 + ")")
+                + ", survival proficiency (" + (statBlock2.getAbilityScores().toModifier(AbilityScore.WISDOM) + PROFICIENCY_2 + ")")
                 + ", ";
 
         assertEquals("", statBlock0.getSkillProficienciesString());

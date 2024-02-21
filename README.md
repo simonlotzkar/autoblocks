@@ -25,7 +25,8 @@ focus on the rest of the game. This is for personal use, but I think any DM woul
 - none :)
 
 ### TODO (in order):
-- remove proficiency, replace saving throw and skill proficiencies with set values
+- add proficiency level
+- revise creator exceptions
 - make custom action window
 
 ### 2.0 Improvements:

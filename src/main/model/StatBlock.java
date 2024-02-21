@@ -25,7 +25,7 @@ public class StatBlock implements Writable {
 
     // optional fields
     protected final List<AbilityScore> savingThrowProficiencies;
-    protected final List<Skill> skillProficiencies;
+    protected final HashMap<Skill, Integer> skillProficiencies;
     protected final List<Condition> conditionImmunities;
     protected final HashMap<DamageType, ResistanceType> resistances;
 
@@ -114,6 +114,7 @@ public class StatBlock implements Writable {
         if (legendaryMechanics != null) {
             json.put("legendaryMechanics", legendaryMechanics.toJson());
         }
+
         return json;
     }
 
@@ -297,23 +298,30 @@ public class StatBlock implements Writable {
     }
 
     // EFFECTS: gets skill proficiencies
-    public List<Skill> getSkillProficiencies() {
+    public HashMap<Skill, Integer> getSkillProficiencies() {
         return skillProficiencies;
     }
 
     // REQUIRES: skill is in skill proficiencies TODO throw IndexOutOfBoundsException
     // EFFECTS: returns all skill proficiencies as a string, or "" if none
     public String getSkillProficienciesString() {
-        if (skillProficiencies == null) {
+        if (skillProficiencies == null || skillProficiencies.isEmpty()) {
             return "";
         }
         StringBuilder skillProficienciesString = new StringBuilder();
-        for (Skill s : Skill.values()) {
-            if (skillProficiencies.contains(s)) {
-                skillProficienciesString.append(s.toString().toLowerCase())
+        for (Skill skill : Skill.values()) {
+            if (skillProficiencies.containsKey(skill)) {
+                String levelString = "proficiency";
+                if (skillProficiencies.get(skill) == 2) {
+                    levelString = "expertise";
+                }
+                skillProficienciesString.append(skill.toString().toLowerCase())
                         .append(" ")
-                        .append(proficiency + abilityScoreSet.toModifier(s.getAbilityScore()))
-                        .append(", ");
+                        .append(levelString)
+                        .append(" (")
+                        .append(proficiency * skillProficiencies.get(skill)
+                                + abilityScoreSet.toModifier(skill.getAbilityScore()))
+                        .append("), ");
             }
         }
         return skillProficienciesString.toString();
@@ -403,7 +411,7 @@ public class StatBlock implements Writable {
 
         // optional fields
         protected List<AbilityScore> savingThrowProficiencies;
-        protected List<Skill> skillProficiencies;
+        protected HashMap<Skill, Integer> skillProficiencies;
         protected List<Condition> conditionImmunities;
         protected HashMap<DamageType, ResistanceType> resistances;
 
@@ -458,7 +466,7 @@ public class StatBlock implements Writable {
         }
 
         // EFFECTS: returns a builder that assigns the given skill proficiencies to the StatBlock
-        public StatBlockBuilder skillProficiencies(List<Skill> skillProficiencies) {
+        public StatBlockBuilder skillProficiencies(HashMap<Skill, Integer> skillProficiencies) {
             this.skillProficiencies = skillProficiencies;
             return this;
         }

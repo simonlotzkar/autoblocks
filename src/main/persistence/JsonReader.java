@@ -85,7 +85,7 @@ public class JsonReader {
                     .abilities(parseAbilities(jsonObject.optJSONArray("abilities")))
                     .savingThrowProficiencies(
                             parseSavingThrowProficiencies(jsonObject.optJSONArray("savingThrowProficiencies")))
-                    .skillProficiencies(parseSkillProficiencies(jsonObject.optJSONArray("skillProficiencies")))
+                    .skillProficiencies(parseSkillProficiencies(jsonObject.optJSONObject("skillProficiencies")))
                     .conditionImmunities(parseConditionImmunities(jsonObject.optJSONArray("conditionImmunities")))
                     .resistances(parseResistances(jsonObject.optJSONObject("resistances")))
                     .legendaryMechanics(parseLegendaryMechanics(jsonObject.optJSONObject("legendaryMechanics")))
@@ -291,24 +291,42 @@ public class JsonReader {
         }
     }
 
-    // EFFECTS: parses skill proficiencies from JSON object and returns it
+    // EFFECTS: parses skill proficiency map from JSON object and returns it
     //          throws an exception if there is any errors when reading
-    private List<Skill> parseSkillProficiencies(JSONArray jsonArray) throws IncompleteFieldException {
-        if (jsonArray == null) {
+    private HashMap<Skill, Integer> parseSkillProficiencies(JSONObject jsonObject)
+            throws IncompleteFieldException {
+        if (jsonObject == null) {
             return null;
         }
-        List<Skill> skillProficiencies = new ArrayList<>();
-        for (Object json : jsonArray) {
-            for (Skill s : Skill.values()) {
-                if (json.toString().equalsIgnoreCase(s.toString())) {
-                    skillProficiencies.add(s);
-                }
+        Map<String, Object> jsonMap = jsonObject.toMap();
+        HashMap<Skill, Integer> skillProficiencies = new HashMap<>();
+
+        try {
+            jsonMap.forEach((s, o) -> skillProficiencies.put(parseSkill(s), parseInteger(o)));
+        } catch (IllegalArgumentException e) {
+            throw new IncompleteFieldException("skill proficiency read invalid string(s)");
+        }
+        return skillProficiencies;
+    }
+
+    // EFFECTS: returns the corresponding skill for the given string, throws an exception if the given string is
+    //          not a string representation of a skill
+    private Skill parseSkill(String string) throws IllegalArgumentException {
+        for (Skill s : Skill.values()) {
+            if (string.equalsIgnoreCase(s.toString())) {
+                return s;
             }
         }
-        if (skillProficiencies.isEmpty()) {
-            return null;
-        } else {
-            return skillProficiencies;
+        throw new IllegalArgumentException("given damage type string is not valid");
+    }
+
+    // EFFECTS: returns the integer value for the given object, throws an exception if the given object
+    //          is not an integer
+    private int parseInteger(Object o) throws IllegalArgumentException {
+        try {
+            return Integer.parseInt(o.toString());
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("given resistance type string is not valid");
         }
     }
 

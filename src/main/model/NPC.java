@@ -123,7 +123,6 @@ public class NPC extends StatBlock implements Writable {
         json.put("speeds", speeds.toJson());
         json.put("senses", senses.toJson());
         json.put("abilityScores", abilityScoreSet.toJson());
-        json.put("rollableActions", actionsToJson());
         return optionalFieldsToJson(json);
     }
 

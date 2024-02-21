@@ -65,8 +65,6 @@ public class NPCTest extends StatBlockTest {
         assertEquals(SPEEDS_0, statBlock0NPC0.getSpeeds());
         assertEquals(SENSES_0, statBlock0NPC0.getSenses());
         assertEquals(ABILITY_SCORES_0, statBlock0NPC0.getAbilityScores());
-
-        assertTrue(statBlock0NPC0.getRollableActions().isEmpty());
     }
 
     @Override
@@ -285,8 +283,6 @@ public class NPCTest extends StatBlockTest {
         assertEquals(1, json.getJSONObject("abilityScores").get("intelligence"));
         assertEquals(1, json.getJSONObject("abilityScores").get("wisdom"));
         assertEquals(1, json.getJSONObject("abilityScores").get("charisma"));
-
-        assertTrue(json.getJSONArray("rollableActions").isEmpty());
     }
 
     @Override
