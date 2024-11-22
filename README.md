@@ -23,13 +23,14 @@ focus on the rest of the game. This is for personal use, but I think any DM woul
 </p>
 
 ### Usage:
-Download the jar. From this page (/main) -> "out" -> "artifacts/AutoBlocks_jar" -> "AutoBlocks.jar" -> on the top right, click the download icon ("download raw file"). 
-Or you can fork and compile the code from an IDE/command line.
+Download the jar, navigate to it from this page: autoblocks/out/artifacts/AutoBlocks_jar/AutoBlocks.jar on the top right, click the download icon ("download raw file"). 
+Or you can clone and compile the code from an IDE/command line.
 <br/>
-Once in the app, save and load to any directory. I have an example file that you can download and use. From this page (/main) -> "autoBlocksApp.json" -> on the top right, click the download icon ("download raw file"). 
+Once in the app, save and load to any directory. I have an example file that you can download and use at: autoblocks/out/production/AutoBlocks/testAutoBlocksAppBaseCase.json
 
 ### Known Limitations/Bugs:
 - custom action window is unimplemented (button does nothing)
+- custom dice roller window doesn't open when using jar file (ide launch is ok)
 
 ### 2.0 Improvements:
 In the future I want to rebuild this project as a web application so it's more accessible. Here are some features I'd like to include as expansions:
