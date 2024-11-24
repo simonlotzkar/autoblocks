@@ -22,17 +22,23 @@ automate NPC mechanics. This app allows the DM to only exclude repetitive simple
 focus on the rest of the game. This is for personal use, but I think any DM would benefit from this app!
 </p>
 
-### Usage:
-Download the jar, navigate to it from this page: autoblocks/out/artifacts/AutoBlocks_jar/AutoBlocks.jar on the top right, click the download icon ("download raw file"). 
-Or you can clone and compile the code from an IDE/command line.
-<br/>
-Once in the app, save and load to any directory. I have an example file that you can download and use at: autoblocks/out/production/AutoBlocks/testAutoBlocksAppBaseCase.json
+## Usage:
+1. **Option 1: JAR File**  
+   - Navigate to the following path:  
+     `autoblocks/out/artifacts/AutoBlocks_jar/AutoBlocks.jar`  
+   - Click the download icon (🡇 **Download Raw File**) on the top-right corner.
+2. **Option 2: Use compiler**  
+     - Clone the repository and compile the code using an IDE or from the command line.
+3. **Save and Load Functionality**  
+   - Once inside the application, you can **save** and **load** to/from any directory.  
+   - You can download a sample file here:  
+     `autoblocks/out/production/AutoBlocks/testAutoBlocksAppBaseCase.json`
 
-### Known Limitations/Bugs:
+## Known Limitations/Bugs:
 - custom action window is unimplemented (button does nothing)
 - custom dice roller window doesn't open when using jar file (ide launch is ok)
 
-### 2.0 Improvements:
+## 2.0 Improvements:
 In the future I want to rebuild this project as a web application so it's more accessible. Here are some features I'd like to include as expansions:
 - polish **ux/ui** design
     - custom roll window
