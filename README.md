@@ -1,5 +1,8 @@
 # AutoBlocks
 ## for Dungeons and Dragons 5th Edition by Wizards of the Coast.
+
+### 📖 [Read the devblog here](https://simonlotzkar.com/articles/autoblocks)
+
 <p>
 This is a tool for dungeon and dragons (D&D) dungeon masters (DMs) to automate mechanics for non player characters (NPCs).
 This does not simulate any form of map, it's intended to be used with an external one.
